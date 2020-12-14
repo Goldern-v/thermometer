@@ -217,8 +217,8 @@ export default {
       },
       topSheetNote: [
         { time: '2019-05-15 07:10:00', value: '入院' },
-        { time: '2019-05-15 10:10:00', value: '手术' },
-        { time: '2019-05-18 10:10:00', value: '手术' },
+        { time: '2019-05-15 10:10:00', value: '手术', slug: 'operate' },
+        { time: '2019-05-19 13:10:00', value: '手术', slug: 'operate' },
         { time: '2019-05-20 13:12:00', value: '出院' },
       ],
       bottomSheetNote: [
@@ -226,7 +226,6 @@ export default {
         { time: '2019-05-19 20:10:00', value: '请假' },
       ],
       dateList: ['2019-05-15', '2019-05-16', '2019-05-17', '2019-05-18', '2019-05-19', '2019-05-20', '2019-05-21'],
-      operateDateList: ['2019-05-15 10:10:00', '2019-05-18 10:10:00'],
       patInfo: {
         'patient_id': '595603',
         'name': '沈英',
@@ -240,6 +239,9 @@ export default {
   computed: {
     timeRange() {
       return [`${this.dateList[0]} 00:00:00`, `${this.dateList[this.dateList.length-1]} 24:00:00`]
+    },
+    operateDateList() {
+      return this.topSheetNote.filter(x => x.slug === 'operate').map(x => x.time).sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
     },
     formatOperateDateList() {
       return this.dateList.map(x => {
