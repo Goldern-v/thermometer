@@ -5,6 +5,9 @@ import store from "./store";
 import "normalize.css/normalize.css";
 import '@/styles/index.scss' // global css
 
+import axios from 'axios'
+Vue.prototype.$http = axios
+
 Vue.config.productionTip = false;
 
 new Vue({

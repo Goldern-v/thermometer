@@ -14,5 +14,13 @@ module.exports = {
         'src': resolve('src')
       }
     }
-  }
+  },
+  devServer: {
+    proxy: {
+      '/': {
+        target: `http://120.238.239.27:9091`,
+        changeOrigin: true,
+      },
+    },
+  },
 }
