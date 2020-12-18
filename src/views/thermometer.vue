@@ -168,7 +168,7 @@
 
 <script>
 import zrender from 'zrender'
-import { mockData } from '../mockData'
+// import { mockData } from '../mockData'
 
 export default {
   data () {
@@ -281,13 +281,9 @@ export default {
         for (let j = pressureList.length - 1; j >=0; j-- ) {
           const timeNum = this.getTimeNum(pressureList[j].time)
           if (timeNum >= i && timeNum < i + 3*4*60*60*1000) {
-            if (item.value) {
-              item.value = `${Math.max(Number(item.value), Number(pressureList[j].value))}/${Math.min(Number(item.value), Number(pressureList[j].value))}`
-              break
-            } {
-              item.value = pressureList[j].value
-            }
+            item.value = pressureList[j].value
             pressureList.splice(j, 1)
+            break
           }
         }
         list.push(item)
@@ -474,7 +470,7 @@ export default {
         this.zr = zrender.init(document.getElementById('main'))
         const div = document.createElement('div')
         div.classList.add('tips')
-        document.getElementById('main').append(div)
+        document.getElementById('main').appendChild(div)
         this.yLine() //生成Y轴坐标
         this.xLine() //生成X轴坐标
         Object.values(this.settingMap).forEach(x => {
