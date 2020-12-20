@@ -119,7 +119,7 @@ this.dateRangeList = dateRangeList
 this.pageTotal = dateRangeList.length
 ```
 现在分页是做在体温单下面，默认隐藏，如果超出1页就会下面显示出来。
-
+![分页](https://img-blog.csdnimg.cn/20201220174742757.png)
 后续如果需要在iframe外面做分页操作，如果跨域则需要用postMessage等方法进行页面通信，不跨域的话可以直接取到dom节点进行相关操作。
 ## 接口请求
 使用axios依赖包，请求路径/crHesb/hospital/common，如果前端资源在线上的话请求地址和服务器所在地址一致。
