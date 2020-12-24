@@ -110,20 +110,14 @@ export const mockData = {
     },
     {
       "temperature_type": "血压",
-      "value": "87",
-      "time_point": "2019-05-18 03:12:00",
+      "value": "138/87",
+      "time_point": "2019-05-18 01:12:00",
       "vital_code": "14"
     },
     {
       "temperature_type": "血压",
-      "value": "138",
-      "time_point": "2019-05-18 03:12:00",
-      "vital_code": "14"
-    },
-    {
-      "temperature_type": "血压",
-      "value": "138",
-      "time_point": "2019-05-18 13:12:00",
+      "value": "139/89",
+      "time_point": "2019-05-18 20:12:00",
       "vital_code": "14"
     },
     {
@@ -131,6 +125,18 @@ export const mockData = {
       "value": "70",
       "time_point": "2019-05-18 13:12:00",
       "vital_code": "18"
+    },
+    {
+      "temperature_type": "体温",
+      "value": "35.2",
+      "time_point": "2019-05-18 01:12:00",
+      "vital_code": "1"
+    },
+    {
+      "temperature_type": "体温",
+      "value": "38",
+      "time_point": "2019-05-17 01:12:00",
+      "vital_code": "1"
     },
     // {
     //   "temperature_type": "呼吸机R",
@@ -144,12 +150,36 @@ export const mockData = {
     //   "time_point": "2020-12-15 03:12:00",
     //   "vital_code": "25"
     // },
-    // {
-    //   "temperature_type": "口温",
-    //   "value": "36.7",
-    //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": "2"
-    // },
+    {
+      "temperature_type": "自定义1",
+      "value": "36.7",
+      "time_point": "2019-05-17 01:12:00",
+      "vital_code": null
+    },
+    {
+      "temperature_type": "自定义1",
+      "value": "36.7",
+      "time_point": "2019-05-18 01:12:00",
+      "vital_code": null
+    },
+    {
+      "temperature_type": "自定义2",
+      "value": "36.7",
+      "time_point": "2019-05-17 01:12:00",
+      "vital_code": null
+    },
+    {
+      "temperature_type": "自定义2",
+      "value": "36.7",
+      "time_point": "2019-05-18 01:12:00",
+      "vital_code": null
+    },
+    {
+      "temperature_type": "自定义3",
+      "value": "36.7",
+      "time_point": "2019-05-16 01:12:00",
+      "vital_code": null
+    },
     // {
     //   "temperature_type": "脉搏",
     //   "value": "55",

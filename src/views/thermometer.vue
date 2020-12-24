@@ -1,5 +1,5 @@
 <template>
-  <div class="main-view" :style="{'width': `${areaWidth + leftWidth}px`}" v-if="apiData">
+  <div class="main-view" :style="{'width': `${leftWidth + areaWidth}px`}" v-if="apiData">
     <div class="head-hos">广州市花都区人民医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
@@ -10,74 +10,44 @@
       <div class="item">科室：{{patInfo.dept_name}}</div>
       <div class="item">床号：{{patInfo.bed_label}}</div>
     </div>
-    <table class="top-table" border="1" :width="areaWidth + leftWidth">
-      <tr>
-        <td :width="leftWidth" v-html="`日&emsp;&emsp;期`"></td>
-        <td colspan="6" v-for="(item, index) in formatDateList" :key="index">{{item}}</td>
-      </tr>
-     <tr>
-        <td :width="leftWidth">住院日数</td>
-        <td colspan="6" v-for="(item, index) in formatStayDayList" :key="index">{{item}}</td>
-      </tr>
-      <tr>
-        <td :width="leftWidth">手术或产后日数</td>
-        <td colspan="6" v-for="(item, index) in formatOperateDateList" :key="index">{{item}}</td>
-      </tr>
-      <tr>
-        <td :width="leftWidth" v-html="`时&emsp;&emsp;间`"></td>
-        <td>4</td>
-        <td>8</td>
-        <td>12</td>
-        <td>16</td>
-        <td>20</td>
-        <td>24</td>
-        
-
-        <td>4</td>
-        <td>8</td>
-        <td>12</td>
-        <td>16</td>
-        <td>20</td>
-        <td>24</td>
-
-        <td>4</td>
-        <td>8</td>
-        <td>12</td>
-        <td>16</td>
-        <td>20</td>
-        <td>24</td>
-
-        <td>4</td>
-        <td>8</td>
-        <td>12</td>
-        <td>16</td>
-        <td>20</td>
-        <td>24</td>
-
-        <td>4</td>
-        <td>8</td>
-        <td>12</td>
-        <td>16</td>
-        <td>20</td>
-        <td>24</td>
-
-        <td>4</td>
-        <td>8</td>
-        <td>12</td>
-        <td>16</td>
-        <td>20</td>
-        <td>24</td>
-
-        <td>4</td>
-        <td>8</td>
-        <td>12</td>
-        <td>16</td>
-        <td>20</td>
-        <td>24</td>
-      </tr>
-    </table>
+    <div class="table-box">
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}" v-html="`日&emsp;&emsp;期`"></div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in formatDateList" :key="index">{{item}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">住院日数</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in formatStayDayList" :key="index">{{item}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">手术或产后日数</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in formatOperateDateList" :key="index">{{item}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}" v-html="`时&emsp;&emsp;间`"></div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in timeTds" :key="index">{{item}}</div>
+        </div>
+      </div>
+    </div>
     <div class="info-box">
-      <div class="index-box" :style="{'height': `${areaHeight + 1}px`, 'width': `${leftWidth}px`}">
+      <div class="index-box" :style="{'height': `${areaHeight}px`, 'width': `${leftWidth}px`}">
+        <div class="notes">
+          <div v-for="(value, key) in settingMap" :key="key" class="note-item">
+            {{value.label}}
+            <template v-if="key === 'axillaryTemperature'">
+              <span class="axillary">x</span>
+              <i class="note-icon"></i>
+            </template>
+            <i v-else class="note-icon" :style="{'border-color': value.color, 'background': value.solid ? value.color : '#fff'}"></i>
+          </div>
+        </div>
         <div class="item times">
           <div class="text">
             <div class="p-r-5">P</div>
@@ -99,76 +69,88 @@
           </div>
           <div class="index" v-for="item in temperaturelist" :key="item"><span>{{item}}</span></div>
         </div>
-        <div class="notes">
-          <div v-for="(value, key) in settingMap" :key="key" class="note-item">
-            {{value.label}}
-            <template v-if="key === 'axillaryTemperature'">
-              <span class="axillary">x</span>
-              <i class="note-icon"></i>
-            </template>
-            <i v-else class="note-icon" :style="{'border-color': value.color, 'background': value.solid ? value.color : '#fff'}"></i>
-          </div>
-        </div>
       </div>
       <div id="main" :style="{'width': `${areaWidth}px`, 'height': `${areaHeight}px`}"></div>
     </div>
-    <table class="bottom-table" border="1" :width="areaWidth + leftWidth">
-      <tr>
-        <td :width="leftWidth">呼吸(次/分)</td>
-        <td v-for="(item, index) in formatBreatheList" :key="index">{{item.value}}</td>
-      </tr>
-      <tr>
-        <td :width="leftWidth">血压(mmHg)</td>
-        <td colspan="3" v-for="(item, index) in formatPressureList" :key="index">{{item.value}}</td>
-      </tr>
-      <tr>
-        <td :width="leftWidth">体重(kg)</td>
-        <td colspan="6" v-for="(item, index) in getFormatList({ timeRange, tList: weightList })" :key="index">{{item.value}}</td>
-      </tr>
-      <tr>
-        <td :width="leftWidth">液体入量</td>
-        <td colspan="6" v-for="(item, index) in getFormatList({ timeRange, tList: inputList })" :key="index">{{item.value}}</td>
-      </tr>
-      <tr>
-        <td :width="leftWidth">大便次数</td>
-        <td colspan="6" v-for="(item, index) in getFormatList({ timeRange, tList: shitList })" :key="index">{{item.value}}</td>
-      </tr>
-      <tr>
-        <td :width="leftWidth">尿量(ml)</td>
-        <td colspan="6" v-for="(item, index) in getFormatList({ timeRange, tList: urineList })" :key="index">{{item.value}}</td>
-      </tr>
-      <tr>
-        <td :width="leftWidth">出量(ml)</td>
-        <td colspan="6" v-for="(item, index) in getFormatList({ timeRange, tList: outputList })" :key="index">{{item.value}}</td>
-      </tr>
-      <!-- <tr>
-        <td :width="leftWidth">自定义</td>
-        <td colspan="6" v-for="item in 7" :key="item"></td>
-      </tr>
-     <tr>
-        <td :width="leftWidth">自定义</td>
-        <td colspan="6" v-for="item in 7" :key="item"></td>
-      </tr>
-      <tr>
-        <td :width="leftWidth">自定义</td>
-        <td colspan="6" v-for="item in 7" :key="item"></td>
-      </tr>
-      <tr>
-        <td :width="leftWidth">自定义</td>
-        <td colspan="6" v-for="item in 7" :key="item"></td>
-      </tr> -->
-    </table>
-    <div class="pagination" v-if="pageTotal > 1">
-      <button :disabled="curPage === 1" @click="toPre">上一页</button>
-      <span>{{curPage}}/{{pageTotal}}</span>
-      <button :disabled="curPage === pageTotal" @click="toNext">下一页</button>
+    <div class="table-box">
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">呼吸(次/分)</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in formatBreatheList" :key="index">{{item.value}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">血压(mmHg)</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in formatPressureList" :key="index">{{item.value}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">体重(kg)</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in getFormatList({ tList: weightList })" :key="index">{{item.value}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">液体入量</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in getFormatList({ tList: inputList })" :key="index">{{item.value}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">大便次数</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in getFormatList({ tList: shitList })" :key="index">{{item.value}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">尿量(ml)</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in getFormatList({ tList: urineList })" :key="index">{{item.value}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">出量(ml)</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in getFormatList({ tList: outputList })" :key="index">{{item.value}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">{{customList0.label || ''}}</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in getFormatList({ tList: customList0 })" :key="index">{{item.value}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">{{customList1.label || ''}}</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in getFormatList({ tList: customList1 })" :key="index">{{item.value}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">{{customList2.label || ''}}</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in getFormatList({ tList: customList2 })" :key="index">{{item.value}}</div>
+        </div>
+      </div>
+      <div class="row" :style="{height: `${trHeight}px`}">
+        <div class="label" :style="{'width': `${leftWidth-2}px`}">{{customList3.label || ''}}</div>
+        <div class="value-item-box">
+          <div class="value-item" v-for="(item, index) in getFormatList({ tList: customList3 })" :key="index">{{item.value}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="pagination">
+      <i :disabled="curPage === 1" @click="toPre" class="pre-icon"></i>
+      <span>第{{curPage}}页/共{{pageTotal}}页</span>
+      <i :disabled="curPage === pageTotal" @click="toNext" class="next-icon"></i>
     </div>
   </div>
 </template>
 
 <script>
 import zrender from 'zrender'
-// import { mockData } from '../mockData'
+import { mockData } from '../mockData'
 
 export default {
   data () {
@@ -176,13 +158,14 @@ export default {
     const pulseRange = [0, 200]
     const painRange = [0, 10]
     return {
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
       areaHeight: 0, // 网格区域的高度
-      xSpace: 20, // 纵向网格的间距
-      ySpace: 20, //  横向网格的间距
-      leftWidth: 140, // 左侧内容宽度
+      xSpace: 16, // 纵向网格的间距
+      ySpace: 13, //  横向网格的间距
+      leftWidth: 130, // 左侧内容宽度
       xRange: [1, 8],
       yRange,
       pulseRange,
@@ -224,6 +207,10 @@ export default {
       shitList: [], // 大便次数
       urineList: [], // 尿量
       outputList: [], // 出量
+      customList0: [], // 自定义1
+      customList1: [], // 自定义2
+      customList2: [], // 自定义3
+      customList3: [], // 自定义4
       dateRangeList: [], // 数组长度决定页数
       patInfo: {
         'patient_id': '',
@@ -258,7 +245,7 @@ export default {
         '28': '呕吐量',
         '29': '在线降温',
         'ttpf': '疼痛评分',
-      },
+      }, // vital_code是null的时候，是自定义字段，显示在体温表后面
       lineMap: {
         '2': 'oralTemperature',
         '1': 'axillaryTemperature',
@@ -272,6 +259,17 @@ export default {
     }
   },
   computed: {
+    timeTds() {
+      const list = [4, 8, 12, 16, 20, 24]
+      const tds = []
+      for (let i = 0; i < 7; i++) {
+        tds.push(...list)
+      }
+      return tds
+    },
+    trHeight() {
+      return this.ySpace * 2
+    },
     formatPressureList() {
       const timeNumRange = this.timeRange.map(x => this.getTimeNum(x))
       const list = []
@@ -402,14 +400,19 @@ export default {
       this.urineList = []
       this.outputList = []
       this.dateRangeList = []
+      for (let i = 0; i < 4; i++) {
+        this[`customList${i}`] = []
+      }
     },
     toNext() {
+      if (this.curPage === this.pageTotal) return
       this.curPage++
       document.getElementById('main').innerHTML = ''
       this.reset()
       this.handleData()
     },
     toPre() {
+      if (this.curPage === 1) return
       this.curPage--
       document.getElementById('main').innerHTML = ''
       this.reset()
@@ -439,8 +442,23 @@ export default {
       this.pageTotal = dateRangeList.length
 
       const timeNumRange = this.timeRange.map(x => this.getTimeNum(x))
+      const customSigns = [] // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
         if (this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] || this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]) {
+          // 超出时间范围的抛弃
+          continue
+        }
+        if (!vitalSigns[i].vital_code || vitalSigns[i].vital_code === 'null') { // 自定义字段填入
+          const sign = vitalSigns[i].temperature_type
+          const index = customSigns.indexOf(sign)
+          if (index < 0) {
+            customSigns.push(sign)
+            this[`customList${customSigns.length - 1}`].push({ time: vitalSigns[i].time_point, value: vitalSigns[i].value })
+            this[`customList${customSigns.length - 1}`].label = sign
+          } else {
+            this[`customList${index}`].push({ time: vitalSigns[i].time_point, value: vitalSigns[i].value })
+            this[`customList${index}`].label = sign
+          }
           continue
         }
         if (this.lineMap[vitalSigns[i].vital_code]) {
@@ -491,10 +509,11 @@ export default {
           }
           this.createText({
             x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-            y: 0,
+            y: 0.5,
             value: this.addn(value),
             color: 'red',
-            textLineHeight: 21
+            textLineHeight: 14,
+            fontWeight: 'bold'
           })
         })
         this.bottomSheetNote.forEach(x => {
@@ -504,10 +523,11 @@ export default {
           }
           this.createText({
             x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-            y: this.areaHeight - 150,
+            y: this.areaHeight - 141,
             value: this.addn(value),
             color: 'black',
-            textLineHeight: 21
+            textLineHeight: 14,
+            fontWeight: 'bold'
           })
         })
       })
@@ -521,7 +541,7 @@ export default {
         const params = {
           x1: 0,
           y1: preSpace,
-          x2: this.areaWidth,
+          x2: this.areaWidth - 1,
           y2: preSpace,
           lineWidth,
           color: isBreak ? '#000' : '#8B8B8B'
@@ -535,14 +555,15 @@ export default {
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i%6 === 0 && i > 0 && i < totalLine - 1
-        const lineWidth = 1
+        const isboundary = i === 0 || i === totalLine - 1
+        const lineWidth = i === 0 ? 0 : 1
         const params = {
           x1: preSpace,
           y1: 0,
           x2: preSpace,
           y2: this.areaHeight,
           lineWidth,
-          color: isBreak ? 'red' : '#8B8B8B'
+          color: isBreak ? 'red' : (isboundary ? '#000' : '#8B8B8B')
         }
         preSpace += lineWidth + this.xSpace
         this.createLine(params)
@@ -563,10 +584,10 @@ export default {
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i%6 === 0 && i > 0 && i < totalLine - 1
-        const lineWidth = 1
+        const lineWidth = i === 0 ? 0 : 1
         preSpace += lineWidth + this.xSpace
       }
-      this.areaWidth = preSpace - this.xSpace - 1
+      this.areaWidth = preSpace - this.xSpace
     },
     createText({ x, y, value, color, fontSize=12, tips, zlevel=0, fontWeight='normal', textLineHeight }) {
       const text = new zrender.Text({
@@ -687,10 +708,10 @@ export default {
         if (dotCross) {
           this.createText({
             x: cx,
-            y: cy - 15,
+            y: cy - 10.5,
             value: 'x',
             color: dotColor,
-            fontSize: 24,
+            fontSize: 18,
             tips: `${x.time} ${type}：${x.value}`,
             zlevel: 10,
             fontWeight: 'bold'
@@ -699,7 +720,7 @@ export default {
           this.createCircle({
             cx,
             cy,
-            r: 5,
+            r: 4,
             color: dotColor || '#000',
             zlevel: 10,
             tips: `${x.time} ${type}：${x.value}`,
@@ -831,8 +852,8 @@ export default {
       return obj;
     },
     // 计算底部数据的渲染列表
-    getFormatList({ timeRange, tList, timeInterval = 24*60*60*1000 }) {
-      const timeNumRange = timeRange.map(x => this.getTimeNum(x))
+    getFormatList({ tList, timeInterval = 24*60*60*1000 }) {
+      const timeNumRange = this.timeRange.map(x => this.getTimeNum(x))
       const list = []
       const targetList = [...tList]
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i+= timeInterval) {
@@ -851,36 +872,47 @@ export default {
     }
   },
   mounted() {
-    const urlParams = this.urlParse()
-    this.$http({
-      method: 'post',
-      url: '/crHesb/hospital/common',
-      data: {
-        tradeCode: 'nurse_getPatientVitalSigns',
-        PatientId: urlParams.PatientId,
-        VisitId: urlParams.VisitId,
-        StartTime: urlParams.StartTime
-      }
-    }).then(res=> {
-      this.apiData = res.data
+    if (this.useMockData) {
+      this.apiData = mockData
       this.$nextTick(() => {
         this.handleData()
       })
-    })
+    } else {
+      const urlParams = this.urlParse()
+      this.$http({
+        method: 'post',
+        url: '/crHesb/hospital/common',
+        data: {
+          tradeCode: 'nurse_getPatientVitalSigns',
+          PatientId: urlParams.PatientId,
+          VisitId: urlParams.VisitId,
+          StartTime: urlParams.StartTime
+        }
+      }).then(res=> {
+        this.apiData = res.data
+        this.$nextTick(() => {
+          this.handleData()
+        })
+      })
+    }
   }
 }
 </script>
 
 <style lang="scss">
 .main-view {
+  padding: 10px 0;
+  margin: 0 auto;
   font-size: 12px;
+  color: #000;
+  font-weight: bold;
   .head-hos {
-    padding-top: 20px;
-    font-size: 18px;
+    padding-top: 10px;
+    font-size: 14px;
   }
   .head-title {
-    padding: 20px 0;
-    font-size: 14px;
+    padding: 10px 0;
+    font-size: 12px;
   }
   .head-info {
     display: flex;
@@ -898,26 +930,60 @@ export default {
 .top-table {
   border-collapse: collapse;
   transform: translateX(0.5px);
-  table-layout: fixed;
+  // table-layout: fixed;
   border-color: #000;
+}
+.table-box {
+  .row {
+    display: flex;
+    align-items: center;
+    border: 1px solid #000;
+    transform: translateX(-0.5px);
+    &:not(:first-child) {
+      border-top: none;
+    }
+    .label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      // flex: 1;
+      border-right: 1px solid #000;
+      transform: translateX(1.5px);
+    }
+    .value-item-box {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      transform: translateX(1px);
+    }
+    .value-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      border-right: 1px solid #000;
+    }
+  }  
 }
 .info-box {
   display: flex;
   .index-box {
     position: relative;
-    transform: translate(0.5px, -0.5px);
     flex-shrink: 0;
     display: flex;
     font-size: 12px;
     border-left: 1px solid #000;
-    .item {
+    transform: translateX(-0.5px);
+    >.item {
       flex: 1;
-      border-right: 1px solid #000;
       display: flex;
       flex-direction: column;
       text-align: right;
+      border-right: 1px solid #000;
       &:last-child {
-        border-right: none;
+        transform: translateX(0.35px);
       }
       .text {
         flex: 1;
@@ -946,8 +1012,8 @@ export default {
     }
     .notes {
       position: absolute;
-      left: 8px;
-      bottom: 5px;
+      left: 3px;
+      bottom: 3px;
       .note-item {
         position: relative;
         margin-bottom: 10px;
@@ -960,12 +1026,14 @@ export default {
         border-width: 2px;
         border-style: solid;
         border-color: #fff;
+        transform: translateY(0.5px);
       }
       .axillary {
         position: absolute;
         right: 1px;
-        top: -5px;
+        top: -4px;
         display: inline-block;
+        z-index: 2;
         color: blue;
         font-size: 17px;
         line-height: 1;
@@ -974,23 +1042,31 @@ export default {
     }
   }
 }
-.bottom-table {
-  border-collapse: collapse;
-  transform: translate(0.5px, -1px);
-  table-layout: fixed;
-  border-color: #000;
-}
 .p-r-5 {
   padding-right: 5px;
 }
 .pagination {
-  padding: 10px 0;
-  button {
-    margin: 0 10px;
+  padding: 10px 0 0;
+  font-weight: normal;
+  .pre-icon {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-left: 1px solid #000;
+    border-bottom: 1px solid #000;
+    transform: rotate(45deg) translateY(-2px);
     cursor: pointer;
+    margin-right: 10px;
   }
-  button[disabled=disabled] {
-    cursor: not-allowed;
+  .next-icon {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+    transform: rotate(-45deg) translateY(-2px);
+    cursor: pointer;
+    margin-left: 10px;
   }
 }
 </style>
