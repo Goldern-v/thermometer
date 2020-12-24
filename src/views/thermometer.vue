@@ -10,27 +10,27 @@
       <div class="item">科室：{{patInfo.dept_name}}</div>
       <div class="item">床号：{{patInfo.bed_label}}</div>
     </div>
-    <div class="table-box">
+    <div class="table-box" style="transform: translateY(0.5px);">
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}" v-html="`日&emsp;&emsp;期`"></div>
+        <div class="label" :style="{'width': `${leftWidth}px`}" v-html="`日&emsp;&emsp;期`"></div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in formatDateList" :key="index">{{item}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">住院日数</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">住院日数</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in formatStayDayList" :key="index">{{item}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">手术或产后日数</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">手术或产后日数</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in formatOperateDateList" :key="index">{{item}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}" v-html="`时&emsp;&emsp;间`"></div>
+        <div class="label" :style="{'width': `${leftWidth}px`}" v-html="`时&emsp;&emsp;间`"></div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in timeTds" :key="index">{{item}}</div>
         </div>
@@ -72,69 +72,69 @@
       </div>
       <div id="main" :style="{'width': `${areaWidth}px`, 'height': `${areaHeight}px`}"></div>
     </div>
-    <div class="table-box">
+    <div class="table-box" style="transform: translateY(-0.5px);">
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">呼吸(次/分)</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">呼吸(次/分)</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in formatBreatheList" :key="index">{{item.value}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">血压(mmHg)</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">血压(mmHg)</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in formatPressureList" :key="index">{{item.value}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">体重(kg)</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">体重(kg)</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in getFormatList({ tList: weightList })" :key="index">{{item.value}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">液体入量</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">液体入量</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in getFormatList({ tList: inputList })" :key="index">{{item.value}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">大便次数</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">大便次数</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in getFormatList({ tList: shitList })" :key="index">{{item.value}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">尿量(ml)</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">尿量(ml)</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in getFormatList({ tList: urineList })" :key="index">{{item.value}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">出量(ml)</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">出量(ml)</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in getFormatList({ tList: outputList })" :key="index">{{item.value}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">{{customList0.label || ''}}</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">{{customList0.label || ''}}</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in getFormatList({ tList: customList0 })" :key="index">{{item.value}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">{{customList1.label || ''}}</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">{{customList1.label || ''}}</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in getFormatList({ tList: customList1 })" :key="index">{{item.value}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">{{customList2.label || ''}}</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">{{customList2.label || ''}}</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in getFormatList({ tList: customList2 })" :key="index">{{item.value}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
-        <div class="label" :style="{'width': `${leftWidth-2}px`}">{{customList3.label || ''}}</div>
+        <div class="label" :style="{'width': `${leftWidth}px`}">{{customList3.label || ''}}</div>
         <div class="value-item-box">
           <div class="value-item" v-for="(item, index) in getFormatList({ tList: customList3 })" :key="index">{{item.value}}</div>
         </div>
@@ -537,6 +537,7 @@ export default {
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i%5 === 0 && i > 0 && i < totalLine - 1
+        const isboundary = i === 0 || i === totalLine - 1
         const lineWidth = isBreak ? 2 : 1
         const params = {
           x1: 0,
@@ -544,7 +545,7 @@ export default {
           x2: this.areaWidth - 1,
           y2: preSpace,
           lineWidth,
-          color: isBreak ? '#000' : '#8B8B8B'
+          color: isBreak ? '#000' : (isboundary ? 'transparent' : '#8B8B8B')
         }
         preSpace += lineWidth + this.ySpace
         this.createLine(params)
@@ -556,7 +557,7 @@ export default {
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i%6 === 0 && i > 0 && i < totalLine - 1
         const isboundary = i === 0 || i === totalLine - 1
-        const lineWidth = i === 0 ? 0 : 1
+        const lineWidth = i === 0 ? 2 : 1
         const params = {
           x1: preSpace,
           y1: 0,
@@ -584,7 +585,7 @@ export default {
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i%6 === 0 && i > 0 && i < totalLine - 1
-        const lineWidth = i === 0 ? 0 : 1
+        const lineWidth = i === 0 ? 2 : 1
         preSpace += lineWidth + this.xSpace
       }
       this.areaWidth = preSpace - this.xSpace
@@ -927,13 +928,9 @@ export default {
   flex-shrink: 0;
   position: relative;
 }
-.top-table {
-  border-collapse: collapse;
-  transform: translateX(0.5px);
-  // table-layout: fixed;
-  border-color: #000;
-}
 .table-box {
+  position: relative;
+  z-index: 20;
   .row {
     display: flex;
     align-items: center;
@@ -947,9 +944,8 @@ export default {
       align-items: center;
       justify-content: center;
       height: 100%;
-      // flex: 1;
       border-right: 1px solid #000;
-      transform: translateX(1.5px);
+      transform: translateX(0.5px);
     }
     .value-item-box {
       flex: 1;
@@ -981,9 +977,8 @@ export default {
       display: flex;
       flex-direction: column;
       text-align: right;
-      border-right: 1px solid #000;
-      &:last-child {
-        transform: translateX(0.35px);
+      &:not(:last-child) {
+        border-right: 1px solid #000;
       }
       .text {
         flex: 1;
