@@ -895,14 +895,14 @@ export default {
     }
   },
   mounted() {
+    const urlParams = this.urlParse()
+    this.showInnerPage = urlParams.showInnerPage === '1'
     if (this.useMockData) {
       this.apiData = mockData
       this.$nextTick(() => {
         this.handleData()
       })
     } else {
-      const urlParams = this.urlParse()
-      this.showInnerPage = urlParams.showInnerPage === '1'
       this.$http({
         method: 'post',
         url: '/crHesb/hospital/common',
