@@ -140,10 +140,10 @@
         </div>
       </div>
     </div>
-    <div class="pagination">
-      <i :disabled="curPage === 1" @click="toPre" class="pre-icon"></i>
-      <span>第{{curPage}}页/共{{pageTotal}}页</span>
-      <i :disabled="curPage === pageTotal" @click="toNext" class="next-icon"></i>
+    <div class="pagination" v-if="showInnerPage">
+      <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i>
+      <span>第{{currentPage}}页/共{{pageTotal}}页</span>
+      <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i>
     </div>
   </div>
 </template>
@@ -158,7 +158,7 @@ export default {
     const pulseRange = [0, 200]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -255,7 +255,8 @@ export default {
         'ttpf': 'pain',
       },
       pageTotal: 1,
-      curPage: 1
+      currentPage: 1,
+      showInnerPage: false, // 是否显示内部分页
     }
   },
   computed: {
@@ -316,7 +317,7 @@ export default {
       return list
     },
     dateRange() {
-      return this.dateRangeList[this.curPage-1] || []
+      return this.dateRangeList[this.currentPage-1] || []
     },
     timeRange() {
       return [`${this.dateList[0]} 00:00:00`, `${this.dateList[this.dateList.length-1]} 24:00:00`]
@@ -385,7 +386,28 @@ export default {
       return list
     }
   }, 
+  watch: {
+    // 因为分页可能在体温单外面，所以给父页面传递pageTotal
+    pageTotal(value) {
+      window.parent.postMessage({ type: 'pageTotal', value }, '*')
+    }
+  },
+  created() {
+    // 实现外部分页
+    window.addEventListener('message', this.messageHandle, false)
+  },
+  beforeDestroy() {
+    window.removeEventListener('message', this.messageHandle, false)
+  },
   methods:{
+    messageHandle(e) {
+      if (e && e.data && e.data.type === 'currentPage' && e.data.value > 0) {
+        this.currentPage = e.data.value
+        document.getElementById('main').innerHTML = ''
+        this.reset()
+        this.handleData()
+      }
+    },
     reset() {
       Object.keys(this.settingMap).forEach(x => {
         this.settingMap[x].data = []
@@ -405,15 +427,15 @@ export default {
       }
     },
     toNext() {
-      if (this.curPage === this.pageTotal) return
-      this.curPage++
+      if (this.currentPage === this.pageTotal) return
+      this.currentPage++
       document.getElementById('main').innerHTML = ''
       this.reset()
       this.handleData()
     },
     toPre() {
-      if (this.curPage === 1) return
-      this.curPage--
+      if (this.currentPage === 1) return
+      this.currentPage--
       document.getElementById('main').innerHTML = ''
       this.reset()
       this.handleData()
@@ -880,6 +902,7 @@ export default {
       })
     } else {
       const urlParams = this.urlParse()
+      this.showInnerPage = urlParams.showInnerPage === '1'
       this.$http({
         method: 'post',
         url: '/crHesb/hospital/common',

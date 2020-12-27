@@ -118,9 +118,59 @@ for (let i = admissionDateNum; i < maxTimeNum; i += 7 * 24 * 60 * 60 * 1000) {
 this.dateRangeList = dateRangeList
 this.pageTotal = dateRangeList.length
 ```
-现在分页是做在体温单下面，默认隐藏，如果超出1页就会下面显示出来。
-![分页](https://img-blog.csdnimg.cn/20201220174742757.png)
-后续如果需要在iframe外面做分页操作，如果跨域则需要用postMessage等方法进行页面通信，不跨域的话可以直接取到dom节点进行相关操作。
+现在内部分页操作是做在体温单下面，默认隐藏，如果连接上拼接了showInnerPage=1就会在下面显示出来。
+
+如果需要在iframe外面做分页操作，则需要用postMessage进行页面通信。
+#### 使用postMessage在体温单iframe外部做分页
+只需在体温单iframe内部传出总页数给到父页面，父页面切换页数时将当前页传给体温单iframe即可
+
+在体温单中
+```js
+watch: {
+  // 因为分页可能在体温单外面，所以给父页面传递pageTotal
+  pageTotal(value) {
+    window.parent.postMessage({ type: 'pageTotal', value }, '*')
+  }
+},
+created() {
+  // 实现外部分页
+  window.addEventListener('message', this.messageHandle, false)
+},
+beforeDestroy() {
+  window.removeEventListener('message', this.messageHandle, false)
+},
+methods:{
+  messageHandle(e) {
+    if (e && e.data && e.data.type === 'currentPage' && e.data.value > 0) {
+      this.currentPage = e.data.value
+      document.getElementById('main').innerHTML = ''
+      this.reset()
+      this.handleData()
+    }
+  },
+}
+```
+在父页面中
+```js
+watch: {
+  currentPage(value) {
+    this.$refs.myIframe.contentWindow.postMessage({ type: 'currentPage', value }, '*')
+  }
+},
+created() {
+  window.addEventListener('message', this.messageHandle, false)
+},
+beforeDestroy() {
+  window.removeEventListener('message', this.messageHandle, false)
+},
+methods: {
+  messageHandle(e) {
+    if (e && e.data && e.data.type === 'pageTotal') {
+      this.pageTotal = e.data.value
+    }
+  }
+}
+```
 ## 接口请求
 使用axios依赖包，请求路径/crHesb/hospital/common，如果前端资源在线上的话请求地址和服务器所在地址一致。
 ```js
