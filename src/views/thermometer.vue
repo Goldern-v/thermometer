@@ -25,7 +25,7 @@
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
         <div class="label" :style="{'width': `${leftWidth}px`}">手术或产后日数</div>
-        <div class="value-item-box">
+        <div class="value-item-box" style="color:red;">
           <div class="value-item" v-for="(item, index) in formatOperateDateList" :key="index">{{item}}</div>
         </div>
       </div>
@@ -141,10 +141,13 @@
       </div>
     </div>
     <div class="pagination" v-if="showInnerPage">
-      <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i>
+      <!-- <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i> -->
+      <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">上一页</button>
       <span>第{{currentPage}}页/共{{pageTotal}}页</span>
-      <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i>
+      <button :disabled="currentPage === pageTotal" @click="toNext" class="next-btn">下一页</button>
+      <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
     </div>
+    <div class="pagination" v-else>第{{currentPage}}页</div>
   </div>
 </template>
 
@@ -158,7 +161,7 @@ export default {
     const pulseRange = [0, 200]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -393,7 +396,7 @@ export default {
     }
   },
   created() {
-    // 实现外部分页
+    // 实现外部分页和打印
     window.addEventListener('message', this.messageHandle, false)
   },
   beforeDestroy() {
@@ -401,11 +404,21 @@ export default {
   },
   methods:{
     messageHandle(e) {
-      if (e && e.data && e.data.type === 'currentPage' && e.data.value > 0) {
-        this.currentPage = e.data.value
-        document.getElementById('main').innerHTML = ''
-        this.reset()
-        this.handleData()
+      if (e && e.data) {
+        switch (e.data.type) {
+          case 'currentPage':
+            if (e.data.value > 0) {
+              this.currentPage = e.data.value
+              document.getElementById('main').innerHTML = ''
+              this.reset()
+              this.handleData()
+            }
+            break
+          case 'printing':
+            window.print()
+            break
+          default: break
+        }
       }
     },
     reset() {
@@ -567,7 +580,7 @@ export default {
           x2: this.areaWidth - 1,
           y2: preSpace,
           lineWidth,
-          color: isBreak ? '#000' : (isboundary ? 'transparent' : '#8B8B8B')
+          color: isBreak ? '#000' : (isboundary ? 'transparent' : '#000')
         }
         preSpace += lineWidth + this.ySpace
         this.createLine(params)
@@ -578,7 +591,6 @@ export default {
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i%6 === 0 && i > 0 && i < totalLine - 1
-        const isboundary = i === 0 || i === totalLine - 1
         const lineWidth = i === 0 ? 2 : 1
         const params = {
           x1: preSpace,
@@ -586,7 +598,7 @@ export default {
           x2: preSpace,
           y2: this.areaHeight,
           lineWidth,
-          color: isBreak ? 'red' : (isboundary ? '#000' : '#8B8B8B')
+          color: isBreak ? 'red' : '#000'
         }
         preSpace += lineWidth + this.xSpace
         this.createLine(params)
@@ -783,6 +795,9 @@ export default {
     getSplitTime(time) {
       const hour = Number(time.slice(-8,-6))
       let splitHour = hour - hour % 4
+      if (hour % 4 === 0) {
+        splitHour -= 4
+      }
       splitHour = splitHour < 10 ? `0${splitHour}` : String(splitHour)
       return `${time.slice(0, -8)}${splitHour}:00:00`
     },
@@ -1085,6 +1100,20 @@ export default {
     transform: rotate(-45deg) translateY(-2px);
     cursor: pointer;
     margin-left: 10px;
+  }
+  .pre-btn {
+    margin-right: 10px;
+  }
+  .next-btn {
+    margin-left: 10px;
+  }
+  button {
+    cursor: pointer;
+    width: 80px;
+    height: 30px;
+  }
+  button[disabled=disabled] {
+    cursor: not-allowed;
   }
 }
 </style>

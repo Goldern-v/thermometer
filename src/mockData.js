@@ -180,12 +180,24 @@ export const mockData = {
       "time_point": "2019-05-16 01:12:00",
       "vital_code": null
     },
-    // {
-    //   "temperature_type": "脉搏",
-    //   "value": "55",
-    //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": "11"
-    // },
+    {
+      "temperature_type": "脉搏",
+      "value": "80",
+      "time_point": "2019-05-17 13:12:00",
+      "vital_code": "11"
+    },
+    {
+      "temperature_type": "脉搏",
+      "value": "60",
+      "time_point": "2019-05-20 10:12:00",
+      "vital_code": "11"
+    },
+    {
+      "temperature_type": "脉搏",
+      "value": "55",
+      "time_point": "2019-05-16 13:00:00",
+      "vital_code": "11"
+    },
     // {
     //   "temperature_type": "尿量",
     //   "value": "1470",
