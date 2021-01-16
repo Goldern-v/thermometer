@@ -109,6 +109,18 @@ export const mockData = {
       "vital_code": "13"
     },
     {
+      "temperature_type": "呼吸",
+      "value": "30",
+      "time_point": "2019-05-17 13:12:00",
+      "vital_code": "13"
+    },
+    {
+      "temperature_type": "呼吸",
+      "value": "20",
+      "time_point": "2019-05-20 13:12:00",
+      "vital_code": "13"
+    },
+    {
       "temperature_type": "血压",
       "value": "138/87",
       "time_point": "2019-05-18 01:12:00",

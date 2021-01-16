@@ -76,12 +76,12 @@
       <div class="row" :style="{height: `${trHeight}px`}">
         <div class="label" :style="{'width': `${leftWidth}px`}">呼吸(次/分)</div>
         <div class="value-item-box">
-          <div class="value-item" v-for="(item, index) in formatBreatheList" :key="index">{{item.value}}</div>
+          <div class="value-item" :style="item.style" v-for="(item, index) in formatBreatheList" :key="index">{{item.value}}</div>
         </div>
       </div>
       <div class="row" :style="{height: `${trHeight}px`}">
         <div class="label" :style="{'width': `${leftWidth}px`}">血压(mmHg)</div>
-        <div class="value-item-box">
+        <div class="value-item-box" style="color:blue;">
           <div class="value-item" v-for="(item, index) in formatPressureList" :key="index">{{item.value}}</div>
         </div>
       </div>
@@ -308,6 +308,7 @@ export default {
         }
         list.push(item)
       }
+      list.filter(x => x.value !== '').forEach((x, i) => x.style = i % 2 === 0 ? 'align-items: flex-start;' : 'align-items: flex-end;')
       return list
     },
     dateList() {
@@ -543,7 +544,8 @@ export default {
             value = `${x.value}${new Date(x.time).getHours()}时${new Date(x.time).getMinutes()}分`
           }
           this.createText({
-            x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
+            // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
+            x: this.getXaxis(this.getlocationTime(x.time)),
             y: 0.5,
             value: this.addn(value),
             color: 'red',
@@ -557,8 +559,9 @@ export default {
             value = `${x.value}${new Date(x.time).getHours()}时${new Date(x.time).getMinutes()}分`
           }
           this.createText({
-            x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-            y: this.areaHeight - 141,
+            // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
+            x: this.getXaxis(this.getlocationTime(x.time)),
+            y: this.areaHeight - 213,
             value: this.addn(value),
             color: 'black',
             textLineHeight: 14,
@@ -737,7 +740,7 @@ export default {
     createBrokenLine({ data, yRange, lineColor, type, dotColor, dotSolid, dotCross }) {
       const dots = []
       data.forEach(x => {
-        const cx = this.getXaxis(x.time)
+        const cx = this.getXaxis(this.getlocationTime(x.time))
         const cy = (yRange[1]-x.value)/(yRange[1]-yRange[0]) * this.areaHeight
         dots.push({ x: cx, y: cy })
         if (dotCross) {
@@ -791,15 +794,45 @@ export default {
       }
       return formatStr
     },
-    // 算出上一个分割时间点
-    getSplitTime(time) {
-      const hour = Number(time.slice(-8,-6))
-      let splitHour = hour - hour % 4
-      if (hour % 4 === 0) {
-        splitHour -= 4
+    // // 算出上一个分割时间点
+    // getSplitTime(time) {
+    //   const hour = Number(time.slice(-8,-6))
+    //   let splitHour = hour - hour % 4
+    //   if (hour % 4 === 0) {
+    //     splitHour -= 4
+    //   }
+    //   splitHour = splitHour < 10 ? `0${splitHour}` : String(splitHour)
+    //   return `${time.slice(0, -8)}${splitHour}:00:00`
+    // },
+    // 计算用来定位描点的时间，医院特殊要求用这个方法定位
+    getlocationTime(time) {
+      const date = new Date(time)
+      const sec = this.getTotalSeconds(time.slice(-8))
+      let str = ''
+      const timeAreasMap = {
+        '02:00:00': ['00:00:00', '06:00:59'],
+        '06:00:00': ['06:01:00', '10:00:59'],
+        '10:00:00': ['10:01:00', '14:00:59'],
+        '14:00:00': ['14:01:00', '18:00:59'],
+        '18:00:00': ['18:01:00', '22:00:59'],
+        '22:00:00': ['22:01:00', '23:59:59'],
       }
-      splitHour = splitHour < 10 ? `0${splitHour}` : String(splitHour)
-      return `${time.slice(0, -8)}${splitHour}:00:00`
+      for (let key in timeAreasMap) {
+        if (timeAreasMap.hasOwnProperty(key)) {
+          const item = timeAreasMap[key]
+          if (sec >= this.getTotalSeconds(item[0]) && sec <= this.getTotalSeconds(item[1])) {
+            str = key
+            break
+          }
+        }
+      }
+      return `${time.slice(0, -8)}${str}`
+    },
+    // 根据时分秒00:00:00计算总秒数
+    getTotalSeconds(str) {
+      return str.split(':').map((x, i) => Number(x) * Math.pow(60, 2 - i)).reduce((pre, cur) => {
+        return pre + cur
+      }, 0)
     },
     // 数字转罗马字符
     numToRome(num) {
