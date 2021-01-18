@@ -296,11 +296,14 @@ export default {
       const timeNumRange = this.timeRange.map(x => this.getTimeNum(x))
       const list = []
       const breatheList = [...this.breatheList]
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i+= 4*60*60*1000) {
+      const timeAdd = i => {
+        return i === timeNumRange[0] ? 6*60*60*1000 : (i === timeNumRange[1] - 2*60*60*1000 ? 2*60*60*1000 : 4*60*60*1000)
+      }
+      for (let i = timeNumRange[0]; i < timeNumRange[1]; i+= timeAdd(i)) {
         const item = { timeNum: i, value: '' }
         for (let j = breatheList.length - 1; j >=0; j-- ) {
           const timeNum = this.getTimeNum(breatheList[j].time)
-          if (timeNum >= i && timeNum < i + 4*60*60*1000) {
+          if (timeNum >= i && timeNum < i + timeAdd(i)) {
             item.value = breatheList[j].value
             breatheList.splice(j, 1)
             break;
