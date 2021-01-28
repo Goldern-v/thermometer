@@ -56,11 +56,12 @@
           <div class="index" v-for="item in pulseList" :key="item"><span>{{item}}</span></div>
         </div>
         <div class="item pain">
-          <div class="text">
+          <div class="text" :style="`height: ${ttLabelHeight}px`">
             <div>疼痛</div>
             <div>(级)</div>
           </div>
           <div class="index" v-for="item in painList" :key="item"><span>{{item}}</span></div>
+          <div class="s-index"><span>0</span></div>
         </div>
         <div class="item temp">
           <div class="text">
@@ -157,8 +158,8 @@ import { mockData } from '../mockData'
 
 export default {
   data () {
-    const yRange = [32, 42]
-    const pulseRange = [0, 200]
+    const yRange = [33, 42]
+    const pulseRange = [20, 200]
     const painRange = [0, 10]
     return {
       useMockData: false,
@@ -339,10 +340,10 @@ export default {
       return this.dateList.map(x => {
         if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0) return ''
         if (!this.operateDateList.length) return ''
-        // 构造天数差数组
-        const days = this.operateDateList.map(y => {
+        // 构造天数差数组，有相同天数差的说明在同一天，所以要去重
+        const days = [...new Set(this.operateDateList.map(y => {
           return this.dayInterval(x, y)
-        })
+        }))]
         if (days.every(z => z < 0)) return ''
         // 找到前一次手术（最后一次天数差是正整数的地方）
         let index = 0
@@ -387,10 +388,13 @@ export default {
     },
     painList() {
       const list = []
-      for (let i = this.painRange[1] - 1; i > this.painRange[0]; i--) {
+      for (let i = this.painRange[1]; i > this.painRange[0]; i--) {
         list.push(i)
       }
       return list
+    },
+    ttLabelHeight() {
+      return this.ySpace * 5 + 4
     }
   }, 
   watch: {
@@ -541,14 +545,17 @@ export default {
             dotCross: x.cross,
           })
         })
-        this.topSheetNote.forEach(x => {
+        // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
+        const topXaxis = this.topSheetNote.map(x => this.getXaxis(this.getlocationTime(x.time)))
+        const topXaxisNew = this.handleNoteXaxis(topXaxis)
+        this.topSheetNote.forEach((x, i) => {
           let value = x.value
           if (x.value.endsWith('|')) {
-            value = `${x.value}${new Date(x.time).getHours()}时${new Date(x.time).getMinutes()}分`
+            value = `${x.value}${this.toChinesNum(new Date(x.time).getHours())}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
           }
           this.createText({
             // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-            x: this.getXaxis(this.getlocationTime(x.time)),
+            x: topXaxisNew[i],
             y: 0.5,
             value: this.addn(value),
             color: 'red',
@@ -556,15 +563,18 @@ export default {
             fontWeight: 'bold'
           })
         })
-        this.bottomSheetNote.forEach(x => {
+         // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
+        const bottomXaxis = this.bottomSheetNote.map(x => this.getXaxis(this.getlocationTime(x.time)))
+        const bottomXaxisNew = this.handleNoteXaxis(bottomXaxis)
+        this.bottomSheetNote.forEach((x, i) => {
           let value = x.value
           if (x.value.endsWith('|')) {
-            value = `${x.value}${new Date(x.time).getHours()}时${new Date(x.time).getMinutes()}分`
+            value = `${x.value}${this.toChinesNum(new Date(x.time).getHours())}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
           }
           this.createText({
             // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-            x: this.getXaxis(this.getlocationTime(x.time)),
-            y: this.areaHeight - 213,
+            x: bottomXaxisNew[i],
+            y: this.areaHeight - 141,
             value: this.addn(value),
             color: 'black',
             textLineHeight: 14,
@@ -744,7 +754,10 @@ export default {
       const dots = []
       data.forEach(x => {
         const cx = this.getXaxis(this.getlocationTime(x.time))
-        const cy = (yRange[1]-x.value)/(yRange[1]-yRange[0]) * this.areaHeight
+        const cy = type === '疼痛' ? 
+          (yRange[1]-x.value)/(yRange[1]-yRange[0]) * (this.areaHeight - this.ttLabelHeight) + this.ttLabelHeight 
+          : 
+          (yRange[1]-x.value)/(yRange[1]-yRange[0]) * this.areaHeight
         dots.push({ x: cx, y: cy })
         if (dotCross) {
           this.createText({
@@ -943,13 +956,64 @@ export default {
         list.push(item)
       }
       return list
+    },
+    // 数字转中文
+    toChinesNum(num) {
+      let changeNum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'] 
+      let unit = ['', '十', '百', '千', '万']
+      num = parseInt(num)
+      let getWan = (temp) => {
+      　　let strArr = temp.toString().split('').reverse();
+      　　let newNum = '';
+      　　for (let i = 0; i < strArr.length; i++) {
+        　　newNum = (i == 0 && strArr[i] == 0 ? '' : (i > 0 && strArr[i] == 0 && strArr[i - 1] == 0 ? '' : changeNum[strArr[i]] + (strArr[i] == 0 ? unit[0] : unit[i]))) + newNum;
+      　　}
+         // 如果是两位数，一十改成十
+         if (strArr.length === 2 && strArr[1] === '1') {
+           newNum = newNum.slice(1)
+         }
+      　 return newNum;
+      }
+      let overWan = Math.floor(num / 10000);
+      let noWan = num % 10000;
+      if (noWan.toString().length < 4) {
+  　　　　　　noWan = '0' + noWan;
+  　　　 }
+      return overWan ? getWan(overWan) + '万' + getWan(noWan) : getWan(num);
+    },
+    // 医院要求一天中不论什么时间点录入的尿量、出量、入量都要显示在前一天日期当中，所以直接处理原数据
+    // ps: 入院当天是不会录入这些数据的，所以不会出现丢失数据
+    handleOriginData(data) {
+      const dataCopy = JSON.parse(JSON.stringify(data))
+      const codeList = ['15', '16', '17']
+      dataCopy.vitalSigns.forEach(x => {
+        if (codeList.includes(x.vital_code)) {
+          x.time_point = this.parseTime((this.getTimeStamp(x.time_point) - 24 * 60 * 60 * 1000))
+        }
+      })
+      return dataCopy
+    },
+    // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
+    handleNoteXaxis(xaxisList) {
+      const xaxisNew = []
+      for (let i = 0; i < xaxisList.length; i++) {
+        if (!xaxisNew.includes(xaxisList[i])) {
+          xaxisNew.push(xaxisList[i])
+        } else {
+          while(xaxisNew.includes(xaxisList[i])) {
+            xaxisList[i] += this.xSpace
+          }
+          xaxisNew.push(xaxisList[i])
+        }
+      }
+      return xaxisNew
     }
   },
   mounted() {
     const urlParams = this.urlParse()
     this.showInnerPage = urlParams.showInnerPage === '1'
     if (this.useMockData) {
-      this.apiData = mockData
+      this.apiData = this.handleOriginData(mockData)
       this.$nextTick(() => {
         this.handleData()
       })
@@ -964,7 +1028,7 @@ export default {
           StartTime: urlParams.StartTime
         }
       }).then(res=> {
-        this.apiData = res.data
+        this.apiData = this.handleOriginData(res.data)
         this.$nextTick(() => {
           this.handleData()
         })
@@ -983,11 +1047,11 @@ export default {
   font-weight: bold;
   .head-hos {
     padding-top: 10px;
-    font-size: 14px;
+    font-size: 20px;
   }
   .head-title {
-    padding: 10px 0;
-    font-size: 12px;
+    padding: 20px 0;
+    font-size: 20px;
   }
   .head-info {
     display: flex;
@@ -1055,7 +1119,6 @@ export default {
         border-right: 1px solid #000;
       }
       .text {
-        flex: 1;
         padding-top: 5px;
         padding-right: 5px;
       }
@@ -1069,14 +1132,36 @@ export default {
       }
     }
     .times {
+      .text {
+        flex: 1;
+      }
       .index {
         color: red;
       }
       flex: 2;
     }
     .pain {
+      position: relative;
+      .text {
+        flex-shrink: 0;
+        flex-grow: 0;
+      }
       .index {
         color: blue;
+        >span {
+          margin-top: -3px;
+        }
+      }
+      .s-index {
+        color: blue;
+        position: absolute;
+        bottom: 0;
+        right: 5px;
+      }
+    }
+    .temp {
+      .text {
+        flex: 1;
       }
     }
     .notes {
