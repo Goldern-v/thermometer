@@ -294,7 +294,7 @@
 
 <script>
 import zrender from 'zrender'
-import { mockData } from '../mockData'
+import { mockData } from 'src/mockData.js'
 
 export default {
   data() {
