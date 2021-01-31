@@ -1,47 +1,47 @@
 export const mockData = {
-  "ErrorCode": "1",
-  "ErrorMsg": "查询成功",
-  "patientInfo": {
-    "patInfo": {
-      "patient_id": "590904",
-      "name": "陈达琼",
-      "dept_name": "乳腺胸外科",
-      "bed_label": "012",
-      "visit_id": "4",
+  ErrorCode: '1',
+  ErrorMsg: '查询成功',
+  patientInfo: {
+    patInfo: {
+      patient_id: '590904',
+      name: '陈达琼',
+      dept_name: '乳腺胸外科',
+      bed_label: '012',
+      visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
-      "admission_date": "2019-05-15 08:12:30.0",
-      "age": "54",
-      "inp_no": "1568587"
+      admission_date: '2019-05-15 08:12:30.0',
+      age: '54',
+      inp_no: '1568587'
     }
   },
-  "vitalSigns": [
+  vitalSigns: [
     {
-      "temperature_type": "表顶注释",
-      "value": "手术入院|",
+      temperature_type: '表顶注释',
+      value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
-      "time_point": "2019-05-18 13:10:00",
-      "vital_code": "3"
+      time_point: '2019-05-18 13:10:00',
+      vital_code: '3'
     },
     {
-      "temperature_type": "表顶注释",
-      "value": "手术",
+      temperature_type: '表顶注释',
+      value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      "time_point": "2019-05-18 16:12:00",
-      "vital_code": "3"
+      time_point: '2019-05-18 16:12:00',
+      vital_code: '3'
     },
     {
-      "temperature_type": "表顶注释",
-      "value": "手术",
+      temperature_type: '表顶注释',
+      value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      "time_point": "2019-05-20 16:12:00",
-      "vital_code": "3"
+      time_point: '2019-05-20 16:12:00',
+      vital_code: '3'
     },
     {
-      "temperature_type": "表顶注释",
-      "value": "手术",
+      temperature_type: '表顶注释',
+      value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      "time_point": "2019-05-20 16:12:00",
-      "vital_code": "3"
+      time_point: '2019-05-20 16:12:00',
+      vital_code: '3'
     },
     // {
     //   "temperature_type": "表顶注释",
@@ -51,39 +51,39 @@ export const mockData = {
     //   "vital_code": "3"
     // },
     {
-      "temperature_type": "表底注释",
-      "value": "请假",
+      temperature_type: '表底注释',
+      value: '请假',
       // "time_point": "2020-12-15 03:12:00",
-      "time_point": "2019-05-18 03:12:00",
-      "vital_code": "31"
+      time_point: '2019-05-18 03:12:00',
+      vital_code: '31'
     },
     {
-      "temperature_type": "表底注释",
-      "value": "请假",
+      temperature_type: '表底注释',
+      value: '请假',
       // "time_point": "2020-12-15 03:12:00",
-      "time_point": "2019-05-18 03:12:00",
-      "vital_code": "31"
+      time_point: '2019-05-18 03:12:00',
+      vital_code: '31'
     },
     {
-      "temperature_type": "表底注释",
-      "value": "请假",
+      temperature_type: '表底注释',
+      value: '请假',
       // "time_point": "2020-12-15 03:12:00",
-      "time_point": "2019-05-20 03:12:00",
-      "vital_code": "31"
+      time_point: '2019-05-20 03:12:00',
+      vital_code: '31'
     },
     {
-      "temperature_type": "出量",
-      "value": "1475",
+      temperature_type: '出量',
+      value: '1475',
       // "time_point": "2020-12-15 03:12:00",
-      "time_point": "2019-05-21 03:12:00",
-      "vital_code": "17"
+      time_point: '2019-05-21 03:12:00',
+      vital_code: '17'
     },
     {
-      "temperature_type": "出量",
-      "value": "1475",
+      temperature_type: '出量',
+      value: '1475',
       // "time_point": "2020-12-15 03:12:00",
-      "time_point": "2019-05-24 03:12:00",
-      "vital_code": "17"
+      time_point: '2019-05-24 03:12:00',
+      vital_code: '17'
     },
     // {
     //   "temperature_type": "在线降温",
@@ -104,91 +104,91 @@ export const mockData = {
     //   "vital_code": "21"
     // },
     {
-      "temperature_type": "肛温",
-      "value": "36.9",
+      temperature_type: '肛温',
+      value: '36.9',
       // "time_point": "2020-12-15 03:12:00",
-      "time_point": "2019-05-20 03:12:00",
-      "vital_code": "19"
+      time_point: '2019-05-20 03:12:00',
+      vital_code: '19'
     },
     {
-      "temperature_type": "肛温",
-      "value": "38",
+      temperature_type: '肛温',
+      value: '38',
       // "time_point": "2020-12-15 03:12:00",
-      "time_point": "2019-05-21 03:12:00",
-      "vital_code": "19"
+      time_point: '2019-05-21 03:12:00',
+      vital_code: '19'
     },
     {
-      "temperature_type": "肛温",
-      "value": "36",
+      temperature_type: '肛温',
+      value: '36',
       // "time_point": "2020-12-15 03:12:00",
-      "time_point": "2019-05-19 03:12:00",
-      "vital_code": "19"
+      time_point: '2019-05-19 03:12:00',
+      vital_code: '19'
     },
     {
-      "temperature_type": "呼吸",
-      "value": "20",
-      "time_point": "2019-05-19 23:12:00",
-      "vital_code": "13"
+      temperature_type: '呼吸',
+      value: '20',
+      time_point: '2019-05-19 23:12:00',
+      vital_code: '13'
     },
     {
-      "temperature_type": "呼吸",
-      "value": "20",
-      "time_point": "2019-05-16 13:12:00",
-      "vital_code": "13"
+      temperature_type: '呼吸',
+      value: '20',
+      time_point: '2019-05-16 13:12:00',
+      vital_code: '13'
     },
     {
-      "temperature_type": "呼吸",
-      "value": "30",
-      "time_point": "2019-05-17 13:12:00",
-      "vital_code": "13"
+      temperature_type: '呼吸',
+      value: '30',
+      time_point: '2019-05-17 13:12:00',
+      vital_code: '13'
     },
     {
-      "temperature_type": "呼吸",
-      "value": "20",
-      "time_point": "2019-05-20 13:12:00",
-      "vital_code": "13"
+      temperature_type: '呼吸',
+      value: '20',
+      time_point: '2019-05-20 13:12:00',
+      vital_code: '13'
     },
     {
-      "temperature_type": "疼痛",
-      "value": "2",
-      "time_point": "2019-05-19 23:12:00",
-      "vital_code": "ttpf"
+      temperature_type: '疼痛',
+      value: '2',
+      time_point: '2019-05-19 23:12:00',
+      vital_code: 'ttpf'
     },
     {
-      "temperature_type": "疼痛",
-      "value": "10",
-      "time_point": "2019-05-20 23:12:00",
-      "vital_code": "ttpf"
+      temperature_type: '疼痛',
+      value: '10',
+      time_point: '2019-05-20 23:12:00',
+      vital_code: 'ttpf'
     },
     {
-      "temperature_type": "血压",
-      "value": "138/87",
-      "time_point": "2019-05-18 01:12:00",
-      "vital_code": "14"
+      temperature_type: '血压',
+      value: '138/87',
+      time_point: '2019-05-18 01:12:00',
+      vital_code: '14'
     },
     {
-      "temperature_type": "血压",
-      "value": "139/89",
-      "time_point": "2019-05-18 20:12:00",
-      "vital_code": "14"
+      temperature_type: '血压',
+      value: '139/89',
+      time_point: '2019-05-18 20:12:00',
+      vital_code: '14'
     },
     {
-      "temperature_type": "体重",
-      "value": "70",
-      "time_point": "2019-05-18 13:12:00",
-      "vital_code": "18"
+      temperature_type: '体重',
+      value: '70',
+      time_point: '2019-05-18 13:12:00',
+      vital_code: '18'
     },
     {
-      "temperature_type": "体温",
-      "value": "35.2",
-      "time_point": "2019-05-18 01:12:00",
-      "vital_code": "1"
+      temperature_type: '体温',
+      value: '35.2',
+      time_point: '2019-05-18 01:12:00',
+      vital_code: '1'
     },
     {
-      "temperature_type": "体温",
-      "value": "38",
-      "time_point": "2019-05-17 01:12:00",
-      "vital_code": "1"
+      temperature_type: '体温',
+      value: '38',
+      time_point: '2019-05-17 01:12:00',
+      vital_code: '1'
     },
     // {
     //   "temperature_type": "呼吸机R",
@@ -203,53 +203,53 @@ export const mockData = {
     //   "vital_code": "25"
     // },
     {
-      "temperature_type": "自定义1",
-      "value": "36.7",
-      "time_point": "2019-05-17 01:12:00",
-      "vital_code": null
+      temperature_type: '自定义1',
+      value: '36.7',
+      time_point: '2019-05-17 01:12:00',
+      vital_code: null
     },
     {
-      "temperature_type": "自定义1",
-      "value": "36.7",
-      "time_point": "2019-05-18 01:12:00",
-      "vital_code": null
+      temperature_type: '自定义1',
+      value: '36.7',
+      time_point: '2019-05-18 01:12:00',
+      vital_code: null
     },
     {
-      "temperature_type": "自定义2",
-      "value": "36.7",
-      "time_point": "2019-05-17 01:12:00",
-      "vital_code": null
+      temperature_type: '自定义2',
+      value: '36.7',
+      time_point: '2019-05-17 01:12:00',
+      vital_code: null
     },
     {
-      "temperature_type": "自定义2",
-      "value": "36.7",
-      "time_point": "2019-05-18 01:12:00",
-      "vital_code": null
+      temperature_type: '自定义2',
+      value: '36.7',
+      time_point: '2019-05-18 01:12:00',
+      vital_code: null
     },
     {
-      "temperature_type": "自定义3",
-      "value": "36.7",
-      "time_point": "2019-05-16 01:12:00",
-      "vital_code": null
+      temperature_type: '自定义3',
+      value: '36.7',
+      time_point: '2019-05-16 01:12:00',
+      vital_code: null
     },
     {
-      "temperature_type": "脉搏",
-      "value": "80",
-      "time_point": "2019-05-17 13:12:00",
-      "vital_code": "11"
+      temperature_type: '脉搏',
+      value: '80',
+      time_point: '2019-05-17 13:12:00',
+      vital_code: '11'
     },
     {
-      "temperature_type": "脉搏",
-      "value": "60",
-      "time_point": "2019-05-20 10:12:00",
-      "vital_code": "11"
+      temperature_type: '脉搏',
+      value: '60',
+      time_point: '2019-05-20 10:12:00',
+      vital_code: '11'
     },
     {
-      "temperature_type": "脉搏",
-      "value": "55",
-      "time_point": "2019-05-16 13:00:00",
-      "vital_code": "11"
-    },
+      temperature_type: '脉搏',
+      value: '55',
+      time_point: '2019-05-16 13:00:00',
+      vital_code: '11'
+    }
     // {
     //   "temperature_type": "尿量",
     //   "value": "1470",
@@ -274,7 +274,7 @@ export const mockData = {
     //   "time_point": "2020-12-15 03:12:00",
     //   "vital_code": "1"
     // },
-    
+
     // {
     //   "temperature_type": "物理降温",
     //   "value": "0.2",
@@ -293,7 +293,7 @@ export const mockData = {
     //   "time_point": "2020-12-15 03:12:00",
     //   "vital_code": "12"
     // },
-   
+
     // {
     //   "temperature_type": "表顶注释",
     //   "value": "手术",
