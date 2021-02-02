@@ -3,18 +3,20 @@
     class="main-view"
     :style="{ width: `${leftWidth + areaWidth}px` }"
     v-if="apiData"
-  >  <div class="head-hos">广州市花都区人民医院</div>
+  >
+    <div class="head-hos">广州市花都区人民医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="it
-     e  m">姓名： {{ patInfo.name }}</div>
-       <div class="item">
+      <div class="item">姓名：{{ patInfo.name }}</div>
+      <div class="item">年龄：{{ patInfo.age }}岁</div>
+      <div class="item">
         入院日期：{{ patInfo.admission_date.slice(0, 10) }}
       </div>
-        <div class="item">住院号：{{ patInfo.patient_id }}</div>
+      <div class="item">住院号：{{ patInfo.patient_id }}</div>
       <div class="item">科室：{{ patInfo.dept_name }}</div>
       <div class="item">床号：{{ patInfo.bed_label }}</div>
-    </div>    <div class="table-box" style="transform: translateY(0.5px);">
+    </div>
+    <div class="table-box" style="transform: translateY(0.5px);">
       <div class="row" :style="{ height: `${trHeight}px` }">
         <div
           class="label"
@@ -292,15 +294,15 @@
 
 <script>
 import zrender from 'zrender'
-import { mockData } from 'src/mockData.js'
+import { mockData } from 'src/projects/liaoCheng/mockData.js'
 
 export default {
-  data() {    
+  data() {
     const yRange = [33, 42]
     const pulseRange = [20, 200]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -341,16 +343,16 @@ export default {
           ]
         },
         heart: {
-          label: '心率',   
-          color: 'red',  
-          range: pulseRange,   
+          label: '心率',
+          color: 'red',
+          range: pulseRange,
           data: [
             // { time: '2019-05-15 07:10:00', value: 140},
           ]
         },
         pulse: {
           label: '脉搏',
-          color: 'red',   
+          color: 'red',
           solid: true,
           range: pulseRange,
           data: [

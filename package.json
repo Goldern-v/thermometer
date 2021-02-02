@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "dev:huaDu": "vue-cli-service serve --project=huaDu",
+    "dev:liaoCheng": "vue-cli-service serve --project=liaoCheng",
+    "build:huaDu": "vue-cli-service build --project=huaDu",
+    "build:liaoCheng": "vue-cli-service build --project=liaoCheng",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },

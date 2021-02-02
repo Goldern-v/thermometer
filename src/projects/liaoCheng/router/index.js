@@ -7,14 +7,8 @@ const routes = [{
         path: "/",
         name: "Home",
         component: () =>
-            import ('src/views/huaDu/thermometer.vue')
-    },
-    {
-        path: "/liaoCheng",
-        name: "liaoCheng",
-        component: () =>
-            import ('src/views/liaoCheng/thermometer.vue')
-    },
+            import ('src/projects/liaoCheng/views/thermometer.vue')
+    }
 ];
 
 const router = new VueRouter({
