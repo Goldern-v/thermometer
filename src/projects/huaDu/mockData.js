@@ -5,6 +5,7 @@ export const mockData = {
     patInfo: {
       patient_id: '590904',
       name: '陈达琼',
+      sex: '女',
       dept_name: '乳腺胸外科',
       bed_label: '012',
       visit_id: '4',

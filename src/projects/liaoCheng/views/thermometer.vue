@@ -4,17 +4,20 @@
     :style="{ width: `${leftWidth + areaWidth}px` }"
     v-if="apiData"
   >
-    <div class="head-hos">广州市花都区人民医院</div>
+    <div class="head-hos">聊城二院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item">姓名：{{ patInfo.name }}</div>
-      <div class="item">年龄：{{ patInfo.age }}岁</div>
+      <div class="item">姓名：<span class="value">{{ patInfo.name }}</span></div>
+      <div class="item">性别：<span class="value">{{ patInfo.sex }}</span></div>
+      <div class="item">年龄：<span class="value">{{ patInfo.age }}岁</span></div>
       <div class="item">
-        入院日期：{{ patInfo.admission_date.slice(0, 10) }}
+        入院日期：<span class="value">{{ patInfo.admission_date.slice(0, 10) }}</span>
       </div>
-      <div class="item">住院号：{{ patInfo.patient_id }}</div>
-      <div class="item">科室：{{ patInfo.dept_name }}</div>
-      <div class="item">床号：{{ patInfo.bed_label }}</div>
+      <div class="item">住院号：<span class="value">{{ patInfo.patient_id }}</span></div>
+    </div>
+    <div class="head-info-1">
+      <div class="item">科室：<span class="value">{{ adtLog }}</span></div>
+      <div class="item">床号：<span class="value">{{ bedExchangeLog }}</span></div>
     </div>
     <div class="table-box" style="transform: translateY(0.5px);">
       <div class="row" :style="{ height: `${trHeight}px` }">
@@ -65,7 +68,7 @@
           :style="{ width: `${leftWidth}px` }"
           v-html="`时&emsp;&emsp;间`"
         ></div>
-        <div class="value-item-box">
+        <div class="value-item-box font-12">
           <div class="value-item" v-for="(item, index) in timeTds" :key="index">
             {{ item }}
           </div>
@@ -133,7 +136,7 @@
         <div class="label" :style="{ width: `${leftWidth}px` }">
           呼吸(次/分)
         </div>
-        <div class="value-item-box">
+        <div class="value-item-box font-12">
           <div
             class="value-item"
             :style="item.style"
@@ -309,7 +312,7 @@ export default {
       areaHeight: 0, // 网格区域的高度
       xSpace: 16, // 纵向网格的间距
       ySpace: 13, //  横向网格的间距
-      leftWidth: 130, // 左侧内容宽度
+      leftWidth: 150, // 左侧内容宽度
       xRange: [1, 8],
       yRange,
       pulseRange,
@@ -394,8 +397,9 @@ export default {
       patInfo: {
         patient_id: '',
         name: '',
-        dept_name: '',
-        bed_label: '',
+        sex: '',
+        dept_name: '', // 由于存在转科的情况，所以这个字段基本废弃
+        bed_label: '', // 由于存在转床的情况，所以这个字段基本废弃
         visit_id: '',
         admission_date: this.parseTime(new Date()),
         age: ''
@@ -435,7 +439,9 @@ export default {
       },
       pageTotal: 1,
       currentPage: 1,
-      showInnerPage: false // 是否显示内部分页
+      showInnerPage: false, // 是否显示内部分页
+      adtLog: '', // 转科
+      bedExchangeLog: '', // 转床
     }
   },
   computed: {
@@ -637,6 +643,12 @@ export default {
           case 'printing':
             window.print()
             break
+          case 'nurseExchangeInfo':
+            if (e.data.value) {
+              this.adtLog = e.data.value.adtLog || '' // 转科
+              this.bedExchangeLog = e.data.value.bedExchangeLog || '' // 转床
+            }
+            break
           default:
             break
         }
@@ -712,6 +724,9 @@ export default {
       }
       this.dateRangeList = dateRangeList
       this.pageTotal = dateRangeList.length
+
+      // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
+      window.parent.postMessage({ type: 'getNurseExchangeInfo', value: { startLogDateTime: this.timeRange[0], endLogDateTime: this.timeRange[1] } }, '*')
 
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
       const customSigns = [] // 记录自定义字段的名字
@@ -1392,16 +1407,16 @@ export default {
 .main-view {
   padding: 10px 0;
   margin: 0 auto;
-  font-size: 12px;
+  font-size: 14px;
   color: #000;
   font-weight: bold;
   .head-hos {
     padding-top: 10px;
-    font-size: 20px;
+    font-size: 26px;
   }
   .head-title {
     padding: 20px 0;
-    font-size: 20px;
+    font-size: 26px;
   }
   .head-info {
     display: flex;
@@ -1409,6 +1424,20 @@ export default {
       flex: 1;
       text-align: left;
       padding: 0 0 5px 5px;
+      .value {
+        font-weight: normal;
+      }
+    }
+  }
+  .head-info-1 {
+    display: flex;
+    .item {
+      text-align: left;
+      padding: 0 0 5px 5px;
+      margin-right: 80px;
+      .value {
+        font-weight: normal;
+      }
     }
   }
 }
@@ -1457,7 +1486,7 @@ export default {
     position: relative;
     flex-shrink: 0;
     display: flex;
-    font-size: 12px;
+    font-size: 14px;
     border-left: 1px solid #000;
     transform: translateX(-0.5px);
     > .item {
@@ -1515,6 +1544,7 @@ export default {
       }
     }
     .notes {
+      font-size: 12px;
       position: absolute;
       left: 3px;
       bottom: 3px;
@@ -1586,5 +1616,8 @@ export default {
   button[disabled='disabled'] {
     cursor: not-allowed;
   }
+}
+.font-12 {
+  font-size: 12px;
 }
 </style>
