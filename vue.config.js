@@ -26,7 +26,13 @@ module.exports = {
   devServer: {
     proxy: {
       '/': {
-        target: `http://120.238.239.27:9091`,
+        target: (() => {
+          switch(project) {
+            case 'huaDu': return 'http://120.238.239.27:9091'
+            case 'liaoCheng': return 'http://120.224.211.7:9091'
+            default: break
+          }
+        })(),
         changeOrigin: true,
       },
     },
