@@ -663,10 +663,10 @@ export default {
       const settingMap = this.settingMap
       return [
         ...settingMap.heart.data.map(x => {
-          return [this.getXaxis(this.getlocationTime(x.time)), this.getYaxis(settingMap.heart.range, x.value)]
+          return [this.getXaxis(this.getLocationTime(x.time)), this.getYaxis(settingMap.heart.range, x.value)]
         }),
         ...settingMap.pulse.data.map(x => {
-          return [this.getXaxis(this.getlocationTime(x.time)), this.getYaxis(settingMap.pulse.range, x.value)]
+          return [this.getXaxis(this.getLocationTime(x.time)), this.getYaxis(settingMap.pulse.range, x.value)]
         }).reverse()
       ]
     }
@@ -907,7 +907,7 @@ export default {
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
       const xaxis = notes.map((x) =>
-        this.getXaxis(this.getlocationTime(x.time))
+        this.getXaxis(this.getLocationTime(x.time))
       )
       const xaxisNew = this.handleNoteXaxis(xaxis)
       notes.forEach((x, i) => {
@@ -1245,7 +1245,7 @@ export default {
     }) {
       const dots = []
       data.forEach((x, index) => {
-        const cx = this.getXaxis(this.getlocationTime(x.time))
+        const cx = this.getXaxis(this.getLocationTime(x.time))
         const cy = this.getYaxis(yRange, x.value, vitalCode)
         dots.push({ x: cx, y: cy })
         switch (dotType) {
@@ -1279,7 +1279,7 @@ export default {
                 ...this.settingMap.analTemperature.data
               ].map(x => {
                 return {
-                  x: this.getXaxis(this.getlocationTime(x.time)),
+                  x: this.getXaxis(this.getLocationTime(x.time)),
                   y: this.getYaxis(this.yRange, x.value),
                 }
               })
@@ -1316,7 +1316,7 @@ export default {
           // 画降温
           for (let i = this.coolList.length - 1; i >= 0; i--) {
             const item = this.coolList[i]
-            const coolX = this.getXaxis(this.getlocationTime(item.time))
+            const coolX = this.getXaxis(this.getLocationTime(item.time))
             const coolY = this.getYaxis(yRange, item.value, vitalCode)
             if (coolX === cx) {
               this.createCircle({
@@ -1383,7 +1383,7 @@ export default {
           // 画疼痛干预
           for (let i = this.ttgyList.length - 1; i >= 0; i--) {
             const item = this.ttgyList[i]
-            const ttgyX = this.getXaxis(this.getlocationTime(item.time))
+            const ttgyX = this.getXaxis(this.getLocationTime(item.time))
             const ttgyY = this.getYaxis(yRange, item.value, vitalCode)
             if (ttgyX === cx) {
               this.createIsogon({
@@ -1467,8 +1467,7 @@ export default {
     //   return `${time.slice(0, -8)}${splitHour}:00:00`
     // },
     // 计算用来定位描点的时间，医院特殊要求用这个方法定位
-    getlocationTime(time) {
-      // const date = new Date(time)
+    getLocationTime(time) {
       const sec = this.getTotalSeconds(time.slice(-8))
       let str = ''
       const timeAreasMap = {

@@ -839,7 +839,7 @@ export default {
         })
         // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
         const topXaxis = this.topSheetNote.map((x) =>
-          this.getXaxis(this.getlocationTime(x.time))
+          this.getXaxis(this.getLocationTime(x.time))
         )
         const topXaxisNew = this.handleNoteXaxis(topXaxis)
         this.topSheetNote.forEach((x, i) => {
@@ -862,7 +862,7 @@ export default {
         })
         // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
         const bottomXaxis = this.bottomSheetNote.map((x) =>
-          this.getXaxis(this.getlocationTime(x.time))
+          this.getXaxis(this.getLocationTime(x.time))
         )
         const bottomXaxisNew = this.handleNoteXaxis(bottomXaxis)
         this.bottomSheetNote.forEach((x, i) => {
@@ -1095,7 +1095,7 @@ export default {
     }) {
       const dots = []
       data.forEach((x) => {
-        const cx = this.getXaxis(this.getlocationTime(x.time))
+        const cx = this.getXaxis(this.getLocationTime(x.time))
         const cy =
           type === '疼痛'
             ? ((yRange[1] - x.value) / (yRange[1] - yRange[0])) *
@@ -1174,8 +1174,7 @@ export default {
     //   return `${time.slice(0, -8)}${splitHour}:00:00`
     // },
     // 计算用来定位描点的时间，医院特殊要求用这个方法定位
-    getlocationTime(time) {
-      // const date = new Date(time)
+    getLocationTime(time) {
       const sec = this.getTotalSeconds(time.slice(-8))
       let str = ''
       const timeAreasMap = {
