@@ -178,7 +178,7 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">液体入量</div>
+            <div class="label" :style="{ width: `${leftWidth}px` }">总入液量</div>
             <div class="value-item-box">
               <div
                 class="value-item"
@@ -214,7 +214,7 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">出量(ml)</div>
+            <div class="label" :style="{ width: `${leftWidth}px` }">总排出量(ml)</div>
             <div class="value-item-box">
               <div
                 class="value-item"
@@ -394,10 +394,10 @@ export default {
       ], // 呼吸
       pressureList: [], // 血压
       weightList: [], // 体重
-      inputList: [], // 液体入量
+      inputList: [], // 总入液量
       shitList: [], // 大便次数
       urineList: [], // 尿量
-      outputList: [], // 出量
+      outputList: [], // 总排出量
       customList0: [], // 自定义1
       customList1: [], // 自定义2
       customList2: [], // 自定义3
@@ -423,8 +423,8 @@ export default {
         '13': '呼吸',
         '14': '血压',
         '15': '尿量',
-        '16': '入量',
-        '17': '出量',
+        '33': '总入液量',
+        '34': '总排出量',
         '18': '体重',
         '19': '肛温',
         '2': '口温',
@@ -708,10 +708,10 @@ export default {
       if (!vitalSigns.length) {
         vitalSigns.push({
           // 空数据加个占位，否则样式会错乱
-          temperature_type: '出量',
+          temperature_type: '总排出量',
           value: '',
           time_point: this.patInfo.admission_date,
-          vital_code: '17'
+          vital_code: '34'
         })
       }
       this.vitalSigns = vitalSigns
@@ -798,7 +798,7 @@ export default {
           case '18':
             this.weightList.push(item)
             break
-          case '16':
+          case '33':
             this.inputList.push(item)
             break
           case '24':
@@ -807,7 +807,7 @@ export default {
           case '15':
             this.urineList.push(item)
             break
-          case '17':
+          case '34':
             this.outputList.push(item)
             break
           default:
@@ -1362,11 +1362,11 @@ export default {
       }
       return overWan ? getWan(overWan) + '万' + getWan(noWan) : getWan(num)
     },
-    // 医院要求一天中不论什么时间点录入的尿量、出量、入量都要显示在前一天日期当中，所以直接处理原数据
+    // 医院要求一天中不论什么时间点录入的尿量、总排出量、入量都要显示在前一天日期当中，所以直接处理原数据
     // ps: 入院当天是不会录入这些数据的，所以不会出现丢失数据
     handleOriginData(data) {
       const dataCopy = JSON.parse(JSON.stringify(data))
-      const codeList = ['15', '16', '17']
+      const codeList = ['15', '33', '34']
       dataCopy.vitalSigns.forEach((x) => {
         if (codeList.includes(x.vital_code)) {
           x.time_point = this.parseTime(

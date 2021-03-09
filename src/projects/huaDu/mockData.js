@@ -73,18 +73,18 @@ export const mockData = {
       vital_code: '31'
     },
     {
-      temperature_type: '出量',
+      temperature_type: '总排出量',
       value: '1475',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-21 03:12:00',
-      vital_code: '17'
+      vital_code: '34'
     },
     {
-      temperature_type: '出量',
+      temperature_type: '总排出量',
       value: '1475',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-24 03:12:00',
-      vital_code: '17'
+      vital_code: '34'
     },
     // {
     //   "temperature_type": "在线降温",
@@ -264,10 +264,10 @@ export const mockData = {
     //   "vital_code": "28"
     // },
     // {
-    //   "temperature_type": "入量",
+    //   "temperature_type": "总入液量",
     //   "value": "2992",
     //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": "16"
+    //   "vital_code": "33"
     // },
     // {
     //   "temperature_type": "体温",
