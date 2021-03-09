@@ -1,5 +1,6 @@
 <template>
   <div
+    @dblclick="dblclick"
     class="main-view"
     v-if="apiData"
   >
@@ -662,6 +663,10 @@ export default {
         }
       }
     },
+    dblclick() {
+      // 和iframe外部通信，传递双击事件
+      window.parent.postMessage({ type: 'dblclick' }, '*')
+    },
     reset() {
       Object.keys(this.settingMap).forEach((x) => {
         this.settingMap[x].data = []
@@ -1102,10 +1107,10 @@ export default {
         if (dotCross) {
           this.createText({
             x: cx,
-            y: cy - 10.5,
+            y: cy - 16.5,
             value: 'x',
             color: dotColor,
-            fontSize: 18,
+            fontSize: 28,
             tips: `${x.time} ${type}：${x.value}`,
             zlevel: 10,
             fontWeight: 'bold'
@@ -1114,7 +1119,7 @@ export default {
           this.createCircle({
             cx,
             cy,
-            r: 4,
+            r: 7,
             color: dotColor || '#000',
             zlevel: 10,
             tips: `${x.time} ${type}：${x.value}`,
@@ -1328,6 +1333,7 @@ export default {
       ]
       let unit = ['', '十', '百', '千', '万']
       num = parseInt(num)
+      if (!num) return '零'
       let getWan = (temp) => {
         let strArr = temp
           .toString()
@@ -1421,7 +1427,7 @@ export default {
   margin: 0 auto;
   font-size: 21px;
   color: #000;
-  font-weight: bold;
+  font-weight: 900;
   font-family: Simsun;
   width: fit-content;
   .view-content {
@@ -1572,29 +1578,29 @@ export default {
       font-size: 18px;
       position: absolute;
       left: 3px;
-      bottom: -5px;
+      bottom: -3px;
       .note-item {
         position: relative;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
       }
       .note-icon {
         display: inline-block;
-        width: 10px;
-        height: 10px;
+        width: 18px;
+        height: 18px;
         border-radius: 50%;
         border-width: 2px;
         border-style: solid;
         border-color: #fff;
-        transform: translateY(0.5px);
+        transform: translate(-4px, 2px);
       }
       .axillary {
         position: absolute;
-        right: 1px;
-        top: -2px;
+        right: 7px;
+        top: -4px;
         display: inline-block;
         z-index: 2;
         color: blue;
-        font-size: 17px;
+        font-size: 26px;
         line-height: 1;
         font-weight: bold;
       }

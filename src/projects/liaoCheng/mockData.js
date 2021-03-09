@@ -87,6 +87,13 @@ export const mockData = {
       vital_code: '19'
     },
     {
+      temperature_type: '尿量',
+      value: '23',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-21 03:12:00',
+      vital_code: '12'
+    },
+    {
       temperature_type: '出量',
       value: '1475',
       // "time_point": "2020-12-15 03:12:00",

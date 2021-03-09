@@ -20,7 +20,7 @@ export const mockData = {
       temperature_type: '表顶注释',
       value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 13:10:00',
+      time_point: '2019-05-18 13:00:00',
       vital_code: '3'
     },
     {
