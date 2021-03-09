@@ -8,7 +8,15 @@ vue+zrender体温单
 项目需求文档后续统一放到docs文件夹里。
 
 ## 花都文档
+本地开发：npm run dev:huaDu
+
+打包构建：npm run build:huaDu
+
 [README-huaDu.md](./README-huaDu.md)
 
 ## 聊城文档
+本地开发：npm run dev:liaoCheng
+
+打包构建：npm run build:liaoCheng
+
 [README-liaoCheng.md](./README-liaoCheng.md)
