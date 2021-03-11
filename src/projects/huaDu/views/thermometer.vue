@@ -180,9 +180,8 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: weightList })"
               :key="index"
-            >
-              {{ item.value }}
-            </div>
+              v-html="item.value"
+            ></div>
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
@@ -192,9 +191,8 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: inputList })"
               :key="index"
-            >
-              {{ item.value }}
-            </div>
+              v-html="item.value"
+            ></div>
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
@@ -204,9 +202,8 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: shitList })"
               :key="index"
-            >
-              {{ item.value }}
-            </div>
+              v-html="item.value"
+            ></div>
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
@@ -216,9 +213,8 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: urineList })"
               :key="index"
-            >
-              {{ item.value }}
-            </div>
+              v-html="item.value"
+            ></div>
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
@@ -228,9 +224,8 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: outputList })"
               :key="index"
-            >
-              {{ item.value }}
-            </div>
+              v-html="item.value"
+            ></div>
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
@@ -242,9 +237,8 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList0 })"
               :key="index"
-            >
-              {{ item.value }}
-            </div>
+              v-html="item.value"
+            ></div>
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
@@ -256,9 +250,8 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList1 })"
               :key="index"
-            >
-              {{ item.value }}
-            </div>
+              v-html="item.value"
+            ></div>
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
@@ -270,9 +263,8 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList2 })"
               :key="index"
-            >
-              {{ item.value }}
-            </div>
+              v-html="item.value"
+            ></div>
           </div>
         </div>
         <div class="row border-bottom-black-2" :style="{ height: `${trHeight}px` }">
@@ -284,9 +276,8 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList3 })"
               :key="index"
-            >
-              {{ item.value }}
-            </div>
+              v-html="item.value"
+            ></div>
           </div>
         </div>
         <div class="vtline" :style="{left: `${leftWidth+item*(6*xSpace+13)}px`, transform: 'translateX(-1.5px)', 'border-color': '#000'}" v-for="item in 6" :key="item"></div>
@@ -561,7 +552,13 @@ export default {
       ]
     },
     operateDateList() {
-      return this.vitalSigns
+      /* 一天中: 
+        1、有分娩的情况下，单独出现无论多少次分娩，都算一次
+        2、有分娩和手术(包含手术分娩)同时出现，计算次数按照手术的次数
+        3、只有手术(包含手术分娩)，有多少次就记录多少次
+        所以要将不计数的分娩去掉
+      */
+      const list = this.vitalSigns
         .filter(
           (x) =>
             x.vital_code === '3' &&
@@ -570,21 +567,43 @@ export default {
               x.value === '手术分娩|' ||
               x.value === '手术入院|')
         )
-        .map((x) => x.time_point)
+      const obj = {}
+      this.dateList.forEach(x => {
+        obj[x] = []
+      })
+      list.forEach(x => {
+        const date = x.time_point.slice(0, 10)
+        if (obj[date]) {
+          obj[date].push(x)
+        }
+      })
+      const listNew = []
+      Object.values(obj).forEach(x => {
+        const values = x.map(y => y.value)
+        if (values.includes('分娩|')) {
+          if (values.some(z => z.includes('手术'))) {
+            for (let i = x.length - 1; i >= 0; i--) {
+              if (x[i].value === '分娩|') {
+                x.splice(i, 1)
+              }
+            }
+          } else {
+            x = [x[0]]
+          }
+        }
+        listNew.push(...x)
+      })
+      return listNew.map((x) => x.time_point)
     },
     formatOperateDateList() {
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0)
           return ''
         if (!this.operateDateList.length) return ''
-        // 构造天数差数组，有相同天数差的说明在同一天，所以要去重
-        const days = [
-          ...new Set(
-            this.operateDateList.map((y) => {
-              return this.dayInterval(x, y)
-            })
-          )
-        ]
+        // 构造天数差数组，有相同天数差的说明在同一天x
+        const days = this.operateDateList.map((y) => {
+          return this.dayInterval(x, y)
+        })
         if (days.every((z) => z < 0)) return ''
         // 找到前一次手术（最后一次天数差是正整数的地方）
         let index = 0
@@ -644,10 +663,10 @@ export default {
     ttLabelHeight() {
       return this.ySpace * 5 + 9
     },
-    temperatureNoteList() { // 拒测,不在,外出,请假都是体温相关的表底注释，出现后体温曲线要在此时间点断开
-      const textList = ['拒测', '不在', '外出', '请假']
-      return this.bottomSheetNote.filter(x => textList.includes(x.value))
-    },
+    // temperatureNoteList() { // 拒测,不在,外出,请假都是体温相关的表底注释，出现后体温曲线要在此时间点断开
+    //   const textList = ['拒测', '不在', '外出', '请假']
+    //   return this.bottomSheetNote.filter(x => textList.includes(x.value))
+    // },
   },
   watch: {
     // 因为分页可能在体温单外面，所以给父页面传递pageTotal
@@ -1331,13 +1350,14 @@ export default {
       })
       // 连线
       for (let i = 0; i < dots.length - 1; i++) {
-        if (['1', '2', '19'].includes(vitalCode)) {
-          if (this.temperatureNoteList.some(x => {
-            return this.getTimeStamp(x.time) >= this.getTimeStamp(dots[i].time) && this.getTimeStamp(x.time) <= this.getTimeStamp(dots[i+1].time)
-          })) {
-            continue
-          }
-        }
+        // 医院那边要求连续，不能断所以注释这个体温曲线断点逻辑
+        // if (['1', '2', '19'].includes(vitalCode)) {
+        //   if (this.temperatureNoteList.some(x => {
+        //     return this.getTimeStamp(x.time) >= this.getTimeStamp(dots[i].time) && this.getTimeStamp(x.time) <= this.getTimeStamp(dots[i+1].time)
+        //   })) {
+        //     continue
+        //   }
+        // }
         this.createLine({
           x1: dots[i].x,
           y1: dots[i].y,
@@ -1526,7 +1546,7 @@ export default {
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time)
           if (timeNum >= i && timeNum < i + timeInterval) {
-            item.value = targetList[j].value
+            item.value = targetList[j].value.replace('+', '<span class="increase">+</span>')
             targetList.splice(j, 1)
             break
           }
@@ -1730,6 +1750,11 @@ export default {
       align-items: center;
       justify-content: center;
       height: 100%;
+      .increase {
+        color:red; 
+        display: inline-block; 
+        margin-top:-5px;
+      }
     }
   }
 }
