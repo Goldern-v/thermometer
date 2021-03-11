@@ -960,9 +960,9 @@ export default {
         // 生成心率脉搏过快注释
         this.createNote(this.topPulseNote, this.ySpace + 2, 'black')
         // 生成表顶注释
-        this.createNote(this.topSheetNote, this.indexTextAreaHeight + 2, 'red',)
+        this.createNote(this.topSheetNote, this.indexTextAreaHeight + 2, 'red')
         // 生成表底注释
-        this.createNote(this.bottomSheetNote, this.indexTextAreaHeight + this.timesTempAreaHeight - 5 * (this.ySpace + 1), 'black',)
+        this.createNote(this.bottomSheetNote, this.indexTextAreaHeight + this.timesTempAreaHeight - 5 * (this.ySpace + 1), 'black')
       })
     },
     yLine() {

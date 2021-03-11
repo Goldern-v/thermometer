@@ -58,20 +58,20 @@ export const mockData = {
       time_point: '2019-05-18 03:12:00',
       vital_code: '31'
     },
-    {
-      temperature_type: '表底注释',
-      value: '请假',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 03:12:00',
-      vital_code: '31'
-    },
-    {
-      temperature_type: '表底注释',
-      value: '请假',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 03:12:00',
-      vital_code: '31'
-    },
+    // {
+    //   temperature_type: '表底注释',
+    //   value: '请假',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2019-05-18 03:12:00',
+    //   vital_code: '31'
+    // },
+    // {
+    //   temperature_type: '表底注释',
+    //   value: '请假',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2019-05-20 03:12:00',
+    //   vital_code: '31'
+    // },
     {
       temperature_type: '总排出量',
       value: '1475',
@@ -98,12 +98,12 @@ export const mockData = {
     //   "time_point": "2020-12-15 03:12:00",
     //   "vital_code": "24"
     // },
-    // {
-    //   "temperature_type": "发热体温",
-    //   "value": "37.1",
-    //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": "21"
-    // },
+    {
+      "temperature_type": "发热体温",
+      "value": "40",
+      "time_point": "2019-05-19 22:12:00",
+      "vital_code": "21"
+    },
     {
       temperature_type: '肛温',
       value: '36.9',
@@ -234,10 +234,46 @@ export const mockData = {
       vital_code: null
     },
     {
+      temperature_type: '肛温',
+      value: '38',
+      time_point: '2019-05-17 13:12:00',
+      vital_code: '19'
+    },
+    {
+      temperature_type: '心率',
+      value: '100',
+      time_point: '2019-05-17 13:12:00',
+      vital_code: '12'
+    },
+    {
+      temperature_type: '体温',
+      value: '37',
+      time_point: '2019-05-17 13:12:00',
+      vital_code: '1'
+    },
+    {
+      "temperature_type": "物理降温",
+      "value": "36",
+      "time_point": "2019-05-17 13:12:00",
+      "vital_code": "27"
+    },
+    {
       temperature_type: '脉搏',
       value: '80',
       time_point: '2019-05-17 13:12:00',
       vital_code: '11'
+    },
+    {
+      temperature_type: '心率',
+      value: '80',
+      time_point: '2019-05-20 10:12:00',
+      vital_code: '12'
+    },
+    {
+      temperature_type: '口温',
+      value: '36',
+      time_point: '2019-05-20 10:12:00',
+      vital_code: '2'
     },
     {
       temperature_type: '脉搏',
@@ -246,11 +282,29 @@ export const mockData = {
       vital_code: '11'
     },
     {
+      temperature_type: '心率',
+      value: '75',
+      time_point: '2019-05-16 13:00:00',
+      vital_code: '12'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '1.25',
+      time_point: '2019-05-16 13:00:00',
+      vital_code: 'ttpf'
+    },
+    {
       temperature_type: '脉搏',
-      value: '55',
+      value: '20',
       time_point: '2019-05-16 13:00:00',
       vital_code: '11'
-    }
+    },
+    {
+      "temperature_type": "线上降温",
+      "value": "37",
+      "time_point": "2019-05-16 13:00:00",
+      "vital_code": "22"
+    },
     // {
     //   "temperature_type": "尿量",
     //   "value": "1470",
@@ -274,19 +328,6 @@ export const mockData = {
     //   "value": "36.8",
     //   "time_point": "2020-12-15 03:12:00",
     //   "vital_code": "1"
-    // },
-
-    // {
-    //   "temperature_type": "物理降温",
-    //   "value": "0.2",
-    //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": "27"
-    // },
-    // {
-    //   "temperature_type": "线上降温",
-    //   "value": "0.1",
-    //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": "22"
     // },
     // {
     //   "temperature_type": "心率",

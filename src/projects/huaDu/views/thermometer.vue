@@ -25,7 +25,7 @@
       <div class="vline" :style="{left: `${leftWidth}px`}"></div>
       <div class="vline" :style="{right: 0}"></div>
       <div class="table-box" style="transform: translateY(0.5px);">
-        <div class="vtline" :style="{left: `${leftWidth+item*(6*xSpace+6)}px`, 'border-color': '#000'}" v-for="item in 6" :key="item"></div>
+        <div class="vtline" :style="{left: `${leftWidth+item*(6*xSpace+13)}px`, transform: 'translateX(-1.5px)', 'border-color': '#000'}" v-for="item in 6" :key="item"></div>
         <div class="row border-top-black-2" :style="{ height: `${trHeight}px` }">
           <div
             class="label"
@@ -71,11 +71,11 @@
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div
             class="label"
-            :style="{ width: `${leftWidth}px` }"
+            :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
             v-html="`时&emsp;&emsp;间`"
           ></div>
-          <div class="value-item-box font-16">
-            <div class="value-item" v-for="(item, index) in timeTds" :key="index">
+          <div class="value-item-box font-18">
+            <div class="value-item" :style="smallTdStyle(index, timeTds.length)" v-for="(item, index) in timeTds" :key="index">
               {{ item }}
             </div>
           </div>
@@ -91,6 +91,10 @@
               {{ value.label }}
               <template v-if="key === 'axillaryTemperature'">
                 <span class="axillary">x</span>
+                <i class="note-icon"></i>
+              </template>
+              <template v-else-if="key === 'pain'">
+                <span class="pain-icon"></span>
                 <i class="note-icon"></i>
               </template>
               <i
@@ -139,13 +143,16 @@
       </div>
       <div class="table-box" style="transform: translateY(-0.5px);">
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }">
             呼吸(次/分)
           </div>
-          <div class="value-item-box font-16">
+          <div class="value-item-box font-18">
             <div
               class="value-item"
-              :style="item.style"
+              :style="{
+                ...smallTdStyle(index, formatBreatheList.length), 
+                ...item.style, 
+              }"
               v-for="(item, index) in formatBreatheList"
               :key="index"
             >
@@ -154,10 +161,11 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">血压(mmHg)</div>
+          <div class="label" :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }">血压(mmHg)</div>
           <div class="value-item-box font-18" style="color:blue;">
             <div
               class="value-item"
+              :style="middleTdStyle(index, formatBreatheList.length)"
               v-for="(item, index) in formatPressureList"
               :key="index"
             >
@@ -281,7 +289,7 @@
             </div>
           </div>
         </div>
-        <div class="vtline" :style="{left: `${leftWidth+item*(6*xSpace+6)}px`, 'border-color': '#000'}" v-for="item in 6" :key="item"></div>
+        <div class="vtline" :style="{left: `${leftWidth+item*(6*xSpace+13)}px`, transform: 'translateX(-1.5px)', 'border-color': '#000'}" v-for="item in 6" :key="item"></div>
       </div>
     </div>
     <div class="pagination" v-if="showInnerPage">
@@ -327,53 +335,64 @@ export default {
       painRange,
       settingMap: {
         oralTemperature: {
+          vitalCode: '2',
           label: '口表',
           color: 'black',
           solid: true,
+          dotType: 'Circle',
           range: yRange,
           data: [
             // { time: '2019-05-15 07:10:00', value: 37 },
           ]
         },
         axillaryTemperature: {
+          vitalCode: '1',
           label: '腋表',
           color: 'blue',
           lineColor: 'black',
-          cross: true,
+          dotType: 'Text',
           range: yRange,
           data: [
             // { time: '2019-05-15 07:10:00', value: 36.5 },
           ]
         },
         analTemperature: {
+          vitalCode: '19',
           label: '肛表',
           color: 'black',
           range: yRange,
+          dotType: 'Circle',
           data: [
             // { time: '2019-05-15 07:10:00', value: 34 },
           ]
         },
         heart: {
+          vitalCode: '12',
           label: '心率',
           color: 'red',
+          dotType: 'Circle',
           range: pulseRange,
           data: [
             // { time: '2019-05-15 07:10:00', value: 140},
           ]
         },
         pulse: {
+          vitalCode: '11',
           label: '脉搏',
           color: 'red',
           solid: true,
+          dotType: 'Circle',
           range: pulseRange,
           data: [
             // { time: '2019-05-15 07:10:00', value: 120},
           ]
         },
         pain: {
+          vitalCode: 'ttpf',
           label: '疼痛',
           color: 'blue',
           solid: true,
+          dotType: 'Isogon',
           range: painRange,
           data: [
             // { time: '2019-05-15 07:10:00', value: 2},
@@ -397,6 +416,9 @@ export default {
       shitList: [], // 大便次数
       urineList: [], // 尿量
       outputList: [], // 出量
+      physicsCoolList: [], // 物理降温
+      onLineCoolList: [], // 线上降温
+      feverList: [], // 发热体温
       customList0: [], // 自定义1
       customList1: [], // 自定义2
       customList2: [], // 自定义3
@@ -415,7 +437,7 @@ export default {
       vitalSigns: [],
       typeMap: {
         '3': '表顶注释', // 入院|,手术,分娩|,出院|,转入|,死亡|,排胎|,出生|,手术分娩|,手术入院|,转出|
-        '31': '表底注释', // 拒测,不在,外出不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
+        '31': '表底注释', // 拒测,不在,外出,不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
         '1': '体温',
         '11': '脉搏',
         '12': '心率',
@@ -515,8 +537,8 @@ export default {
           (x, i) =>
             (x.style =
               i % 2 === 0
-                ? 'align-items: flex-start;'
-                : 'align-items: flex-end;')
+                ? {'align-items': 'flex-start'}
+                : {'align-items': 'flex-end'})
         )
       return list
     },
@@ -620,8 +642,12 @@ export default {
       return list
     },
     ttLabelHeight() {
-      return this.ySpace * 5 + 4
-    }
+      return this.ySpace * 5 + 9
+    },
+    temperatureNoteList() { // 拒测,不在,外出,请假都是体温相关的表底注释，出现后体温曲线要在此时间点断开
+      const textList = ['拒测', '不在', '外出', '请假']
+      return this.bottomSheetNote.filter(x => textList.includes(x.value))
+    },
   },
   watch: {
     // 因为分页可能在体温单外面，所以给父页面传递pageTotal
@@ -637,6 +663,28 @@ export default {
     window.removeEventListener('message', this.messageHandle, false)
   },
   methods: {
+    smallTdStyle(index, length) {
+      return {
+        width: `${this.xSpace + ((index-5)%6 === 0 ? 3 : 2)}px`,
+        flex: 'auto',
+        'border-right-style': 'solid',
+        'border-width': `${(index-5)%6 === 0 ? 3 : 2}px`,
+        'border-color': `${(index-5)%6 === 0 && index < length - 1 ? 'transparent' : '#000'}`,
+        transform: 'translateX(1.5px)',
+        'font-family': 'SimHei'
+      }
+    },
+    middleTdStyle(index, length) {
+      return {
+        width: `${this.xSpace * 3 + ((index-1)%2 === 0 ? 7 : 6)}px`,
+        flex: 'auto',
+        'border-right-style': 'solid',
+        'border-width': `${(index-1)%2 === 0 ? 3 : 2}px`,
+        'border-color': `${(index - 1)%2 === 0 && index < length - 1 ? 'transparent' : '#000'}`,
+        transform: 'translateX(1.5px)',
+        'font-family': 'SimHei'
+      }
+    },
     messageHandle(e) {
       if (e && e.data) {
         switch (e.data.type) {
@@ -679,6 +727,9 @@ export default {
       this.shitList = []
       this.urineList = []
       this.outputList = []
+      this.physicsCoolList = []
+      this.onLineCoolList = []
+      this.feverList = []
       this.dateRangeList = []
       for (let i = 0; i < 4; i++) {
         this[`customList${i}`] = []
@@ -809,6 +860,15 @@ export default {
           case '34':
             this.outputList.push(item)
             break
+          case '27':
+            this.physicsCoolList.push(item)
+            break
+          case '22': 
+            this.onLineCoolList.push(item)
+            break
+          case '21':
+            this.feverList.push(item)
+            break
           default:
             break
         }
@@ -827,60 +887,99 @@ export default {
         this.xLine() //生成X轴坐标
         Object.values(this.settingMap).forEach((x) => {
           this.createBrokenLine({
+            vitalCode: x.vitalCode,
             data: x.data,
             yRange: x.range,
             lineColor: x.lineColor || x.color,
-            type: x.label,
+            label: x.label,
             dotColor: x.color,
             dotSolid: x.solid,
-            dotCross: x.cross
+            dotType: x.dotType
           })
         })
-        // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
-        const topXaxis = this.topSheetNote.map((x) =>
-          this.getXaxis(this.getLocationTime(x.time))
-        )
-        const topXaxisNew = this.handleNoteXaxis(topXaxis)
-        this.topSheetNote.forEach((x, i) => {
-          let value = x.value
-          if (x.value.endsWith('|')) {
-            value = `${x.value}${this.toChinesNum(
-              new Date(x.time).getHours()
-            )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
-          }
-          this.createText({
-            // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-            x: topXaxisNew[i],
-            y: 0,
-            value: this.addn(value),
+        // 画线上降温，画红圈不用连线
+        this.onLineCoolList.forEach(x => {
+          this.createCircle({
+            cx: this.getXaxis(this.getLocationTime(x.time)),
+            cy: this.getYaxis(this.yRange, x.value, '22'),
+            r: 7,
             color: 'red',
-            textLineHeight: this.ySpace + 1,
-            fontWeight: 'bold',
-            fontFamily: 'Simsun'
+            zlevel: 10,
+            tips: `${x.time} 线上降温：${x.value}`,
+            dotSolid: false
           })
         })
-        // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
-        const bottomXaxis = this.bottomSheetNote.map((x) =>
-          this.getXaxis(this.getLocationTime(x.time))
-        )
-        const bottomXaxisNew = this.handleNoteXaxis(bottomXaxis)
-        this.bottomSheetNote.forEach((x, i) => {
-          let value = x.value
-          if (x.value.endsWith('|')) {
-            value = `${x.value}${this.toChinesNum(
-              new Date(x.time).getHours()
-            )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
+        // 画发热体温，画篮圈和上一次最近的体温用蓝虚线相连
+        const list = [...this.settingMap.oralTemperature.data, ...this.settingMap.axillaryTemperature.data, ...this.settingMap.analTemperature.data].sort((a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time))
+        this.feverList.forEach(x => {
+          const xTimeStamp = this.getTimeStamp(x.time)
+          for (let i = 0; i < list.length; i++) {
+            let isTarget = false
+            const item = list[i]
+            const itemTimeStamp = this.getTimeStamp(item.time)
+            if (i < list.length - 1) {
+              if (itemTimeStamp <= xTimeStamp && xTimeStamp < this.getTimeStamp(list[i+1].time)) {
+                isTarget = true
+              }
+            } else if (itemTimeStamp <= xTimeStamp) {
+              isTarget = true
+            }
+            if (isTarget) {
+              const itemX = this.getXaxis(this.getLocationTime(item.time))
+              const itemY = this.getYaxis(this.yRange, item.value)
+              const feverX = this.getXaxis(this.getLocationTime(x.time))
+              const feverY = this.getYaxis(this.yRange, x.value)
+              this.createCircle({
+                cx: feverX,
+                cy: feverY,
+                r: 7,
+                color: 'blue',
+                zlevel: 10,
+                tips: `${x.time} 发热体温：${x.value}`,
+                dotSolid: false
+              })
+              this.createLine({
+                x1: itemX,
+                y1: itemY,
+                x2: feverX,
+                y2: feverY,
+                lineWidth: 2,
+                color: 'blue',
+                zlevel: 1,
+                lineDash: [3, 3]
+              })
+              break
+            }
           }
-          this.createText({
-            // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-            x: bottomXaxisNew[i],
-            y: this.areaHeight - (this.ySpace + 1) * 10 - 1,
-            value: this.addn(value),
-            color: 'black',
-            textLineHeight: this.ySpace + 1,
-            fontWeight: 'bold',
-            fontFamily: 'Simsun'
-          })
+        })
+        // 生成表顶注释
+        this.createNote(this.topSheetNote, 0, 'red')
+        // 生成表底注释
+        this.createNote(this.bottomSheetNote, this.areaHeight - (this.ySpace + 2) * 10 - 2, 'black')
+      })
+    },
+    createNote(notes, y, color) {
+      // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
+      const xaxis = notes.map((x) =>
+        this.getXaxis(this.getLocationTime(x.time))
+      )
+      const xaxisNew = this.handleNoteXaxis(xaxis)
+      notes.forEach((x, i) => {
+        let value = x.value
+        if (x.value.endsWith('|')) {
+          value = `${x.value}${this.toChinesNum(
+            new Date(x.time).getHours()
+          )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
+        }
+        this.createText({
+          // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
+          x: xaxisNew[i],
+          y,
+          value: this.addn(value),
+          color,
+          textLineHeight: this.ySpace + 2,
+          fontWeight: 'bold',
+          fontFamily: 'SimHei'
         })
       })
     },
@@ -894,7 +993,7 @@ export default {
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1
         const isboundary = i === 0 || i === totalLine - 1
-        const lineWidth = isBreak ? 2 : 1
+        const lineWidth = isBreak ? 3 : 2
         const params = {
           x1: 0,
           y1: preSpace,
@@ -916,7 +1015,7 @@ export default {
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 6 === 0 && i > 0 && i < totalLine - 1
-        const lineWidth = i === 0 ? 2 : 1
+        const lineWidth = isBreak ? 3 : (i === 0 ? 3 : 2)
         const params = {
           x1: preSpace,
           y1: 0,
@@ -938,7 +1037,7 @@ export default {
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1
-        const lineWidth = isBreak ? 2 : 1
+        const lineWidth = isBreak ? 3 : 2
         preSpace += lineWidth + this.ySpace
       }
       this.areaHeight = preSpace - this.ySpace - 1
@@ -951,8 +1050,8 @@ export default {
         (this.xRange[1] - this.xRange[0]) * 5
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
-        // const isBreak = i % 6 === 0 && i > 0 && i < totalLine - 1
-        const lineWidth = i === 0 ? 2 : 1
+        const isBreak = i % 6 === 0 && i > 0 && i < totalLine - 1
+        const lineWidth = isBreak ? 3 : (i === 0 ? 3 : 2)
         preSpace += lineWidth + this.xSpace
       }
       this.areaWidth = preSpace - this.xSpace
@@ -962,11 +1061,11 @@ export default {
       y,
       value,
       color,
-      fontSize = 18,
+      fontSize = 16,
       tips,
       zlevel = 0,
       fontWeight = 'bold',
-      fontFamily = 'null',
+      fontFamily = 'SimHei',
       textLineHeight
     }) {
       const text = new zrender.Text({
@@ -1003,7 +1102,7 @@ export default {
         )
       }
     },
-    createLine({ x1, y1, x2, y2, lineWidth, color, zlevel = 0 }) {
+    createLine({ x1, y1, x2, y2, lineWidth, color, zlevel = 0, lineDash = [] }) {
       const line = new zrender.Line({
         zlevel,
         shape: {
@@ -1013,6 +1112,7 @@ export default {
           y2
         },
         style: {
+          lineDash,
           lineWidth,
           stroke: color
         }
@@ -1040,6 +1140,41 @@ export default {
           { tips },
           cx,
           cy - 5,
+          {
+            shape: {
+              r: r + 1
+            }
+          },
+          {
+            shape: {
+              r
+            }
+          }
+        )
+      }
+    },
+    createIsogon({ x, y, r, n, color, zlevel, tips, dotSolid }) {
+      const isogon = new zrender.Isogon({
+        zlevel,
+        shape: {
+          x,
+          y,
+          r,
+          n
+        },
+        style: {
+          fill: dotSolid ? color : '#fff',
+          stroke: color,
+          lineWidth: 2
+        }
+      })
+      this.zr.add(isogon)
+      if (tips) {
+        this.addHover(
+          isogon,
+          { tips },
+          x,
+          y,
           {
             shape: {
               r: r + 1
@@ -1084,55 +1219,131 @@ export default {
       })
     },
     createBrokenLine({
+      vitalCode,
       data,
       yRange,
       lineColor,
-      type,
+      label,
       dotColor,
       dotSolid,
-      dotCross
+      dotType
     }) {
       const dots = []
       data.forEach((x) => {
         const cx = this.getXaxis(this.getLocationTime(x.time))
-        const cy =
-          type === '疼痛'
-            ? ((yRange[1] - x.value) / (yRange[1] - yRange[0])) *
-                (this.areaHeight - this.ttLabelHeight) +
-              this.ttLabelHeight
-            : ((yRange[1] - x.value) / (yRange[1] - yRange[0])) *
-              this.areaHeight
-        dots.push({ x: cx, y: cy })
-        if (dotCross) {
-          this.createText({
-            x: cx,
-            y: cy - 16.5,
-            value: 'x',
-            color: dotColor,
-            fontSize: 28,
-            tips: `${x.time} ${type}：${x.value}`,
-            zlevel: 10,
-            fontWeight: 'bold'
-          })
-        } else {
-          this.createCircle({
-            cx,
-            cy,
-            r: 7,
-            color: dotColor || '#000',
-            zlevel: 10,
-            tips: `${x.time} ${type}：${x.value}`,
-            dotSolid
-          })
+        const cy = this.getYaxis(yRange, x.value, vitalCode)
+        dots.push({ x: cx, y: cy, time: x.time })
+        switch (dotType) {
+          case 'Text':
+            this.createText({
+              x: cx,
+              y: cy - 17,
+              value: 'x',
+              color: dotColor,
+              fontSize: 28,
+              tips: `${x.time} ${label}：${x.value}`,
+              zlevel: 10,
+              fontWeight: 'bold'
+            })
+            break
+          case 'Circle':
+            let params = {
+              cx,
+              cy,
+              r: 7,
+              color: dotColor || '#000',
+              zlevel: 10,
+              tips: `${x.time} ${label}：${x.value}`,
+              dotSolid
+            }
+            // 如果脉搏或心率和体温坐标重叠，改成在体温标识外面画红色的圆圈
+            if (vitalCode === '11' || vitalCode === '12') {
+              const tList = [
+                ...this.settingMap.oralTemperature.data.map(x => ({ ...x, vitalCode: '2' })), 
+                ...this.settingMap.axillaryTemperature.data.map(x => ({ ...x, vitalCode: '1' })), 
+                ...this.settingMap.analTemperature.data.map(x => ({ ...x, vitalCode: '19' })),
+                ...this.settingMap.pain.data.map(x => ({ ...x, vitalCode: 'ttpf' }))
+              ].map(x => {
+                return {
+                  x: this.getXaxis(this.getLocationTime(x.time)),
+                  y: Math.round(this.getYaxis(x.vitalCode === 'ttpf' ? this.painRange : this.yRange, x.value, x.vitalCode)),
+                }
+              })
+              const sameAxisItem = tList.find(x => x.x === cx && x.y === cy)
+              if (sameAxisItem) {
+                params = {
+                  cx,
+                  cy,
+                  r: 10,
+                  color: 'red',
+                  zlevel: 9,
+                  tips: `${x.time} ${label}：${x.value}`,
+                  dotSolid: false
+                }
+              }
+            }
+            this.createCircle(params)
+            break
+          case 'Isogon':
+            this.createIsogon({
+              x: cx,
+              y: cy,
+              r: 7,
+              n: 3,
+              color: dotColor || '#000',
+              zlevel: 10,
+              tips: `${x.time} ${label}：${x.value}`,
+              dotSolid
+            })
+            break
+          default: break
+        }
+        if (['1', '2', '19'].includes(vitalCode)) {
+          // 画物理降温
+          for (let i = this.physicsCoolList.length - 1; i >= 0; i--) {
+            const item = this.physicsCoolList[i]
+            const coolX = this.getXaxis(this.getLocationTime(item.time))
+            const coolY = this.getYaxis(yRange, item.value, vitalCode)
+            if (coolX === cx) {
+              this.createCircle({
+                cx: coolX,
+                cy: coolY,
+                r: 7,
+                color: 'red',
+                zlevel: 10,
+                tips: `${item.time} 物理降温：${item.value}`,
+                dotSolid: false
+              })
+              this.createLine({
+                x1: cx,
+                y1: cy,
+                x2: coolX,
+                y2: coolY,
+                lineWidth: 2,
+                color: 'red',
+                zlevel: 1,
+                lineDash: [3, 3]
+              })
+              this.physicsCoolList.splice(i, 1)
+            }
+          }
         }
       })
+      // 连线
       for (let i = 0; i < dots.length - 1; i++) {
+        if (['1', '2', '19'].includes(vitalCode)) {
+          if (this.temperatureNoteList.some(x => {
+            return this.getTimeStamp(x.time) >= this.getTimeStamp(dots[i].time) && this.getTimeStamp(x.time) <= this.getTimeStamp(dots[i+1].time)
+          })) {
+            continue
+          }
+        }
         this.createLine({
           x1: dots[i].x,
           y1: dots[i].y,
           x2: dots[i + 1].x,
           y2: dots[i + 1].y,
-          lineWidth: 1,
+          lineWidth: 2,
           color: lineColor || 'red',
           zlevel: 1
         })
@@ -1146,6 +1357,15 @@ export default {
             this.getTimeStamp(this.timeRange[0]))) *
         this.areaWidth
       )
+    },
+    // 根据值计算纵坐标
+    getYaxis(yRange, value, vitalCode) {
+      return vitalCode === 'ttpf'
+        ? ((yRange[1] - value) / (yRange[1] - yRange[0])) *
+            (this.areaHeight - this.ttLabelHeight) +
+          this.ttLabelHeight
+        : ((yRange[1] - value) / (yRange[1] - yRange[0])) *
+          this.areaHeight
     },
     // 增加换行符
     addn(str) {
@@ -1423,7 +1643,7 @@ export default {
 @media print {
   @page {
     size: a4;//定义为a4纸
-    margin: 8mm 5mm 8mm 15mm ; // 页面的边距
+    margin: 5mm 3mm 5mm 11mm ; // 页面的边距
   }
 }
 .main-view {
@@ -1435,10 +1655,12 @@ export default {
   font-family: Simsun;
   width: fit-content;
   .head-hos {
+    font-family: SimHei;
     font-size: 38px;
     font-weight: bold;
   }
   .head-title {
+    font-family: SimHei;
     padding: 13px 0;
     font-size: 38px;
     font-weight: bold;
@@ -1477,13 +1699,13 @@ export default {
     position: absolute;
     top: 0;
     bottom: 0;
-    border-left: 2px solid #000;
+    border-left: 3px solid #000;
     z-index: 30;
   }
   .row {
     display: flex;
     align-items: center;
-    border: 1px solid #000;
+    border: 2px solid #000;
     transform: translateX(-0.5px);
     &:not(:first-child) {
       border-top: none;
@@ -1493,7 +1715,7 @@ export default {
       align-items: center;
       justify-content: center;
       height: 100%;
-      border-right: 1px solid #000;
+      border-right: 2px solid #000;
       transform: translateX(0.5px);
     }
     .value-item-box {
@@ -1508,7 +1730,6 @@ export default {
       align-items: center;
       justify-content: center;
       height: 100%;
-      border-right: 1px solid #000;
     }
   }
 }
@@ -1519,7 +1740,7 @@ export default {
     flex-shrink: 0;
     display: flex;
     font-size: 18px;
-    border-left: 1px solid #000;
+    border-left: 2px solid #000;
     transform: translateX(-0.5px);
     > .item {
       flex: 1;
@@ -1527,7 +1748,7 @@ export default {
       flex-direction: column;
       text-align: right;
       &:not(:last-child) {
-        border-right: 1px solid #000;
+        border-right: 2px solid #000;
       }
       .text {
         padding-top: 5px;
@@ -1579,10 +1800,10 @@ export default {
       font-size: 18px;
       position: absolute;
       left: 3px;
-      bottom: -3px;
+      bottom: 0px;
       .note-item {
         position: relative;
-        margin-bottom: 20px;
+        margin-bottom: 22px;
       }
       .note-icon {
         display: inline-block;
@@ -1595,15 +1816,26 @@ export default {
         transform: translate(-4px, 2px);
       }
       .axillary {
+        font-family: SimHei;
         position: absolute;
-        right: 7px;
-        top: -4px;
+        right: 6px;
+        top: -5px;
         display: inline-block;
         z-index: 2;
         color: blue;
-        font-size: 26px;
+        font-size: 28px;
         line-height: 1;
         font-weight: bold;
+      }
+      .pain-icon {
+        position: absolute;
+        right: 3px;
+        top: 2px;
+        display: inline-block;
+        z-index: 2;
+        border-left: 10px solid transparent;  
+				border-right: 10px solid transparent;  
+				border-bottom: 18px solid blue;
       }
     }
   }
@@ -1665,10 +1897,10 @@ export default {
   font-size: 20px;
 }
 .border-bottom-black-2 {
-  border-bottom: 2px solid black !important;
+  border-bottom: 3px solid black !important;
 }
 .border-top-black-2 {
-  border-top: 2px solid black !important;
+  border-top: 3px solid black !important;
 }
 .table-area {
   position: relative;
@@ -1676,9 +1908,12 @@ export default {
     position: absolute;
     top: 0;
     bottom: 1px;
-    border-left: 2px solid #000;
+    border-left: 3px solid #000;
     z-index: 30;
     transform: translateY(0.5px);
   }
+}
+.simhei {
+  font-family: SimHei;
 }
 </style>
