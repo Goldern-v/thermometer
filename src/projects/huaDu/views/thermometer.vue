@@ -23,7 +23,7 @@
     <div class="table-area">
       <div class="vline" :style="{left: '-0.5px'}"></div>
       <div class="vline" :style="{left: `${leftWidth}px`}"></div>
-      <div class="vline" :style="{right: 0}"></div>
+      <div class="vline" :style="{right: '1px'}"></div>
       <div class="table-box" style="transform: translateY(0.5px);">
         <div class="vtline" :style="{left: `${leftWidth+item*(6*xSpace+13)}px`, transform: 'translateX(-1.5px)', 'border-color': '#000'}" v-for="item in 6" :key="item"></div>
         <div class="row border-top-black-2" :style="{ height: `${trHeight}px` }">
@@ -317,8 +317,8 @@ export default {
       zr: '',
       areaWidth: 0, // 网格区域的宽度
       areaHeight: 0, // 网格区域的高度
-      xSpace: 20, // 纵向网格的间距
-      ySpace: 17, //  横向网格的间距
+      xSpace: 19, // 纵向网格的间距
+      ySpace: 16, //  横向网格的间距
       leftWidth: 160, // 左侧内容宽度
       xRange: [1, 8],
       yRange,
@@ -688,7 +688,7 @@ export default {
         flex: 'auto',
         'border-right-style': 'solid',
         'border-width': `${(index-5)%6 === 0 ? 3 : 2}px`,
-        'border-color': `${(index-5)%6 === 0 && index < length - 1 ? 'transparent' : '#000'}`,
+        'border-color': `${(index-5)%6 === 0 ? 'transparent' : '#000'}`,
         transform: 'translateX(1.5px)',
         'font-family': 'SimHei'
       }
@@ -1622,7 +1622,7 @@ export default {
           xaxisNew.push(xaxisList[i])
         } else {
           while (xaxisNew.includes(xaxisList[i])) {
-            xaxisList[i] += this.xSpace
+            xaxisList[i] += this.xSpace + 2
           }
           xaxisNew.push(xaxisList[i])
         }
@@ -1663,7 +1663,7 @@ export default {
 @media print {
   @page {
     size: a4;//定义为a4纸
-    margin: 5mm 3mm 5mm 11mm ; // 页面的边距
+    margin: 10mm 5mm 10mm 18mm ; // 页面的边距
   }
 }
 .main-view {
@@ -1726,6 +1726,7 @@ export default {
     display: flex;
     align-items: center;
     border: 2px solid #000;
+    border-right-color: transparent;
     transform: translateX(-0.5px);
     &:not(:first-child) {
       border-top: none;
@@ -1825,7 +1826,7 @@ export default {
       font-size: 18px;
       position: absolute;
       left: 3px;
-      bottom: 0px;
+      bottom: -8px;
       .note-item {
         position: relative;
         margin-bottom: 22px;
