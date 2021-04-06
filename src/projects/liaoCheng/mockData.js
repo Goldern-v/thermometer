@@ -210,13 +210,13 @@ export const mockData = {
       temperature_type: '腋温',
       value: '35.2',
       time_point: '2019-05-18 01:12:00',
-      vital_code: '042'
+      vital_code: '01'
     },
     {
       temperature_type: '腋温',
       value: '38',
       time_point: '2019-05-17 01:12:00',
-      vital_code: '042'
+      vital_code: '01'
     },
     {
       temperature_type: '口温',
@@ -288,7 +288,7 @@ export const mockData = {
       temperature_type: '腋温',
       value: '37',
       time_point: '2019-05-20 10:12:00',
-      vital_code: '042'
+      vital_code: '01'
     },
     {
       temperature_type: '肛温',

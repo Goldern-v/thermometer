@@ -1600,20 +1600,6 @@ export default {
       }
       return overWan ? getWan(overWan) + '万' + getWan(noWan) : getWan(num)
     },
-    // 医院要求一天中不论什么时间点录入的尿量、出量、入量都要显示在前一天日期当中，所以直接处理原数据
-    // ps: 入院当天是不会录入这些数据的，所以不会出现丢失数据
-    handleOriginData(data) {
-      const dataCopy = JSON.parse(JSON.stringify(data))
-      const codeList = ['15', '33', '34']
-      dataCopy.vitalSigns.forEach((x) => {
-        if (codeList.includes(x.vital_code)) {
-          x.time_point = this.parseTime(
-            this.getTimeStamp(x.time_point) - 24 * 60 * 60 * 1000
-          )
-        }
-      })
-      return dataCopy
-    },
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
     handleNoteXaxis(xaxisList) {
       const xaxisNew = []
@@ -1634,7 +1620,7 @@ export default {
     const urlParams = this.urlParse()
     this.showInnerPage = urlParams.showInnerPage === '1'
     if (this.useMockData) {
-      this.apiData = this.handleOriginData(mockData)
+      this.apiData = mockData
       this.$nextTick(() => {
         this.handleData()
       })
@@ -1649,7 +1635,7 @@ export default {
           StartTime: urlParams.StartTime
         }
       }).then((res) => {
-        this.apiData = this.handleOriginData(res.data)
+        this.apiData = res.data
         this.$nextTick(() => {
           this.handleData()
         })

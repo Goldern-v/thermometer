@@ -340,7 +340,7 @@ export default {
           ]
         },
         axillaryTemperature: {
-          vitalCode: '042',
+          vitalCode: '01',
           label: '腋温',
           color: 'blue',
           lineColor: 'blue',
@@ -436,7 +436,7 @@ export default {
       typeMap: {
         '5': '表顶注释', // 入院|,手术,分娩|,出院|,转入|,死亡|,排胎|,出生|,手术分娩|,手术入院|,转出|
         '4': '表底注释', // 拒测,不在,外出不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
-        '042': '腋温',
+        '01': '腋温',
         '02': '脉搏',
         '20': '心率',
         '04': '呼吸',
@@ -462,7 +462,7 @@ export default {
       }, // vital_code是null的时候，是自定义字段，显示在体温表后面
       lineMap: {
         '041': 'oralTemperature',
-        '042': 'axillaryTemperature',
+        '01': 'axillaryTemperature',
         '043': 'analTemperature',
         '20': 'heart',
         '02': 'pulse',
@@ -845,7 +845,7 @@ export default {
               time: vitalSigns[i].time_point,
               value: '过快'
             })
-          } else if (['041', '042', '043'].includes(vitalSigns[i].vital_code) && Number(vitalSigns[i].value) <= 35) {
+          } else if (['041', '01', '043'].includes(vitalSigns[i].vital_code) && Number(vitalSigns[i].value) <= 35) {
             this.bottomSheetNote.push({
               time: vitalSigns[i].time_point,
               value: '不升'
@@ -1312,7 +1312,7 @@ export default {
             break
           default: break
         }
-        if (['042', '043', '041'].includes(vitalCode)) {
+        if (['01', '043', '041'].includes(vitalCode)) {
           // 画降温
           for (let i = this.coolList.length - 1; i >= 0; i--) {
             const item = this.coolList[i]
@@ -1367,7 +1367,7 @@ export default {
                 ...this.settingMap.oralTemperature.data[0]
               },
               {
-                vitalCode: '042',
+                vitalCode: '01',
                 ...this.settingMap.axillaryTemperature.data[0]
               },
               {
@@ -1635,20 +1635,6 @@ export default {
       }
       return overWan ? getWan(overWan) + '万' + getWan(noWan) : getWan(num)
     },
-    // 医院要求一天中不论什么时间点录入的尿量、出量、入量都要显示在前一天日期当中，所以直接处理原数据
-    // ps: 入院当天是不会录入这些数据的，所以不会出现丢失数据
-    handleOriginData(data) {
-      const dataCopy = JSON.parse(JSON.stringify(data))
-      const codeList = ['12', '091', '19']
-      dataCopy.vitalSigns.forEach((x) => {
-        if (codeList.includes(x.vital_code)) {
-          x.time_point = this.parseTime(
-            this.getTimeStamp(x.time_point) - 24 * 60 * 60 * 1000
-          )
-        }
-      })
-      return dataCopy
-    },
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
     handleNoteXaxis(xaxisList) {
       const xaxisNew = []
@@ -1669,7 +1655,7 @@ export default {
     const urlParams = this.urlParse()
     this.showInnerPage = urlParams.showInnerPage === '1'
     if (this.useMockData) {
-      this.apiData = this.handleOriginData(mockData)
+      this.apiData = mockData
       this.$nextTick(() => {
         this.handleData()
       })
@@ -1684,7 +1670,7 @@ export default {
           StartTime: urlParams.StartTime
         }
       }).then((res) => {
-        this.apiData = this.handleOriginData(res.data)
+        this.apiData = res.data
         this.$nextTick(() => {
           this.handleData()
         })
