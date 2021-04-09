@@ -4,7 +4,7 @@ export const mockData = {
   patientInfo: {
     patInfo: {
       patient_id: '590904',
-      name: '陈达琼',
+      name: '陈小倩',
       sex: '女',
       dept_name: '乳腺胸外科',
       bed_label: '012',
@@ -106,10 +106,10 @@ export const mockData = {
     //   "vital_code": "24"
     // },
     {
-      "temperature_type": "发热体温",
-      "value": "40",
-      "time_point": "2019-05-19 22:12:00",
-      "vital_code": "21"
+      temperature_type: '发热体温',
+      value: '40',
+      time_point: '2019-05-19 22:12:00',
+      vital_code: '21'
     },
     {
       temperature_type: '肛温',
@@ -164,7 +164,7 @@ export const mockData = {
     },
     {
       temperature_type: '疼痛',
-      value: '10',
+      value: '7',
       time_point: '2019-05-20 23:12:00',
       vital_code: 'ttpf'
     },
@@ -259,10 +259,10 @@ export const mockData = {
       vital_code: '1'
     },
     {
-      "temperature_type": "物理降温",
-      "value": "36",
-      "time_point": "2019-05-17 13:12:00",
-      "vital_code": "27"
+      temperature_type: '物理降温',
+      value: '36',
+      time_point: '2019-05-17 13:12:00',
+      vital_code: '27'
     },
     {
       temperature_type: '脉搏',
@@ -307,11 +307,11 @@ export const mockData = {
       vital_code: '11'
     },
     {
-      "temperature_type": "线上降温",
-      "value": "37",
-      "time_point": "2019-05-16 13:00:00",
-      "vital_code": "22"
-    },
+      temperature_type: '线上降温',
+      value: '37',
+      time_point: '2019-05-16 13:00:00',
+      vital_code: '22'
+    }
     // {
     //   "temperature_type": "尿量",
     //   "value": "1470",
