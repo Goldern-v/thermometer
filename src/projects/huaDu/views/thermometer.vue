@@ -736,7 +736,7 @@ export default {
     window.removeEventListener('message', this.messageHandle, false)
   },
   methods: {
-    smallTdStyle(index, length) {
+    smallTdStyle(index) {
       return {
         width: `${this.xSpace + ((index - 5) % 6 === 0 ? 3 : 2)}px`,
         flex: 'auto',
@@ -1337,6 +1337,15 @@ export default {
         const cx = this.getXaxis(this.getLocationTime(x.time))
         const cy = this.getYaxis(yRange, x.value, vitalCode)
         dots.push({ x: cx, y: cy, time: x.time })
+        let params = {
+          cx,
+          cy,
+          r: 7,
+          color: dotColor || '#000',
+          zlevel: 10,
+          tips: `${x.time} ${label}：${x.value}`,
+          dotSolid
+        }
         switch (dotType) {
           case 'Text':
             this.createText({
@@ -1351,15 +1360,6 @@ export default {
             })
             break
           case 'Circle':
-            let params = {
-              cx,
-              cy,
-              r: 7,
-              color: dotColor || '#000',
-              zlevel: 10,
-              tips: `${x.time} ${label}：${x.value}`,
-              dotSolid
-            }
             // 如果脉搏或心率和体温坐标重叠，改成在体温标识外面画红色的圆圈
             if (vitalCode === '11' || vitalCode === '12') {
               const tList = [

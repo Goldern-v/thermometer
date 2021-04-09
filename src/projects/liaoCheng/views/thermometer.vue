@@ -992,6 +992,7 @@ export default {
             break
           case '094':
             this.heightList.push(item)
+            break
           default:
             break
         }
@@ -1336,7 +1337,6 @@ export default {
       el.on('mouseover', () => {
         domTips[0].innerHTML = config.tips
 
-        let textWidth = config.tips.length * 8
         domTips[0].setAttribute(
           'style',
           `
@@ -1375,6 +1375,15 @@ export default {
         const cx = this.getXaxis(this.getLocationTime(x.time))
         const cy = this.getYaxis(yRange, x.value, vitalCode)
         dots.push({ x: cx, y: cy })
+        let params = {
+          cx,
+          cy,
+          r: 4,
+          color: dotColor || '#000',
+          zlevel: 10,
+          tips: `${x.time} ${label}：${x.value}`,
+          dotSolid
+        }
         switch (dotType) {
           case 'Text':
             this.createText({
@@ -1389,15 +1398,6 @@ export default {
             })
             break
           case 'Circle':
-            let params = {
-              cx,
-              cy,
-              r: 4,
-              color: dotColor || '#000',
-              zlevel: 10,
-              tips: `${x.time} ${label}：${x.value}`,
-              dotSolid
-            }
             // 如果脉搏或心率和体温坐标重叠，改成在体温标识外面画红色的圆圈
             if (vitalCode === '02' || vitalCode === '20') {
               const tList = [
