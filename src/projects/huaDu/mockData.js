@@ -15,8 +15,7 @@ export const mockData = {
       inp_no: '1568587'
     }
   },
-  vitalSigns: [
-    {
+  vitalSigns: [{
       temperature_type: '表顶注释',
       value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
@@ -25,23 +24,30 @@ export const mockData = {
     },
     {
       temperature_type: '表顶注释',
-      value: '手术',
+      value: '手术分娩|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 16:12:00',
+      time_point: '2019-05-18 10:12:00',
       vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
-      value: '分娩',
+      value: '分娩|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 16:12:00',
+      time_point: '2019-05-18 18:12:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '分娩|',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-20 11:12:00',
       vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 16:12:00',
+      time_point: '2019-05-20 15:12:00',
       vital_code: '3'
     },
     {
@@ -49,6 +55,27 @@ export const mockData = {
       value: '手术分娩|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-20 16:12:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '手术入院|',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-20 18:12:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '手术入院|',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-20 19:12:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '手术入院|',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-23 18:12:00',
       vital_code: '3'
     },
     // {
