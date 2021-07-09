@@ -27,7 +27,7 @@
       <div class="item">
         科别：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item">
+      <div class="item" style="width:80px;flex:none;">
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
