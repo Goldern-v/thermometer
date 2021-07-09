@@ -7,13 +7,13 @@
     <div class="head-hos">聊城市第二人民医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item">
+      <div class="item" style="width:100px;flex:none;">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item">
+      <div class="item" style="width:80px;flex:none;">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item">
+      <div class="item"  style="width:80px;flex:none;">
         年龄：<span class="value">{{ patInfo.age }}岁</span>
       </div>
       <div class="item">
@@ -24,8 +24,6 @@
       <div class="item">
         病案号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
-    </div>
-    <div class="head-info-1">
       <div class="item">
         科别：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
@@ -35,6 +33,9 @@
         }}</span>
       </div>
     </div>
+    <!-- <div class="head-info-1">
+      
+    </div> -->
     <div class="table-area">
       <div class="vline" :style="{ left: '-0.5px' }"></div>
       <div class="vline" :style="{ right: 0 }"></div>
@@ -174,21 +175,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            血压(mmHg)
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              :style="middleTdStyle(index)"
-              v-for="(item, index) in formatPressureList"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div> -->
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             大便(次/日)
@@ -197,6 +183,21 @@
             <div
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: shitList })"
+              :key="index"
+            >
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            血压(mmHg)
+          </div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              :style="middleTdStyle(index)"
+              v-for="(item, index) in formatPressureList"
               :key="index"
             >
               {{ item.value }}
@@ -256,18 +257,6 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">尿量(ml)</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: urineList })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             引流量(ml)
           </div>
@@ -275,6 +264,18 @@
             <div
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: yinliuList })"
+              :key="index"
+            >
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">尿量(ml)</div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in getFormatList({ tList: urineList })"
               :key="index"
             >
               {{ item.value }}
@@ -1684,12 +1685,14 @@ export default {
     },
     // 根据时间点计算横坐标
     getXaxis(time) {
-      return (
+      let xAxis = (
         ((this.getTimeStamp(time) - this.getTimeStamp(this.timeRange[0])) /
           (this.getTimeStamp(this.timeRange[1]) -
             this.getTimeStamp(this.timeRange[0]))) *
         this.areaWidth
-      );
+      )-6;
+      // console.log(xAxis)
+      return xAxis
     },
     // 增加换行符
     addn(str) {
@@ -1721,22 +1724,22 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       console.log("sec", time.slice(-8));
       let str = "";
-      const timeAreasMap = {
-        "02:00:00": ["00:00:00", "06:00:59"],
-        "06:00:00": ["06:01:00", "10:00:59"],
-        "10:00:00": ["10:01:00", "14:00:59"],
-        "14:00:00": ["14:01:00", "18:00:59"],
-        "18:00:00": ["18:01:00", "22:00:59"],
-        "22:00:00": ["22:01:00", "23:59:59"],
-      };
       // const timeAreasMap = {
-      //   "03:00:00": ["03:00:00", "07:00:59"],
-      //   "07:00:00": ["07:01:00", "11:00:59"],
-      //   "11:00:00": ["11:01:00", "15:00:59"],
-      //   "15:00:00": ["15:01:00", "19:00:59"],
-      //   "19:00:00": ["19:01:00", "23:00:59"],
-      //   "23:00:00": ["23:01:00", "03:00:59"],
+      //   "02:00:00": ["00:00:00", "06:00:59"],
+      //   "06:00:00": ["06:01:00", "10:00:59"],
+      //   "10:00:00": ["10:01:00", "14:00:59"],
+      //   "14:00:00": ["14:01:00", "18:00:59"],
+      //   "18:00:00": ["18:01:00", "22:00:59"],
+      //   "22:00:00": ["22:01:00", "23:59:59"],
       // };
+      const timeAreasMap = {
+        "03:00:00": ["01:00:00", "05:00:59"],
+        "07:00:00": ["05:01:00", "9:00:59"],
+        "11:00:00": ["9:01:00", "13:00:59"],
+        "15:00:00": ["13:01:00", "17:00:59"],
+        "19:00:00": ["17:01:00", "21:00:59"],
+        "23:00:00": ["21:01:00", "1:00:59"],
+      };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
           const item = timeAreasMap[key];
