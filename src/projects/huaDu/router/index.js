@@ -1,18 +1,18 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
-const routes = [{
-        path: "/",
-        name: "Home",
-        component: () =>
-            import ('src/projects/huaDu/views/thermometer.vue')
-    }
-];
+const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: () => import('src/projects/huaDu/views/thermometer.vue')
+  }
+]
 
 const router = new VueRouter({
-    routes
-});
+  routes
+})
 
-export default router;
+export default router

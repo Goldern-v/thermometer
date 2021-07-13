@@ -19,4 +19,3 @@ for (const argv of argvs) {
 }
 
 module.exports = { project }
-

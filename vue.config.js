@@ -1,8 +1,6 @@
 'use strict'
 const path = require('path')
-const {
-  project
-} = require('./src/argvs')
+const { project } = require('./src/argvs')
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -28,7 +26,7 @@ module.exports = {
     resolve: {
       alias: {
         '@': resolve('src'),
-        'src': resolve('src')
+        src: resolve('src')
       }
     }
   },
@@ -42,16 +40,16 @@ module.exports = {
             case 'liaoCheng':
               // return 'http://120.224.211.7:9091'
               return 'http://172.17.5.41:9091'
-              // case 'wuJing':
-              //   return 'http://58.248.14.84:9091'
-              // case 'hengLi':
-              //   return 'http://120.224.211.7:9091'
+            // case 'wuJing':
+            //   return 'http://58.248.14.84:9091'
+            // case 'hengLi':
+            //   return 'http://120.224.211.7:9091'
             default:
               break
           }
         })(),
-        changeOrigin: true,
-      },
-    },
-  },
+        changeOrigin: true
+      }
+    }
+  }
 }

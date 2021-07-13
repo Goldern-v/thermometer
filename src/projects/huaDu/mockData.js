@@ -15,7 +15,8 @@ export const mockData = {
       inp_no: '1568587'
     }
   },
-  vitalSigns: [{
+  vitalSigns: [
+    {
       temperature_type: '表顶注释',
       value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
