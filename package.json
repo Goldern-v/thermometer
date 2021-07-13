@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev:huaDu": "vue-cli-service serve --project=huaDu",
-    "dev:liaoCheng": "vue-cli-service serve --project=liaoCheng",
     "build:huaDu": "vue-cli-service build --project=huaDu",
+    "dev:liaoCheng": "vue-cli-service serve --project=liaoCheng",
     "build:liaoCheng": "vue-cli-service build --project=liaoCheng",
+    "dev:guiZhou": "vue-cli-service serve --project=guiZhou",
+    "build:guiZhou": "vue-cli-service build --project=guiZhou",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },

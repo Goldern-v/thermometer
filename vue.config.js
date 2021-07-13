@@ -11,10 +11,12 @@ module.exports = {
   configureWebpack: {
     entry: (() => {
       switch (project) {
-        case 'huaDu':
+        case 'huaDu': // 花都人医
           return './src/projects/huaDu/main.js'
-        case 'liaoCheng':
+        case 'liaoCheng': // 聊城二院
           return './src/projects/liaoCheng/main.js'
+        case 'guiZhou': // 贵州省人医
+          return './src/projects/guiZhou/main.js'
         case 'wuJing':
           return './src/projects/wuJing/main.js'
         case 'hengLi':
@@ -39,6 +41,8 @@ module.exports = {
               return 'http://120.238.239.27:9091'
             case 'liaoCheng':
               // return 'http://120.224.211.7:9091'
+              return 'http://172.17.5.41:9091'
+            case 'guiZhou':
               return 'http://172.17.5.41:9091'
             // case 'wuJing':
             //   return 'http://58.248.14.84:9091'
