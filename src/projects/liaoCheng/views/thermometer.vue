@@ -783,37 +783,42 @@ export default {
       return this.ySpace * 1 + 1
     },
     polygonPoints() {
-      // 形成心率和脉搏多边形锚点
+      /*
+        形成心率和脉搏多边形锚点二维数组，多个数组则画多个多边形，
+        注意同一对录入的心率值肯定大于脉搏值的，而且脉搏和心率一一对应
+      */
       const settingMap = this.settingMap
       if (settingMap.heart.data.length > 0) {
-        return [
-          ...settingMap.heart.data.map((x) => {
-            return [
-              this.getXaxis(this.getLocationTime(x.time)),
-              this.getYaxis(settingMap.heart.range, x.value)
-            ]
-          }),
-          ...settingMap.pulse.data
-            .map((x) => {
+        let data = [[]]
+        settingMap.heart.data.forEach((x, i) => {
+          if (x.value > this.pulseRange[1]) {
+            data.push([])
+          } else {
+            data[data.length - 1].push({ value: x, index: i })
+          }
+        })
+        data = data.map((x) => {
+          return [
+            ...x.map((y) => {
               return [
-                this.getXaxis(this.getLocationTime(x.time)),
-                this.getYaxis(settingMap.pulse.range, x.value)
+                this.getXaxis(this.getLocationTime(y.value.time)),
+                this.getYaxis(settingMap.heart.range, y.value.value)
               ]
-            })
-            .reverse()
-        ]
-      } else {
-        return [
-          ...settingMap.pulse.data
-            .map((x) => {
-              return [
-                this.getXaxis(this.getLocationTime(x.time)),
-                this.getYaxis(settingMap.pulse.range, x.value)
-              ]
-            })
-            .reverse()
-        ]
+            }),
+            ...settingMap.pulse.data
+              .slice(x[0].index, x[x.length - 1].index + 1)
+              .map((z) => {
+                return [
+                  this.getXaxis(this.getLocationTime(z.time)),
+                  this.getYaxis(settingMap.pulse.range, z.value)
+                ]
+              })
+              .reverse()
+          ]
+        })
+        return data
       }
+      return []
     }
   },
   watch: {
@@ -1020,12 +1025,11 @@ export default {
               time: vitalSigns[i].time_point,
               value: '不升'
             })
-          } else {
-            this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
-              time: vitalSigns[i].time_point,
-              value: Number(vitalSigns[i].value)
-            })
           }
+          this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
+            time: vitalSigns[i].time_point,
+            value: Number(vitalSigns[i].value)
+          })
           continue
         }
         const item = {
@@ -1080,9 +1084,8 @@ export default {
     },
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
-      const xaxis = notes.map(
-        (x) => this.getXaxis(this.getLocationTime(x.time))
-        // console.log("xaxis", this.getLocationTime(x.time));
+      const xaxis = notes.map((x) =>
+        this.getXaxis(this.getLocationTime(x.time))
       )
       const xaxisNew = this.handleNoteXaxis(xaxis)
       notes.forEach((x, i) => {
@@ -1115,32 +1118,55 @@ export default {
         this.xLine() //生成X轴坐标
         // 画折线
         Object.values(this.settingMap).forEach((x) => {
-          this.createBrokenLine({
-            vitalCode: x.vitalCode,
-            data: x.data,
-            yRange: x.range,
-            lineColor: x.lineColor || x.color,
-            label: x.label,
-            dotColor: x.color,
-            dotSolid: x.solid,
-            dotType: x.dotType
+          let data = [x.data]
+          if (['041', '01', '043'].includes(x.vitalCode)) {
+            // 体温为不升时，折线需要断开
+            data = [[]]
+            x.data.forEach((y) => {
+              if (y.value <= 35) {
+                data.push([])
+              } else {
+                data[data.length - 1].push(y)
+              }
+            })
+          }
+          if (['02', '20'].includes(x.vitalCode)) {
+            // 心率或脉搏过快时，折线需要断开
+            data = [[]]
+            x.data.forEach((y) => {
+              if (y.value > this.pulseRange[1]) {
+                data.push([])
+              } else {
+                data[data.length - 1].push(y)
+              }
+            })
+          }
+          data.forEach((z) => {
+            this.createBrokenLine({
+              vitalCode: x.vitalCode,
+              data: z,
+              yRange: x.range,
+              lineColor: x.lineColor || x.color,
+              label: x.label,
+              dotColor: x.color,
+              dotSolid: x.solid,
+              dotType: x.dotType
+            })
           })
         })
-        /*  画心率和脉搏的多边形
+        /*  画心率和脉搏的多边形，连线已经用折线画了，
+            这里用多边形是为了生成阴影，多边形的边框颜色设为透明，
+            注意折线可能会断，所以需要考虑有多个多边形的情形
             ①只填写脉搏没有填写心率的单据，不需要连接成闭环形成阴影
             ②填写脉搏和心率的单据需要连接两者数据点形成阴影(此情况为房颤患者)
         */
         if (this.settingMap.heart.data.length > 0) {
-          this.createPolygon({
-            points: this.polygonPoints,
-            lineWidth: 1,
-            color: 'red'
-          })
-        } else {
-          this.createPolyline({
-            points: this.polygonPoints,
-            lineWidth: 1,
-            color: 'red'
+          this.polygonPoints.forEach((x) => {
+            this.createPolygon({
+              points: x,
+              lineWidth: 1,
+              color: 'transparent'
+            })
           })
         }
         // 生成心率脉搏过快注释
@@ -1325,22 +1351,6 @@ export default {
       })
 
       this.zr.add(polygon)
-    },
-    createPolyline({ points, lineWidth, color, zlevel = 0 }) {
-      const polyline = new zrender.Polyline({
-        zlevel,
-        shape: {
-          points,
-          smooth: 0,
-          smoothConstraint: 0
-        },
-        style: {
-          lineWidth,
-          stroke: color
-        }
-      })
-
-      this.zr.add(polyline)
     },
     createLine({
       x1,
@@ -1655,19 +1665,16 @@ export default {
           }
         }
       })
-      // 心率和脉搏要画多边形，其他直接画折线
-      if (vitalCode !== '02' && vitalCode !== '20') {
-        for (let i = 0; i < dots.length - 1; i++) {
-          this.createLine({
-            x1: dots[i].x,
-            y1: dots[i].y,
-            x2: dots[i + 1].x,
-            y2: dots[i + 1].y,
-            lineWidth: 1,
-            color: lineColor || 'red',
-            zlevel: 1
-          })
-        }
+      for (let i = 0; i < dots.length - 1; i++) {
+        this.createLine({
+          x1: dots[i].x,
+          y1: dots[i].y,
+          x2: dots[i + 1].x,
+          y2: dots[i + 1].y,
+          lineWidth: 1,
+          color: lineColor || 'red',
+          zlevel: 1
+        })
       }
     },
     // 根据值计算纵坐标
@@ -1689,7 +1696,6 @@ export default {
             this.getTimeStamp(this.timeRange[0]))) *
           this.areaWidth -
         6
-      // console.log(xAxis)
       return xAxis
     },
     // 增加换行符
@@ -1720,7 +1726,6 @@ export default {
     // 计算用来定位描点的时间，医院特殊要求用这个方法定位
     getLocationTime(time) {
       const sec = this.getTotalSeconds(time.slice(-8))
-      console.log('sec', time.slice(-8))
       let str = ''
       // const timeAreasMap = {
       //   "02:00:00": ["00:00:00", "06:00:59"],
@@ -1750,7 +1755,6 @@ export default {
           }
         }
       }
-      console.log('sdfadfa', `${time.slice(0, -8)}${str}`)
       return `${time.slice(0, -8)}${str}`
     },
     // 根据时分秒00:00:00计算总秒数
