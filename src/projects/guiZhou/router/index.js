@@ -7,7 +7,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('src/projects/liaoCheng/views/thermometer.vue')
+    component: () => import('src/projects/guiZhou/views/thermometer.vue')
   }
 ]
 

@@ -4,38 +4,31 @@
     :style="{ width: `${leftWidth + areaWidth}px` }"
     v-if="apiData"
   >
-    <div class="head-hos">聊城市第二人民医院</div>
+    <div class="head-hos">贵州省人民医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item" style="width:100px;flex:none;">
-        姓名：<span class="value">{{ patInfo.name }}</span>
-      </div>
-      <div class="item" style="width:80px;flex:none;">
-        性别：<span class="value">{{ patInfo.sex }}</span>
-      </div>
-      <div class="item" style="width:80px;flex:none;">
-        年龄：<span class="value">{{ patInfo.age }}岁</span>
+      <div class="item">
+        姓名<span class="value">&emsp;{{ patInfo.name }}&emsp;</span>
       </div>
       <div class="item">
-        入院日期：<span class="value">{{
-          patInfo.admission_date.slice(0, 10)
-        }}</span>
+        科别<span class="value"
+          >&emsp;{{ adtLog || patInfo.dept_name }}&emsp;</span
+        >
       </div>
       <div class="item">
-        病案号：<span class="value">{{ patInfo.patient_id }}</span>
+        床号<span class="value"
+          >&emsp;{{ bedExchangeLog || patInfo.bed_label }}&emsp;</span
+        >
       </div>
       <div class="item">
-        科别：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
+        入院日期<span class="value"
+          >&emsp;{{ patInfo.admission_date.slice(0, 10) }}&emsp;</span
+        >
       </div>
-      <div class="item" style="width:80px;flex:none;">
-        床号：<span class="value">{{
-          bedExchangeLog || patInfo.bed_label
-        }}</span>
+      <div class="item">
+        住院号<span class="value">&emsp;{{ patInfo.patient_id }}&emsp;</span>
       </div>
     </div>
-    <!-- <div class="head-info-1">
-      
-    </div> -->
     <div class="table-area">
       <div class="vline" :style="{ left: '-0.5px' }"></div>
       <div class="vline" :style="{ right: 0 }"></div>
@@ -53,7 +46,7 @@
           <div
             class="label"
             :style="{ width: `${leftWidth}px` }"
-            v-html="`日期`"
+            v-html="`日&emsp;&emsp;期`"
           ></div>
           <div class="value-item-box">
             <div
@@ -69,11 +62,61 @@
           class="row border-bottom-black-2"
           :style="{ height: `${trHeight}px` }"
         >
-          <div
-            class="label"
-            :style="{ width: `${leftWidth}px` }"
-            v-html="`时间`"
-          ></div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            术后天数
+          </div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in formatOperateDateList"
+              :key="index"
+            >
+              {{ item }}
+            </div>
+          </div>
+        </div>
+        <div
+          class="row border-bottom-black-2"
+          :style="{ height: `${trHeight}px` }"
+        >
+          <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in formatStayDayList"
+              :key="index"
+            >
+              {{ item }}
+            </div>
+          </div>
+        </div>
+        <div
+          class="row border-bottom-black-2"
+          :style="{ height: `${trHeight}px` }"
+        >
+          <div class="label" :style="{ width: `${leftWidth}px` }"></div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              :style="middleTdStyle(index)"
+              v-for="(item, index) in maTds"
+              :key="index"
+            >
+              {{ item }}
+            </div>
+          </div>
+        </div>
+        <div
+          class="row border-bottom-black-2"
+          :style="{ height: `${trHeight}px` }"
+        >
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            <span
+              class="time-label"
+              :style="`transform: translateY(-${trHeight / 2}px);`"
+              v-html="`时&emsp;&emsp;间`"
+            ></span>
+          </div>
           <div class="value-item-box font-12">
             <div
               class="value-item"
@@ -324,7 +367,10 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div
+          class="row border-bottom-black-2"
+          :style="{ height: `${trHeight}px` }"
+        >
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList3.label || '' }}
           </div>
@@ -335,63 +381,6 @@
               :key="index"
             >
               {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList4.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: customList4 })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList5.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: customList5 })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div> -->
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            手术后天数
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in formatOperateDateList"
-              :key="index"
-            >
-              {{ item }}
-            </div>
-          </div>
-        </div>
-        <div
-          class="row border-bottom-black-2"
-          :style="{ height: `${trHeight}px` }"
-        >
-          <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in formatStayDayList"
-              :key="index"
-            >
-              {{ item }}
             </div>
           </div>
         </div>
@@ -418,7 +407,7 @@
 
 <script>
 import zrender from 'zrender'
-import { mockData } from 'src/projects/liaoCheng/mockData.js'
+import { mockData } from 'src/projects/guiZhou/mockData.js'
 
 export default {
   data() {
@@ -597,7 +586,15 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [3, 7, 11, 15, 19, 23]
+      const list = [2, 6, 10, 14, 18, 22]
+      const tds = []
+      for (let i = 0; i < 7; i++) {
+        tds.push(...list)
+      }
+      return tds
+    },
+    maTds() {
+      const list = ['上午', '下午']
       const tds = []
       for (let i = 0; i < 7; i++) {
         tds.push(...list)
@@ -838,7 +835,7 @@ export default {
     smallTdStyle(index, length) {
       return {
         color:
-          index % 6 === 0 || (index - 1) % 6 === 0 || (index - 5) % 6 === 0
+          index % 6 === 0 || (index - 4) % 6 === 0 || (index - 5) % 6 === 0
             ? 'red'
             : '',
         width: `${this.xSpace + ((index - 5) % 6 === 0 ? 2 : 1)}px`,
@@ -1736,13 +1733,13 @@ export default {
       //   "22:00:00": ["22:01:00", "23:59:59"],
       // };
       const timeAreasMap = {
-        "03:00:00": ["00:00:00", "05:00:59"],
-        "07:00:00": ["05:01:00", "9:00:59"],
-        "11:00:00": ["9:01:00", "13:00:59"],
-        "15:00:00": ["13:01:00", "17:00:59"],
-        "19:00:00": ["17:01:00", "21:00:59"],
-        "23:00:00": ["21:01:00", "23:59:59"],
-      };
+        '03:00:00': ['01:00:00', '05:00:59'],
+        '07:00:00': ['05:01:00', '9:00:59'],
+        '11:00:00': ['9:01:00', '13:00:59'],
+        '15:00:00': ['13:01:00', '17:00:59'],
+        '19:00:00': ['17:01:00', '21:00:59'],
+        '23:00:00': ['21:01:00', '1:00:59']
+      }
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
           const item = timeAreasMap[key]
@@ -1970,18 +1967,8 @@ export default {
       padding: 0 0 5px 5px;
       .value {
         font-weight: normal;
-      }
-    }
-  }
-  .head-info-1 {
-    font-size: 14px;
-    display: flex;
-    .item {
-      text-align: left;
-      padding: 0 0 5px 5px;
-      margin-right: 80px;
-      .value {
-        font-weight: normal;
+        text-decoration: underline;
+        padding: 5px;
       }
     }
   }
@@ -2041,6 +2028,13 @@ export default {
       justify-content: center;
       height: 100%;
       border-right: 1px solid #000;
+    }
+    .time-label {
+      display: block;
+      width: 100%;
+      background: #fff;
+      position: relative;
+      z-index: 2;
     }
   }
 }
