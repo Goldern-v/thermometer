@@ -134,13 +134,11 @@
           class="index-box"
           :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
         >
-          <i
-            class="split-line"
-            :style="{
-              bottom: `${painAreaHeight + bottomAreaHeight + ySpace}px`
-            }"
-          ></i>
           <div class="item times">
+            <div :style="`height: ${topAreaHeight}px`"></div>
+            <div class="pain-area" :style="`height: ${painAreaHeight}px`">
+              疼<br />痛<br />强<br />度
+            </div>
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
               <div class="label" :style="{ height: `${trHeight + 2}px` }">
                 脉搏<i class="white-line"></i>
@@ -150,15 +148,14 @@
             <div class="index" v-for="item in pulseList" :key="item">
               <span>{{ item }}</span>
             </div>
-            <div class="pain-area" :style="`height: ${painAreaHeight}px`">
-              疼<br />痛<br />评<br />分
-            </div>
-            <div
-              class="bottom-area"
-              :style="`height: ${bottomAreaHeight}px`"
-            ></div>
           </div>
           <div class="item temp">
+            <div :style="`height: ${topAreaHeight}px`"></div>
+            <div class="pain-area" :style="`height: ${painAreaHeight}px`">
+              <div class="pain-index" v-for="item in painList" :key="item">
+                <span>{{ item === 4 || item === 7 ? item : `&emsp;` }}</span>
+              </div>
+            </div>
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
               <div class="label" :style="{ height: `${trHeight + 2}px` }">
                 体温
@@ -168,16 +165,6 @@
             <div class="index" v-for="item in temperaturelist" :key="item">
               <span>{{ item }}</span>
             </div>
-            <div class="pain-area" :style="`height: ${painAreaHeight}px`">
-              <div class="pain-index" v-for="item in painList" :key="item">
-                <span>{{ item }}</span>
-              </div>
-              <div class="s-index"><span>0</span></div>
-            </div>
-            <div
-              class="bottom-area"
-              :style="`height: ${bottomAreaHeight}px`"
-            ></div>
           </div>
         </div>
         <div
@@ -757,27 +744,27 @@ export default {
     },
     painList() {
       const list = []
-      for (let i = this.painRange[1]; i > this.painRange[0]; i -= 2) {
+      for (let i = this.painRange[1]; i > this.painRange[0]; i -= 1) {
         list.push(i)
       }
       return list
     },
-    indexTextAreaHeight() {
-      return this.ySpace * 3 + 2
-    },
-    timesTempAreaHeight() {
-      return (
-        this.areaHeight -
-        this.indexTextAreaHeight -
-        this.painAreaHeight -
-        this.bottomAreaHeight
-      )
+    topAreaHeight() {
+      return this.ySpace * 1 + 1
     },
     painAreaHeight() {
       return this.ySpace * 5 + 8
     },
-    bottomAreaHeight() {
-      return this.ySpace * 1 + 1
+    indexTextAreaHeight() {
+      return this.ySpace * 2 + 1
+    },
+    timesTempAreaHeight() {
+      return (
+        this.areaHeight -
+        this.topAreaHeight -
+        this.painAreaHeight -
+        this.indexTextAreaHeight
+      )
     },
     polygonPoints() {
       /*
@@ -1184,17 +1171,14 @@ export default {
       const totalLine =
         this.yRange[1] -
         this.yRange[0] +
-        1 +
         (this.yRange[1] - this.yRange[0]) * 4 +
-        3 +
-        6
+        8 +
+        1 // 这里加1是疼痛7那条红线
       let preSpace = 0
-      let breakIndex = 0
       for (let i = 0; i < totalLine; i++) {
-        const isPainBreak =
-          this.yRange[1] - breakIndex + 2 === 35 && (i - 3) % 5 === 4
+        const isPainBreak = i === 3 || i === 5 || i === 7
         const isBreak =
-          ((i - 3) % 5 === 0 || isPainBreak || i === 1) &&
+          (((i - 9) % 5 === 0 && i >= 9) || isPainBreak) &&
           i > 0 &&
           i < totalLine - 1
         const isboundary = i === 0 || i === totalLine - 1
@@ -1205,15 +1189,22 @@ export default {
           x2: this.areaWidth - 1,
           y2: preSpace,
           lineWidth,
-          color: isBreak
-            ? this.yRange[1] - breakIndex++ + 1 === 37 || isPainBreak
-              ? 'red'
-              : '#000'
-            : isboundary
-            ? 'transparent'
-            : '#000'
+          color: (() => {
+            if (isBreak) {
+              if (i === 5) {
+                return 'red'
+              } else if (i === 3) {
+                return 'blue'
+              } else {
+                return '#000'
+              }
+            } else {
+              return isboundary ? 'transparent' : '#000'
+            }
+          })()
         }
-        preSpace += lineWidth + this.ySpace
+        preSpace +=
+          lineWidth + (i === 2 || i === 3 ? this.ySpace / 2 - 1 : this.ySpace)
         this.createLine(params)
       }
     },
@@ -1243,22 +1234,19 @@ export default {
       const totalLine =
         this.yRange[1] -
         this.yRange[0] +
-        1 +
         (this.yRange[1] - this.yRange[0]) * 4 +
-        3 +
-        6
+        8 +
+        1 // 这里加1是疼痛7那条红线
       let preSpace = 0
-      let breakIndex = 0
       for (let i = 0; i < totalLine; i++) {
-        const isPainBreak =
-          this.yRange[1] - breakIndex + 2 === 35 && (i - 3) % 5 === 4
+        const isPainBreak = i === 3 || i === 5 || i === 7
         const isBreak =
-          ((i - 3) % 5 === 0 || isPainBreak || i === 1) &&
+          (((i - 9) % 5 === 0 && i >= 9) || isPainBreak) &&
           i > 0 &&
           i < totalLine - 1
-        isBreak && breakIndex++
         const lineWidth = isBreak ? 2 : 1
-        preSpace += lineWidth + this.ySpace
+        preSpace +=
+          lineWidth + (i === 2 || i === 3 ? this.ySpace / 2 - 1 : this.ySpace)
       }
       this.areaHeight = preSpace - this.ySpace - 1
     },
@@ -2061,12 +2049,11 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-bottom: 5px;
-          border-bottom: 2px solid #000;
         }
       }
       .index {
         flex: 1;
+        border-top: 2px solid #000;
         > span {
           display: block;
           margin-top: -5px;
@@ -2079,16 +2066,16 @@ export default {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        border-bottom: 2px solid #000;
+        transform: translateY(-1px);
+        margin-right: -1px;
+        padding-right: 1px;
         .pain-index {
           flex: 1;
           > span {
             display: block;
-            margin-top: -5px;
+            margin-top: -6px;
           }
-        }
-        .s-index {
-          position: absolute;
-          bottom: -6px;
         }
       }
     }
@@ -2121,13 +2108,6 @@ export default {
           padding-right: 1px;
         }
       }
-    }
-    .split-line {
-      display: block;
-      position: absolute;
-      left: 0;
-      right: -1px;
-      border-bottom: 2px solid red;
     }
   }
 }
