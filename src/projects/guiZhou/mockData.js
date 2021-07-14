@@ -32,6 +32,13 @@ export const mockData = {
     },
     {
       temperature_type: '表顶注释',
+      value: '分娩',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-16 16:12:00',
+      vital_code: '5'
+    },
+    {
+      temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-23 16:12:00',
@@ -132,6 +139,13 @@ export const mockData = {
       time_point: '2019-05-21 03:12:00',
       vital_code: '043'
     },
+    // {
+    //   temperature_type: '表顶注释',
+    //   value: '拒测',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2019-05-20 03:12:00',
+    //   vital_code: '5'
+    // },
     {
       temperature_type: '肛温',
       value: '36',

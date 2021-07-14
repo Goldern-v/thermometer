@@ -426,7 +426,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -712,12 +712,23 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i
         }
-        const apart = [] // 存储当天和前面手术的天数间隔
+        let apart = [] // 存储当天和前面手术的天数间隔
         for (let i = 0; i < index; i++) {
           apart.unshift(days[i])
         }
+        // 间隔大于7天的手术，分子分母的写法要重置
+        if (apart.length) {
+          apart.unshift(days[index])
+          for (let i = 1; i < apart.length; i++) {
+            if (apart[i] - apart[i - 1] > 7) {
+              apart = apart.slice(0, i)
+              break
+            }
+          }
+          apart.splice(0, 1)
+        }
         if (days[index] <= 7) {
-          return index === 0
+          return index === 0 || !apart.length
             ? days[index]
             : days[index] === 0
             ? `${apart.join('/')}(${apart.length + 1})`
@@ -843,9 +854,10 @@ export default {
             : '',
         width: `${this.xSpace + ((index - 5) % 6 === 0 ? 2 : 1)}px`,
         flex: 'auto',
+        'border-right-style': 'solid',
         'border-width': `${(index - 5) % 6 === 0 ? 2 : 1}px`,
         'border-color': `${
-          (index - 5) % 6 === 0 && index < length - 1 ? 'red' : '#000'
+          (index - 5) % 6 === 0 && index < length - 1 ? 'transparent' : '#000'
         }`,
         transform: (index - 5) % 6 === 0 ? 'translateX(-0.5px)' : ''
       }
@@ -854,7 +866,11 @@ export default {
       return {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 4 : 3)}px`,
         flex: 'auto',
+        'border-right-style': 'solid',
         'border-width': `${(index - 1) % 2 === 0 ? 2 : 1}px`,
+        'border-color': `${
+          (index - 1) % 2 === 0 && index < length - 1 ? 'transparent' : '#000'
+        }`,
         transform: (index - 1) % 2 === 0 ? 'translateX(-0.5px)' : ''
       }
     },
@@ -1694,8 +1710,7 @@ export default {
         ((this.getTimeStamp(time) - this.getTimeStamp(this.timeRange[0])) /
           (this.getTimeStamp(this.timeRange[1]) -
             this.getTimeStamp(this.timeRange[0]))) *
-          this.areaWidth -
-        6
+        this.areaWidth
       return xAxis
     },
     // 增加换行符
@@ -1727,22 +1742,14 @@ export default {
     getLocationTime(time) {
       const sec = this.getTotalSeconds(time.slice(-8))
       let str = ''
-      // const timeAreasMap = {
-      //   "02:00:00": ["00:00:00", "06:00:59"],
-      //   "06:00:00": ["06:01:00", "10:00:59"],
-      //   "10:00:00": ["10:01:00", "14:00:59"],
-      //   "14:00:00": ["14:01:00", "18:00:59"],
-      //   "18:00:00": ["18:01:00", "22:00:59"],
-      //   "22:00:00": ["22:01:00", "23:59:59"],
-      // };
       const timeAreasMap = {
-        "03:00:00": ["00:00:00", "05:00:59"],
-        "07:00:00": ["05:01:00", "9:00:59"],
-        "11:00:00": ["9:01:00", "13:00:59"],
-        "15:00:00": ["13:01:00", "17:00:59"],
-        "19:00:00": ["17:01:00", "21:00:59"],
-        "23:00:00": ["21:01:00", "23:59:59"],
-      };
+        '02:00:00': ['00:00:00', '05:00:59'],
+        '06:00:00': ['05:01:00', '9:00:59'],
+        '10:00:00': ['9:01:00', '13:00:59'],
+        '14:00:00': ['13:01:00', '17:00:59'],
+        '18:00:00': ['17:01:00', '21:00:59'],
+        '22:00:00': ['21:01:00', '23:59:59']
+      }
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
           const item = timeAreasMap[key]
@@ -2040,7 +2047,6 @@ export default {
       align-items: center;
       justify-content: center;
       height: 100%;
-      border-right: 1px solid #000;
     }
   }
 }
