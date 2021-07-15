@@ -43,7 +43,7 @@ module.exports = {
               // return 'http://120.224.211.7:9091'
               return 'http://172.17.5.41:9091'
             case 'guiZhou':
-              return 'http://172.17.5.41:9091'
+              return 'http://10.207.40.22:9091'
             // case 'wuJing':
             //   return 'http://58.248.14.84:9091'
             // case 'hengLi':

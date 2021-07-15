@@ -30,13 +30,22 @@
       </div>
     </div>
     <div class="table-area">
-      <div class="vline" :style="{ left: '-0.5px' }"></div>
+      <div class="hline"></div>
+      <div
+        class="vline"
+        :style="{
+          top: 0,
+          bottom: '2px',
+          transform: 'translateX(-0.5px)'
+        }"
+      ></div>
       <div
         class="vline"
         :style="{
           left: `${leftWidth - 1}px`,
-          top: '2px',
-          bottom: '3px',
+          top: 0,
+          bottom: '2.5px',
+          transform: 'translateY(0.5px)',
           'border-color': 'red'
         }"
       ></div>
@@ -45,8 +54,9 @@
         :style="{
           right: 0,
           'border-color': 'red',
+          top: 0,
           bottom: '40px',
-          transform: 'translate(-0.5px, 2.5px)'
+          transform: 'translateY(0.5px)'
         }"
       ></div>
       <div
@@ -57,7 +67,7 @@
           bottom: '1px',
           top: `${areaHeight + 5 * trHeight}px`,
           'z-index': 40,
-          transform: 'translateX(-0.5px)'
+          transform: 'translateY(0.5px)'
         }"
       ></div>
       <div class="table-box" style="transform: translateY(0.5px);">
@@ -68,7 +78,7 @@
           :key="item"
         ></div>
         <div
-          class="row border-top-black-2 border-bottom-black-2"
+          class="row border-bottom-black-2"
           :style="{ height: `${trHeight}px` }"
         >
           <div
@@ -443,7 +453,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -457,7 +467,7 @@ export default {
       painRange,
       settingMap: {
         oralTemperature: {
-          vitalCode: '041',
+          vitalCode: 'kouTemperature',
           label: '口温',
           color: 'blue',
           solid: true,
@@ -468,7 +478,7 @@ export default {
           ]
         },
         axillaryTemperature: {
-          vitalCode: '01',
+          vitalCode: 'yeTemperature',
           label: '腋温',
           color: 'blue',
           lineColor: 'blue',
@@ -479,7 +489,7 @@ export default {
           ]
         },
         analTemperature: {
-          vitalCode: '043',
+          vitalCode: 'gangTemperature',
           label: '肛温',
           color: 'blue',
           dotType: 'Circle',
@@ -489,7 +499,7 @@ export default {
           ]
         },
         heart: {
-          vitalCode: '20',
+          vitalCode: 'heartRate',
           label: '心率',
           color: 'red',
           dotType: 'Circle',
@@ -499,7 +509,7 @@ export default {
           ]
         },
         pulse: {
-          vitalCode: '02',
+          vitalCode: 'pulse',
           label: '脉搏',
           color: 'red',
           solid: true,
@@ -510,7 +520,7 @@ export default {
           ]
         },
         pain: {
-          vitalCode: '092',
+          vitalCode: 'ttpf',
           label: '疼痛',
           color: 'blue',
           solid: true,
@@ -567,45 +577,45 @@ export default {
       },
       vitalSigns: [],
       typeMap: {
-        '5': '表顶注释', // 入院|,手术,分娩|,出院|,转入|,死亡|,排胎|,出生|,手术分娩|,手术入院|,转出|
-        '4': '表底注释', // 拒测,不在,外出不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
-        '01': '腋温',
-        '02': '脉搏',
-        '20': '心率',
-        '04': '呼吸',
-        '062': '血压',
-        '12': '尿量',
-        '091': '入量',
-        '19': '出量',
-        '033': '体重',
-        '043': '肛温',
-        '041': '口温',
+        nurseEvents: '病人事件', // 入院|,手术,分娩|,出院|,转入|,死亡|,排胎|,出生|,手术分娩|,手术入院|,转出|
+        '4': '表底注释', // 拒测,不在,外出不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸   并入病人事件
+        yeTemperature: '腋温',
+        pulse: '脉搏',
+        heartRate: '心率',
+        breathe: '呼吸',
+        bloodPressure: '血压',
+        niaoliang: '尿量',
+        ruliang: '入量',
+        chuliang: '出量',
+        weight: '体重',
+        gangTemperature: '肛温',
+        kouTemperature: '口温',
         '21': '发热体温',
         '22': '线上降温',
-        '23': '呼吸机R',
-        '061': '大便次数',
+        breatheMachine: '呼吸机', // 前端并入呼吸
+        excrement: '大便次数',
         '10': '引流量',
         '25': '护理事件',
         '27': '物理降温',
         '28': '呕吐量',
         '29': '在线降温',
-        '092': '疼痛评分',
-        '094': '身高',
-        '3': '物理降温',
-        '32': '自定义1',
-        '33': '自定义2',
-        '34': '自定义3',
-        '35': '自定义4',
-        '36': '自定义5',
-        '37': '自定义6'
-      }, // vital_code是null的时候，是自定义字段，显示在体温表后面
+        ttpf: '疼痛评分',
+        height: '身高',
+        downTemperature: '降温后',
+        other1: '自定义1',
+        other2: '自定义2',
+        other3: '自定义3',
+        other4: '自定义4',
+        other5: '自定义5',
+        other6: '自定义6'
+      }, // vital_code是other的时候，是自定义字段，显示在体温表后面
       lineMap: {
-        '041': 'oralTemperature',
-        '01': 'axillaryTemperature',
-        '043': 'analTemperature',
-        '20': 'heart',
-        '02': 'pulse',
-        '092': 'pain'
+        kouTemperature: 'oralTemperature',
+        yeTemperature: 'axillaryTemperature',
+        gangTemperature: 'analTemperature',
+        heartRate: 'heart',
+        pulse: 'pulse',
+        ttpf: 'pain'
       },
       pageTotal: 1,
       currentPage: 1,
@@ -712,7 +722,7 @@ export default {
       return this.vitalSigns
         .filter(
           (x) =>
-            x.vital_code === '5' &&
+            x.vital_code === 'nurseEvents' &&
             (x.value === '手术' ||
               x.value === '手术分娩|' ||
               x.value === '手术入院|')
@@ -774,7 +784,7 @@ export default {
       return this.vitalSigns
         .filter(
           (x) =>
-            x.vital_code === '5' &&
+            x.vital_code === 'nurseEvents' &&
             (x.value === '分娩' ||
               x.value === '分娩|' ||
               x.value === '手术分娩|')
@@ -932,20 +942,24 @@ export default {
             : '',
         width: `${this.xSpace + ((index - 5) % 6 === 0 ? 2 : 1)}px`,
         flex: 'auto',
+        'flex-grow': 0,
+        'flex-shrink': 0,
         'border-right-style': 'solid',
         'border-width': `${(index - 5) % 6 === 0 ? 2 : 1}px`,
         'border-color': `${(index - 5) % 6 === 0 ? 'transparent' : '#000'}`,
-        transform: (index - 5) % 6 === 0 ? 'translateX(-0.5px)' : ''
+        transform: 'translateX(1px)'
       }
     },
     middleTdStyle(index) {
       return {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 4 : 3)}px`,
         flex: 'auto',
+        'flex-grow': 0,
+        'flex-shrink': 0,
         'border-right-style': 'solid',
         'border-width': `${(index - 1) % 2 === 0 ? 2 : 1}px`,
         'border-color': `${(index - 1) % 2 === 0 ? 'transparent' : '#000'}`,
-        transform: (index - 1) % 2 === 0 ? 'translateX(-0.5px)' : ''
+        transform: 'translateX(1px)'
       }
     },
     messageHandle(e) {
@@ -1022,7 +1036,7 @@ export default {
           temperature_type: '出量',
           value: '',
           time_point: this.patInfo.admission_date,
-          vital_code: '19'
+          vital_code: 'chuliang'
         })
       }
       this.vitalSigns = vitalSigns
@@ -1072,12 +1086,9 @@ export default {
           continue
         }
         if (
-          vitalSigns[i].vital_code === '32' ||
-          vitalSigns[i].vital_code === '33' ||
-          vitalSigns[i].vital_code === '34' ||
-          vitalSigns[i].vital_code === '35' ||
-          vitalSigns[i].vital_code === '36' ||
-          vitalSigns[i].vital_code === '37'
+          ['other1', 'other2', 'other3', 'other4', 'other5', 'other6'].includes(
+            vitalSigns[i].vital_code
+          )
         ) {
           // 自定义字段填入
           const sign = vitalSigns[i].temperature_type
@@ -1100,7 +1111,7 @@ export default {
         }
         if (this.lineMap[vitalSigns[i].vital_code]) {
           if (
-            ['02', '20'].includes(vitalSigns[i].vital_code) &&
+            ['pulse', 'heartRate'].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) > this.pulseRange[1]
           ) {
             // this.topPulseNote.push({
@@ -1108,7 +1119,9 @@ export default {
             //   value: '过快'
             // })
           } else if (
-            ['041', '01', '043'].includes(vitalSigns[i].vital_code) &&
+            ['kouTemperature', 'yeTemperature', 'gangTemperature'].includes(
+              vitalSigns[i].vital_code
+            ) &&
             Number(vitalSigns[i].value) <= 35
           ) {
             this.bottomSheetNote.push({
@@ -1127,43 +1140,46 @@ export default {
           value: vitalSigns[i].value
         }
         switch (vitalSigns[i].vital_code) {
-          case '5':
+          case 'nurseEvents':
             this.topSheetNote.push(item)
             break
           case '4':
-            this.topSheetNote.push(item)
+            this.bottomSheetNote.push(item)
             break
-          case '04':
+          case 'breathe': // 呼吸
             this.breatheList.push(item)
             break
-          case '062':
+          case 'breatheMachine': // 呼吸机
+            this.breatheList.push(item)
+            break
+          case 'bloodPressure':
             this.pressureList.push(item)
             break
-          case '033':
+          case 'weight':
             this.weightList.push(item)
             break
-          case '091':
+          case 'ruliang':
             this.inputList.push(item)
             break
-          case '061':
+          case 'excrement':
             this.shitList.push(item)
             break
           case '10':
             this.yinliuList.push(item)
             break
-          case '12':
+          case 'niaoliang':
             this.urineList.push(item)
             break
-          case '19':
+          case 'chuliang':
             this.outputList.push(item)
             break
-          case '3':
+          case 'downTemperature':
             this.coolList.push(item)
             break
-          case '093':
+          case 'jtpf':
             this.ttgyList.push(item)
             break
-          case '094':
+          case 'height':
             this.heightList.push(item)
             break
           default:
@@ -1209,7 +1225,11 @@ export default {
         // 画折线
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data]
-          if (['041', '01', '043'].includes(x.vitalCode)) {
+          if (
+            ['kouTemperature', 'yeTemperature', 'gangTemperature'].includes(
+              x.vitalCode
+            )
+          ) {
             // 体温为不升时，折线需要断开
             data = [[]]
             x.data.forEach((y) => {
@@ -1220,7 +1240,7 @@ export default {
               }
             })
           }
-          // if (['02', '20'].includes(x.vitalCode)) {
+          // if (['pulse', 'heartRate'].includes(x.vitalCode)) {
           //   // 心率或脉搏过快时，折线需要断开
           //   data = [[]]
           //   x.data.forEach((y) => {
@@ -1555,6 +1575,7 @@ export default {
           `
           position:absolute;
           top:${y - 30}px;
+          z-index:50;
           display:block;
           font-size:12px;
           background-color:rgba(0,0,0,.7);
@@ -1610,7 +1631,7 @@ export default {
             })
             break
           case 'Circle':
-            if (vitalCode === '02' || vitalCode === '20') {
+            if (vitalCode === 'pulse' || vitalCode === 'heartRate') {
               // 如果脉搏或心率超限过快，则在最高的格子中间用实心红圈描点
               if (x.value > this.pulseRange[1]) {
                 cy = this.getYaxis(yRange, yRange[1] - 2, vitalCode)
@@ -1665,7 +1686,11 @@ export default {
           default:
             break
         }
-        if (['01', '043', '041'].includes(vitalCode)) {
+        if (
+          ['yeTemperature', 'gangTemperature', 'kouTemperature'].includes(
+            vitalCode
+          )
+        ) {
           // 画降温
           for (let i = this.coolList.length - 1; i >= 0; i--) {
             const item = this.coolList[i]
@@ -1719,15 +1744,15 @@ export default {
           //   // 入院首次体温≥38℃
           //   const list = [
           //     {
-          //       vitalCode: '041',
+          //       vitalCode: 'kouTemperature',
           //       ...this.settingMap.oralTemperature.data[0]
           //     },
           //     {
-          //       vitalCode: '01',
+          //       vitalCode: 'yeTemperature',
           //       ...this.settingMap.axillaryTemperature.data[0]
           //     },
           //     {
-          //       vitalCode: '043',
+          //       vitalCode: 'gangTemperature',
           //       ...this.settingMap.analTemperature.data[0]
           //     }
           //   ]
@@ -1740,7 +1765,7 @@ export default {
           //     createRepeatTest()
           //   }
           // }
-        } else if (vitalCode === '092') {
+        } else if (vitalCode === 'ttpf') {
           // 画疼痛干预
           for (let i = this.ttgyList.length - 1; i >= 0; i--) {
             const item = this.ttgyList[i]
@@ -1769,7 +1794,7 @@ export default {
               this.ttgyList.splice(i, 1)
             }
           }
-        } else if (['02', '20'].includes(vitalCode)) {
+        } else if (['pulse', 'heartRate'].includes(vitalCode)) {
           // 画脉搏/心率超限过快
           if (x.value > this.pulseRange[1]) {
             this.createText({
@@ -1788,7 +1813,11 @@ export default {
       })
       // 连线
       for (let i = 0; i < dots.length - 1; i++) {
-        if (['01', '041', '043'].includes(vitalCode)) {
+        if (
+          ['yeTemperature', 'kouTemperature', 'gangTemperature'].includes(
+            vitalCode
+          )
+        ) {
           if (
             this.temperatureNoteList.some((x) => {
               return (
@@ -1813,7 +1842,7 @@ export default {
     },
     // 根据值计算纵坐标
     getYaxis(yRange, value, vitalCode) {
-      return vitalCode === '092'
+      return vitalCode === 'ttpf'
         ? ((yRange[1] - value) / (yRange[1] - yRange[0])) *
             this.painAreaHeight +
             this.topAreaHeight -
@@ -2073,6 +2102,12 @@ export default {
 </script>
 
 <style lang="scss">
+@media print {
+  @page {
+    size: a4; //定义为a4纸
+    margin: 10mm 10mm 10mm 10mm; // 页面的边距
+  }
+}
 .main-view {
   padding: 5px 0;
   margin: 0 auto;
@@ -2082,7 +2117,7 @@ export default {
   font-family: Simsun;
   .head-hos {
     padding-top: 10px;
-    font-size: 18px;
+    font-size: 24px;
   }
   .head-title {
     padding: 15px 0;
@@ -2109,13 +2144,18 @@ export default {
 }
 .table-area {
   position: relative;
-  .vline {
+  .hline {
     position: absolute;
     top: 0;
-    bottom: 1px;
+    left: 0;
+    right: 0;
+    border-top: 2px solid #000;
+    z-index: 60;
+  }
+  .vline {
+    position: absolute;
     border-left: 2px solid #000;
     z-index: 30;
-    transform: translateY(0.5px);
   }
 }
 .table-box {
@@ -2123,7 +2163,7 @@ export default {
   z-index: 20;
   .vtline {
     position: absolute;
-    top: 2px;
+    top: 0;
     bottom: 0;
     border-left: 2px solid red;
     z-index: 30;
@@ -2131,8 +2171,8 @@ export default {
   .row {
     display: flex;
     align-items: center;
-    border: 1px solid #000;
-    border-right: none;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
     transform: translateX(-0.5px);
     &:not(:first-child) {
       border-top: none;
@@ -2158,7 +2198,6 @@ export default {
       align-items: center;
       justify-content: center;
       height: 100%;
-      /* border-right: 1px solid #000; */
     }
     .time-label {
       display: block;
@@ -2176,7 +2215,6 @@ export default {
     flex-shrink: 0;
     display: flex;
     font-size: 12px;
-    border-left: 1px solid #000;
     transform: translateX(-0.5px);
     > .item {
       flex: 1;
