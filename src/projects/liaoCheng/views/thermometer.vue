@@ -37,8 +37,24 @@
       
     </div> -->
     <div class="table-area">
-      <div class="vline" :style="{ left: '-0.5px' }"></div>
-      <div class="vline" :style="{ right: 0 }"></div>
+      <div
+        class="vline"
+        :style="{
+          top: '1px',
+          bottom: '0',
+          left: '-1px',
+          transform: 'translateY(-0.5px)'
+        }"
+      ></div>
+      <div
+        class="vline"
+        :style="{
+          top: '1px',
+          bottom: '0',
+          right: '0',
+          transform: 'translateY(-0.5px)'
+        }"
+      ></div>
       <div class="table-box" style="transform: translateY(0.5px);">
         <div
           class="vtline"
@@ -165,8 +181,7 @@
               :style="{
                 ...smallTdStyle(index, formatBreatheList.length),
                 ...item.style,
-                color: '#000',
-                'border-color': '#000'
+                color: '#000'
               }"
               v-for="(item, index) in formatBreatheList"
               :key="index"
@@ -846,7 +861,7 @@ export default {
     window.removeEventListener('message', this.messageHandle, false)
   },
   methods: {
-    smallTdStyle(index, length) {
+    smallTdStyle(index) {
       return {
         color:
           index % 6 === 0 || (index - 1) % 6 === 0 || (index - 5) % 6 === 0
@@ -854,24 +869,24 @@ export default {
             : '',
         width: `${this.xSpace + ((index - 5) % 6 === 0 ? 2 : 1)}px`,
         flex: 'auto',
+        'flex-grow': 0,
+        'flex-shrink': 0,
         'border-right-style': 'solid',
         'border-width': `${(index - 5) % 6 === 0 ? 2 : 1}px`,
-        'border-color': `${
-          (index - 5) % 6 === 0 && index < length - 1 ? 'transparent' : '#000'
-        }`,
-        transform: (index - 5) % 6 === 0 ? 'translateX(-0.5px)' : ''
+        'border-color': `${(index - 5) % 6 === 0 ? 'transparent' : '#000'}`,
+        transform: 'translateX(1px)'
       }
     },
     middleTdStyle(index) {
       return {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 4 : 3)}px`,
         flex: 'auto',
+        'flex-grow': 0,
+        'flex-shrink': 0,
         'border-right-style': 'solid',
         'border-width': `${(index - 1) % 2 === 0 ? 2 : 1}px`,
-        'border-color': `${
-          (index - 1) % 2 === 0 && index < length - 1 ? 'transparent' : '#000'
-        }`,
-        transform: (index - 1) % 2 === 0 ? 'translateX(-0.5px)' : ''
+        'border-color': `${(index - 1) % 2 === 0 ? 'transparent' : '#000'}`,
+        transform: 'translateX(1px)'
       }
     },
     messageHandle(e) {
@@ -1953,6 +1968,12 @@ export default {
 </script>
 
 <style lang="scss">
+@media print {
+  @page {
+    size: a4; //定义为a4纸
+    margin: 10mm 10mm 10mm 10mm; // 页面的边距
+  }
+}
 .main-view {
   padding: 5px 0;
   margin: 0 auto;
@@ -2001,11 +2022,8 @@ export default {
   position: relative;
   .vline {
     position: absolute;
-    top: 0;
-    bottom: 1px;
     border-left: 2px solid #000;
     z-index: 30;
-    transform: translateY(0.5px);
   }
 }
 .table-box {
@@ -2022,6 +2040,8 @@ export default {
     display: flex;
     align-items: center;
     border: 1px solid #000;
+    border-left: none;
+    border-right: none;
     transform: translateX(-0.5px);
     &:not(:first-child) {
       border-top: none;
@@ -2032,7 +2052,7 @@ export default {
       justify-content: center;
       height: 100%;
       border-right: 1px solid #000;
-      transform: translateX(0.5px);
+      transform: translateX(1.5px);
       flex-shrink: 0;
     }
     .value-item-box {
@@ -2057,7 +2077,6 @@ export default {
     flex-shrink: 0;
     display: flex;
     font-size: 12px;
-    border-left: 1px solid #000;
     transform: translateX(-0.5px);
     > .item {
       flex: 1;
@@ -2113,10 +2132,10 @@ export default {
           .white-line {
             display: block;
             position: absolute;
-            right: -1px;
+            right: -2px;
             top: 0;
             bottom: 0;
-            border-right: 1px solid #fff;
+            border-right: 4px solid #fff;
           }
         }
       }
