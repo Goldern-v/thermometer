@@ -6,7 +6,7 @@ export const mockData = {
       patient_id: '590904',
       name: '陈小倩',
       sex: '女',
-      dept_name: '乳腺胸外科',
+      dept_name: '儿科-病区护理单元',
       bed_label: '012',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",

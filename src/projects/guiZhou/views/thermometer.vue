@@ -2128,8 +2128,20 @@ export default {
     display: flex;
     .item {
       flex: 1;
-      text-align: left;
+      text-align: center;
       padding: 0 0 5px 5px;
+      &:nth-child(1) {
+        flex: 0.7;
+      }
+      &:nth-child(2) {
+        flex: 1.5;
+      }
+      &:nth-child(3) {
+        flex: 0.7;
+      }
+      &:nth-child(4) {
+        flex: 1.3;
+      }
       .value {
         font-weight: normal;
         text-decoration: underline;
