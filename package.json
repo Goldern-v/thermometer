@@ -9,6 +9,8 @@
     "build:liaoCheng": "vue-cli-service build --project=liaoCheng",
     "dev:guiZhou": "vue-cli-service serve --project=guiZhou",
     "build:guiZhou": "vue-cli-service build --project=guiZhou",
+    "dev:liaoChengNewBorn": "vue-cli-service serve --project=liaoChengNewBorn",
+    "build:liaoChengNewBorn": "vue-cli-service build --project=liaoChengNewBorn",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },

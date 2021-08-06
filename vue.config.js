@@ -15,6 +15,8 @@ module.exports = {
           return './src/projects/huaDu/main.js'
         case 'liaoCheng': // 聊城二院
           return './src/projects/liaoCheng/main.js'
+        case 'liaoChengNewBorn': // 聊城人民医院新生儿体温单
+          return './src/projects/liaoChengNewBorn/main.js'
         case 'guiZhou': // 贵州省人医
           return './src/projects/guiZhou/main.js'
         case 'wuJing':
@@ -40,6 +42,9 @@ module.exports = {
             case 'huaDu':
               return 'http://120.238.239.27:9091'
             case 'liaoCheng':
+              // return 'http://120.224.211.7:9091'
+              return 'http://172.17.5.41:9091'
+            case 'liaoChengNewBorn':
               // return 'http://120.224.211.7:9091'
               return 'http://172.17.5.41:9091'
             case 'guiZhou':
