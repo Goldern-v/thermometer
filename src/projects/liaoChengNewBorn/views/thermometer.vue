@@ -322,7 +322,21 @@ import { mockData } from 'src/projects/liaoChengNewBorn/mockData.js'
 export default {
   data() {
     const yRange = [34, 42]
-    const fahrenheitRange = []
+    const fahrenheitRange = (() => {
+      const list = []
+      let fahrenheit
+      for (let i = yRange[1]; i > yRange[0]; i--) {
+        //按公式计算，102.2和105.8和医院有出入，需要做特殊判断赋值
+        fahrenheit = (i * 9) / 5 + 32
+        if (fahrenheit === 102.2) {
+          fahrenheit = 102.3
+        } else if (fahrenheit === 105.8) {
+          fahrenheit = 106
+        }
+        list.push(fahrenheit)
+      }
+      return list
+    })()
     return {
       useMockData: true,
       apiData: '', // 接口数据
@@ -334,7 +348,7 @@ export default {
       leftWidth: 90, // 左侧内容宽度
       xRange: [1, 8],
       yRange,
-      fahrenheitRange, //华氏度
+      fahrenheitRange: fahrenheitRange,
       settingMap: {
         oralTemperature: {
           vitalCode: '041',
@@ -513,17 +527,8 @@ export default {
     },
     temperaturelist() {
       const list = []
-      let fahrenheit
       for (let i = this.yRange[1]; i > this.yRange[0]; i--) {
         list.push(i)
-        //按公式计算，102.2和105.8和医院有出入，需要做特殊判断赋值
-        fahrenheit = (i * 9) / 5 + 32
-        if (fahrenheit === 102.2) {
-          fahrenheit = 102.3
-        } else if (fahrenheit === 105.8) {
-          fahrenheit = 106
-        }
-        this.fahrenheitRange.push(fahrenheit)
       }
       return list
     },
@@ -534,7 +539,7 @@ export default {
       return this.areaHeight - this.indexTextAreaHeight - this.bottomAreaHeight
     },
     bottomAreaHeight() {
-      return this.ySpace * 1 + 1
+      return this.ySpace * 4 + 5
     }
   },
   watch: {
@@ -1352,14 +1357,12 @@ export default {
       }
     },
     // 根据值计算纵坐标
-    getYaxis(yRange, value, vitalCode) {
-      return vitalCode === '092'
-        ? ((yRange[1] - value) / (yRange[1] - yRange[0])) *
-            this.indexTextAreaHeight +
-            this.timesTempAreaHeight
-        : ((yRange[1] - value) / (yRange[1] - yRange[0])) *
-            this.timesTempAreaHeight +
-            this.indexTextAreaHeight
+    getYaxis(yRange, value) {
+      return (
+        ((yRange[1] - value) / (yRange[1] - yRange[0] - 1)) *
+          this.timesTempAreaHeight +
+        this.indexTextAreaHeight
+      )
     },
     // 根据时间点计算横坐标
     getXaxis(time) {
