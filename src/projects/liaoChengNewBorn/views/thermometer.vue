@@ -150,7 +150,7 @@
           :key="item"
         ></div>
         <div class="row border-top-red-2" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">人工喂养</div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">母乳</div>
           <div class="value-item-box">
             <div
               class="value-item"
@@ -228,26 +228,50 @@
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">乙肝疫苗</div>
           <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({
-                tList: hepatitisBvaccine
-              })"
-              :key="index"
-            >
-              {{ item.value }}
+            <div class="value-item-box">
+              <div class="value-item ">日期{{ hepatitisBvaccine.time }}</div>
+              <div class="value-item ">剂量{{ hepatitisBvaccine.dosis }}ml</div>
+              <div class="value-item ">
+                用法{{ hepatitisBvaccine.direction }}
+              </div>
+              <div class="value-item ">
+                批号{{ hepatitisBvaccine.batchNumber }}
+              </div>
+              <div class="value-item"></div>
+              <div class="value-item">未接种原因</div>
+              <div class="value-item">
+                {{ hepatitisBvaccine.notVaccinated }}
+              </div>
             </div>
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">卡介苗</div>
           <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: bcgVaccine })"
-              :key="index"
-            >
-              {{ item.value }}
+            <div class="value-item ">日期{{ bcgVaccine.time }}</div>
+            <div class="value-item ">剂量{{ bcgVaccine.dosis }}ml</div>
+            <div class="value-item ">用法{{ bcgVaccine.direction }}</div>
+            <div class="value-item ">批号{{ bcgVaccine.batchNumber }}</div>
+            <div class="value-item"></div>
+            <div class="value-item">未接种原因</div>
+            <div class="value-item">{{ bcgVaccine.notVaccinated }}</div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            乙肝免疫蛋白
+          </div>
+          <div class="value-item-box">
+            <div class="value-item ">日期{{ hepatitisBGobulin.time }}</div>
+            <div class="value-item ">剂量{{ hepatitisBGobulin.dosis }}ml</div>
+            <div class="value-item ">用法{{ hepatitisBGobulin.direction }}</div>
+            <div class="value-item ">
+              批号{{ hepatitisBGobulin.batchNumber }}
+            </div>
+            <div class="value-item"></div>
+            <div class="value-item">未接种原因</div>
+            <div class="value-item">
+              {{ hepatitisBGobulin.notVaccinated }}
             </div>
           </div>
         </div>
@@ -260,22 +284,6 @@
               :key="index"
             >
               {{ item.value != '' ? `${item.value}mg` : '' }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            乙肝免疫蛋白
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({
-                tList: hepatitisBGobulin
-              })"
-              :key="index"
-            >
-              {{ item.value != '' ? `${item.value}IU` : '' }}
             </div>
           </div>
         </div>
@@ -417,9 +425,9 @@ export default {
       handRearingList: [], // 人工喂养
       vitaminK1List: [], //维生素K1
       jaundiceList: [], //黄疸
-      hepatitisBGobulin: [], //乙肝球蛋白
-      hepatitisBvaccine: [], //乙肝疫苗
-      bcgVaccine: [], //卡介疫苗
+      hepatitisBGobulin: {}, //乙肝球蛋白
+      hepatitisBvaccine: {}, //乙肝疫苗
+      bcgVaccine: {}, //卡介疫苗
       customList0: [], // 自定义1
       customList1: [], // 自定义2
       customList2: [], // 自定义3
@@ -788,16 +796,16 @@ export default {
             this.umbilicalCordList.push(item)
             break
           case '063':
-            this.hepatitisBvaccine.push(item)
+            this.hepatitisBvaccine = item.value
             break
           case '064':
-            this.bcgVaccine.push(item)
+            this.bcgVaccine = item.value
             break
           case '065':
             this.vitaminK1List.push(item)
             break
           case '066':
-            this.hepatitisBGobulin.push(item)
+            this.hepatitisBGobulin = item.value
             break
           case '050':
             this.breastMilkList.push(item)
@@ -883,23 +891,6 @@ export default {
             })
           })
         })
-        /*  画心率和脉搏的多边形，连线已经用折线画了，
-            这里用多边形是为了生成阴影，多边形的边框颜色设为透明，
-            注意折线可能会断，所以需要考虑有多个多边形的情形
-            ①只填写脉搏没有填写心率的单据，不需要连接成闭环形成阴影
-            ②填写脉搏和心率的单据需要连接两者数据点形成阴影(此情况为房颤患者)
-        */
-        // if (this.settingMap.heart.data.length > 0) {
-        //   this.polygonPoints.forEach((x) => {
-        //     this.createPolygon({
-        //       points: x,
-        //       lineWidth: 1,
-        //       color: 'transparent'
-        //     })
-        //   })
-        // }
-        // 生成心率脉搏过快注释
-        // this.createNote(this.topPulseNote, this.ySpace + 2, 'black')
         // 生成表顶注释
         this.createNote(this.topSheetNote, this.indexTextAreaHeight + 2, 'red')
         // 生成表底注释
@@ -1229,31 +1220,6 @@ export default {
             })
             break
           case 'Circle':
-            // 如果脉搏或心率和体温坐标重叠，改成在体温标识外面画红色的圆圈
-            if (vitalCode === '02' || vitalCode === '20') {
-              const tList = [
-                ...this.settingMap.oralTemperature.data,
-                ...this.settingMap.axillaryTemperature.data
-                // ...this.settingMap.analTemperature.data
-              ].map((x) => {
-                return {
-                  x: this.getXaxis(this.getLocationTime(x.time)),
-                  y: this.getYaxis(this.yRange, x.value)
-                }
-              })
-              const sameAxisItem = tList.find((x) => x.x === cx && x.y === cy)
-              if (sameAxisItem) {
-                params = {
-                  cx,
-                  cy,
-                  r: 8,
-                  color: 'red',
-                  zlevel: 9,
-                  tips: `${x.time} ${label}：${x.value}`,
-                  dotSolid: false
-                }
-              }
-            }
             this.createCircle(params)
             break
           case 'Isogon':
@@ -1642,8 +1608,10 @@ export default {
     }
   }
   .splice-line-top {
+    width: 200px;
+    height: 10px;
     position: absolute;
-    color: red;
+    color: rgb(240, 13, 13);
   }
   .head-info-1 {
     font-size: 14px;
@@ -1657,6 +1625,9 @@ export default {
       }
     }
   }
+}
+.left_text {
+  justify-content: left !important;
 }
 #main {
   flex-shrink: 0;

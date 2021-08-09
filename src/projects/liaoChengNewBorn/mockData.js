@@ -44,6 +44,45 @@ export const mockData = {
       time_point: '2019-06-12 16:12:00',
       vital_code: '5'
     },
+
+    {
+      temperature_type: '乙肝疫苗',
+      value: {
+        time: '2021.5.18',
+        dosis: '100',
+        direction: 'in',
+        batchNumber: '2021年5月1日',
+        notVaccinated: ''
+      },
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-19 16:12:00',
+      vital_code: '063'
+    },
+    {
+      temperature_type: '卡介疫苗',
+      value: {
+        time: '2021.5.18',
+        dosis: '100',
+        direction: 'in',
+        batchNumber: '2021年5月1日',
+        notVaccinated: ''
+      },
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-19 16:12:00',
+      vital_code: '064'
+    },
+    {
+      temperature_type: '乙肝免疫蛋白',
+      value: {
+        time: '2021.5.18',
+        dosis: '100',
+        direction: 'in',
+        batchNumber: '2021年5月1日',
+        notVaccinated: ''
+      },
+      time_point: '2019-05-18 15:12:00',
+      vital_code: '066'
+    },
     {
       //母乳喂养
       temperature_type: '母乳喂养',
@@ -262,30 +301,6 @@ export const mockData = {
       value: '0.0136',
       time_point: '2019-05-16 13:00:00',
       vital_code: '065'
-    },
-    {
-      temperature_type: '乙肝免疫蛋白',
-      value: '500',
-      time_point: '2019-05-18 15:12:00',
-      vital_code: '066'
-    },
-    {
-      temperature_type: '乙肝免疫蛋白',
-      value: '300',
-      time_point: '2019-05-21 13:00:00',
-      vital_code: '066'
-    },
-    {
-      temperature_type: '乙肝免疫蛋白',
-      value: '200',
-      time_point: '2019-05-16 13:00:00',
-      vital_code: '066'
-    },
-    {
-      temperature_type: '乙肝免疫蛋白',
-      value: '250',
-      time_point: '2019-05-18 15:12:00',
-      vital_code: '066'
     },
     {
       temperature_type: '皮温',
