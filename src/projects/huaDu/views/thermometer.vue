@@ -372,7 +372,7 @@ export default {
     const pulseRange = [0, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -565,10 +565,17 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
       const list = []
       const breatheList = [...this.breatheList]
+      // 根据医院要求，0-6点落在当天第一个格子，22-24点落在当天最后一个格子，所以特殊处理每天第一个格子和最后一个格子的落点
+      const timeNumList = this.dateList.map((x) => {
+        return {
+          start: this.getTimeNum(`${x} 00:00:00`),
+          end: this.getTimeNum(`${x} 24:00:00`)
+        }
+      })
       const timeAdd = (i) => {
-        return i === timeNumRange[0]
+        return timeNumList.some((x) => x.start === i)
           ? 6 * 60 * 60 * 1000
-          : i === timeNumRange[1] - 2 * 60 * 60 * 1000
+          : timeNumList.some((x) => x.end - 2 * 60 * 60 * 1000 === i)
           ? 2 * 60 * 60 * 1000
           : 4 * 60 * 60 * 1000
       }

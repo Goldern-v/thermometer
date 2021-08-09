@@ -17,10 +17,8 @@ module.exports = {
           return './src/projects/liaoCheng/main.js'
         case 'guiZhou': // 贵州省人医
           return './src/projects/guiZhou/main.js'
-        case 'wuJing':
-          return './src/projects/wuJing/main.js'
-        case 'hengLi':
-          return './src/projects/hengLi/main.js'
+        case 'common': // 可配置的通用版本
+          return './src/projects/common/main.js'
         default:
           break
       }
@@ -40,14 +38,11 @@ module.exports = {
             case 'huaDu':
               return 'http://120.238.239.27:9091'
             case 'liaoCheng':
-              // return 'http://120.224.211.7:9091'
               return 'http://172.17.5.41:9091'
             case 'guiZhou':
               return 'http://10.207.40.22:9091'
-            // case 'wuJing':
-            //   return 'http://58.248.14.84:9091'
-            // case 'hengLi':
-            //   return 'http://120.224.211.7:9091'
+            case 'common':
+              return 'http://172.17.5.41:9091'
             default:
               break
           }

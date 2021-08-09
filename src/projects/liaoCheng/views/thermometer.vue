@@ -7,13 +7,13 @@
     <div class="head-hos">聊城市第二人民医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item" style="width:100px;flex:none;">
+      <div class="item" style="width:125px;flex:none;">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item" style="width:80px;flex:none;">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="width:80px;flex:none;">
+      <div class="item" style="width:90px;flex:none;">
         年龄：<span class="value">{{ patInfo.age }}岁</span>
       </div>
       <div class="item">
@@ -441,7 +441,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -594,7 +594,7 @@ export default {
         '35': '自定义4',
         '36': '自定义5',
         '37': '自定义6'
-      }, // vital_code是null的时候，是自定义字段，显示在体温表后面
+      },
       lineMap: {
         '041': 'oralTemperature',
         '01': 'axillaryTemperature',
@@ -648,11 +648,18 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
       const list = []
       const breatheList = [...this.breatheList]
+      // 根据医院要求，0-5点落在当天第一个格子，21-24点落在当天最后一个格子，所以特殊处理每天第一个格子和最后一个格子的落点
+      const timeNumList = this.dateList.map((x) => {
+        return {
+          start: this.getTimeNum(`${x} 00:00:00`),
+          end: this.getTimeNum(`${x} 24:00:00`)
+        }
+      })
       const timeAdd = (i) => {
-        return i === timeNumRange[0]
-          ? 6 * 60 * 60 * 1000
-          : i === timeNumRange[1] - 2 * 60 * 60 * 1000
-          ? 2 * 60 * 60 * 1000
+        return timeNumList.some((x) => x.start === i)
+          ? 5 * 60 * 60 * 1000
+          : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
+          ? 3 * 60 * 60 * 1000
           : 4 * 60 * 60 * 1000
       }
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeAdd(i)) {
@@ -1013,12 +1020,9 @@ export default {
           continue
         }
         if (
-          vitalSigns[i].vital_code === '32' ||
-          vitalSigns[i].vital_code === '33' ||
-          vitalSigns[i].vital_code === '34' ||
-          vitalSigns[i].vital_code === '35' ||
-          vitalSigns[i].vital_code === '36' ||
-          vitalSigns[i].vital_code === '37'
+          ['32', '33', '34', '35', '36', '37'].includes(
+            vitalSigns[i].vital_code
+          )
         ) {
           // 自定义字段填入
           const sign = vitalSigns[i].temperature_type

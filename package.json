@@ -9,6 +9,8 @@
     "build:liaoCheng": "vue-cli-service build --project=liaoCheng",
     "dev:guiZhou": "vue-cli-service serve --project=guiZhou",
     "build:guiZhou": "vue-cli-service build --project=guiZhou",
+    "dev:common": "vue-cli-service serve --project=common",
+    "build:common": "vue-cli-service build --project=common",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
