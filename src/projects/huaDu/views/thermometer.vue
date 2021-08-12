@@ -117,6 +117,12 @@
           class="index-box"
           :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
         >
+          <i
+            class="split-line"
+            :style="{
+              bottom: `${painAreaHeight + bottomAreaHeight + ySpace}px`
+            }"
+          ></i>
           <div class="notes">
             <div
               v-for="(value, key) in settingMap"
@@ -150,16 +156,13 @@
             <div class="index" v-for="item in pulseList" :key="item">
               <span>{{ item }}</span>
             </div>
-          </div>
-          <div class="item pain">
-            <div class="text" :style="`height: ${ttLabelHeight}px`">
-              <div>疼痛</div>
-              <div>(分)</div>
+            <div class="pain-area" :style="`height: ${painAreaHeight}px`">
+              疼<br />痛<br />评<br />分
             </div>
-            <div class="index" v-for="item in painList" :key="item">
-              <span>{{ item }}</span>
-            </div>
-            <div class="s-index"><span>0</span></div>
+            <div
+              class="bottom-area"
+              :style="`height: ${bottomAreaHeight}px`"
+            ></div>
           </div>
           <div class="item temp">
             <div class="text">
@@ -169,6 +172,16 @@
             <div class="index" v-for="item in temperaturelist" :key="item">
               <span>{{ item }}</span>
             </div>
+            <div class="pain-area" :style="`height: ${painAreaHeight}px`">
+              <div class="pain-index" v-for="item in painList" :key="item">
+                <span>{{ item }}</span>
+              </div>
+              <div class="s-index"><span>0</span></div>
+            </div>
+            <div
+              class="bottom-area"
+              :style="`height: ${bottomAreaHeight}px`"
+            ></div>
           </div>
         </div>
         <div
@@ -348,7 +361,13 @@
       <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">
         上一页
       </button>
-      <span>第{{ currentPage }}页/共{{ pageTotal }}页</span>
+      <span
+        >第<input
+          v-model="toCurrentPage"
+          class="pageInput"
+          @keyup.enter="toPage()"
+        />页/共{{ pageTotal }}页</span
+      >
       <button
         :disabled="currentPage === pageTotal"
         @click="toNext"
@@ -358,7 +377,14 @@
       </button>
       <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
     </div>
-    <div class="pagination" v-else>第{{ currentPage }}页</div>
+    <div class="pagination" v-else>
+      第
+      <input
+        v-model="toCurrentPage"
+        class="pageInput"
+        @keyup.enter="toPage()"
+      />页
+    </div>
   </div>
 </template>
 
@@ -378,7 +404,7 @@ export default {
       areaWidth: 0, // 网格区域的宽度
       areaHeight: 0, // 网格区域的高度
       xSpace: 19, // 纵向网格的间距
-      ySpace: 16, //  横向网格的间距
+      ySpace: 15, //  横向网格的间距
       leftWidth: 160, // 左侧内容宽度
       xRange: [1, 8],
       yRange,
@@ -520,6 +546,7 @@ export default {
       },
       pageTotal: 1,
       currentPage: 1,
+      toCurrentPage: 1,
       showInnerPage: true, // 是否显示内部分页
       adtLog: '', // 转科
       bedExchangeLog: '', // 转床
@@ -535,6 +562,13 @@ export default {
         tds.push(...list)
       }
       return tds
+    },
+    painList() {
+      const list = []
+      for (let i = this.painRange[1]; i > this.painRange[0]; i -= 2) {
+        list.push(i)
+      }
+      return list
     },
     trHeight() {
       return this.ySpace * 2
@@ -560,6 +594,24 @@ export default {
         list.push(item)
       }
       return list
+    },
+
+    painAreaHeight() {
+      return this.ySpace * 5 + 14
+    },
+    middleAreaHeight() {
+      return this.ySpace * 3 + 5
+    },
+    bottomAreaHeight() {
+      return this.ySpace * 1 + 1
+    },
+    timesTempAreaHeight() {
+      return (
+        this.areaHeight -
+        this.middleAreaHeight -
+        this.painAreaHeight -
+        this.bottomAreaHeight
+      )
     },
     formatBreatheList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
@@ -729,16 +781,6 @@ export default {
         list.push(i)
       }
       return list
-    },
-    painList() {
-      const list = []
-      for (let i = this.painRange[1]; i > this.painRange[0]; i--) {
-        list.push(i)
-      }
-      return list
-    },
-    ttLabelHeight() {
-      return this.ySpace * 5 + 9
     }
     // temperatureNoteList() { // 拒测,不在,外出,请假都是体温相关的表底注释，出现后体温曲线要在此时间点断开
     //   const textList = ['拒测', '不在', '外出', '请假']
@@ -843,6 +885,27 @@ export default {
     toPre() {
       if (this.currentPage === 1) return
       this.currentPage--
+      document.getElementById('main').innerHTML = ''
+      this.reset()
+      this.handleData()
+    },
+    toPage() {
+      if (this.toCurrentPage === '' || this.toCurrentPage <= 0) {
+        this.currentPage = 1
+        this.toCurrentPage = 1
+        document.getElementById('main').innerHTML = ''
+        this.reset()
+        this.handleData()
+      } else {
+        if (this.toCurrentPage > this.pageTotal) {
+          this.currentPage = this.pageTotal
+          this.toCurrentPage = this.pageTotal
+          document.getElementById('main').innerHTML = ''
+          this.reset()
+          this.handleData()
+        }
+      }
+      this.currentPage = this.toCurrentPage
       document.getElementById('main').innerHTML = ''
       this.reset()
       this.handleData()
@@ -1072,7 +1135,7 @@ export default {
         // 生成表底注释
         this.createNote(
           this.bottomSheetNote,
-          this.areaHeight - (this.ySpace + 2) * 10 - 2,
+          this.areaHeight - (this.ySpace + 2) * 14,
           'black'
         )
       })
@@ -1107,10 +1170,14 @@ export default {
         this.yRange[1] -
         this.yRange[0] +
         1 +
-        (this.yRange[1] - this.yRange[0]) * 4
+        (this.yRange[1] - this.yRange[0]) * 4 +
+        4
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
-        const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1
+        const isBreak =
+          (i % 5 === 0 && i > 0 && i < totalLine - 1 && i !== 45) ||
+          i === 48 ||
+          i === 43
         const isboundary = i === 0 || i === totalLine - 1
         const lineWidth = isBreak ? 3 : 2
         const params = {
@@ -1152,7 +1219,8 @@ export default {
         this.yRange[1] -
         this.yRange[0] +
         1 +
-        (this.yRange[1] - this.yRange[0]) * 4
+        (this.yRange[1] - this.yRange[0]) * 4 +
+        4
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1
@@ -1511,9 +1579,12 @@ export default {
     getYaxis(yRange, value, vitalCode) {
       return vitalCode === 'ttpf'
         ? ((yRange[1] - value) / (yRange[1] - yRange[0])) *
-            (this.areaHeight - this.ttLabelHeight) +
-            this.ttLabelHeight
-        : ((yRange[1] - value) / (yRange[1] - yRange[0])) * this.areaHeight
+            this.painAreaHeight +
+            this.middleAreaHeight +
+            this.timesTempAreaHeight
+        : ((yRange[1] - value) /
+            (yRange[1] - (['11', '12'].includes(vitalCode) ? 20 : 34))) *
+            this.timesTempAreaHeight
     },
     // 增加换行符
     addn(str) {
@@ -1530,17 +1601,6 @@ export default {
       }
       return formatStr
     },
-    // // 算出上一个分割时间点
-    // getSplitTime(time) {
-    //   const hour = Number(time.slice(-8,-6))
-    //   let splitHour = hour - hour % 4
-    //   if (hour % 4 === 0) {
-    //     splitHour -= 4
-    //   }
-    //   splitHour = splitHour < 10 ? `0${splitHour}` : String(splitHour)
-    //   return `${time.slice(0, -8)}${splitHour}:00:00`
-    // },
-    // 计算用来定位描点的时间，医院特殊要求用这个方法定位
     getLocationTime(time) {
       const sec = this.getTotalSeconds(time.slice(-8))
       let str = ''
@@ -1881,7 +1941,11 @@ export default {
     }
   }
 }
+
 .info-box {
+  .temp:nth-child(6) {
+    color: red;
+  }
   display: flex;
   .index-box {
     position: relative;
@@ -1907,7 +1971,6 @@ export default {
         padding-right: 5px;
         > span {
           display: block;
-          margin-top: -9px;
         }
       }
     }
@@ -1935,8 +1998,7 @@ export default {
       .s-index {
         color: blue;
         position: absolute;
-        bottom: 0;
-        right: 5px;
+        bottom: -6px;
       }
     }
     .temp {
@@ -1944,11 +2006,77 @@ export default {
         flex: 1;
       }
     }
+    .temp :nth-child(2) > span {
+      margin-top: -10px;
+    }
+    .temp :nth-child(3) > span {
+      margin-top: -6px;
+    }
+    .temp :nth-child(4) > span {
+      margin-top: -2px;
+    }
+    .temp :nth-child(5) > span {
+      margin-top: 7px;
+    }
+    .temp :nth-child(6) > span {
+      margin-top: 7px;
+    }
+    .temp :nth-child(7) > span {
+      padding-top: 12px;
+    }
+    .temp :nth-child(8) > span {
+      padding-top: 17px;
+    }
+    .temp :nth-child(9) > span {
+      padding-top: 20px;
+    }
+    .times :nth-child(2) > span {
+      margin-top: -10px;
+    }
+    .times :nth-child(3) > span {
+      margin-top: -6px;
+    }
+    .times :nth-child(4) > span {
+      margin-top: -2px;
+    }
+    .times :nth-child(5) > span {
+      margin-top: 7px;
+    }
+    .times :nth-child(6) > span {
+      margin-top: 7px;
+    }
+    .times :nth-child(7) > span {
+      padding-top: 12px;
+    }
+    .times :nth-child(8) > span {
+      padding-top: 17px;
+    }
+    .times :nth-child(9) > span {
+      padding-top: 20px;
+    }
+    .pain-area {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      .pain-index {
+        flex: 1;
+        > span {
+          display: block;
+          margin-top: -10px;
+        }
+      }
+      .s-index {
+        position: absolute;
+        bottom: -12px;
+      }
+    }
     .notes {
       font-size: 18px;
       position: absolute;
-      left: 3px;
-      bottom: -8px;
+      left: 7px;
+      bottom: 140px;
       .note-item {
         position: relative;
         margin-bottom: 22px;
@@ -1985,6 +2113,13 @@ export default {
         border-right: 10px solid transparent;
         border-bottom: 18px solid blue;
       }
+    }
+    .split-line {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: -1px;
+      border-bottom: 2px solid red;
     }
   }
 }
@@ -2063,5 +2198,9 @@ export default {
 }
 .simhei {
   font-family: SimHei;
+}
+.pageInput {
+  width: 30px;
+  border: 0px;
 }
 </style>
