@@ -362,11 +362,7 @@
         上一页
       </button>
       <span
-        >第<input
-          v-model="toCurrentPage"
-          class="pageInput"
-          @keyup.enter="toPage()"
-        />页/共{{ pageTotal }}页</span
+        >第{{ currentPage }}页/共{{ pageTotal }}页</span
       >
       <button
         :disabled="currentPage === pageTotal"
@@ -378,12 +374,7 @@
       <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
     </div>
     <div class="pagination" v-else>
-      第
-      <input
-        v-model="toCurrentPage"
-        class="pageInput"
-        @keyup.enter="toPage()"
-      />页
+      第{{ currentPage }}页
     </div>
   </div>
 </template>
@@ -546,7 +537,6 @@ export default {
       },
       pageTotal: 1,
       currentPage: 1,
-      toCurrentPage: 1,
       showInnerPage: true, // 是否显示内部分页
       adtLog: '', // 转科
       bedExchangeLog: '', // 转床
@@ -885,27 +875,6 @@ export default {
     toPre() {
       if (this.currentPage === 1) return
       this.currentPage--
-      document.getElementById('main').innerHTML = ''
-      this.reset()
-      this.handleData()
-    },
-    toPage() {
-      if (this.toCurrentPage === '' || this.toCurrentPage <= 0) {
-        this.currentPage = 1
-        this.toCurrentPage = 1
-        document.getElementById('main').innerHTML = ''
-        this.reset()
-        this.handleData()
-      } else {
-        if (this.toCurrentPage > this.pageTotal) {
-          this.currentPage = this.pageTotal
-          this.toCurrentPage = this.pageTotal
-          document.getElementById('main').innerHTML = ''
-          this.reset()
-          this.handleData()
-        }
-      }
-      this.currentPage = this.toCurrentPage
       document.getElementById('main').innerHTML = ''
       this.reset()
       this.handleData()
