@@ -110,15 +110,15 @@
           <i
             class="split-line"
             :style="{
-              bottom: `${painAreaHeight + bottomAreaHeight + ySpace}px`
+              bottom: `${painAreaHeight + bottomAreaHeight -1}px`
             }"
           ></i>
           <div class="item times">
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
-              <div class="label" :style="{ height: `${trHeight + 2}px` }">
+             <!-- <div class="label" :style="{ height: `${trHeight + 2}px` }">
                 脉搏<i class="white-line"></i>
-              </div>
-              <div>次/分</div>
+              </div>-->
+              <div>脉搏</br>次/分</div>
             </div>
             <div class="index" v-for="item in pulseList" :key="item">
               <span>{{ item }}</span>
@@ -133,10 +133,10 @@
           </div>
           <div class="item temp">
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
-              <div class="label" :style="{ height: `${trHeight + 2}px` }">
+              <!--<div class="label" :style="{ height: `${trHeight + 2}px` }">
                 体温
-              </div>
-              <div>(℃)</div>
+              </div>-->
+              <div>体温</br>(℃)</div>
             </div>
             <div class="index" v-for="item in temperaturelist" :key="item">
               <span>{{ item }}</span>
@@ -145,7 +145,7 @@
               <div class="pain-index" v-for="item in painList" :key="item">
                 <span>{{ item }}</span>
               </div>
-              <div class="s-index"><span>0</span></div>
+             <!-- <div class="s-index"><span>0</span></div>-->
             </div>
             <div
               class="bottom-area"
@@ -799,18 +799,17 @@ export default {
       return list
     },
     indexTextAreaHeight() {
-      return this.ySpace * 3 + 2
+      return this.ySpace * 2 + 1
     },
     timesTempAreaHeight() {
       return (
         this.areaHeight -
         this.indexTextAreaHeight -
-        this.painAreaHeight -
-        this.bottomAreaHeight
+        this.painAreaHeight +3*this.ySpace+2
       )
     },
     painAreaHeight() {
-      return this.ySpace * 5 + 8
+      return this.ySpace * 5 + 7
     },
     bottomAreaHeight() {
       return this.ySpace * 1 + 1
@@ -1130,10 +1129,11 @@ export default {
             new Date(x.time).getHours()
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
+        console.log(x)
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y,
+          y:value!=='过快'?y+2:y-this.ySpace-1,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1230,9 +1230,9 @@ export default {
       let breakIndex = 0
       for (let i = 0; i < totalLine; i++) {
         const isPainBreak =
-          this.yRange[1] - breakIndex + 2 === 35 && (i - 3) % 5 === 4
+          this.yRange[1] - breakIndex  === 34
         const isBreak =
-          ((i - 3) % 5 === 0 || isPainBreak || i === 1) &&
+          ((i - 2) % 5 === 0 &&i<40|| isPainBreak || i ===39||i===43) &&
           i > 0 &&
           i < totalLine - 1
         const isboundary = i === 0 || i === totalLine - 1
@@ -1244,7 +1244,7 @@ export default {
           y2: preSpace,
           lineWidth,
           color: isBreak
-            ? this.yRange[1] - breakIndex++ + 1 === 37 || isPainBreak
+            ? this.yRange[1] - breakIndex++-2 === 35 || isPainBreak
               ? 'red'
               : '#000'
             : isboundary
@@ -1283,13 +1283,12 @@ export default {
         this.yRange[0] +
         1 +
         (this.yRange[1] - this.yRange[0]) * 4 +
-        3 +
-        6
+        4
       let preSpace = 0
       let breakIndex = 0
       for (let i = 0; i < totalLine; i++) {
         const isPainBreak =
-          this.yRange[1] - breakIndex + 2 === 35 && (i - 3) % 5 === 4
+          this.yRange[1] - breakIndex + 3 === 35 && (i - 3) % 5 === 4
         const isBreak =
           ((i - 3) % 5 === 0 || isPainBreak || i === 1) &&
           i > 0 &&
@@ -1319,7 +1318,7 @@ export default {
       y,
       value,
       color,
-      fontSize = 12,
+      fontSize = 14,
       tips,
       zlevel = 0,
       fontWeight = 'normal',
@@ -1700,13 +1699,14 @@ export default {
           }
         }
       })
+      //图标连接的折线路部分
       for (let i = 0; i < dots.length - 1; i++) {
         this.createLine({
           x1: dots[i].x,
           y1: dots[i].y,
           x2: dots[i + 1].x,
           y2: dots[i + 1].y,
-          lineWidth: 1,
+          lineWidth: 2,
           color: lineColor || 'red',
           zlevel: 1
         })
@@ -1718,10 +1718,10 @@ export default {
         ? ((yRange[1] - value) / (yRange[1] - yRange[0])) *
             this.painAreaHeight +
             this.indexTextAreaHeight +
-            this.timesTempAreaHeight
+            this.timesTempAreaHeight -3 * this.ySpace - 1
         : ((yRange[1] - value) / (yRange[1] - yRange[0])) *
             this.timesTempAreaHeight +
-            this.indexTextAreaHeight
+            this.indexTextAreaHeight + 1
     },
     // 根据时间点计算横坐标
     getXaxis(time) {
@@ -1732,8 +1732,9 @@ export default {
         this.areaWidth
       return xAxis
     },
-    // 增加换行符
+    // 增加字符（过快，不升，请假等字符的换行）换行符
     addn(str) {
+      console.log(str)
       let formatStr = ''
       if (str.length < 2) {
         return str
@@ -2030,6 +2031,9 @@ export default {
     z-index: 30;
   }
 }
+.pain-area:nth-child(3){
+  color:red;
+}
 .table-box {
   position: relative;
   z-index: 20;
@@ -2108,6 +2112,9 @@ export default {
           text-align: center;
         }
       }
+      .pain-area :nth-child(1){
+        margin-top:12px;
+        }
       .pain-area {
         position: relative;
         display: flex;
@@ -2118,12 +2125,14 @@ export default {
           flex: 1;
           > span {
             display: block;
-            margin-top: -5px;
+            margin-top: 6px;
           }
+
         }
+       
         .s-index {
           position: absolute;
-          bottom: -6px;
+          bottom: -7px;
         }
       }
     }
@@ -2156,6 +2165,54 @@ export default {
           padding-right: 1px;
         }
       }
+    }
+    .temp :nth-child(2) > span {
+      margin-top: -8px;
+    }
+    .temp :nth-child(3) > span {
+      margin-top: 3px;
+    }
+    .temp :nth-child(4) > span {
+      margin-top: 12px;
+    }
+    .temp :nth-child(5) > span {
+      margin-top: 19px;
+    }
+    .temp :nth-child(6) > span {
+      margin-top: 28px;
+    }
+    .temp :nth-child(7) > span {
+      margin-top: 37px;
+    }
+    .temp :nth-child(8) > span {
+      margin-top: 44px;
+    }
+    .temp :nth-child(9) > span {
+      margin-top: 52px;
+    }
+    .times :nth-child(2) > span {
+      margin-top: -8px;
+    }
+    .times :nth-child(3) > span {
+      margin-top: 3px;
+    }
+    .times :nth-child(4) > span {
+      margin-top: 12px;
+    }
+    .times :nth-child(5) > span {
+      margin-top: 19px;
+    }
+    .times :nth-child(6) > span {
+      margin-top: 28px;
+    }
+    .times :nth-child(7) > span {
+      margin-top: 37px;
+    }
+    .times :nth-child(8) > span {
+      margin-top: 44px;
+    }
+    .times :nth-child(9) > span {
+      margin-top: 52px;
     }
     .split-line {
       display: block;
