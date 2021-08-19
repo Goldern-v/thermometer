@@ -361,9 +361,7 @@
       <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">
         上一页
       </button>
-      <span
-        >第{{ currentPage }}页/共{{ pageTotal }}页</span
-      >
+      <span>第{{ currentPage }}页/共{{ pageTotal }}页</span>
       <button
         :disabled="currentPage === pageTotal"
         @click="toNext"
@@ -373,9 +371,7 @@
       </button>
       <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
     </div>
-    <div class="pagination" v-else>
-      第{{ currentPage }}页
-    </div>
+    <div class="pagination" v-else>第{{ currentPage }}页</div>
   </div>
 </template>
 
@@ -1453,7 +1449,13 @@ export default {
                   )
                 }
               })
-              const sameAxisItem = tList.find((x) => x.x === cx && x.y === cy)
+              const sameAxisItem = tList.find(
+                (x) =>
+                  x.x <= cx + 10 &&
+                  x.x >= cx - 10 &&
+                  x.y <= cy + 10 &&
+                  x.y >= cy - 10
+              )
               if (sameAxisItem) {
                 params = {
                   cx,
@@ -1553,7 +1555,8 @@ export default {
             this.timesTempAreaHeight
         : ((yRange[1] - value) /
             (yRange[1] - (['11', '12'].includes(vitalCode) ? 20 : 34))) *
-            this.timesTempAreaHeight
+            this.timesTempAreaHeight -
+            1
     },
     // 增加换行符
     addn(str) {
@@ -1936,7 +1939,7 @@ export default {
         padding-right: 5px;
       }
       .index {
-        flex: 1;
+        height: 81.7px;
         padding-right: 5px;
         > span {
           display: block;
@@ -2030,7 +2033,7 @@ export default {
       align-items: center;
       justify-content: center;
       .pain-index {
-        flex: 1;
+        height: 81.7px;
         > span {
           display: block;
           margin-top: -10px;
@@ -2039,6 +2042,11 @@ export default {
       .s-index {
         position: absolute;
         bottom: -12px;
+        left: 50%;
+        -webkit-transform: translate(-50%);
+        -moz-transform: translate(-50%);
+        transform: translate(-50%);
+        text-align: center;
       }
     }
     .notes {

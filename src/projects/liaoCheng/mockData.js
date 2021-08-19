@@ -226,6 +226,12 @@ export const mockData = {
       vital_code: '01'
     },
     {
+      temperature_type: '腋温',
+      value: '37.4',
+      time_point: '2019-05-17 15:12:00',
+      vital_code: '01'
+    },
+    {
       temperature_type: '口温',
       value: '36',
       time_point: '2019-05-16 13:00:00',

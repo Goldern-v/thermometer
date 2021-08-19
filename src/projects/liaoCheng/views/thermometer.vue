@@ -115,9 +115,6 @@
           ></i>
           <div class="item times">
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
-             <!-- <div class="label" :style="{ height: `${trHeight + 2}px` }">
-                脉搏<i class="white-line"></i>
-              </div>-->
               <div>脉搏</br>次/分</div>
             </div>
             <div class="index" v-for="item in pulseList" :key="item">
@@ -1129,7 +1126,6 @@ export default {
             new Date(x.time).getHours()
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
-        console.log(x)
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
@@ -1197,6 +1193,7 @@ export default {
         */
         if (this.settingMap.heart.data.length > 0) {
           this.polygonPoints.forEach((x) => {
+             console.log(x)
             this.createPolygon({
               points: x,
               lineWidth: 1,
@@ -1357,6 +1354,7 @@ export default {
         )
       }
     },
+    //先在外层画一个多边形，然后根据多边形画虚线连接，有心率和脉搏就画虚线区域
     createPolygon({ points, lineWidth, color, zlevel = 0 }) {
       const canvas = document.createElement('canvas')
       canvas.width = 10
@@ -1365,7 +1363,7 @@ export default {
       ctx.moveTo(canvas.width, 0)
       ctx.lineTo(0, canvas.height)
       ctx.lineWidth = 1
-      ctx.strokeStyle = 'red'
+      ctx.strokeStyle = 'green'
       ctx.stroke()
 
       const polygon = new zrender.Polygon({
@@ -1562,7 +1560,10 @@ export default {
                   y: this.getYaxis(this.yRange, x.value)
                 }
               })
-              const sameAxisItem = tList.find((x) => x.x === cx && x.y === cy)
+              const sameAxisItem = tList.find((x) =>  x.x <= cx + 10 &&
+                  x.x >= cx - 10 &&
+                  x.y <= cy + 10 &&
+                  x.y >= cy - 10)
               if (sameAxisItem) {
                 params = {
                   cx,
@@ -1734,7 +1735,6 @@ export default {
     },
     // 增加字符（过快，不升，请假等字符的换行）换行符
     addn(str) {
-      console.log(str)
       let formatStr = ''
       if (str.length < 2) {
         return str
@@ -2105,7 +2105,8 @@ export default {
         }
       }
       .index {
-        flex: 1;
+       height: 81.7px;
+        position: relative;
         > span {
           display: block;
           margin-top: -5px;
@@ -2122,10 +2123,10 @@ export default {
         align-items: center;
         justify-content: center;
         .pain-index {
-          flex: 1;
+          height: 81.7px;
           > span {
             display: block;
-            margin-top: 6px;
+            margin-top: 4px;
           }
 
         }
@@ -2157,6 +2158,7 @@ export default {
       }
     }
     .temp {
+    overflow:hidden;
       .text {
         flex-shrink: 0;
         flex-grow: 0;
@@ -2214,6 +2216,7 @@ export default {
     .times :nth-child(9) > span {
       margin-top: 52px;
     }
+
     .split-line {
       display: block;
       position: absolute;
