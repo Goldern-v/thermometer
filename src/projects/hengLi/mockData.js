@@ -339,13 +339,13 @@ export const mockData = {
       value: '37',
       time_point: '2019-05-16 13:00:00',
       vital_code: '22'
-    },
-    {
-      temperature_type: '尿量',
-      value: '1470',
-      time_point: '2020-12-15 03:12:00',
-      vital_code: '15'
     }
+    // {
+    //   "temperature_type": "尿量",
+    //   "value": "1470",
+    //   "time_point": "2020-12-15 03:12:00",
+    //   "vital_code": "15"
+    // },
     // {
     //   "temperature_type": "呕吐量",
     //   "value": "0",

@@ -19,6 +19,10 @@ module.exports = {
           return './src/projects/liaoChengNewBorn/main.js'
         case 'guiZhou': // 贵州省人医
           return './src/projects/guiZhou/main.js'
+        case 'jiangMenFuYou': // 江门妇幼
+          return './src/projects/jiangMenFuYou/main.js'
+        case 'hengLi': // 东莞横沥
+          return './src/projects/hengLi/main.js'
         case 'common': // 可配置的通用版本
           return './src/projects/common/main.js'
         default:
@@ -43,6 +47,10 @@ module.exports = {
               return 'http://172.17.5.41:9091'
             case 'liaoChengNewBorn':
               // return 'http://120.224.211.7:9091'
+              return 'http://172.17.5.41:9091'
+            case 'jiangMenFuYou':
+              return 'http://172.17.5.41:9091'
+            case 'hengLi':
               return 'http://172.17.5.41:9091'
             case 'guiZhou':
               return 'http://10.207.40.22:9091'
