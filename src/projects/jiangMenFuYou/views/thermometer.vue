@@ -402,7 +402,7 @@ export default {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -601,20 +601,16 @@ export default {
       const list = []
       const breatheList = [...this.breatheList]
       // 根据医院要求，0-6点落在当天第一个格子，22-24点落在当天最后一个格子，所以特殊处理每天第一个格子和最后一个格子的落点
-      const timeNumList = this.dateList.map((x) => {
-        return {
-          start: this.getTimeNum(`${x} 00:00:00`),
-          end: this.getTimeNum(`${x} 24:00:00`)
-        }
-      })
-      const timeAdd = (i) => {
-        return timeNumList.some((x) => x.start === i)
-          ? 6 * 60 * 60 * 1000
-          : timeNumList.some((x) => x.end - 2 * 60 * 60 * 1000 === i)
-          ? 2 * 60 * 60 * 1000
-          : 4 * 60 * 60 * 1000
+      // const timeNumList = this.dateList.map((x) => {
+      //   return {
+      //     start: this.getTimeNum(`${x} 00:00:00`),
+      //     end: this.getTimeNum(`${x} 24:00:00`)
+      //   }
+      // })
+      const timeAdd = () => {
+        return 4 * 60 * 60 * 1000
       }
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeAdd(i)) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeAdd()) {
         const item = { timeNum: i, value: '' }
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time)
@@ -979,7 +975,6 @@ export default {
             this.pressureList.push(item)
             break
           case '18':
-            console.log(item)
             this.weightList.push(item)
             break
           case '33':
@@ -1566,12 +1561,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8))
       let str = ''
       const timeAreasMap = {
-        '02:00:00': ['00:00:00', '06:00:59'],
-        '06:00:00': ['06:01:00', '10:00:59'],
-        '10:00:00': ['10:01:00', '14:00:59'],
-        '14:00:00': ['14:01:00', '18:00:59'],
-        '18:00:00': ['18:01:00', '22:00:59'],
-        '22:00:00': ['22:01:00', '23:59:59']
+        '02:00:00': ['00:00:00', '04:00:59'],
+        '06:00:00': ['04:01:00', '08:00:59'],
+        '10:00:00': ['08:01:00', '12:00:59'],
+        '14:00:00': ['12:01:00', '16:00:59'],
+        '18:00:00': ['16:01:00', '20:00:59'],
+        '22:00:00': ['20:01:00', '23:59:59']
       }
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -1703,7 +1698,6 @@ export default {
             break
           }
         }
-        console.log(item)
         list.push(item)
       }
       return list

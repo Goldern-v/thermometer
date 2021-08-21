@@ -23,6 +23,8 @@ module.exports = {
           return './src/projects/jiangMenFuYou/main.js'
         case 'hengLi': // 东莞横沥
           return './src/projects/hengLi/main.js'
+        case 'xieGang': // 谢岗
+          return './src/projects/xieGang/main.js'
         case 'common': // 可配置的通用版本
           return './src/projects/common/main.js'
         default:
@@ -54,6 +56,8 @@ module.exports = {
               return 'http://172.17.5.41:9091'
             case 'guiZhou':
               return 'http://10.207.40.22:9091'
+            case 'xieGang':
+              return 'http://172.17.5.41:9091'
             case 'common':
               return 'http://172.17.5.41:9091'
             default:

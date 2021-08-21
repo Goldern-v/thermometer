@@ -13,6 +13,8 @@
     "build:jiangMenFuYou": "vue-cli-service build --project=jiangMenFuYou",
     "dev:hengLi": "vue-cli-service serve --project=hengLi",
     "build:hengLi": "vue-cli-service build --project=hengLi",
+    "dev:xieGang": "vue-cli-service serve --project=xieGang",
+    "build:xieGang": "vue-cli-service build --project=xieGang",
     "dev:common": "vue-cli-service serve --project=common",
     "build:common": "vue-cli-service build --project=common",
     "dev:liaoChengNewBorn": "vue-cli-service serve --project=liaoChengNewBorn",

@@ -162,7 +162,7 @@ export const mockData = {
       temperature_type: '口表',
       value: '38.9',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 18:12:00',
+      time_point: '2019-05-15 05:12:00',
       vital_code: '2'
     },
     {
