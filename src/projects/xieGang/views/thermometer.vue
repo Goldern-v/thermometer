@@ -503,17 +503,6 @@ export default {
           data: [
             // { time: '2019-05-15 07:10:00', value: 120},
           ]
-        },
-        pain: {
-          vitalCode: '092',
-          label: '疼痛',
-          color: 'red',
-          solid: true,
-          dotType: 'Isogon',
-          range: painRange,
-          data: [
-            // { time: '2019-05-15 07:10:00', value: 2},
-          ]
         }
       }, // 折线部分
       topSheetNote: [
@@ -1560,10 +1549,7 @@ export default {
                   y: this.getYaxis(this.yRange, x.value)
                 }
               })
-              const sameAxisItem = tList.find((x) =>  x.x <= cx + 10 &&
-                  x.x >= cx - 10 &&
-                  x.y <= cy + 10 &&
-                  x.y >= cy - 10)
+              const sameAxisItem = tList.find((x) =>  x.x === cx && x.y === cy)
               if (sameAxisItem) {
                 params = {
                   cx,

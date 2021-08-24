@@ -453,7 +453,7 @@ export default {
         },
         pain: {
           vitalCode: 'ttpf',
-          label: '疼痛',
+          label: '',
           color: 'blue',
           solid: true,
           dotType: 'Isogon',
@@ -1451,10 +1451,8 @@ export default {
               })
               const sameAxisItem = tList.find(
                 (x) =>
-                  x.x <= cx + 10 &&
-                  x.x >= cx - 10 &&
-                  x.y <= cy + 10 &&
-                  x.y >= cy - 10
+                  x.x.toFixed(2) === cx.toFixed(2) &&
+                  x.y.toFixed(2) === cy.toFixed(2)
               )
               if (sameAxisItem) {
                 params = {
@@ -2053,7 +2051,7 @@ export default {
       font-size: 18px;
       position: absolute;
       left: 7px;
-      bottom: 140px;
+      bottom: 100px;
       .note-item {
         position: relative;
         margin-bottom: 22px;
@@ -2082,8 +2080,8 @@ export default {
       }
       .pain-icon {
         position: absolute;
-        right: 3px;
-        top: 2px;
+        left: 31px;
+        top: 123px;
         display: inline-block;
         z-index: 2;
         border-left: 10px solid transparent;

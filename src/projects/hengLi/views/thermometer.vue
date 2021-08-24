@@ -1438,13 +1438,7 @@ export default {
                   )
                 }
               })
-              const sameAxisItem = tList.find(
-                (x) =>
-                  x.x <= cx + 10 &&
-                  x.x >= cx - 10 &&
-                  x.y <= cy + 10 &&
-                  x.y >= cy - 10
-              )
+              const sameAxisItem = tList.find((x) => x.x.toFixed(2) === cx.toFixed(2) && x.y.toFixed(2) === cy.toFixed(2))
               if (sameAxisItem) {
                 params = {
                   cx,

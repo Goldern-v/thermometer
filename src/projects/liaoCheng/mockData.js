@@ -220,14 +220,26 @@ export const mockData = {
       vital_code: '01'
     },
     {
+      temperature_type: '脉搏',
+      value: '104',
+      time_point: '2019-05-17 01:12:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '112',
+      time_point: '2019-05-17 01:12:00',
+      vital_code: '20'
+    },
+    {
       temperature_type: '腋温',
-      value: '38',
+      value: '38.2',
       time_point: '2019-05-17 01:12:00',
       vital_code: '01'
     },
     {
       temperature_type: '腋温',
-      value: '37.4',
+      value: '37',
       time_point: '2019-05-17 15:12:00',
       vital_code: '01'
     },

@@ -713,7 +713,7 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i
         }
-        if (days[index] <= 10) {
+        if (days[index] <= 14) {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
           let operatorCout = index + 1 + this.idx[this.currentPage - 1]
           if (dateIndex === this.dateList.length - 1) {
@@ -721,7 +721,7 @@ export default {
           }
           return index === 0 && this.idx[this.currentPage - 1] === 0
             ? days[index]
-            : `${this.numToRome(operatorCout)}-${days[index]}`
+            : `${this.numToRome(operatorCout)}/${days[index]}`
         } else {
           return ''
         }
@@ -1439,13 +1439,7 @@ export default {
                   )
                 }
               })
-              const sameAxisItem = tList.find(
-                (x) =>
-                  x.x <= cx + 10 &&
-                  x.x >= cx - 10 &&
-                  x.y <= cy + 10 &&
-                  x.y >= cy - 10
-              )
+              const sameAxisItem = tList.find((x) => x.x.toFixed(2) === cx.toFixed(2) && x.y.toFixed(2) === cy.toFixed(2))
               if (sameAxisItem) {
                 params = {
                   cx,

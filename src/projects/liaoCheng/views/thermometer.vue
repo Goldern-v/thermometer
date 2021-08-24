@@ -1363,7 +1363,7 @@ export default {
       ctx.moveTo(canvas.width, 0)
       ctx.lineTo(0, canvas.height)
       ctx.lineWidth = 1
-      ctx.strokeStyle = 'green'
+      ctx.strokeStyle = 'red'
       ctx.stroke()
 
       const polygon = new zrender.Polygon({
@@ -1560,10 +1560,7 @@ export default {
                   y: this.getYaxis(this.yRange, x.value)
                 }
               })
-              const sameAxisItem = tList.find((x) =>  x.x <= cx + 10 &&
-                  x.x >= cx - 10 &&
-                  x.y <= cy + 10 &&
-                  x.y >= cy - 10)
+              const sameAxisItem = tList.find((x) => x.x.toFixed(2) === cx.toFixed(2) && x.y.toFixed(2) === cy.toFixed(2))
               if (sameAxisItem) {
                 params = {
                   cx,
