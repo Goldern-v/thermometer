@@ -571,7 +571,6 @@ export default {
         '27': '物理降温',
         '28': '呕吐量',
         '29': '在线降温',
-        '092': '疼痛评分',
         '094': '身高',
         '3': '物理降温',
         '32': '自定义1',
@@ -587,7 +586,7 @@ export default {
         '043': 'analTemperature',
         '20': 'heart',
         '02': 'pulse',
-        '092': 'pain'
+        // '092': 'pain'
       },
       pageTotal: 1,
       currentPage: 1,

@@ -1663,7 +1663,7 @@ export default {
                   y: this.getYaxis(this.yRange, x.value)
                 }
               })
-              const sameAxisItem = tList.find((x) => x.x === cx && x.y === cy)
+             const sameAxisItem = tList.find((x) => x.x.toFixed(2) === cx.toFixed(2) && x.y.toFixed(2) === cy.toFixed(2))
               if (sameAxisItem) {
                 params = {
                   cx,
