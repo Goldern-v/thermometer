@@ -6,7 +6,7 @@ export const mockData = {
       patient_id: '590904',
       name: '陈小倩',
       sex: '女',
-      dept_name: '儿科-病区护理单元',
+      dept_name: '消化内科护理单元是是是',
       bed_label: '012',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
@@ -174,7 +174,7 @@ export const mockData = {
     },
     {
       temperature_type: '呼吸机',
-      value: 'R',
+      value: '呼吸机',
       time_point: '2019-05-18 13:12:00',
       vital_code: 'breatheMachine'
     },

@@ -182,7 +182,7 @@ export const mockData = {
     {
       temperature_type: '呼吸',
       value: '20',
-      time_point: '2019-05-19 23:12:00',
+      time_point: '2019-05-19 15:00:00',
       vital_code: '13'
     },
     {

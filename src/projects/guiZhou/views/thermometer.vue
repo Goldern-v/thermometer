@@ -10,7 +10,7 @@
       <div class="item">
         姓名<span class="value">&emsp;{{ patInfo.name }}&emsp;</span>
       </div>
-      <div class="item">
+      <div class="item" style="width:210px;flex:none;">
         科别<span class="value"
           >&emsp;{{ adtLog || patInfo.dept_name }}&emsp;</span
         >
@@ -453,7 +453,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -689,7 +689,11 @@ export default {
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time)
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
-            item.value = breatheList[j].value
+            typeof parseInt(breatheList[j].value) === 'number' &&
+            !isNaN(breatheList[j].value)
+              ? (item.value = breatheList[j].value)
+              : (item.value = 'Ⓡ')
+            // item.value = breatheList[j].value
             breatheList.splice(j, 1)
             break
           }
@@ -1663,7 +1667,11 @@ export default {
                   y: this.getYaxis(this.yRange, x.value)
                 }
               })
-             const sameAxisItem = tList.find((x) => x.x.toFixed(2) === cx.toFixed(2) && x.y.toFixed(2) === cy.toFixed(2))
+              const sameAxisItem = tList.find(
+                (x) =>
+                  x.x.toFixed(2) === cx.toFixed(2) &&
+                  x.y.toFixed(2) === cy.toFixed(2)
+              )
               if (sameAxisItem) {
                 params = {
                   cx,
