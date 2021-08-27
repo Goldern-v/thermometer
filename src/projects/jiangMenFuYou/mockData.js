@@ -11,7 +11,7 @@ export const mockData = {
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
       admission_date: '2019-05-15 08:12:30.0',
-      age: '54',
+      age: '30',
       inp_no: '1568587'
     }
   },
@@ -155,8 +155,8 @@ export const mockData = {
     },
     {
       temperature_type: '呼吸',
-      value: '20',
-      time_point: '2019-05-19 23:12:00',
+      value: '70',
+      time_point: '2019-05-16 23:59:00',
       vital_code: '04'
     },
     {

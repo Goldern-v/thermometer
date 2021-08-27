@@ -12,7 +12,7 @@
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item">
-        年龄：<span class="value">{{ patInfo.age }}岁</span>
+        年龄：<span class="value">{{ typeof parseInt(patInfo.age)==='number'&&!isNaN(patInfo.age)?patInfo.age+'岁':patInfo.age}}</span>
       </div>
       <div class="item">
         性别：<span class="value">{{ patInfo.sex }}</span>
@@ -621,7 +621,7 @@ export default {
         const item = { timeNum: i, value: '' }
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time)
-          if (timeNum >= i && timeNum < i + timeAdd(i)) {
+          if (timeNum >= i && timeNum <=i + timeAdd(i)) {
             item.value = breatheList[j].value
             breatheList.splice(j, 1)
             break
@@ -990,7 +990,7 @@ export default {
           case '091':
             this.inputList.push(item)
             break
-          case '61':
+          case '061':
             this.shitList.push(item)
             break
           case '12':
