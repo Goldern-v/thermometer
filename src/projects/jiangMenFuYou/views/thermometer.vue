@@ -402,7 +402,7 @@ export default {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -1156,7 +1156,7 @@ export default {
           (i % 5 === 0 && i > 0 && i < totalLine - 1 && i !== 45) ||
           i === 48
         const isboundary = i === 0 || i === totalLine - 1
-        const lineWidth = isBreak ? 3 : 2
+        const lineWidth = isBreak ? 2 : 1
         const params = {
           x1: 0,
           y1: preSpace,
@@ -1199,7 +1199,7 @@ export default {
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1
-        const lineWidth = isBreak ? 3 : 2
+        const lineWidth = isBreak ? 2 : 1
         preSpace += lineWidth + this.ySpace
       }
       this.areaHeight = preSpace - this.ySpace - 1
@@ -1456,7 +1456,8 @@ export default {
                 }
               })
               const sameAxisItem = tList.find((x) =>
-              x.x.toFixed(2) === cx.toFixed(2) && x.y.toFixed(2)-1<=cy&&x.y.toFixed(2)+1>= cy.toFixed(2)
+              // console.log(x.y,cy)
+              x.x.toFixed(2) === cx.toFixed(2) && x.y-1<=cy&&x.y+1>= cy
               )
               if (sameAxisItem) {
                 params = {
@@ -1508,7 +1509,7 @@ export default {
                 y1: cy,
                 x2: coolX,
                 y2: coolY,
-                lineWidth: 2,
+                lineWidth: 1,
                 color: 'red',
                 zlevel: 1,
                 lineDash: [3, 3]
@@ -1552,7 +1553,7 @@ export default {
     getYaxis(yRange, value) {
       return ((yRange[1] - value) /
             (yRange[1] - yRange[0])) *
-            this.timesTempAreaHeight-1 
+            this.timesTempAreaHeight -1
     },
     // 增加换行符
     addn(str) {
@@ -1987,49 +1988,49 @@ export default {
       margin-top: -10px;
     }
     .temp :nth-child(3) > span {
-      margin-top: -6px;
+      margin-top: -10px;
     }
     .temp :nth-child(4) > span {
-      margin-top: -2px;
+      margin-top: -10px;
     }
     .temp :nth-child(5) > span {
-      margin-top: 7px;
+      margin-top: -10px;
     }
     .temp :nth-child(6) > span {
-      margin-top: 7px;
+      margin-top: -10px;
     }
     .temp :nth-child(7) > span {
-      padding-top: 12px;
+       margin-top: -10px;
     }
     .temp :nth-child(8) > span {
-      padding-top: 17px;
+       margin-top: -8px;
     }
     .temp :nth-child(9) > span {
-      padding-top: 20px;
+      margin-top: -8px;
     }
     .times :nth-child(2) > span {
       margin-top: -10px;
     }
     .times :nth-child(3) > span {
-      margin-top: -6px;
+     margin-top: -10px;
     }
     .times :nth-child(4) > span {
-      margin-top: -2px;
+     margin-top: -10px;
     }
     .times :nth-child(5) > span {
-      margin-top: 7px;
+     margin-top: -10px;
     }
     .times :nth-child(6) > span {
-      margin-top: 7px;
+     margin-top: -10px;
     }
     .times :nth-child(7) > span {
-      padding-top: 12px;
+      margin-top: -10px;
     }
     .times :nth-child(8) > span {
-      padding-top: 17px;
+       margin-top: -8px;
     }
     .times :nth-child(9) > span {
-      padding-top: 20px;
+      margin-top: -8px;
     }
     .pain-area {
       position: relative;
@@ -2163,6 +2164,7 @@ export default {
 }
 .border-bottom-black-2 {
   border-bottom: 3px solid black !important;
+
 }
 .border-top-black-2 {
   border-top: 3px solid black !important;
