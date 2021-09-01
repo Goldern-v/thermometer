@@ -31,7 +31,7 @@
         床号：<span class="value">{{  bedExchangeLog || patInfo.bed_label }}</span>
       </div>
       <div class="item" style="text-align: right;">
-        住院号：<span class="value">{{ patInfo.patient_id }}</span>
+        住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
     </div>
     <div class="table-area">
@@ -402,7 +402,7 @@ export default {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -447,7 +447,7 @@ export default {
           ]
         },
         pulse: {
-          vitalCode: '02',
+          vitalCode: '0002',
           label: '脉搏',
           color: 'red',
           solid: true,
@@ -458,7 +458,7 @@ export default {
           ]
         },
         heart: {
-          vitalCode: '20',
+          vitalCode: '0023',
           label: '心率',
           color: 'red',
           dotType: 'Circle',
@@ -477,7 +477,7 @@ export default {
         // { time: '2019-05-19 20:10:00', value: '请假' },
       ], // 表底注释
       breatheList: [
-        // { time: '2019-05-18 03:12:00', value: '20' }
+        // { time: '2019-05-18 03:12:00', value: '0023' }
       ], // 呼吸
       pressureList: [], // 血压
       weightList: [], // 体重
@@ -508,43 +508,43 @@ export default {
       },
       vitalSigns: [],
       typeMap: {
-        '5': '表顶注释', // 入院|,手术,分娩|,出院|,转入|,死亡|,排胎|,出生|,手术分娩|,手术入院|,转出|
-        '4': '表底注释', // 拒测,不在,外出,不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
-        '01': '体温',
-        '02': '脉搏',
-        '20': '心率',
-        '04': '呼吸',
-        '062': '血压',
-        '12': '尿量',
-        '091': '入量',
+        '0022': '表顶注释', // 入院|,手术,分娩|,出院|,转入|,死亡|,排胎|,出生|,手术分娩|,手术入院|,转出|
+        '0021': '表底注释', // 拒测,不在,外出,不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
+        '0001': '体温',
+        '0002': '脉搏',
+        '0023': '心率',
+        '0003': '呼吸',
+        '0005': '血压',
+        '0008': '尿量',
+        '0007': '入量',
         // '34': '出量',
-        '19':'总出量',
-        '033': '体重',
+        '0018':'总出量',
+        '0006': '体重',
         '043': '肛温',
         '041': '口温',
         '21': '发热体温',
-        '22': '线上降温',
+        '0020': '物理降温',
         '044': '呼吸机R',
-        '061': '大便次数',
+        '0004': '大便次数',
         '25': '护理事件',
         '3': '物理降温',
         '28': '呕吐量',
         '29': '在线降温',
-        '30':'皮试',
+        '0010':'皮试',
         '32':'自定义1',
         '33':'自定义2',
         '34':'自定义3',
         '35':'自定义4',
-        '50':'其他',
-        '51':'其他',
+        '0009':'出量其他',
+        '0012':'其他',
         
       }, // vital_code是null的时候，是自定义字段，显示在体温表后面
       lineMap: {
-        '041': 'oralTemperature',
-        '01': 'axillaryTemperature',
-        '043': 'analTemperature',
-        '20': 'heart',
-        '02': 'pulse',
+        // '041': 'oralTemperature',
+        '0001': 'axillaryTemperature',
+        // '043': 'analTemperature',
+        '0023': 'heart',
+        '0002': 'pulse',
       },
       pageTotal: 1,
       currentPage: 1,
@@ -665,7 +665,7 @@ export default {
       */
       const list = this.vitalSigns.filter(
         (x) =>
-          x.vital_code === '5' &&
+          x.vital_code === '0022' &&
           (x.value === '手术' ||
             x.value === '分娩|' ||
             x.value === '手术分娩|' ||
@@ -971,28 +971,28 @@ export default {
           value: vitalSigns[i].value
         }
         switch (vitalSigns[i].vital_code) {
-          case '5':
+          case '0022':
             this.topSheetNote.push(item)
             break
-          case '4':
+          case '0021':
             this.bottomSheetNote.push(item)
             break
-          case '04':
+          case '0003':
             this.breatheList.push(item)
             break
-          case '062':
+          case '0005':
             this.pressureList.push(item)
             break
-          case '033':
+          case '0006':
             this.weightList.push(item)
             break
-          case '091':
+          case '0007':
             this.inputList.push(item)
             break
-          case '061':
+          case '0004':
             this.shitList.push(item)
             break
-          case '12':
+          case '0008':
             this.urineList.push(item)
             break
           case '34':
@@ -1001,19 +1001,19 @@ export default {
           case '27':
             this.physicsCoolList.push(item)
             break
-          case '22':
+          case '0020':
             this.onLineCoolList.push(item)
             break
           case '21':
             this.feverList.push(item)
             break
-            case '30':
+            case '0010':
             this.skinTest.push(item)
             break
-            case '50':
+            case '0009':
             this.otherList.push(item)
             break
-            case '51':
+            case '0012':
             this.otherList2.push(item)
             break
           default:
@@ -1048,7 +1048,7 @@ export default {
         this.onLineCoolList.forEach((x) => {
           this.createCircle({
             cx: this.getXaxis(this.getLocationTime(x.time)),
-            cy: this.getYaxis(this.yRange, x.value, '22'),
+            cy: this.getYaxis(this.yRange, x.value, '0020'),
             r: 7,
             color: 'red',
             zlevel: 10,
@@ -1428,7 +1428,7 @@ export default {
             break
           case 'Circle':
             // 如果脉搏或心率和体温坐标重叠，改成在体温标识外面画红色的圆圈
-            if (vitalCode === '02' || vitalCode === '20') {
+            if (vitalCode === '0002' || vitalCode === '0023') {
               const tList = [
                 ...this.settingMap.oralTemperature.data.map((x) => ({
                   ...x,
@@ -1436,7 +1436,7 @@ export default {
                 })),
                 ...this.settingMap.axillaryTemperature.data.map((x) => ({
                   ...x,
-                  vitalCode: '01'
+                  vitalCode: '0001'
                 })),
                 ...this.settingMap.analTemperature.data.map((x) => ({
                   ...x,
@@ -1486,7 +1486,7 @@ export default {
           default:
             break
         }
-        if (['01', '041', '043'].includes(vitalCode)) {
+        if (['0001', '041', '043'].includes(vitalCode)) {
           // 画物理降温
           for (let i = this.physicsCoolList.length - 1; i >= 0; i--) {
             const item = this.physicsCoolList[i]
@@ -1520,7 +1520,7 @@ export default {
       // 连线
       for (let i = 0; i < dots.length - 1; i++) {
         // 医院那边要求连续，不能断所以注释这个体温曲线断点逻辑
-        // if (['1', '2', '19'].includes(vitalCode)) {
+        // if (['1', '2', '0018'].includes(vitalCode)) {
         //   if (this.temperatureNoteList.some(x => {
         //     return this.getTimeStamp(x.time) >= this.getTimeStamp(dots[i].time) && this.getTimeStamp(x.time) <= this.getTimeStamp(dots[i+1].time)
         //   })) {

@@ -8,7 +8,7 @@ export const mockData = {
       sex: '女',
       dept_name: '神经内科VIP病房（本部）',
       bed_label: '012',
-      visit_id: '4',
+      visit_id: '0021',
       // "admission_date": "2020-12-02 08:12:30.0",
       admission_date: '2019-05-15 08:12:30.0',
       age: '30天',
@@ -21,91 +21,119 @@ export const mockData = {
       value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 13:10:00',
-      vital_code: '5'
+      vital_code: '0022'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 16:12:00',
-      vital_code: '5'
+      vital_code: '0022'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-23 16:12:00',
-      vital_code: '5'
+      vital_code: '0022'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-25 16:12:00',
-      vital_code: '5'
+      vital_code: '0022'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-06-08 16:12:00',
-      vital_code: '5'
+      vital_code: '0022'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-06-12 16:12:00',
-      vital_code: '5'
+      vital_code: '0022'
     },
     // {
     //   "temperature_type": "表顶注释",
     //   "value": "入院|",
     //   // "time_point": "2020-12-15 03:12:00",
     //   "time_point": "2019-05-18 03:12:00",
-    //   "vital_code": '4'
+    //   "vital_code": '0021'
     // },
     {
       temperature_type: '表底注释',
       value: '请假',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 03:12:00',
-      vital_code: '4'
+      vital_code: '0021'
     },
     {
       temperature_type: '表底注释',
       value: '请假',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 03:12:00',
-      vital_code: '4'
+      vital_code: '0021'
     },
     {
       temperature_type: '表底注释',
       value: '请假',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-20 03:12:00',
-      vital_code: '4'
+      vital_code: '0021'
     },
     {
       temperature_type: '出量',
       value: '1475',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-21 03:12:00',
-      vital_code: '19'
+      vital_code: '0007'
     },
     {
       temperature_type: '尿量',
       value: '23',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-21 03:12:00',
-      vital_code: '12'
+      vital_code: '0008'
     },
     {
       temperature_type: '出量',
       value: '1475',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-24 03:12:00',
-      vital_code: '19'
+      vital_code: '0007'
+    },
+    {
+      temperature_type: '体重',
+      value: '75',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-17 03:12:00',
+      vital_code: '0006'
+    },
+    {
+      temperature_type: '其他',
+      value: '75',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-17 03:12:00',
+      vital_code: '0012'
+    },
+    {
+      temperature_type: '皮试',
+      value: '青霉素（+）',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-17 03:12:00',
+      vital_code: '0010'
+    },
+    {
+      temperature_type: '出量其他',
+      value: '1475',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-17 03:12:00',
+      vital_code: '0009'
     },
     // {
     //   "temperature_type": "在线降温",
@@ -117,7 +145,7 @@ export const mockData = {
       temperature_type: '大便次数',
       value: '1',
       time_point: '2019-05-20 03:12:00',
-      vital_code: '061'
+      vital_code: '0004'
     },
     // {
     //   "temperature_type": "发热体温",
@@ -157,25 +185,25 @@ export const mockData = {
       temperature_type: '呼吸',
       value: '70',
       time_point: '2019-05-16 23:59:00',
-      vital_code: '04'
+      vital_code: '0003'
     },
     {
       temperature_type: '呼吸',
       value: '80',
       time_point: '2019-05-16 13:12:00',
-      vital_code: '04'
+      vital_code: '0003'
     },
     {
       temperature_type: '呼吸',
       value: '30',
       time_point: '2019-05-17 15:00:00',
-      vital_code: '04'
+      vital_code: '0003'
     },
     {
       temperature_type: '呼吸',
-      value: '20',
+      value: '0023',
       time_point: '2019-05-20 13:12:00',
-      vital_code: '04'
+      vital_code: '0003'
     },
     {
       temperature_type: '疼痛',
@@ -199,13 +227,13 @@ export const mockData = {
       temperature_type: '血压',
       value: '138/87',
       time_point: '2019-05-18 01:12:00',
-      vital_code: '062'
+      vital_code: '0005'
     },
     {
       temperature_type: '血压',
       value: '139/89',
       time_point: '2019-05-18 20:12:00',
-      vital_code: '062'
+      vital_code: '0005'
     },
     {
       temperature_type: '体重',
@@ -217,31 +245,31 @@ export const mockData = {
       temperature_type: '腋温',
       value: '35.2',
       time_point: '2019-05-18 01:12:00',
-      vital_code: '01'
+      vital_code: '0001'
     },
     {
       temperature_type: '脉搏',
       value: '104',
       time_point: '2019-05-17 01:12:00',
-      vital_code: '02'
+      vital_code: '0002'
     },
     {
       temperature_type: '心率',
       value: '112',
       time_point: '2019-05-17 01:12:00',
-      vital_code: '20'
+      vital_code: '0023'
     },
     {
       temperature_type: '腋温',
       value: '38.2',
       time_point: '2019-05-17 01:12:00',
-      vital_code: '01'
+      vital_code: '0001'
     },
     {
       temperature_type: '腋温',
       value: '37',
       time_point: '2019-05-17 15:12:00',
-      vital_code: '01'
+      vital_code: '0001'
     },
     {
       temperature_type: '口温',
@@ -301,19 +329,19 @@ export const mockData = {
       temperature_type: '心率',
       value: '131',
       time_point: '2019-05-17 13:12:00',
-      vital_code: '20'
+      vital_code: '0023'
     },
     {
       temperature_type: '脉搏',
       value: '89',
       time_point: '2019-05-17 13:12:00',
-      vital_code: '02'
+      vital_code: '0002'
     },
     {
       temperature_type: '腋温',
       value: '37',
       time_point: '2019-05-20 10:12:00',
-      vital_code: '01'
+      vital_code: '0001'
     },
     {
       temperature_type: '肛温',
@@ -325,49 +353,49 @@ export const mockData = {
       temperature_type: '心率',
       value: '100',
       time_point: '2019-05-20 10:12:00',
-      vital_code: '20'
+      vital_code: '0023'
     },
     {
       temperature_type: '脉搏',
       value: '80',
       time_point: '2019-05-20 10:12:00',
-      vital_code: '02'
+      vital_code: '0002'
     },
     {
       temperature_type: '心率',
       value: '100',
       time_point: '2019-05-21 10:12:00',
-      vital_code: '20'
+      vital_code: '0023'
     },
     {
       temperature_type: '脉搏',
       value: '80',
       time_point: '2019-05-21 10:12:00',
-      vital_code: '02'
+      vital_code: '0002'
     },
     {
       temperature_type: '心率',
       value: '60',
       time_point: '2019-05-15 13:00:00',
-      vital_code: '20'
+      vital_code: '0023'
     },
     {
       temperature_type: '脉搏',
       value: '55',
       time_point: '2019-05-15 13:00:00',
-      vital_code: '02'
+      vital_code: '0002'
     },
     {
       temperature_type: '心率',
       value: '60',
       time_point: '2019-05-16 13:00:00',
-      vital_code: '20'
+      vital_code: '0023'
     },
     {
       temperature_type: '脉搏',
       value: '55',
       time_point: '2019-05-16 13:00:00',
-      vital_code: '02'
+      vital_code: '0002'
     },
     {
       temperature_type: '入量',

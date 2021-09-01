@@ -385,7 +385,7 @@ export default {
     const pulseRange = [0, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -688,6 +688,7 @@ export default {
         }
       })
       this.dateList.forEach((date) => {
+        // console.log(obj[date])
         if (obj[date].length > 0) {
           deliveryObj = obj[date].find((obj) => obj.value.includes('分娩'))
           obj[date].forEach((item, index) => {
@@ -697,6 +698,7 @@ export default {
           })
           if (deliveryObj) {
             obj[date].push(deliveryObj)
+            console.log(deliveryObj)
           }
         }
       })

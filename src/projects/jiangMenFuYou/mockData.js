@@ -360,7 +360,7 @@ export const mockData = {
     {
       temperature_type: '心率',
       value: '60',
-      time_point: '2019-05-16 13:00:00',
+      time_point: '2019-05-15 00:00:00',
       vital_code: '20'
     },
     {

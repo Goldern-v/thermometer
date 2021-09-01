@@ -5,7 +5,7 @@
     v-if="apiData"
     :style="{ width: `${leftWidth + areaWidth}px` }"
   >
-    <div class="head-hos">江门妇幼医院</div>
+    <div class="head-hos">江门市妇幼保健院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
       <div class="item">
@@ -31,7 +31,7 @@
         床号：<span class="value">{{  bedExchangeLog || patInfo.bed_label }}</span>
       </div>
       <div class="item" style="text-align: right;">
-        住院号：<span class="value">{{ patInfo.patient_id }}</span>
+        住院号：<span class="value">{{ patInfo.inp_no}}</span>
       </div>
     </div>
     <div class="table-area">
@@ -1223,7 +1223,7 @@ export default {
       y,
       value,
       color,
-      fontSize = 16,
+      fontSize = 15,
       tips,
       zlevel = 0,
       fontWeight = 'bold',
