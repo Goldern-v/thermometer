@@ -249,12 +249,12 @@ export const mockData = {
       time_point: '2019-05-20 03:00:00',
       vital_code: '02'
     },
-    // {
-    //   temperature_type: '心率',
-    //   value: '112',
-    //   time_point: '2019-05-17 01:12:00',
-    //   vital_code: '20'
-    // },
+    {
+      temperature_type: '心率',
+      value: '112',
+      time_point: '2019-05-20 13:20:00',
+      vital_code: '20'
+    },
     // {
     //   temperature_type: '腋温',
     //   value: '38.2',

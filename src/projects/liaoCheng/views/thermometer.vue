@@ -822,6 +822,7 @@ export default {
       */
       const settingMap = this.settingMap
       const xyMap = new Map()
+      console.log(xyMap)
       settingMap.heart.data.forEach((x) => {
         const xAxis = this.getXaxis(this.getLocationTime(x.time))
         if (xyMap.has(xAxis)) {

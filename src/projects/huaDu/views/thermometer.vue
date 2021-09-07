@@ -356,7 +356,7 @@
       </div>
     </div>
     <!-- <div class="pagination"> -->
-    <div class="pagination" v-if="showInnerPage">
+    <div class="pagination">
       <!-- <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i> -->
       <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">
         上一页
@@ -371,7 +371,7 @@
       </button>
       <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
     </div>
-    <div class="pagination" v-else>第{{ currentPage }}页</div>
+    <div class="pagination">第{{ currentPage }}页</div>
   </div>
 </template>
 
@@ -724,13 +724,17 @@ export default {
         }
         if (days[index] <= 10) {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
-          let operatorCout = index + 1 + this.idx[this.currentPage - 1]
+          let idxValue =
+            this.idx[this.currentPage - 1] === undefined
+              ? 0
+              : this.idx[this.currentPage - 1]
+          let operatorCout = index + 1 + idxValue
           if (dateIndex === this.dateList.length - 1) {
             this.idx[this.currentPage] = operatorCout
           }
           return index === 0 && this.idx[this.currentPage - 1] === 0
             ? days[index]
-            : `${this.numToRome(operatorCout)}-${days[index]}`
+            : `${this.numToRome(operatorCout)}/${days[index]}`
         } else {
           return ''
         }

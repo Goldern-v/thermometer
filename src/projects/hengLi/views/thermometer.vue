@@ -12,7 +12,11 @@
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item">
-        年龄：<span class="value">{{ typeof parseInt(patInfo.age)==='number'&&!isNaN(patInfo.age)?patInfo.age+'岁':patInfo.age}}</span>
+        年龄：<span class="value">{{
+          typeof parseInt(patInfo.age) === 'number' && !isNaN(patInfo.age)
+            ? patInfo.age + '岁'
+            : patInfo.age
+        }}</span>
       </div>
       <div class="item">
         性别：<span class="value">{{ patInfo.sex }}</span>
@@ -28,7 +32,9 @@
     </div>
     <div class="head-info-1">
       <div class="item">
-        床号：<span class="value">{{  bedExchangeLog || patInfo.bed_label }}</span>
+        床号：<span class="value">{{
+          bedExchangeLog || patInfo.bed_label
+        }}</span>
       </div>
       <div class="item" style="text-align: right;">
         住院号：<span class="value">{{ patInfo.inp_no }}</span>
@@ -135,7 +141,6 @@
           class="index-box"
           :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
         >
-  
           <div class="notes">
             <div
               v-for="(value, key) in settingMap"
@@ -235,10 +240,10 @@
 
         <div>
           <div class="left_box" :style="{ width: `${leftWidth / 4}px` }">
-            排</br>出</br>量
+            排<br />出<br />量
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth-40}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               大便(次)
             </div>
             <div class="value-item-box">
@@ -252,7 +257,7 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth-40}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               尿量(ml)
             </div>
             <div class="value-item-box">
@@ -265,7 +270,7 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth-40}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               其他（ml）
             </div>
             <div class="value-item-box">
@@ -278,16 +283,18 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">体重(kg)</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: weightList })"
-              :key="index"
-              v-html="item.value"
-            ></div>
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              体重(kg)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatList({ tList: weightList })"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
           </div>
-         </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
               皮试
@@ -488,9 +495,9 @@ export default {
       physicsCoolList: [], // 物理降温
       onLineCoolList: [], // 线上降温
       feverList: [], // 发热体温
-      otherList:[],
-      otherList2:[],
-      skinTest:[],
+      otherList: [],
+      otherList2: [],
+      skinTest: [],
       // customList0: [], // 自定义1
       // customList1: [], // 自定义2
       // customList2: [], // 自定义3
@@ -518,7 +525,7 @@ export default {
         '0008': '尿量',
         '0007': '入量',
         // '34': '出量',
-        '0018':'总出量',
+        '0018': '总出量',
         '0006': '体重',
         '043': '肛温',
         '041': '口温',
@@ -530,21 +537,20 @@ export default {
         '3': '物理降温',
         '28': '呕吐量',
         '29': '在线降温',
-        '0010':'皮试',
-        '32':'自定义1',
-        '33':'自定义2',
-        '34':'自定义3',
-        '35':'自定义4',
-        '0009':'出量其他',
-        '0012':'其他',
-        
+        '0010': '皮试',
+        '32': '自定义1',
+        '33': '自定义2',
+        '34': '自定义3',
+        '35': '自定义4',
+        '0009': '出量其他',
+        '0012': '其他'
       }, // vital_code是null的时候，是自定义字段，显示在体温表后面
       lineMap: {
         // '041': 'oralTemperature',
         '0001': 'axillaryTemperature',
         // '043': 'analTemperature',
         '0023': 'heart',
-        '0002': 'pulse',
+        '0002': 'pulse'
       },
       pageTotal: 1,
       currentPage: 1,
@@ -599,9 +605,7 @@ export default {
       return list
     },
     timesTempAreaHeight() {
-      return (
-        this.areaHeight 
-      )
+      return this.areaHeight
     },
     formatBreatheList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
@@ -815,6 +819,7 @@ export default {
         switch (e.data.type) {
           case 'currentPage':
             if (e.data.value > 0) {
+              console.log('eee', e.data.value)
               this.currentPage = e.data.value
               document.getElementById('main').innerHTML = ''
               this.reset()
@@ -856,9 +861,9 @@ export default {
       this.onLineCoolList = []
       this.feverList = []
       this.dateRangeList = []
-      this.otherList=[]
-      this.otherList2=[]
-      this.skinTest=[]
+      this.otherList = []
+      this.otherList2 = []
+      this.skinTest = []
       for (let i = 0; i < 4; i++) {
         this[`customList${i}`] = []
       }
@@ -1007,13 +1012,13 @@ export default {
           case '21':
             this.feverList.push(item)
             break
-            case '0010':
+          case '0010':
             this.skinTest.push(item)
             break
-            case '0009':
+          case '0009':
             this.otherList.push(item)
             break
-            case '0012':
+          case '0012':
             this.otherList2.push(item)
             break
           default:
@@ -1133,7 +1138,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y:value!=='请假'?y:y+14*this.ySpace-6,
+          y: value !== '请假' ? y : y + 14 * this.ySpace - 6,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 2,
@@ -1152,8 +1157,7 @@ export default {
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak =
-          (i % 5 === 0 && i > 0 && i < totalLine - 1 && i !== 45) ||
-          i === 48
+          (i % 5 === 0 && i > 0 && i < totalLine - 1 && i !== 45) || i === 48
         const isboundary = i === 0 || i === totalLine - 1
         const lineWidth = isBreak ? 3 : 2
         const params = {
@@ -1194,7 +1198,8 @@ export default {
       const totalLine =
         this.yRange[1] -
         this.yRange[0] +
-        (this.yRange[1] - this.yRange[0]) * 4 +1
+        (this.yRange[1] - this.yRange[0]) * 4 +
+        1
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1
@@ -1446,16 +1451,15 @@ export default {
                 return {
                   x: this.getXaxis(this.getLocationTime(x.time)),
                   y: Math.round(
-                    this.getYaxis(
-                      this.yRange,
-                      x.value,
-                      x.vitalCode
-                    )
+                    this.getYaxis(this.yRange, x.value, x.vitalCode)
                   )
                 }
               })
-              const sameAxisItem = tList.find((x) =>
-              x.x.toFixed(2) === cx.toFixed(2) && x.y.toFixed(2)-1<=cy&&x.y.toFixed(2)+1>= cy.toFixed(2)
+              const sameAxisItem = tList.find(
+                (x) =>
+                  x.x.toFixed(2) === cx.toFixed(2) &&
+                  x.y.toFixed(2) - 1 <= cy &&
+                  x.y.toFixed(2) + 1 >= cy.toFixed(2)
               )
               if (sameAxisItem) {
                 params = {
@@ -1549,9 +1553,10 @@ export default {
     },
     // 根据值计算纵坐标, vitalCode会传过来判断数据类型  这里不需要用到先删掉
     getYaxis(yRange, value) {
-      return ((yRange[1] - value) /
-            (yRange[1] - yRange[0])) *
-            this.timesTempAreaHeight 
+      return (
+        ((yRange[1] - value) / (yRange[1] - yRange[0])) *
+        this.timesTempAreaHeight
+      )
     },
     // 增加换行符
     addn(str) {
@@ -1891,7 +1896,7 @@ export default {
     }
     .label {
       display: flex;
-      width:110px;
+      width: 110px;
       align-items: center;
       justify-content: center;
       height: 100%;
@@ -1952,7 +1957,7 @@ export default {
     }
     .times {
       .text {
-        height:82.7px;
+        height: 82.7px;
       }
       .index {
         color: red;
@@ -1979,7 +1984,7 @@ export default {
     }
     .temp {
       .text {
-        height:82.7px
+        height: 82.7px;
       }
     }
     .temp :nth-child(2) > span {

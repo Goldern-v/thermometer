@@ -409,7 +409,7 @@ export default {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -724,9 +724,13 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i
         }
-        if (days[index] <= 14) {
+        if (days[index] <= 10) {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
-          let operatorCout = index + 1 + this.idx[this.currentPage - 1]
+          let idxValue =
+            this.idx[this.currentPage - 1] === undefined
+              ? 0
+              : this.idx[this.currentPage - 1]
+          let operatorCout = index + 1 + idxValue
           if (dateIndex === this.dateList.length - 1) {
             this.idx[this.currentPage] = operatorCout
           }
@@ -816,11 +820,21 @@ export default {
       }
     },
     messageHandle(e) {
+      console.log(e)
       if (e && e.data) {
         switch (e.data.type) {
           case 'currentPage':
             if (e.data.value > 0) {
               this.currentPage = e.data.value
+              document.getElementById('main').innerHTML = ''
+              this.reset()
+              this.handleData()
+            }
+            break
+          case 'pageTotal':
+            if (e.data.value > 0) {
+              this.currentPage = e.data.value
+              this.pageTotal = e.data.value
               document.getElementById('main').innerHTML = ''
               this.reset()
               this.handleData()

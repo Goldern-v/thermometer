@@ -81,7 +81,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             手术后天数
@@ -140,12 +140,12 @@
           <i
             class="split-line"
             :style="{
-              bottom: `${painAreaHeight + bottomAreaHeight -1}px`
+              bottom: `${painAreaHeight + bottomAreaHeight - 1}px`
             }"
           ></i>
           <div class="item times">
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
-              <div>脉搏</br>次/分</div>
+              <div>脉搏<br />次/分</div>
             </div>
             <div class="index" v-for="item in pulseList" :key="item">
               <span>{{ item }}</span>
@@ -163,7 +163,7 @@
               <!--<div class="label" :style="{ height: `${trHeight + 2}px` }">
                 体温
               </div>-->
-              <div>体温</br>(℃)</div>
+              <div>体温<br />(℃)</div>
             </div>
             <div class="index" v-for="item in temperaturelist" :key="item">
               <span>{{ item }}</span>
@@ -172,7 +172,7 @@
               <div class="pain-index" v-for="item in painList" :key="item">
                 <span>{{ item }}</span>
               </div>
-             <!-- <div class="s-index"><span>0</span></div>-->
+              <!-- <div class="s-index"><span>0</span></div>-->
             </div>
             <div
               class="bottom-area"
@@ -241,7 +241,11 @@
               v-for="(item, index) in getFormatList({ tList: pressureList })"
               :key="index"
             >
-              {{ item.value.includes(' ')?item.value.replace(' ','|'):item.value }}
+              {{
+                item.value.includes(' ')
+                  ? item.value.replace(' ', '|')
+                  : item.value
+              }}
             </div>
           </div>
         </div>
@@ -255,11 +259,15 @@
               v-for="(item, index) in getFormatList({ tList: pmPressureList })"
               :key="index"
             >
-              {{ item.value.includes(' ')?item.value.replace(' ','|'):item.value }}
+              {{
+                item.value.includes(' ')
+                  ? item.value.replace(' ', '|')
+                  : item.value
+              }}
             </div>
           </div>
         </div>
-        
+
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             总入量(ml)
@@ -331,10 +339,12 @@
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatList({ tList: irritabilityList })"
+              v-for="(item, index) in getFormatList({
+                tList: irritabilityList
+              })"
               :key="index"
             >
-              {{ item.value!==""?item.value+'+':""}}
+              {{ item.value !== '' ? item.value + '+' : '' }}
             </div>
           </div>
         </div>
@@ -422,7 +432,6 @@
             </div>
           </div>
         </div> -->
-        
       </div>
     </div>
     <div class="pagination" v-if="showInnerPage">
@@ -454,7 +463,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -548,8 +557,8 @@ export default {
         // { time: '2019-05-18 03:12:00', value: '20' }
       ], // 呼吸
       pressureList: [], // 血压
-      pmPressureList:[],//下午血压
-      irritabilityList:[],//过敏药物
+      pmPressureList: [], //下午血压
+      irritabilityList: [], //过敏药物
       weightList: [], // 体重
       heightList: [], // 身高
       inputList: [], // 液体入量
@@ -585,7 +594,7 @@ export default {
         '03': '心率',
         '06': '呼吸',
         '10': '上午血压',
-        '11':'下午血压',
+        '11': '下午血压',
         // '12': '尿量',
         '08': '入量',
         '15': '出量',
@@ -604,7 +613,7 @@ export default {
         '092': '疼痛评分',
         '13': '身高',
         '3': '物理降温',
-        '14':'药物过敏',
+        '14': '药物过敏',
         '32': '自定义1',
         '33': '自定义2',
         '34': '自定义3',
@@ -617,7 +626,7 @@ export default {
         '01': 'axillaryTemperature',
         // '043': 'analTemperature',
         '03': 'heart',
-        '02': 'pulse',
+        '02': 'pulse'
         // '092': 'pain'
       },
       pageTotal: 1,
@@ -824,7 +833,9 @@ export default {
       return (
         this.areaHeight -
         this.indexTextAreaHeight -
-        this.painAreaHeight +3*this.ySpace+2
+        this.painAreaHeight +
+        3 * this.ySpace +
+        2
       )
     },
     painAreaHeight() {
@@ -1104,9 +1115,9 @@ export default {
           case '10':
             this.pressureList.push(item)
             break
-            case '11':
-              this.pmPressureList.push(item)
-              break
+          case '11':
+            this.pmPressureList.push(item)
+            break
           case '12':
             this.weightList.push(item)
             break
@@ -1156,7 +1167,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y:value!=='过快'?y+2:y-this.ySpace-1,
+          y: value !== '过快' ? y + 2 : y - this.ySpace - 1,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1252,10 +1263,12 @@ export default {
       let preSpace = 0
       let breakIndex = 0
       for (let i = 0; i < totalLine; i++) {
-        const isPainBreak =
-          this.yRange[1] - breakIndex  === 34
+        const isPainBreak = this.yRange[1] - breakIndex === 34
         const isBreak =
-          ((i - 2) % 5 === 0 &&i<40|| isPainBreak || i ===39||i===43) &&
+          (((i - 2) % 5 === 0 && i < 40) ||
+            isPainBreak ||
+            i === 39 ||
+            i === 43) &&
           i > 0 &&
           i < totalLine - 1
         const isboundary = i === 0 || i === totalLine - 1
@@ -1267,7 +1280,7 @@ export default {
           y2: preSpace,
           lineWidth,
           color: isBreak
-            ? this.yRange[1] - breakIndex++-2 === 35 || isPainBreak
+            ? this.yRange[1] - breakIndex++ - 2 === 35 || isPainBreak
               ? 'red'
               : '#000'
             : isboundary
@@ -1586,7 +1599,11 @@ export default {
                   y: this.getYaxis(this.yRange, x.value)
                 }
               })
-              const sameAxisItem = tList.find((x) => x.x.toFixed(2) === cx.toFixed(2) && x.y.toFixed(2) === cy.toFixed(2))
+              const sameAxisItem = tList.find(
+                (x) =>
+                  x.x.toFixed(2) === cx.toFixed(2) &&
+                  x.y.toFixed(2) === cy.toFixed(2)
+              )
               if (sameAxisItem) {
                 params = {
                   cx,
@@ -1676,7 +1693,7 @@ export default {
               {
                 vitalCode: '01',
                 ...this.settingMap.axillaryTemperature.data[0]
-              },
+              }
               // {
               //   vitalCode: '043',
               //   ...this.settingMap.analTemperature.data[0]
@@ -1737,16 +1754,18 @@ export default {
       }
     },
     // 根据值计算纵坐标
-    getYaxis(yRange, value,vitalCode) {
-      return  vitalCode === '092'
+    getYaxis(yRange, value, vitalCode) {
+      return vitalCode === '092'
         ? ((yRange[1] - value) / (yRange[1] - yRange[0])) *
             this.painAreaHeight +
             this.indexTextAreaHeight +
-            this.timesTempAreaHeight -3 * this.ySpace - 1
+            this.timesTempAreaHeight -
+            3 * this.ySpace -
+            1
         : ((yRange[1] - value) / (yRange[1] - yRange[0])) *
             this.timesTempAreaHeight +
-            this.indexTextAreaHeight + 1
-        
+            this.indexTextAreaHeight +
+            1
     },
     // 根据时间点计算横坐标
     getXaxis(time) {
@@ -1787,12 +1806,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8))
       let str = ''
       const timeAreasMap = {
-        '02:00:00': ['00:00:00', '02:00:59'],
-        '06:00:00': ['02:01:00', '6:00:59'],
-        '10:00:00': ['6:01:00', '10:00:59'],
-        '14:00:00': ['10:01:00', '14:00:59'],
-        '18:00:00': ['14:01:00', '18:00:59'],
-        '22:00:00': ['18:01:00', '23:59:59']
+        '02:00:00': ['00:00:00', '04:00:59'],
+        '06:00:00': ['04:01:00', '8:00:59'],
+        '10:00:00': ['8:01:00', '12:00:59'],
+        '14:00:00': ['12:01:00', '16:00:59'],
+        '18:00:00': ['16:01:00', '20:00:59'],
+        '22:00:00': ['20:01:00', '23:59:59']
       }
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -2055,8 +2074,8 @@ export default {
     z-index: 30;
   }
 }
-.pain-area:nth-child(3){
-  color:red;
+.pain-area:nth-child(3) {
+  color: red;
 }
 .table-box {
   position: relative;
@@ -2129,7 +2148,7 @@ export default {
         }
       }
       .index {
-       height: 81.7px;
+        height: 81.7px;
         position: relative;
         > span {
           display: block;
@@ -2137,9 +2156,9 @@ export default {
           text-align: center;
         }
       }
-      .pain-area :nth-child(1){
-        margin-top:12px;
-        }
+      .pain-area :nth-child(1) {
+        margin-top: 12px;
+      }
       .pain-area {
         position: relative;
         display: flex;
@@ -2152,9 +2171,8 @@ export default {
             display: block;
             margin-top: 4px;
           }
-
         }
-       
+
         .s-index {
           position: absolute;
           bottom: -7px;
@@ -2182,7 +2200,7 @@ export default {
       }
     }
     .temp {
-    overflow:hidden;
+      overflow: hidden;
       .text {
         flex-shrink: 0;
         flex-grow: 0;
