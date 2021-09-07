@@ -377,7 +377,7 @@ export const mockData = {
     },
     {
       temperature_type: '心率',
-      value: '138',
+      value: '190',
       time_point: '2019-05-19 09:12:00',
       vital_code: '20'
     },

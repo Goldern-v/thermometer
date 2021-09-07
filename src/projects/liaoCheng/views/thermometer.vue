@@ -816,38 +816,71 @@ export default {
     polygonPoints() {
       /*
         形成心率和脉搏多边形锚点二维数组，多个数组则画多个多边形，
-        注意同一对录入的心率值肯定大于脉搏值的，而且脉搏和心率一一对应
+        注意同一对录入的心率值肯定大于脉搏值的，而且脉搏和心率可能不一一对应
+        构造xyMap，结构为以x轴坐标作为key，{heart: {value, y}，pulse: {value, y}}作为value
+        心率heart/脉搏pulse有一个为空时记为一个多边形断点， 同时心率过快也作为一个断点
       */
       const settingMap = this.settingMap
-      if (settingMap.heart.data.length > 0) {
+      const xyMap = new Map()
+      settingMap.heart.data.forEach((x) => {
+        const xAxis = this.getXaxis(this.getLocationTime(x.time))
+        if (xyMap.has(xAxis)) {
+          xyMap.set(xAxis, {
+            ...xyMap.get(xAxis),
+            heart: {
+              value: x.value,
+              y: this.getYaxis(settingMap.heart.range, x.value)
+            }
+          })
+        } else {
+          xyMap.set(xAxis, {
+            heart: {
+              value: x.value,
+              y: this.getYaxis(settingMap.heart.range, x.value)
+            },
+            pulse: null
+          })
+        }
+      })
+      settingMap.pulse.data.forEach((x) => {
+        const xAxis = this.getXaxis(this.getLocationTime(x.time))
+        if (xyMap.has(xAxis)) {
+          xyMap.set(xAxis, {
+            ...xyMap.get(xAxis),
+            pulse: {
+              value: x.value,
+              y: this.getYaxis(settingMap.pulse.range, x.value)
+            }
+          })
+        } else {
+          xyMap.set(xAxis, {
+            pulse: {
+              value: x.value,
+              y: this.getYaxis(settingMap.pulse.range, x.value)
+            },
+            heart: null
+          })
+        }
+      })
+      const allList = [...xyMap.entries()].sort((a, b) => a[0] - b[0])
+      if (allList.length) {
         let data = [[]]
-        settingMap.heart.data.forEach((x, i) => {
-          if (x.value > this.pulseRange[1]) {
+        allList.forEach((x) => {
+          if (
+            !x[1].heart ||
+            !x[1].pulse ||
+            (x[1].heart && x[1].heart.value > this.pulseRange[1])
+          ) {
+            // 断点
             data.push([])
           } else {
-            data[data.length - 1].push({ value: x, index: i })
-            console.log(data)
+            data[data.length - 1].push(x[0])
           }
         })
         data = data.map((x) => {
-          console.log('x', x)
           return [
-            ...x.map((y) => {
-              console.log('y', y)
-              return [
-                this.getXaxis(this.getLocationTime(y.value.time)),
-                this.getYaxis(settingMap.heart.range, y.value.value)
-              ]
-            }),
-            ...settingMap.pulse.data
-              .slice(x[0].index, x[x.length - 1].index + 1)
-              .map((z) => {
-                return [
-                  this.getXaxis(this.getLocationTime(z.time)),
-                  this.getYaxis(settingMap.pulse.range, z.value)
-                ]
-              })
-              .reverse()
+            ...x.map((y) => [y, xyMap.get(y).heart.y]),
+            ...x.map((y) => [y, xyMap.get(y).pulse.y]).reverse()
           ]
         })
         return data
