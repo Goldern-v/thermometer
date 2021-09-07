@@ -12,7 +12,11 @@
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item">
-        年龄：<span class="value">{{ typeof parseInt(patInfo.age)==='number'&&!isNaN(patInfo.age)?patInfo.age+'岁':patInfo.age}}</span>
+        年龄：<span class="value">{{
+          typeof parseInt(patInfo.age) === 'number' && !isNaN(patInfo.age)
+            ? patInfo.age + '岁'
+            : patInfo.age
+        }}</span>
       </div>
       <div class="item">
         性别：<span class="value">{{ patInfo.sex }}</span>
@@ -28,10 +32,12 @@
     </div>
     <div class="head-info-1">
       <div class="item">
-        床号：<span class="value">{{  bedExchangeLog || patInfo.bed_label }}</span>
+        床号：<span class="value">{{
+          bedExchangeLog || patInfo.bed_label
+        }}</span>
       </div>
       <div class="item" style="text-align: right;">
-        住院号：<span class="value">{{ patInfo.inp_no}}</span>
+        住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
     </div>
     <div class="table-area">
@@ -135,7 +141,6 @@
           class="index-box"
           :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
         >
-  
           <div class="notes">
             <div
               v-for="(value, key) in settingMap"
@@ -234,11 +239,11 @@
         </div>
 
         <div>
-          <div class="left_box" :style="{ height: `${trHeight*3}px` }">
-            排</br>出</br>量
+          <div class="left_box" :style="{ height: `${trHeight * 3}px` }">
+            排<br />出<br />量
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth-40}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               大便(次)
             </div>
             <div class="value-item-box">
@@ -252,7 +257,7 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth-40}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               尿量(ml)
             </div>
             <div class="value-item-box">
@@ -265,12 +270,12 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth-40}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               其他
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-14" 
+                class="value-item font-14"
                 v-for="(item, index) in getFormatList({ tList: otherList })"
                 :key="index"
                 v-html="item.value"
@@ -278,16 +283,18 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">体重(kg)</div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-16"
-              v-for="(item, index) in getFormatList({ tList: weightList })"
-              :key="index"
-              v-html="item.value"
-            ></div>
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              体重(kg)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-16"
+                v-for="(item, index) in getFormatList({ tList: weightList })"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
           </div>
-         </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
               皮试
@@ -488,9 +495,9 @@ export default {
       physicsCoolList: [], // 物理降温
       onLineCoolList: [], // 线上降温
       feverList: [], // 发热体温
-      otherList:[],
-      otherList2:[],
-      skinTest:[],
+      otherList: [],
+      otherList2: [],
+      skinTest: [],
       // customList0: [], // 自定义1
       // customList1: [], // 自定义2
       // customList2: [], // 自定义3
@@ -518,7 +525,7 @@ export default {
         '12': '尿量',
         '091': '入量',
         // '34': '出量',
-        '19':'总出量',
+        '19': '总出量',
         '033': '体重',
         '043': '肛温',
         '041': '口温',
@@ -530,21 +537,20 @@ export default {
         '3': '物理降温',
         '28': '呕吐量',
         '29': '在线降温',
-        '30':'皮试',
-        '32':'自定义1',
-        '33':'自定义2',
-        '34':'自定义3',
-        '35':'自定义4',
-        '50':'其他',
-        '51':'其他',
-        
+        '30': '皮试',
+        '32': '自定义1',
+        '33': '自定义2',
+        '34': '自定义3',
+        '35': '自定义4',
+        '50': '其他',
+        '51': '其他'
       }, // vital_code是null的时候，是自定义字段，显示在体温表后面
       lineMap: {
         '041': 'oralTemperature',
         '01': 'axillaryTemperature',
         '043': 'analTemperature',
         '20': 'heart',
-        '02': 'pulse',
+        '02': 'pulse'
       },
       pageTotal: 1,
       currentPage: 1,
@@ -599,9 +605,7 @@ export default {
       return list
     },
     timesTempAreaHeight() {
-      return (
-        this.areaHeight 
-      )
+      return this.areaHeight
     },
     formatBreatheList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
@@ -621,7 +625,7 @@ export default {
         const item = { timeNum: i, value: '' }
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time)
-          if (timeNum >= i && timeNum <=i + timeAdd(i)) {
+          if (timeNum >= i && timeNum <= i + timeAdd(i)) {
             item.value = breatheList[j].value
             breatheList.splice(j, 1)
             break
@@ -857,9 +861,9 @@ export default {
       this.onLineCoolList = []
       this.feverList = []
       this.dateRangeList = []
-      this.otherList=[]
-      this.otherList2=[]
-      this.skinTest=[]
+      this.otherList = []
+      this.otherList2 = []
+      this.skinTest = []
       for (let i = 0; i < 4; i++) {
         this[`customList${i}`] = []
       }
@@ -1011,13 +1015,13 @@ export default {
           case '21':
             this.feverList.push(item)
             break
-            case '30':
+          case '30':
             this.skinTest.push(item)
             break
-            case '50':
+          case '50':
             this.otherList.push(item)
             break
-            case '51':
+          case '51':
             this.otherList2.push(item)
             break
           default:
@@ -1134,11 +1138,11 @@ export default {
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
         //画请假和手术的字体
-       let bottomContextList=["温水擦浴", "不升"]
+        let bottomContextList = ['温水擦浴', '不升']
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y:bottomContextList.includes(value)?y+12*this.ySpace-8:y,
+          y: bottomContextList.includes(value) ? y + 12 * this.ySpace - 8 : y,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 2,
@@ -1157,8 +1161,7 @@ export default {
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak =
-          (i % 5 === 0 && i > 0 && i < totalLine - 1 && i !== 45) ||
-          i === 48
+          (i % 5 === 0 && i > 0 && i < totalLine - 1 && i !== 45) || i === 48
         const isboundary = i === 0 || i === totalLine - 1
         const lineWidth = isBreak ? 2 : 1
         const params = {
@@ -1199,7 +1202,8 @@ export default {
       const totalLine =
         this.yRange[1] -
         this.yRange[0] +
-        (this.yRange[1] - this.yRange[0]) * 4 +1
+        (this.yRange[1] - this.yRange[0]) * 4 +
+        1
       let preSpace = 0
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1
@@ -1451,17 +1455,16 @@ export default {
                 return {
                   x: this.getXaxis(this.getLocationTime(x.time)),
                   y: Math.round(
-                    this.getYaxis(
-                      this.yRange,
-                      x.value,
-                      x.vitalCode
-                    )
+                    this.getYaxis(this.yRange, x.value, x.vitalCode)
                   )
                 }
               })
-              const sameAxisItem = tList.find((x) =>
-              // console.log(x.y,cy)
-              x.x.toFixed(2) === cx.toFixed(2) && x.y-1<=cy&&x.y+1>= cy
+              const sameAxisItem = tList.find(
+                (x) =>
+                  // console.log(x.y,cy)
+                  x.x.toFixed(2) === cx.toFixed(2) &&
+                  x.y - 1 <= cy &&
+                  x.y + 1 >= cy
               )
               if (sameAxisItem) {
                 params = {
@@ -1492,7 +1495,6 @@ export default {
           default:
             break
         }
-        console.log(vitalCode)
         if (['01', '041', '043'].includes(vitalCode)) {
           // 画物理降温
           for (let i = this.physicsCoolList.length - 1; i >= 0; i--) {
@@ -1556,9 +1558,11 @@ export default {
     },
     // 根据值计算纵坐标, vitalCode会传过来判断数据类型  这里不需要用到先删掉
     getYaxis(yRange, value) {
-      return ((yRange[1] - value) /
-            (yRange[1] - yRange[0])) *
-            this.timesTempAreaHeight -1
+      return (
+        ((yRange[1] - value) / (yRange[1] - yRange[0])) *
+          this.timesTempAreaHeight -
+        1
+      )
     },
     // 增加换行符
     addn(str) {
@@ -1879,7 +1883,7 @@ export default {
     z-index: 30;
   }
   .left_box {
-    width:40px;
+    width: 40px;
     border: 1px solid;
     float: left;
     font-size: 18px;
@@ -1898,7 +1902,7 @@ export default {
     }
     .label {
       display: flex;
-      width:110px;
+      width: 110px;
       align-items: center;
       justify-content: center;
       height: 100%;
@@ -1959,7 +1963,7 @@ export default {
     }
     .times {
       .text {
-        height:82.7px;
+        height: 82.7px;
       }
       .index {
         color: red;
@@ -1986,7 +1990,7 @@ export default {
     }
     .temp {
       .text {
-        height:82.7px
+        height: 82.7px;
       }
     }
     .temp :nth-child(2) > span {
@@ -2005,10 +2009,10 @@ export default {
       margin-top: -10px;
     }
     .temp :nth-child(7) > span {
-       margin-top: -10px;
+      margin-top: -10px;
     }
     .temp :nth-child(8) > span {
-       margin-top: -8px;
+      margin-top: -8px;
     }
     .temp :nth-child(9) > span {
       margin-top: -8px;
@@ -2017,22 +2021,22 @@ export default {
       margin-top: -10px;
     }
     .times :nth-child(3) > span {
-     margin-top: -10px;
+      margin-top: -10px;
     }
     .times :nth-child(4) > span {
-     margin-top: -10px;
+      margin-top: -10px;
     }
     .times :nth-child(5) > span {
-     margin-top: -10px;
+      margin-top: -10px;
     }
     .times :nth-child(6) > span {
-     margin-top: -10px;
+      margin-top: -10px;
     }
     .times :nth-child(7) > span {
       margin-top: -10px;
     }
     .times :nth-child(8) > span {
-       margin-top: -8px;
+      margin-top: -8px;
     }
     .times :nth-child(9) > span {
       margin-top: -8px;
@@ -2169,7 +2173,6 @@ export default {
 }
 .border-bottom-black-2 {
   border-bottom: 3px solid black !important;
-
 }
 .border-top-black-2 {
   border-top: 3px solid black !important;
