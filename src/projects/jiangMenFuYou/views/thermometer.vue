@@ -120,7 +120,7 @@
 
           <div class="value-item-box font-18">
             <div
-              class="value-item"
+              class="value-item font-16"
               :style="smallTdStyle(index, timeTds.length)"
               v-for="(item, index) in timeTds"
               :key="index"
@@ -189,7 +189,7 @@
           >
             呼吸(次/分)
           </div>
-          <div class="value-item-box font-18">
+          <div class="value-item-box font-14">
             <div
               class="value-item"
               :style="{
@@ -210,7 +210,7 @@
           >
             血压(mmHg)
           </div>
-          <div class="value-item-box font-18" style="color:blue;">
+          <div class="value-item-box font-14" style="color:blue;">
             <div
               class="value-item"
               :style="middleTdStyle(index, formatBreatheList.length)"
@@ -225,7 +225,7 @@
           <div class="label" :style="{ width: `${leftWidth}px` }">输入总量</div>
           <div class="value-item-box">
             <div
-              class="value-item"
+              class="value-item font-16"
               v-for="(item, index) in getFormatList({ tList: inputList })"
               :key="index"
               v-html="item.value"
@@ -234,7 +234,7 @@
         </div>
 
         <div>
-          <div class="left_box" :style="{ width: `${leftWidth / 4}px` }">
+          <div class="left_box" :style="{ height: `${trHeight*3}px` }">
             排</br>出</br>量
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
@@ -243,7 +243,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item"
+                class="value-item font-16"
                 v-for="(item, index) in getFormatList({ tList: shitList })"
                 :key="index"
               >
@@ -270,7 +270,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item"
+                class="value-item font-14" 
                 v-for="(item, index) in getFormatList({ tList: otherList })"
                 :key="index"
                 v-html="item.value"
@@ -281,7 +281,7 @@
           <div class="label" :style="{ width: `${leftWidth}px` }">体重(kg)</div>
           <div class="value-item-box">
             <div
-              class="value-item"
+              class="value-item font-16"
               v-for="(item, index) in getFormatList({ tList: weightList })"
               :key="index"
               v-html="item.value"
@@ -294,7 +294,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item"
+                class="value-item font-14"
                 v-for="(item, index) in getFormatList({ tList: skinTest })"
                 :key="index"
                 v-html="item.value"
@@ -307,7 +307,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item"
+                class="value-item font-14"
                 v-for="(item, index) in getFormatList({ tList: otherList2 })"
                 :key="index"
                 v-html="item.value"
@@ -402,7 +402,7 @@ export default {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -426,7 +426,7 @@ export default {
           ]
         },
         axillaryTemperature: {
-          vitalCode: '042',
+          vitalCode: '01',
           label: '腋表',
           color: 'blue',
           lineColor: 'blue',
@@ -972,6 +972,9 @@ export default {
           value: vitalSigns[i].value
         }
         switch (vitalSigns[i].vital_code) {
+          case '3':
+            this.physicsCoolList.push(item)
+            break
           case '5':
             this.topSheetNote.push(item)
             break
@@ -1131,10 +1134,11 @@ export default {
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
         //画请假和手术的字体
+       let bottomContextList=["温水擦浴", "不升"]
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y:value!=='请假'?y:y+14*this.ySpace-6,
+          y:bottomContextList.includes(value)?y+12*this.ySpace-8:y,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 2,
@@ -1488,6 +1492,7 @@ export default {
           default:
             break
         }
+        console.log(vitalCode)
         if (['01', '041', '043'].includes(vitalCode)) {
           // 画物理降温
           for (let i = this.physicsCoolList.length - 1; i >= 0; i--) {
@@ -1874,7 +1879,7 @@ export default {
     z-index: 30;
   }
   .left_box {
-    height: 90px;
+    width:40px;
     border: 1px solid;
     float: left;
     font-size: 18px;

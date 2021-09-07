@@ -67,21 +67,49 @@ export const mockData = {
     // },
     {
       temperature_type: '表底注释',
-      value: '请假',
+      value: '温水擦浴',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-15 03:12:00',
+      vital_code: '4'
+    },
+    {
+      temperature_type: '表底注释',
+      value: '温水擦浴',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-20 03:12:00',
+      vital_code: '4'
+    },
+    {
+      temperature_type: '排出其他',
+      value: '测试长数据批号1000000000000',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-18 03:12:00',
+      vital_code: '50'
+    },
+    {
+      temperature_type: '皮试',
+      value: '青霉素阴性（-）批号222222',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-18 03:12:00',
+      vital_code: '30'
+    },
+    {
+      temperature_type: '其他',
+      value: '1000',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-18 03:12:00',
+      vital_code: '51'
+    },
+    {
+      temperature_type: '表底注释',
+      value: '不升',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 03:12:00',
       vital_code: '4'
     },
     {
       temperature_type: '表底注释',
-      value: '请假',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 03:12:00',
-      vital_code: '4'
-    },
-    {
-      temperature_type: '表底注释',
-      value: '请假',
+      value: '不升',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-20 03:12:00',
       vital_code: '4'
@@ -211,7 +239,7 @@ export const mockData = {
       temperature_type: '体重',
       value: '70',
       time_point: '2019-05-18 13:12:00',
-      vital_code: '09'
+      vital_code: '033'
     },
     {
       temperature_type: '腋温',
@@ -259,7 +287,7 @@ export const mockData = {
       temperature_type: '口温',
       value: '39',
       time_point: '2019-05-20 15:12:00',
-      vital_code: '041'
+      vital_code: '01'
     },
     {
       temperature_type: '降温', // 自己捏造的标识
