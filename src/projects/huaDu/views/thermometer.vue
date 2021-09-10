@@ -356,7 +356,7 @@
       </div>
     </div>
     <!-- <div class="pagination"> -->
-    <div class="pagination">
+    <div class="pagination" v-if="showInnerPage">
       <!-- <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i> -->
       <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">
         上一页
@@ -371,7 +371,7 @@
       </button>
       <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
     </div>
-    <div class="pagination">第{{ currentPage }}页</div>
+    <div class="pagination" v-else>第{{ currentPage }}页</div>
   </div>
 </template>
 
@@ -385,7 +385,7 @@ export default {
     const pulseRange = [0, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -535,9 +535,7 @@ export default {
       currentPage: 1,
       showInnerPage: true, // 是否显示内部分页
       adtLog: '', // 转科
-      bedExchangeLog: '', // 转床
-      deliveryList: [], // 分娩和手术后数据列表
-      idx: [0] // 上一页的手术次数
+      bedExchangeLog: '' // 转床
     }
   },
   computed: {
@@ -672,10 +670,11 @@ export default {
             x.value === '手术分娩|' ||
             x.value === '手术入院|')
       )
+      const oDateList = list.map((x) => x.time_point.slice(0, 10))
       const obj = {}
       let deliveryObj = {}
       /* 给每个日期定义对象obj存储当前日期的表顶注释列表数组 */
-      this.dateList.forEach((x) => {
+      oDateList.forEach((x) => {
         obj[x] = []
       })
       /* 遍历表顶注释列表 */
@@ -687,18 +686,17 @@ export default {
           ) /* obj:{2019-05-20:[{},{},{}],2019-05-21:[{},{}],} */
         }
       })
-      this.dateList.forEach((date) => {
+      oDateList.forEach((date) => {
         // console.log(obj[date])
         if (obj[date].length > 0) {
           deliveryObj = obj[date].find((obj) => obj.value.includes('分娩'))
-          obj[date].forEach((item, index) => {
-            if (item.value.includes('分娩')) {
-              obj[date].splice(index, 1)
+          for (let i = obj[date].length - 1; i >= 0; i--) {
+            if (obj[date][i].value.includes('分娩')) {
+              obj[date].splice(i, 1)
             }
-          })
+          }
           if (deliveryObj) {
             obj[date].push(deliveryObj)
-            console.log(deliveryObj)
           }
         }
       })
@@ -709,7 +707,7 @@ export default {
       return listNew.map((x) => x.time_point)
     },
     formatOperateDateList() {
-      return this.dateList.map((x, dateIndex) => {
+      return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0)
           return ''
         if (!this.operateDateList.length) return ''
@@ -724,17 +722,9 @@ export default {
         }
         if (days[index] <= 10) {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
-          let idxValue =
-            this.idx[this.currentPage - 1] === undefined
-              ? 0
-              : this.idx[this.currentPage - 1]
-          let operatorCout = index + 1 + idxValue
-          if (dateIndex === this.dateList.length - 1) {
-            this.idx[this.currentPage] = operatorCout
-          }
-          return index === 0 && this.idx[this.currentPage - 1] === 0
+          return index === 0
             ? days[index]
-            : `${this.numToRome(operatorCout)}/${days[index]}`
+            : `${this.numToRome(index + 1)}-${days[index]}`
         } else {
           return ''
         }

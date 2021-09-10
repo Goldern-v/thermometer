@@ -8,20 +8,20 @@
     <div class="head-hos">江门市妇幼保健院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item">
+      <div class="item" style="width:155px;flex:none;">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item">
+      <div class="item" style="width:150px;flex:none;">
         年龄：<span class="value">{{
           typeof parseInt(patInfo.age) === 'number' && !isNaN(patInfo.age)
             ? patInfo.age + '岁'
             : patInfo.age
         }}</span>
       </div>
-      <div class="item">
+      <div class="item" style="width:100px;flex:none;">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="flex:1.3;">
+      <div class="item" style="flex:1;">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
@@ -87,6 +87,7 @@
             </div>
           </div>
         </div>
+
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             手术或产后日数
@@ -117,13 +118,17 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight - 10}px` }">
+          <div class="white_line"></div>
           <div
             class="label"
-            :style="{ width: `${leftWidth}px`, transform: 'translateX(3px)' }"
+            :style="{
+              width: `${leftWidth}px`,
+              transform: 'translateX(3px)',
+              transform: 'translateY(-13px)'
+            }"
             v-html="`时&emsp;&emsp;间`"
           ></div>
-
           <div class="value-item-box font-18">
             <div
               class="value-item font-16"
@@ -262,7 +267,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item"
+                class="value-item font-16"
                 v-for="(item, index) in getFormatList({ tList: urineList })"
                 :key="index"
                 v-html="item.value"
@@ -275,7 +280,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-14"
+                class="value-item font-13 "
                 v-for="(item, index) in getFormatList({ tList: otherList })"
                 :key="index"
                 v-html="item.value"
@@ -301,7 +306,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-14"
+                class="value-item font-13"
                 v-for="(item, index) in getFormatList({ tList: skinTest })"
                 :key="index"
                 v-html="item.value"
@@ -314,7 +319,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-14"
+                class="value-item font-13"
                 v-for="(item, index) in getFormatList({ tList: otherList2 })"
                 :key="index"
                 v-html="item.value"
@@ -409,13 +414,13 @@ export default {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
       areaHeight: 0, // 网格区域的高度
       xSpace: 19, // 纵向网格的间距
-      ySpace: 15, //  横向网格的间距
+      ySpace: 17, //  横向网格的间距
       leftWidth: 160, // 左侧内容宽度
       xRange: [1, 8],
       yRange,
@@ -663,80 +668,57 @@ export default {
       ]
     },
     operateDateList() {
-      /* 一天中:
-        1同时出现多次 分娩（包括手术分娩）时，计算为一次。
-        2出现多个分娩（包括手术分娩）+手术（包括入院手术）时，分娩算一次，手术出现几个算几次，再两个相加
-        3同时出现多个手术（包括手术入院）时，每一个手术算为一次
-      */
-      const list = this.vitalSigns.filter(
-        (x) =>
-          x.vital_code === '5' &&
-          (x.value === '手术' ||
-            x.value === '分娩|' ||
-            x.value === '手术分娩|' ||
-            x.value === '手术入院|')
-      )
-      const obj = {}
-      let deliveryObj = {}
-      /* 给每个日期定义对象obj存储当前日期的表顶注释列表数组 */
-      this.dateList.forEach((x) => {
-        obj[x] = []
-      })
-      /* 遍历表顶注释列表 */
-      list.forEach((x) => {
-        const date = x.time_point.slice(0, 10) // 只获取到日期
-        if (obj[date]) {
-          obj[date].push(
-            x
-          ) /* obj:{2019-05-20:[{},{},{}],2019-05-21:[{},{}],} */
-        }
-      })
-      this.dateList.forEach((date) => {
-        if (obj[date].length > 0) {
-          deliveryObj = obj[date].find((obj) => obj.value.includes('分娩'))
-          obj[date].forEach((item, index) => {
-            if (item.value.includes('分娩')) {
-              obj[date].splice(index, 1)
-            }
-          })
-          if (deliveryObj) {
-            obj[date].push(deliveryObj)
-          }
-        }
-      })
-      const listNew = []
-      Object.values(obj).forEach((x) => {
-        listNew.push(...x)
-      })
-      return listNew.map((x) => x.time_point)
+      return this.vitalSigns
+        .filter(
+          (x) =>
+            x.vital_code === '5' &&
+            (x.value === '手术' ||
+              x.value === '分娩|' ||
+              x.value === '手术分娩|' ||
+              x.value === '手术入院|')
+        )
+        .map((x) => x.time_point)
     },
     formatOperateDateList() {
-      return this.dateList.map((x, dateIndex) => {
+      return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0)
           return ''
         if (!this.operateDateList.length) return ''
-        // 构造天数差数组，有相同天数差的说明在同一天x
-        const days = this.operateDateList.map((y) => {
-          return this.dayInterval(x, y)
-        })
+        // 构造天数差数组，有相同天数差的说明在同一天，所以要去重
+        const days = [
+          ...new Set(
+            this.operateDateList.map((y) => {
+              return this.dayInterval(x, y)
+            })
+          )
+        ]
         if (days.every((z) => z < 0)) return ''
+        // 找到前一次手术（最后一次天数差是正整数的地方）
         let index = 0
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i
         }
-        if (days[index] <= 10) {
-          /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
-          let idxValue =
-            this.idx[this.currentPage - 1] === undefined
-              ? 0
-              : this.idx[this.currentPage - 1]
-          let operatorCout = index + 1 + idxValue
-          if (dateIndex === this.dateList.length - 1) {
-            this.idx[this.currentPage] = operatorCout
+        let apart = [] // 存储当天和前面手术的天数间隔
+        for (let i = 0; i < index; i++) {
+          apart.unshift(days[i])
+        }
+        // 间隔大于7天的手术，分子分母的写法要重置
+        if (apart.length) {
+          apart.unshift(days[index])
+          for (let i = 1; i < apart.length; i++) {
+            if (apart[i] - apart[i - 1] > 7) {
+              apart = apart.slice(0, i)
+              break
+            }
           }
-          return index === 0 && this.idx[this.currentPage - 1] === 0
+          apart.splice(0, 1)
+        }
+        if (days[index] <= 7) {
+          return index === 0 || !apart.length
             ? days[index]
-            : `${this.numToRome(operatorCout)}/${days[index]}`
+            : days[index] === 0
+            ? `${apart.join('-')}(${apart.length + 1})`
+            : `${days[index]}-${apart.join('-')}`
         } else {
           return ''
         }
@@ -831,15 +813,15 @@ export default {
               this.handleData()
             }
             break
-          case 'pageTotal':
-            if (e.data.value > 0) {
-              this.currentPage = e.data.value
-              this.pageTotal = e.data.value
-              document.getElementById('main').innerHTML = ''
-              this.reset()
-              this.handleData()
-            }
-            break
+          // case 'pageTotal':
+          //   if (e.data.value > 0) {
+          //     this.currentPage = e.data.value
+          //     this.pageTotal = e.data.value
+          //     document.getElementById('main').innerHTML = ''
+          //     this.reset()
+          //     this.handleData()
+          //   }
+          //   break
           case 'printing':
             window.print()
             break
@@ -1152,14 +1134,14 @@ export default {
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
         //画请假和手术的字体
-        let bottomContextList = ['温水擦浴', '不升']
+        let bottomContextList = ['温水擦浴', '不升', '特殊物理降温', '辅助呼吸']
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: bottomContextList.includes(value) ? y + 12 * this.ySpace - 8 : y,
+          y: bottomContextList.includes(value) ? y + 5 * this.ySpace : y,
           value: this.addn(value),
           color,
-          textLineHeight: this.ySpace + 2,
+          textLineHeight: this.ySpace + 1,
           fontWeight: 'bold',
           fontFamily: 'SimHei'
         })
@@ -1184,6 +1166,7 @@ export default {
           x2: this.areaWidth - 1,
           y2: preSpace,
           lineWidth,
+          lineDash: isBreak ? [] : [1, 1],
           color: isBreak ? '#000' : isboundary ? 'transparent' : '#000'
         }
         preSpace += lineWidth + this.ySpace
@@ -1206,8 +1189,10 @@ export default {
           x2: preSpace,
           y2: this.areaHeight,
           lineWidth,
+          lineDash: isBreak ? [] : [1, 1],
           color: isBreak ? 'red' : '#000'
         }
+
         preSpace += lineWidth + this.xSpace
         this.createLine(params)
       }
@@ -1245,7 +1230,7 @@ export default {
       y,
       value,
       color,
-      fontSize = 15,
+      fontSize = 17,
       tips,
       zlevel = 0,
       fontWeight = 'bold',
@@ -1882,6 +1867,16 @@ export default {
     }
   }
 }
+.white_line {
+  background-color: rgb(255, 255, 255);
+  width: 160px;
+  height: 7px;
+  position: absolute;
+  top: -4px;
+  z-index: 99;
+  left: 0;
+  border: none;
+}
 #main {
   flex-shrink: 0;
   position: relative;
@@ -1920,6 +1915,7 @@ export default {
       align-items: center;
       justify-content: center;
       height: 100%;
+      z-index: 999;
       transform: translateX(0.5px);
     }
     .value-item-box {
@@ -2008,52 +2004,52 @@ export default {
       }
     }
     .temp :nth-child(2) > span {
-      margin-top: -10px;
+      margin-top: -4px;
     }
     .temp :nth-child(3) > span {
-      margin-top: -10px;
+      margin-top: 7px;
     }
     .temp :nth-child(4) > span {
-      margin-top: -10px;
+      margin-top: 15px;
     }
     .temp :nth-child(5) > span {
-      margin-top: -10px;
+      margin-top: 25px;
     }
     .temp :nth-child(6) > span {
-      margin-top: -10px;
+      margin-top: 33px;
     }
     .temp :nth-child(7) > span {
-      margin-top: -10px;
+      margin-top: 40px;
     }
     .temp :nth-child(8) > span {
-      margin-top: -8px;
+      margin-top: 53px;
     }
     .temp :nth-child(9) > span {
-      margin-top: -8px;
+      margin-top: 63px;
     }
     .times :nth-child(2) > span {
-      margin-top: -10px;
+      margin-top: -4px;
     }
     .times :nth-child(3) > span {
-      margin-top: -10px;
+      margin-top: 7px;
     }
     .times :nth-child(4) > span {
-      margin-top: -10px;
+      margin-top: 15px;
     }
     .times :nth-child(5) > span {
-      margin-top: -10px;
+      margin-top: 25px;
     }
     .times :nth-child(6) > span {
-      margin-top: -10px;
+      margin-top: 33px;
     }
     .times :nth-child(7) > span {
-      margin-top: -10px;
+      margin-top: 40px;
     }
     .times :nth-child(8) > span {
-      margin-top: -8px;
+      margin-top: 53px;
     }
     .times :nth-child(9) > span {
-      margin-top: -8px;
+      margin-top: 63px;
     }
     .pain-area {
       position: relative;
@@ -2175,6 +2171,9 @@ export default {
 }
 .font-14 {
   font-size: 14px;
+}
+.font-13 {
+  font-size: 13px;
 }
 .font-16 {
   font-size: 16px;

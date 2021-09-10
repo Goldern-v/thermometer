@@ -438,7 +438,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -747,6 +747,7 @@ export default {
           apart.splice(0, 1)
         }
         if (days[index] <= 7) {
+          console.log(days[index])
           return index === 0 || !apart.length
             ? days[index]
             : days[index] === 0
@@ -822,7 +823,6 @@ export default {
       */
       const settingMap = this.settingMap
       const xyMap = new Map()
-      console.log(xyMap)
       settingMap.heart.data.forEach((x) => {
         const xAxis = this.getXaxis(this.getLocationTime(x.time))
         if (xyMap.has(xAxis)) {
