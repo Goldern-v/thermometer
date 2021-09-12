@@ -19,6 +19,8 @@
     "build:quZhou": "vue-cli-service build --project=quZhou",
     "dev:beiHai": "vue-cli-service serve --project=beiHai",
     "build:beiHai": "vue-cli-service build --project=beiHai",
+    "dev:wuJing": "vue-cli-service serve --project=wuJing",
+    "build:wuJing": "vue-cli-service build --project=wuJing",
     "dev:common": "vue-cli-service serve --project=common",
     "build:common": "vue-cli-service build --project=common",
     "dev:liaoChengNewBorn": "vue-cli-service serve --project=liaoChengNewBorn",
