@@ -110,12 +110,12 @@
           <i
             class="split-line"
             :style="{
-              bottom: `${painAreaHeight + bottomAreaHeight -1}px`
+              bottom: `${painAreaHeight + bottomAreaHeight - 1}px`
             }"
           ></i>
           <div class="item times">
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
-              <div>脉搏</br>次/分</div>
+              <div>脉搏<br />次/分</div>
             </div>
             <div class="index" v-for="item in pulseList" :key="item">
               <span>{{ item }}</span>
@@ -133,7 +133,7 @@
               <!--<div class="label" :style="{ height: `${trHeight + 2}px` }">
                 体温
               </div>-->
-              <div>体温</br>(℃)</div>
+              <div>体温<br />(℃)</div>
             </div>
             <div class="index" v-for="item in temperaturelist" :key="item">
               <span>{{ item }}</span>
@@ -142,7 +142,7 @@
               <div class="pain-index" v-for="item in painList" :key="item">
                 <span>{{ item }}</span>
               </div>
-             <!-- <div class="s-index"><span>0</span></div>-->
+              <!-- <div class="s-index"><span>0</span></div>-->
             </div>
             <div
               class="bottom-area"
@@ -585,7 +585,7 @@ export default {
         '01': 'axillaryTemperature',
         '043': 'analTemperature',
         '20': 'heart',
-        '02': 'pulse',
+        '02': 'pulse'
         // '092': 'pain'
       },
       pageTotal: 1,
@@ -790,7 +790,9 @@ export default {
       return (
         this.areaHeight -
         this.indexTextAreaHeight -
-        this.painAreaHeight +3*this.ySpace+2
+        this.painAreaHeight +
+        3 * this.ySpace +
+        2
       )
     },
     painAreaHeight() {
@@ -1117,7 +1119,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y:value!=='过快'?y+2:y-this.ySpace-1,
+          y: value !== '过快' ? y + 2 : y - this.ySpace - 1,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1181,7 +1183,7 @@ export default {
         */
         if (this.settingMap.heart.data.length > 0) {
           this.polygonPoints.forEach((x) => {
-             console.log(x)
+            console.log(x)
             this.createPolygon({
               points: x,
               lineWidth: 1,
@@ -1214,10 +1216,12 @@ export default {
       let preSpace = 0
       let breakIndex = 0
       for (let i = 0; i < totalLine; i++) {
-        const isPainBreak =
-          this.yRange[1] - breakIndex  === 34
+        const isPainBreak = this.yRange[1] - breakIndex === 34
         const isBreak =
-          ((i - 2) % 5 === 0 &&i<40|| isPainBreak || i ===39||i===43) &&
+          (((i - 2) % 5 === 0 && i < 40) ||
+            isPainBreak ||
+            i === 39 ||
+            i === 43) &&
           i > 0 &&
           i < totalLine - 1
         const isboundary = i === 0 || i === totalLine - 1
@@ -1229,7 +1233,7 @@ export default {
           y2: preSpace,
           lineWidth,
           color: isBreak
-            ? this.yRange[1] - breakIndex++-2 === 35 || isPainBreak
+            ? this.yRange[1] - breakIndex++ - 2 === 35 || isPainBreak
               ? 'red'
               : '#000'
             : isboundary
@@ -1548,7 +1552,7 @@ export default {
                   y: this.getYaxis(this.yRange, x.value)
                 }
               })
-              const sameAxisItem = tList.find((x) =>  x.x === cx && x.y === cy)
+              const sameAxisItem = tList.find((x) => x.x === cx && x.y === cy)
               if (sameAxisItem) {
                 params = {
                   cx,
@@ -1704,10 +1708,13 @@ export default {
         ? ((yRange[1] - value) / (yRange[1] - yRange[0])) *
             this.painAreaHeight +
             this.indexTextAreaHeight +
-            this.timesTempAreaHeight -3 * this.ySpace - 1
+            this.timesTempAreaHeight -
+            3 * this.ySpace -
+            1
         : ((yRange[1] - value) / (yRange[1] - yRange[0])) *
             this.timesTempAreaHeight +
-            this.indexTextAreaHeight + 1
+            this.indexTextAreaHeight +
+            1
     },
     // 根据时间点计算横坐标
     getXaxis(time) {
@@ -2016,8 +2023,8 @@ export default {
     z-index: 30;
   }
 }
-.pain-area:nth-child(3){
-  color:red;
+.pain-area:nth-child(3) {
+  color: red;
 }
 .table-box {
   position: relative;
@@ -2090,7 +2097,7 @@ export default {
         }
       }
       .index {
-       height: 81.7px;
+        height: 81.7px;
         position: relative;
         > span {
           display: block;
@@ -2098,9 +2105,9 @@ export default {
           text-align: center;
         }
       }
-      .pain-area :nth-child(1){
-        margin-top:12px;
-        }
+      .pain-area :nth-child(1) {
+        margin-top: 12px;
+      }
       .pain-area {
         position: relative;
         display: flex;
@@ -2113,9 +2120,8 @@ export default {
             display: block;
             margin-top: 4px;
           }
-
         }
-       
+
         .s-index {
           position: absolute;
           bottom: -7px;
@@ -2143,7 +2149,7 @@ export default {
       }
     }
     .temp {
-    overflow:hidden;
+      overflow: hidden;
       .text {
         flex-shrink: 0;
         flex-grow: 0;
