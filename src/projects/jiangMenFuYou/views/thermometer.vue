@@ -8,7 +8,7 @@
     <div class="head-hos">江门市妇幼保健院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item" style="width:155px;flex:none;">
+      <div class="item" style="width:220px;flex:none;">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item" style="width:150px;flex:none;">
@@ -21,7 +21,7 @@
       <div class="item" style="width:100px;flex:none;">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="flex:1;">
+      <div class="item" style="flex:0.8;">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
@@ -414,7 +414,7 @@ export default {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -522,6 +522,7 @@ export default {
       typeMap: {
         '5': '表顶注释', // 入院|,手术,分娩|,出院|,转入|,死亡|,排胎|,出生|,手术分娩|,手术入院|,转出|
         '4': '表底注释', // 拒测,不在,外出,不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
+        '6': '中间注释', //辅助呼吸
         '01': '体温',
         '02': '脉搏',
         '20': '心率',
@@ -667,58 +668,90 @@ export default {
         `${this.dateList[this.dateList.length - 1]} 24:00:00`
       ]
     },
+    // operateDateList() {
+    //   return this.vitalSigns
+    //     .filter(
+    //       (x) =>
+    //         x.vital_code === '5' &&
+    //         (x.value === '手术' ||
+    //           x.value === '分娩|' ||
+    //           x.value === '手术分娩|' ||
+    //           x.value === '手术入院|')
+    //     )
+    //     .map((x) => x.time_point)
+    // },
     operateDateList() {
-      return this.vitalSigns
-        .filter(
-          (x) =>
-            x.vital_code === '5' &&
-            (x.value === '手术' ||
-              x.value === '分娩|' ||
-              x.value === '手术分娩|' ||
-              x.value === '手术入院|')
-        )
-        .map((x) => x.time_point)
+      /* 一天中:
+        1同时出现多次 分娩（包括手术分娩）时，计算为一次。
+        2出现多个分娩（包括手术分娩）+手术（包括入院手术）时，分娩算一次，手术出现几个算几次，再两个相加
+        3同时出现多个手术（包括手术入院）时，每一个手术算为一次
+      */
+      const list = this.vitalSigns.filter(
+        (x) =>
+          x.vital_code === '5' &&
+          (x.value === '手术' ||
+            x.value === '分娩|' ||
+            x.value === '手术|' ||
+            x.value === '分娩' ||
+            x.value === '手术分娩|' ||
+            x.value === '手术入院|')
+      )
+      const oDateList = list.map((x) => x.time_point.slice(0, 10))
+      const obj = {}
+      let deliveryObj = {}
+      /* 给每个日期定义对象obj存储当前日期的表顶注释列表数组 */
+      oDateList.forEach((x) => {
+        obj[x] = []
+      })
+      /* 遍历表顶注释列表 */
+      list.forEach((x) => {
+        const date = x.time_point.slice(0, 10) // 只获取到日期
+        if (obj[date]) {
+          obj[date].push(
+            x
+          ) /* obj:{2019-05-20:[{},{},{}],2019-05-21:[{},{}],} */
+        }
+      })
+      oDateList.forEach((date) => {
+        // console.log(obj[date])
+        if (obj[date].length > 0) {
+          deliveryObj = obj[date].find((obj) => obj.value.includes('分娩'))
+          for (let i = obj[date].length - 1; i >= 0; i--) {
+            if (obj[date][i].value.includes('分娩')) {
+              obj[date].splice(i, 1)
+            }
+          }
+          if (deliveryObj) {
+            obj[date].push(deliveryObj)
+          }
+        }
+      })
+      const listNew = []
+      Object.values(obj).forEach((x) => {
+        listNew.push(...x)
+      })
+      return listNew.map((x) => x.time_point)
     },
     formatOperateDateList() {
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0)
           return ''
         if (!this.operateDateList.length) return ''
-        // 构造天数差数组，有相同天数差的说明在同一天，所以要去重
-        const days = [
-          ...new Set(
-            this.operateDateList.map((y) => {
-              return this.dayInterval(x, y)
-            })
-          )
-        ]
+        // 构造天数差数组，有相同天数差的说明在同一天x
+        const days = this.operateDateList.map((y) => {
+          return this.dayInterval(x, y)
+        })
         if (days.every((z) => z < 0)) return ''
-        // 找到前一次手术（最后一次天数差是正整数的地方）
         let index = 0
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i
         }
-        let apart = [] // 存储当天和前面手术的天数间隔
-        for (let i = 0; i < index; i++) {
-          apart.unshift(days[i])
-        }
-        // 间隔大于7天的手术，分子分母的写法要重置
-        if (apart.length) {
-          apart.unshift(days[index])
-          for (let i = 1; i < apart.length; i++) {
-            if (apart[i] - apart[i - 1] > 7) {
-              apart = apart.slice(0, i)
-              break
-            }
-          }
-          apart.splice(0, 1)
-        }
-        if (days[index] <= 7) {
-          return index === 0 || !apart.length
+        if (days[index] <= 14) {
+          //体温单手术超过15天归零显示
+          /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
+          return index === 0
             ? days[index]
-            : days[index] === 0
-            ? `${apart.join('-')}(${apart.length + 1})`
-            : `${days[index]}-${apart.join('-')}`
+            : `${this.numToRome(index + 1)}-${days[index]}`
         } else {
           return ''
         }
@@ -1134,7 +1167,7 @@ export default {
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
         //画请假和手术的字体
-        let bottomContextList = ['温水擦浴', '不升', '特殊物理降温', '辅助呼吸']
+        let bottomContextList = ['温水擦浴', '不升', '特殊物理降温']
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
@@ -1619,7 +1652,7 @@ export default {
       let h = Math.floor((num % 1000) / 100)
       let t = Math.floor((num % 100) / 10)
       let o = num % 10
-      let one = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
+      let one = ['I', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'V', 'Ⅵ', 'Ⅶ', 'Ⅷ', 'Ⅸ']
       let ten = ['X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC']
       let hundred = ['C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM']
       let thousand = 'M'

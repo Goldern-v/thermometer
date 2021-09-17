@@ -385,7 +385,7 @@ export default {
     const pulseRange = [0, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -413,7 +413,7 @@ export default {
           vitalCode: '1',
           label: '腋表',
           color: 'blue',
-          lineColor: 'black',
+          lineColor: 'blue',
           dotType: 'Text',
           range: yRange,
           data: [
@@ -726,7 +726,7 @@ export default {
             ? days[index]
             : `${this.numToRome(index + 1)}-${days[index]}`
         } else {
-          return ''
+          return `${this.numToRome(index + 1)}`
         }
       })
     },
@@ -1608,7 +1608,7 @@ export default {
       let h = Math.floor((num % 1000) / 100)
       let t = Math.floor((num % 100) / 10)
       let o = num % 10
-      let one = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
+      let one = ['I', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'V', 'Ⅵ', 'Ⅶ', 'Ⅷ', 'Ⅸ']
       let ten = ['X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC']
       let hundred = ['C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM']
       let thousand = 'M'

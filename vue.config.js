@@ -29,8 +29,10 @@ module.exports = {
           return './src/projects/beiHai/main.js'
         case 'quZhou': // 曲州
           return './src/projects/quZhou/main.js'
-          case 'wuJing': // 武警
+        case 'wuJing': // 武警
           return './src/projects/wuJing/main.js'
+        case 'zhongXi': // 武警
+          return './src/projects/zhongXi/main.js'
         case 'common': // 可配置的通用版本
           return './src/projects/common/main.js'
         default:
@@ -69,6 +71,8 @@ module.exports = {
             case 'quZhou':
               return 'http://172.17.5.41:9091'
             case 'wuJing':
+              return 'http://172.17.5.41:9091'
+            case 'zhongXi':
               return 'http://172.17.5.41:9091'
             case 'common':
               return 'http://172.17.5.41:9091'

@@ -3,10 +3,10 @@ export const mockData = {
   ErrorMsg: '查询成功',
   patientInfo: {
     patInfo: {
-      patient_id: '0000590904',
+      patient_id: '590904',
       name: '陈小倩',
       sex: '女',
-      dept_name: '神经内科',
+      dept_name: '乳腺胸外科',
       bed_label: '012',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
@@ -80,13 +80,6 @@ export const mockData = {
       vital_code: '4'
     },
     {
-      temperature_type: '中间注释',
-      value: '辅助呼吸',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 03:12:00',
-      vital_code: '6'
-    },
-    {
       temperature_type: '表底注释',
       value: '请假',
       // "time_point": "2020-12-15 03:12:00",
@@ -102,16 +95,9 @@ export const mockData = {
     },
     {
       temperature_type: '尿量',
-      value: '2123',
+      value: '23',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-15 03:12:00',
-      vital_code: '12'
-    },
-    {
-      temperature_type: '尿量',
-      value: '2300',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-17 03:12:00',
+      time_point: '2019-05-21 03:12:00',
       vital_code: '12'
     },
     {
@@ -141,7 +127,7 @@ export const mockData = {
     // },
     {
       temperature_type: '肛温',
-      value: '38',
+      value: '36.9',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-20 03:12:00',
       vital_code: '043'
@@ -169,25 +155,25 @@ export const mockData = {
     },
     {
       temperature_type: '呼吸',
-      value: '70',
+      value: '20',
       time_point: '2019-05-19 23:12:00',
       vital_code: '04'
     },
     {
       temperature_type: '呼吸',
-      value: '50',
+      value: '20',
       time_point: '2019-05-16 13:12:00',
       vital_code: '04'
     },
     {
       temperature_type: '呼吸',
-      value: '40',
+      value: '30',
       time_point: '2019-05-17 13:12:00',
       vital_code: '04'
     },
     {
       temperature_type: '呼吸',
-      value: '80',
+      value: '20',
       time_point: '2019-05-20 13:12:00',
       vital_code: '04'
     },
@@ -228,52 +214,16 @@ export const mockData = {
       vital_code: '09'
     },
     {
-      temperature_type: '小便',
-      value: '1',
-      time_point: '2019-05-18 13:12:00',
-      vital_code: '67'
-    },
-    {
-      temperature_type: '体重',
-      value: '50',
-      time_point: '2019-05-18 13:12:00',
-      vital_code: '033'
-    },
-    {
-      temperature_type: '出量',
-      value: '500',
-      time_point: '2019-05-18 13:12:00',
-      vital_code: '19'
-    },
-    {
       temperature_type: '腋温',
       value: '35.2',
       time_point: '2019-05-18 01:12:00',
-      vital_code: '042'
-    },
-    {
-      temperature_type: '脉搏',
-      value: '120',
-      time_point: '2019-05-17 01:12:00',
-      vital_code: '02'
-    },
-    {
-      temperature_type: '心率',
-      value: '120',
-      time_point: '2019-05-17 01:12:00',
-      vital_code: '20'
+      vital_code: '01'
     },
     {
       temperature_type: '腋温',
-      value: '38.2',
+      value: '38',
       time_point: '2019-05-17 01:12:00',
-      vital_code: '042'
-    },
-    {
-      temperature_type: '腋温',
-      value: '37',
-      time_point: '2019-05-17 15:12:00',
-      vital_code: '042'
+      vital_code: '01'
     },
     {
       temperature_type: '口温',
@@ -293,12 +243,12 @@ export const mockData = {
       time_point: '2019-05-20 15:12:00',
       vital_code: '041'
     },
-    // {
-    //   temperature_type: '降温', // 自己捏造的标识
-    //   value: '37',
-    //   time_point: '2019-05-20 15:12:00',
-    //   vital_code: '02'
-    // },
+    {
+      temperature_type: '降温', // 自己捏造的标识
+      value: '37',
+      time_point: '2019-05-20 15:12:00',
+      vital_code: '3'
+    },
     {
       temperature_type: '自定义1',
       value: '36.7',
@@ -345,7 +295,7 @@ export const mockData = {
       temperature_type: '腋温',
       value: '37',
       time_point: '2019-05-20 10:12:00',
-      vital_code: '042'
+      vital_code: '01'
     },
     {
       temperature_type: '肛温',
@@ -403,7 +353,7 @@ export const mockData = {
     },
     {
       temperature_type: '入量',
-      value: '5512',
+      value: '55',
       time_point: '2019-05-16 13:00:00',
       vital_code: '091'
     },
@@ -411,7 +361,7 @@ export const mockData = {
       temperature_type: '身高',
       value: '167',
       time_point: '2019-05-16 13:00:00',
-      vital_code: '14'
+      vital_code: '094'
     }
   ]
 }

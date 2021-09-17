@@ -4,7 +4,7 @@ export const mockData = {
   patientInfo: {
     patInfo: {
       patient_id: '0000590904',
-      name: '陈小倩',
+      name: '陈小倩（婴）',
       sex: '女',
       dept_name: '神经内科VIP病房（本部）',
       bed_label: '012',
@@ -78,6 +78,13 @@ export const mockData = {
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-20 03:12:00',
       vital_code: '4'
+    },
+    {
+      temperature_type: '表底注释',
+      value: '辅助呼吸',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-19 03:12:00',
+      vital_code: '6'
     },
     {
       temperature_type: '排出其他',

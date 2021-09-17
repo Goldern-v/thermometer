@@ -303,7 +303,7 @@
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatList({ tList: peeList })"
+              v-for="(item, index) in getFormatList({ tList: urineList })"
               :key="index"
             >
               {{ item.value }}
@@ -380,9 +380,9 @@
             </div>
           </div>
         </div>
-        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList4.label || "" }}
+            {{ customList4.label || '' }}
           </div>
           <div class="value-item-box">
             <div
@@ -394,7 +394,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <!--  <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList5.label || "" }}
           </div>
@@ -445,7 +445,7 @@
 
 <script>
 import zrender from 'zrender'
-import { mockData } from 'src/projects/beiHai/mockData.js'
+import { mockData } from 'src/projects/wuJing/mockData.js'
 
 export default {
   data() {
@@ -453,7 +453,7 @@ export default {
     const pulseRange = [0, 180]
     // const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -467,7 +467,7 @@ export default {
       // painRange,
       settingMap: {
         oralTemperature: {
-          vitalCode: '7',
+          vitalCode: '1',
           label: '口温',
           color: 'blue',
           solid: true,
@@ -489,7 +489,7 @@ export default {
           ]
         },
         analTemperature: {
-          vitalCode: '8',
+          vitalCode: '3',
           label: '肛温',
           color: 'blue',
           dotType: 'Circle',
@@ -499,7 +499,7 @@ export default {
           ]
         },
         heart: {
-          vitalCode: '6',
+          vitalCode: '4',
           label: '心率',
           color: 'red',
           dotType: 'Circle',
@@ -509,7 +509,7 @@ export default {
           ]
         },
         pulse: {
-          vitalCode: '3',
+          vitalCode: '5',
           label: '脉搏',
           color: 'red',
           solid: true,
@@ -575,42 +575,40 @@ export default {
       },
       vitalSigns: [],
       typeMap: {
-        '1': '表顶注释', // 入院|,手术,分娩|,出院|,转入|,死亡|,排胎|,出生|,手术分娩|,手术入院|,转出|
-        '20': '表底注释', // 拒测,不在,外出不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
+        '21': '表顶注释', // 入院|,手术,分娩|,出院|,转入|,死亡|,排胎|,出生|,手术分娩|,手术入院|,转出|
+        '22': '表底注释', // 拒测,不在,外出不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
         '2': '腋温',
-        '3': '脉搏',
-        '6': '心率',
-        '4': '呼吸',
-        '5': '血压',
-        '11': '尿量',
-        '15': '入量',
-        '16': '出量',
-        '13': '体重',
-        '8': '肛温',
-        '7': '口温',
-        '21': '发热体温',
-        '22': '线上降温',
+        '5': '脉搏',
+        '4': '心率',
+        '6': '呼吸',
+        '7': '血压',
+        '13': '尿量',
+        '10': '入量',
+        '12': '出量',
+        '8': '体重',
+        '3': '肛温',
+        '1': '口温',
         '23': '呼吸机R',
-        '10': '大便次数',
+        '11': '输入液量',
+        '14': '大便次数',
         // '10': '引流量',
         '25': '护理事件',
-        '9': '物理降温',
         '28': '呕吐量',
         '29': '在线降温',
-        '14': '身高',
-        '32': '自定义1',
-        '33': '自定义2',
-        '34': '自定义3',
-        '35': '自定义4',
-        '36': '自定义5',
+        '9': '身高',
+        '16': '自定义1',
+        '17': '自定义2',
+        '18': '自定义3',
+        '19': '自定义4',
+        '20': '自定义5',
         '37': '自定义6'
       },
       lineMap: {
-        '7': 'oralTemperature',
+        '1': 'oralTemperature',
         '2': 'axillaryTemperature',
-        '8': 'analTemperature',
-        '6': 'heart',
-        '3': 'pulse'
+        '3': 'analTemperature',
+        '4': 'heart',
+        '5': 'pulse'
         // '092': 'pain'
       },
       pageTotal: 1,
@@ -717,7 +715,7 @@ export default {
       return this.vitalSigns
         .filter(
           (x) =>
-            x.vital_code === '1' &&
+            x.vital_code === '21' &&
             (x.value === '手术' ||
               x.value === '分娩|' ||
               x.value === '手术分娩|' ||
@@ -927,7 +925,7 @@ export default {
           temperature_type: '出量',
           value: '',
           time_point: this.patInfo.admission_date,
-          vital_code: '16'
+          vital_code: '12'
         })
       }
       this.vitalSigns = vitalSigns
@@ -1002,7 +1000,7 @@ export default {
         }
         if (this.lineMap[vitalSigns[i].vital_code]) {
           if (
-            ['3', '6'].includes(vitalSigns[i].vital_code) &&
+            ['7', '6'].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) > this.pulseRange[1]
           ) {
             this.topPulseNote.push({
@@ -1029,43 +1027,43 @@ export default {
           value: vitalSigns[i].value
         }
         switch (vitalSigns[i].vital_code) {
-          case '1':
+          case '21':
             this.topSheetNote.push(item)
             break
-          case '20':
+          case '22':
             this.bottomSheetNote.push(item)
             break
-          case '4':
+          case '6':
             this.breatheList.push(item)
             break
-          case '5':
+          case '7':
             this.pressureList.push(item)
             break
-          case '13':
+          case '8':
             this.weightList.push(item)
             break
-          case '15':
+          case '10':
             this.inputList.push(item)
             break
-          case '10':
+          case '14':
             this.shitList.push(item)
             break
-          case '67':
-            this.peeList.push(item)
-            break
-          case '11':
+          // case '13':
+          //   this.peeList.push(item)
+          //   break
+          case '13':
             this.urineList.push(item)
             break
-          case '16':
+          case '12':
             this.outputList.push(item)
             break
-          case '9':
-            this.coolList.push(item)
-            break
-          // case '093':
-          //   this.ttgyList.push(item)
+          // case '9':
+          //   this.coolList.push(item)
           //   break
-          case '14':
+          case '11':
+            this.entryList.push(item)
+            break
+          case '9':
             this.heightList.push(item)
             break
           default:
@@ -1132,7 +1130,7 @@ export default {
         // 画折线
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data]
-          if (['7', '2', '8'].includes(x.vitalCode)) {
+          if (['1', '2', '3'].includes(x.vitalCode)) {
             // 体温为不升时，折线需要断开
             data = [[]]
             x.data.forEach((y) => {
@@ -1143,7 +1141,7 @@ export default {
               }
             })
           }
-          if (['3', '6'].includes(x.vitalCode)) {
+          if (['4', '5'].includes(x.vitalCode)) {
             // 心率或脉搏过快时，折线需要断开
             data = [[]]
             x.data.forEach((y) => {
@@ -1517,7 +1515,7 @@ export default {
             break
           case 'Circle':
             // 如果脉搏或心率和体温坐标重叠，改成在体温标识外面画红色的圆圈
-            if (vitalCode === '3' || vitalCode === '6') {
+            if (vitalCode === '5' || vitalCode === '4') {
               const tList = [
                 ...this.settingMap.oralTemperature.data,
                 ...this.settingMap.axillaryTemperature.data,
@@ -1562,7 +1560,7 @@ export default {
           default:
             break
         }
-        if (['2', '8', '7'].includes(vitalCode)) {
+        if (['1', '2', '3'].includes(vitalCode)) {
           // 画降温
           for (let i = this.coolList.length - 1; i >= 0; i--) {
             const item = this.coolList[i]
@@ -1616,7 +1614,7 @@ export default {
             // 入院首次体温≥38℃
             const list = [
               {
-                vitalCode: '7',
+                vitalCode: '1',
                 ...this.settingMap.oralTemperature.data[0]
               },
               {
@@ -1624,7 +1622,7 @@ export default {
                 ...this.settingMap.axillaryTemperature.data[0]
               },
               {
-                vitalCode: '8',
+                vitalCode: '3',
                 ...this.settingMap.analTemperature.data[0]
               }
             ]
