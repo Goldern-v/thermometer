@@ -452,7 +452,7 @@ export default {
     const pulseRange = [0, 180]
     // const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -1010,20 +1010,22 @@ export default {
           if (
             ['02', '20'].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) > this.pulseRange[1]
-          ) {
-            this.topPulseNote.push({
-              time: vitalSigns[i].time_point,
-              value: '过快'
-            })
-          } else if (
-            ['041', '042', '043'].includes(vitalSigns[i].vital_code) &&
-            Number(vitalSigns[i].value) <= 35
-          ) {
-            this.bottomSheetNote.push({
-              time: vitalSigns[i].time_point,
-              value: '不升'
-            })
-          }
+          )
+            if (
+              ['041', '042', '043'].includes(vitalSigns[i].vital_code) &&
+              Number(vitalSigns[i].value) <= 35
+            ) {
+              // {
+              //   this.topPulseNote.push({
+              //     time: vitalSigns[i].time_point,
+              //     value: '过快'
+              //   })
+              // } else
+              this.bottomSheetNote.push({
+                time: vitalSigns[i].time_point,
+                value: '不升'
+              })
+            }
           this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
             time: vitalSigns[i].time_point,
             value: Number(vitalSigns[i].value)
@@ -1096,7 +1098,6 @@ export default {
             new Date(x.time).getHours()
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
-        const topText = ['过快']
         const bottomText = [
           '拒测',
           '不在',
@@ -1116,9 +1117,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: topText.includes(value)
-            ? y - this.ySpace - 1
-            : bottomText.includes(value)
+          y: bottomText.includes(value)
             ? y - 2 * this.ySpace - 2
             : centerText.includes(value)
             ? y - 18 * this.ySpace - 4

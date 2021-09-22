@@ -194,7 +194,7 @@
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatList({ tList: shitList })"
+              v-for="(item, index) in getFormatListShit({ tList: shitList })"
               :key="index"
             >
               {{ item.value }}
@@ -438,7 +438,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -747,7 +747,6 @@ export default {
           apart.splice(0, 1)
         }
         if (days[index] <= 7) {
-          console.log(days[index])
           return index === 0 || !apart.length
             ? days[index]
             : days[index] === 0
@@ -1922,6 +1921,31 @@ export default {
             break
           }
         }
+        list.push(item)
+      }
+      return list
+    },
+    // 大便次数有特殊的显示需求，计算底部数据的渲染列表
+    getFormatListShit({ tList, timeInterval = 24 * 60 * 60 * 1000 }) {
+      console.log(this.timeRange)
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
+      const list = []
+      const newList = []
+      const targetList = [...tList]
+      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+        const item = { timeNum: i, value: '' }
+        for (let j = targetList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(targetList[j].time)
+          if (timeNum >= i && timeNum < i + timeInterval) {
+            item.value = targetList[j].value
+            targetList.splice(j, 1)
+            break
+          }
+        }
+        if (item.value === '0') {
+          newList.push(item)
+        }
+        console.log(newList)
         list.push(item)
       }
       return list
