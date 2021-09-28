@@ -1,10 +1,16 @@
 'use strict'
 const path = require('path')
 const { project } = require('./src/argvs')
-
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
+// const today = new Date()
+// const packageName = `<你的项目名称>(${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()})`
+
+// output: {
+//     path: resolve(__dirname, packageName)
+// }
+
 module.exports = {
   publicPath: './',
   lintOnSave: false,

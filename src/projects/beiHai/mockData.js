@@ -148,9 +148,9 @@ export const mockData = {
     // },
     {
       temperature_type: '肛温',
-      value: '38',
+      value: '35',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 03:12:00',
+      time_point: '2019-05-15 03:12:00',
       vital_code: '043'
     },
     {

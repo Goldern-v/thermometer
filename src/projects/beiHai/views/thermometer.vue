@@ -452,7 +452,7 @@ export default {
     const pulseRange = [0, 180]
     // const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -467,7 +467,7 @@ export default {
       settingMap: {
         oralTemperature: {
           vitalCode: '041',
-          label: '口温',
+          label: '口表',
           color: 'blue',
           solid: true,
           dotType: 'Circle',
@@ -478,7 +478,7 @@ export default {
         },
         axillaryTemperature: {
           vitalCode: '042',
-          label: '腋温',
+          label: '腋表',
           color: 'blue',
           lineColor: 'blue',
           dotType: 'Text',
@@ -489,7 +489,7 @@ export default {
         },
         analTemperature: {
           vitalCode: '043',
-          label: '肛温',
+          label: '肛表',
           color: 'blue',
           dotType: 'Circle',
           range: yRange,
@@ -580,7 +580,7 @@ export default {
       typeMap: {
         '5': '表顶注释', // 入院|,手术,分娩|,出院|,转入|,死亡|,排胎|,出生|,手术分娩|,手术入院|,转出|
         '4': '表底注释', // 拒测,不在,外出不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
-        '042': '腋温',
+        '042': '腋表',
         '02': '脉搏',
         '20': '心率',
         '04': '呼吸',
@@ -589,8 +589,8 @@ export default {
         '091': '入量',
         '19': '出量',
         '033': '体重',
-        '043': '肛温',
-        '041': '口温',
+        '043': '肛表',
+        '041': '口表',
         '21': '发热体温',
         '22': '线上降温',
         '23': '呼吸机R',
@@ -1021,10 +1021,10 @@ export default {
               //     value: '过快'
               //   })
               // } else
-              this.bottomSheetNote.push({
-                time: vitalSigns[i].time_point,
-                value: '不升'
-              })
+              // this.bottomSheetNote.push({
+              //   time: vitalSigns[i].time_point,
+              //   value: '不升'
+              // })
             }
           this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
             time: vitalSigns[i].time_point,
@@ -1118,7 +1118,7 @@ export default {
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
           y: bottomText.includes(value)
-            ? y - 2 * this.ySpace - 2
+            ? y - 7 * this.ySpace - 8
             : centerText.includes(value)
             ? y - 18 * this.ySpace - 4
             : y - 2 * this.ySpace - 2,
@@ -1142,28 +1142,28 @@ export default {
         // 画折线
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data]
-          if (['041', '042', '043'].includes(x.vitalCode)) {
-            // 体温为不升时，折线需要断开
-            data = [[]]
-            x.data.forEach((y) => {
-              if (y.value <= 35) {
-                data.push([])
-              } else {
-                data[data.length - 1].push(y)
-              }
-            })
-          }
-          if (['02', '20'].includes(x.vitalCode)) {
-            // 心率或脉搏过快时，折线需要断开
-            data = [[]]
-            x.data.forEach((y) => {
-              if (y.value > this.pulseRange[1]) {
-                data.push([])
-              } else {
-                data[data.length - 1].push(y)
-              }
-            })
-          }
+          // if (['041', '042', '043'].includes(x.vitalCode)) {
+          //   // 体温为不升时，折线需要断开
+          //   data = [[]]
+          //   x.data.forEach((y) => {
+          //     if (y.value <= 35) {
+          //       data.push([])
+          //     } else {
+          //       data[data.length - 1].push(y)
+          //     }
+          //   })
+          // }
+          // if (['02', '20'].includes(x.vitalCode)) {
+          //   // 心率或脉搏过快时，折线需要断开
+          //   data = [[]]
+          //   x.data.forEach((y) => {
+          //     if (y.value > this.pulseRange[1]) {
+          //       data.push([])
+          //     } else {
+          //       data[data.length - 1].push(y)
+          //     }
+          //   })
+          // }
           data.forEach((z) => {
             this.createBrokenLine({
               vitalCode: x.vitalCode,
