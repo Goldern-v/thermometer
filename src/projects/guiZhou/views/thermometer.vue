@@ -349,20 +349,20 @@
             </div>
           </div>
         </div>
-        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            引流量(ml)
+            过敏药物
           </div>
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatList({ tList: yinliuList })"
+              v-for="(item, index) in getFormatList({ tList: allergyList })"
               :key="index"
             >
-              {{ item.value }}
+              {{ formatAllergy(item.value) }}
             </div>
           </div>
-        </div> -->
+        </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList0.label || '' }}
@@ -453,7 +453,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -556,6 +556,7 @@ export default {
       yinliuList: [], // 引流量
       urineList: [], // 尿量
       outputList: [], // 出量
+      allergyList: [], // 过敏药物
       customList0: [], // 自定义1
       customList1: [], // 自定义2
       customList2: [], // 自定义3
@@ -998,6 +999,20 @@ export default {
         }
       }
     },
+    formatAllergy(val) {
+      if (val !== '') {
+        let str = val.split('  ')
+        console.log(str)
+        for (let i = 0; i < str.length; i++)
+          // console.log(item)
+          if (str[1] === '阳性' || str[1] === '阴性') {
+            // console.log(item)
+            str[1] === '阴性' ? (str[1] = '(-)') : (str[1] = '(+)')
+          }
+
+        return `${str[0]}${str[1]}`
+      }
+    },
     reset() {
       Object.keys(this.settingMap).forEach((x) => {
         this.settingMap[x].data = []
@@ -1008,6 +1023,7 @@ export default {
       this.breatheList = []
       this.pressureList = []
       this.weightList = []
+      this.allergyList = []
       this.heightList = []
       this.inputList = []
       this.shitList = []
@@ -1165,6 +1181,9 @@ export default {
             break
           case 'bloodPressure':
             this.pressureList.push(item)
+            break
+          case 'guominyaowu':
+            this.allergyList.push(item)
             break
           case 'weight':
             this.weightList.push(item)
@@ -2165,6 +2184,7 @@ export default {
     }
   }
 }
+
 #main {
   flex-shrink: 0;
   position: relative;
@@ -2235,6 +2255,7 @@ export default {
     }
   }
 }
+
 .info-box {
   display: flex;
   .index-box {
@@ -2271,46 +2292,28 @@ export default {
           text-align: center;
         }
       }
-      .pain-area {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        border-bottom: 2px solid #000;
-        transform: translateY(-1px);
-        margin-right: -1px;
-        padding-right: 1px;
-        .pain-index {
-          flex: 1;
-          > span {
-            display: block;
-            margin-top: -6px;
-          }
+      .times {
+        .text {
+          flex-shrink: 0;
+          flex-grow: 0;
+        }
+        .index {
+          color: red;
         }
       }
-    }
-    .times {
-      .text {
-        flex-shrink: 0;
-        flex-grow: 0;
-      }
-      .index {
-        color: red;
-      }
-    }
-    .temp {
-      .text {
-        flex-shrink: 0;
-        flex-grow: 0;
-        .label {
+      .temp {
+        .text {
+          flex-shrink: 0;
+          flex-grow: 0;
+          .label {
+            margin-right: -1px;
+            padding-right: 1px;
+          }
+        }
+        .index {
           margin-right: -1px;
           padding-right: 1px;
         }
-      }
-      .index {
-        margin-right: -1px;
-        padding-right: 1px;
       }
     }
   }

@@ -185,6 +185,18 @@ export const mockData = {
       vital_code: 'breathe'
     },
     {
+      temperature_type: '过敏药物',
+      value: '啊路霉素  阴性',
+      time_point: '2019-05-17 13:12:00',
+      vital_code: 'guominyaowu'
+    },
+    {
+      temperature_type: '过敏药物',
+      value: '思路霉素  阳性',
+      time_point: '2019-05-18 13:12:00',
+      vital_code: 'guominyaowu'
+    },
+    {
       temperature_type: '呼吸',
       value: '20',
       time_point: '2019-05-20 13:12:00',
