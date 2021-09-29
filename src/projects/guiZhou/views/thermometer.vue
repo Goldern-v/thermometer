@@ -1001,7 +1001,7 @@ export default {
     },
     formatAllergy(val) {
       if (val !== '') {
-        let str = val.split('  ')
+        let str = val.split(' ')
         console.log(str)
         for (let i = 0; i < str.length; i++)
           // console.log(item)
