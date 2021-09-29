@@ -9,6 +9,8 @@
     "build:liaoCheng": "vue-cli-service build --project=liaoCheng",
     "dev:guiZhou": "vue-cli-service serve --project=guiZhou",
     "build:guiZhou": "vue-cli-service build --project=guiZhou",
+    "dev:guiZhouNewBorn": "vue-cli-service serve --project=guiZhouNewBorn",
+    "build:guiZhouNewBorn": "vue-cli-service build --project=guiZhouNewBorn",
     "dev:jiangMenFuYou": "vue-cli-service serve --project=jiangMenFuYou",
     "build:jiangMenFuYou": "vue-cli-service build --project=jiangMenFuYou",
     "dev:hengLi": "vue-cli-service serve --project=hengLi",

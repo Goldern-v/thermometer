@@ -363,7 +363,7 @@ export const mockData = {
     },
     {
       temperature_type: '口温',
-      value: '36',
+      value: '4000',
       time_point: '2019-05-20 10:12:00',
       vital_code: '2'
     },
