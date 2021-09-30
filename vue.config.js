@@ -37,7 +37,7 @@ module.exports = {
           return './src/projects/quZhou/main.js'
         case 'wuJing': // 武警
           return './src/projects/wuJing/main.js'
-        case 'guiZhouNewBorn': // 武警
+        case 'guiZhouNewBorn': // 贵州省人医新生儿体温单
           return './src/projects/guiZhouNewBorn/main.js'
         case 'zhongXi': // 武警
           return './src/projects/zhongXi/main.js'

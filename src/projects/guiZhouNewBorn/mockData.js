@@ -17,91 +17,43 @@ export const mockData = {
   },
   vitalSigns: [
     {
-      temperature_type: '表顶注释',
+      temperature_type: '病人事件',
       value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-15 13:00:00',
-      vital_code: '3'
+      vital_code: 'nurseEvents'
     },
     {
-      temperature_type: '表顶注释',
+      temperature_type: '病人事件',
       value: '手术分娩|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-15 10:12:00',
-      vital_code: '3'
+      vital_code: 'nurseEvents'
     },
     {
-      temperature_type: '表顶注释',
-      value: '分娩|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 18:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
-      value: '分娩|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 11:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
+      temperature_type: '病人事件',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-20 15:12:00',
-      vital_code: '3'
+      vital_code: 'nurseEvents'
     },
     {
-      temperature_type: '表顶注释',
+      temperature_type: '病人事件',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-07-02 15:12:00',
-      vital_code: '3'
+      vital_code: 'nurseEvents'
     },
+
     {
-      temperature_type: '表顶注释',
-      value: '手术入院|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 18:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
-      value: '手术入院|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-17 19:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
-      value: '手术入院|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-17 05:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
-      value: '分娩',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-17 05:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
-      value: '手术分娩',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-17 10:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
+      temperature_type: '病人事件',
       value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-23 18:12:00',
-      vital_code: '3'
+      vital_code: 'nurseEvents'
     },
     // {
-    //   "temperature_type": "表顶注释",
+    //   "temperature_type": "病人事件",
     //   "value": "入院|",
     //   // "time_point": "2020-12-15 03:12:00",
     //   "time_point": "2019-05-18 03:12:00",
@@ -267,21 +219,21 @@ export const mockData = {
     },
     {
       temperature_type: '体重',
-      value: '70',
+      value: '1600',
       time_point: '2019-05-18 13:12:00',
-      vital_code: '18'
+      vital_code: 'weight'
     },
     {
       temperature_type: '体温',
       value: '35.2',
       time_point: '2019-05-18 01:12:00',
-      vital_code: '1'
+      vital_code: 'yeTemperature'
     },
     {
       temperature_type: '体温',
       value: '38',
       time_point: '2019-05-17 01:12:00',
-      vital_code: '1'
+      vital_code: 'yeTemperature'
     },
     // {
     //   "temperature_type": "呼吸机R",
@@ -341,7 +293,7 @@ export const mockData = {
       temperature_type: '体温',
       value: '37',
       time_point: '2019-05-17 13:12:00',
-      vital_code: '1'
+      vital_code: 'yeTemperature'
     },
     {
       temperature_type: '物理降温',
@@ -429,7 +381,7 @@ export const mockData = {
     // },
 
     // {
-    //   "temperature_type": "表顶注释",
+    //   "temperature_type": "病人事件",
     //   "value": "手术",
     //   "time_point": "2020-12-15 07:12:00",
     //   "vital_code": "3"
