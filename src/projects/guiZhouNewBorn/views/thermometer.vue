@@ -43,7 +43,7 @@
     <div class="table-area">
       <div class="vline" :style="{ left: '-0.5px' }"></div>
       <div class="vline" :style="{ left: `${leftWidth}px` }"></div>
-      <div class="vline" :style="{ right: '1px' }"></div>
+      <div class="vline" :style="{ right: '0px' }"></div>
       <div class="table-box" style="transform: translateY(0.5px);">
         <div
           class="vtline"
@@ -1031,7 +1031,7 @@ export default {
               ].map((x) => {
                 return {
                   x: this.getXaxis(this.getLocationTime(x.time)),
-                  y: Math.round(this.getYaxis(this.yRange, x.value))
+                  y: this.getYaxis(this.yRange, x.value)
                 }
               })
               const sameAxisItem = tList.find(
@@ -1368,7 +1368,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 10mm 5mm 10mm 18mm; // 页面的边距
+    margin: 10mm 5mm 10mm 10mm; // 页面的边距
   }
 }
 .main-view {

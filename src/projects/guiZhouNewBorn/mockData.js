@@ -220,7 +220,13 @@ export const mockData = {
     {
       temperature_type: '体重',
       value: '1600',
-      time_point: '2019-05-18 13:12:00',
+      time_point: '2019-05-18 01:12:00',
+      vital_code: 'weight'
+    },
+    {
+      temperature_type: '体重',
+      value: '1800',
+      time_point: '2019-05-20 13:12:00',
       vital_code: 'weight'
     },
     {
