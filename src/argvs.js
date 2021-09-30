@@ -1,4 +1,4 @@
-let project = 'huaDu' // 默认是跑花都的体温单项目
+let project = 'guiZhou' // 默认是跑花都的体温单项目
 /**
  * 处理参数
  */

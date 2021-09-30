@@ -1000,17 +1000,29 @@ export default {
       }
     },
     formatAllergy(val) {
+      // if (val !== '') {
+      //   let str = val.split(' ')
+      //   console.log(str)
+      //   for (let i = 0; i < str.length; i++)
+      //     // console.log(item)
+      //     if (str[1] === '阳性' || str[1] === '阴性') {
+      //       // console.log(item)
+      //       str[1] === '阴性' ? (str[1] = '(-)') : (str[1] = '(+)')
+      //     }
+
+      //   return `${str[0]}${str[1]}`
+      // }
       if (val !== '') {
+        //氯霉素 阴性 阴性
         let str = val.split(' ')
         console.log(str)
-        for (let i = 0; i < str.length; i++)
-          // console.log(item)
-          if (str[1] === '阳性' || str[1] === '阴性') {
-            // console.log(item)
-            str[1] === '阴性' ? (str[1] = '(-)') : (str[1] = '(+)')
-          }
-
-        return `${str[0]}${str[1]}`
+        let newStr=[...new Set(str)]
+        const findeStr=newStr.findIndex(item=>['阳性','阴性'].includes(item));
+        if(findeStr && findeStr==0){
+           return `${newStr[1]}(${newStr[0]})`
+        }else if(findeStr && findeStr==1){
+          return `${newStr[0]}(${newStr[1]})`
+        }
       }
     },
     reset() {
@@ -1182,7 +1194,7 @@ export default {
           case 'bloodPressure':
             this.pressureList.push(item)
             break
-          case 'guominyaowu':
+          case 'guomingyaowu':
             this.allergyList.push(item)
             break
           case 'weight':
@@ -1215,6 +1227,8 @@ export default {
           default:
             break
         }
+        console.log(this.topSheetNote)
+         console.log("this.topSheetNote")
       }
       this.init()
     },
@@ -2027,6 +2041,7 @@ export default {
       return obj
     },
     // 计算底部数据的渲染列表
+
     getFormatList({ tList, timeInterval = 24 * 60 * 60 * 1000 }) {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
       const list = []
@@ -2125,6 +2140,8 @@ export default {
           StartTime: urlParams.StartTime
         }
       }).then((res) => {
+        console.log(res.data)
+        console.log("res.data 华")
         this.apiData = res.data
         this.$nextTick(() => {
           this.handleData()
