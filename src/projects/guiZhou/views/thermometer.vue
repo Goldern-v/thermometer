@@ -878,48 +878,72 @@ export default {
     polygonPoints() {
       /*
         形成心率和脉搏多边形锚点二维数组，多个数组则画多个多边形，
-        注意同一对录入的心率值肯定大于脉搏值的，而且脉搏和心率一一对应
+        注意同一对录入的心率值肯定大于脉搏值的，而且脉搏和心率可能不一一对应
+        构造xyMap，结构为以x轴坐标作为key，{heart: {value, y}，pulse: {value, y}}作为value
+        心率heart/脉搏pulse有一个为空时记为一个多边形断点， 同时心率过快也作为一个断点
       */
       const settingMap = this.settingMap
-      if (settingMap.heart.data.length > 0) {
+      const xyMap = new Map()
+      settingMap.heart.data.forEach((x) => {
+        const xAxis = this.getXaxis(this.getLocationTime(x.time))
+        if (xyMap.has(xAxis)) {
+          xyMap.set(xAxis, {
+            ...xyMap.get(xAxis),
+            heart: {
+              value: x.value,
+              y: this.getYaxis(settingMap.heart.range, x.value)
+            }
+          })
+        } else {
+          xyMap.set(xAxis, {
+            heart: {
+              value: x.value,
+              y: this.getYaxis(settingMap.heart.range, x.value)
+            },
+            pulse: null
+          })
+        }
+      })
+      settingMap.pulse.data.forEach((x) => {
+        const xAxis = this.getXaxis(this.getLocationTime(x.time))
+        if (xyMap.has(xAxis)) {
+          xyMap.set(xAxis, {
+            ...xyMap.get(xAxis),
+            pulse: {
+              value: x.value,
+              y: this.getYaxis(settingMap.pulse.range, x.value)
+            }
+          })
+        } else {
+          xyMap.set(xAxis, {
+            pulse: {
+              value: x.value,
+              y: this.getYaxis(settingMap.pulse.range, x.value)
+            },
+            heart: null
+          })
+        }
+      })
+      const allList = [...xyMap.entries()].sort((a, b) => a[0] - b[0])
+      if (allList.length) {
         let data = [[]]
-        settingMap.heart.data.forEach((x, i) => {
-          // 注释的是断线逻辑
-          // if (x.value > this.pulseRange[1]) {
-          //   data.push([])
-          // } else {
-          //   data[data.length - 1].push({ value: x, index: i })
-          // }
-          // 贵州医院不需要断线
-          data[data.length - 1].push({ value: x, index: i })
+        allList.forEach((x) => {
+          if (
+            !x[1].heart ||
+            !x[1].pulse
+            //贵州不存在过快的逻辑观点，所以去除这个判断
+            // (x[1].heart && x[1].heart.value > this.pulseRange[1])
+          ) {
+            // 断点
+            data.push([])
+          } else {
+            data[data.length - 1].push(x[0])
+          }
         })
         data = data.map((x) => {
           return [
-            ...x.map((y) => {
-              return [
-                this.getXaxis(this.getLocationTime(y.value.time)),
-                this.getYaxis(
-                  settingMap.heart.range,
-                  y.value.value > this.pulseRange[1]
-                    ? this.pulseRange[1] - 2
-                    : y.value.value
-                )
-              ]
-            }),
-            ...settingMap.pulse.data
-              .slice(x[0].index, x[x.length - 1].index + 1)
-              .map((z) => {
-                return [
-                  this.getXaxis(this.getLocationTime(z.time)),
-                  this.getYaxis(
-                    settingMap.pulse.range,
-                    z.value > this.pulseRange[1]
-                      ? this.pulseRange[1] - 2
-                      : z.value
-                  )
-                ]
-              })
-              .reverse()
+            ...x.map((y) => [y, xyMap.get(y).heart.y]),
+            ...x.map((y) => [y, xyMap.get(y).pulse.y]).reverse()
           ]
         })
         return data
@@ -1015,12 +1039,13 @@ export default {
       if (val !== '') {
         //氯霉素 阴性 阴性
         let str = val.split(' ')
-        console.log(str)
-        let newStr=[...new Set(str)]
-        const findeStr=newStr.findIndex(item=>['阳性','阴性'].includes(item));
-        if(findeStr && findeStr==0){
-           return `${newStr[1]}(${newStr[0]})`
-        }else if(findeStr && findeStr==1){
+        let newStr = [...new Set(str)]
+        const findeStr = newStr.findIndex((item) =>
+          ['阳性', '阴性'].includes(item)
+        )
+        if (findeStr && findeStr == 0) {
+          return `${newStr[1]}(${newStr[0]})`
+        } else if (findeStr && findeStr == 1) {
           return `${newStr[0]}(${newStr[1]})`
         }
       }
@@ -1227,8 +1252,6 @@ export default {
           default:
             break
         }
-        console.log(this.topSheetNote)
-         console.log("this.topSheetNote")
       }
       this.init()
     },
@@ -2140,8 +2163,6 @@ export default {
           StartTime: urlParams.StartTime
         }
       }).then((res) => {
-        console.log(res.data)
-        console.log("res.data 华")
         this.apiData = res.data
         this.$nextTick(() => {
           this.handleData()
