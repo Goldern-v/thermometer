@@ -72,6 +72,7 @@ module.exports = {
               return 'http://172.17.5.41:9091'
             case 'guiZhou':
               return 'http://10.207.40.22:9091'
+              //return 'http://192.168.8.158:8588'//贵州测试
             case 'xieGang':
               return 'http://172.17.5.41:9091'
             case 'beiHai':

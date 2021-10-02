@@ -2154,6 +2154,7 @@ export default {
         (item.expand2 && item.expand2!='') && (newItem.time_point=item.expand2) && (newItem.expand2=item.time_point);
         return newItem
       })
+      console.log(this.apiData.vitalSigns,"病人事件")
     }
   },
   mounted() {
