@@ -2151,9 +2151,17 @@ export default {
       }
       this.apiData.vitalSigns=resData.vitalSigns.map(item=>{
         let newItem={...item};
-        (item.expand2 && item.expand2!='') && (newItem.time_point=item.expand2) && (newItem.expand2=item.time_point);
+        //特殊处理病人事件
+        (item.vital_code=="nurseEvents" && item.expand2 && item.expand2!='') && (newItem.time_point=item.expand2) && (newItem.expand2=item.time_point);
         return newItem
-      })
+      });
+      // let newaa=[...this.apiData.vitalSigns];
+      // this.apiData.vitalSigns=newaa.filter(item=>{
+      //   console.log(item)
+      //   console.log(item.time_point.substring(0,10))
+      //   return  item.time_point.substring(0,10)!='2021-10-01'
+      // }).slice(0,2)
+      // params.startTime =
       console.log(this.apiData.vitalSigns,"病人事件")
     }
   },
