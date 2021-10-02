@@ -2142,6 +2142,18 @@ export default {
         }
       }
       return xaxisNew
+    },
+    //特殊处理病人事件时间expand2 换成 time_point
+    sortExpand2NurseEvents(resData){
+      //this.apiData=resData;
+      if (!resData.vitalSigns && resData.vitalSigns.length==0) {
+        return false;
+      }
+      this.apiData.vitalSigns=resData.vitalSigns.map(item=>{
+        let newItem={...item};
+        (item.expand2 && item.expand2!='') && (newItem.time_point=item.expand2) && (newItem.expand2=item.time_point);
+        return newItem
+      })
     }
   },
   mounted() {
@@ -2164,6 +2176,8 @@ export default {
         }
       }).then((res) => {
         this.apiData = res.data
+        ////特殊处理病人事件时间expand2 换成 time_point
+        this.sortExpand2NurseEvents(res.data);
         this.$nextTick(() => {
           this.handleData()
         })
