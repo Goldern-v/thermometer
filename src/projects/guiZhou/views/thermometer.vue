@@ -2186,7 +2186,7 @@ export default {
       }).then((res) => {
         this.apiData = res.data
         ////特殊处理病人事件时间expand2 换成 time_point
-        this.sortExpand2NurseEvents(res.data);
+        //this.sortExpand2NurseEvents(res.data);
         this.$nextTick(() => {
           this.handleData()
         })
