@@ -292,7 +292,7 @@
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatList({ tList: shitList })"
+              v-for="(item, index) in getFormatShitList({ tList: shitList })"
               :key="index"
             >
               {{ item.value }}
@@ -552,7 +552,7 @@ export default {
       weightList: [], // 体重
       heightList: [], // 身高
       inputList: [], // 液体入量
-      shitList: [], // 大便次数
+      shitList: [], // 大便次数 大便失禁者用“※”表示，人工肛门用“☆”表示，灌肠“E”表示。
       yinliuList: [], // 引流量
       urineList: [], // 尿量
       outputList: [], // 出量
@@ -2072,6 +2072,33 @@ export default {
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time)
           if (timeNum >= i && timeNum < i + timeInterval) {
+            item.value = targetList[j].value
+            targetList.splice(j, 1)
+            break
+          }
+        }
+        list.push(item)
+      }
+      return list
+    },
+    //大便次数做特殊的处理
+    getFormatShitList({ tList, timeInterval = 24 * 60 * 60 * 1000 }) {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
+      const list = []
+      const targetList = [...tList]
+      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+        const item = { timeNum: i, value: '' }
+        for (let j = targetList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(targetList[j].time)
+          if (timeNum >= i && timeNum < i + timeInterval) {
+            targetList[j].value
+            targetList[j].value = `${targetList[j].value.replace('失禁', '※')}`
+            targetList[j].value = `${targetList[j].value.replace('灌肠', 'E')}`
+            targetList[j].value = `${targetList[j].value.replace(
+              '人工肛门',
+              '☆'
+            )}`
+            console.log(targetList[j].value)
             item.value = targetList[j].value
             targetList.splice(j, 1)
             break

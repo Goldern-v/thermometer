@@ -95,8 +95,26 @@ export const mockData = {
     // },
     {
       temperature_type: '大便次数',
-      value: '1',
+      value: '1/灌肠',
       time_point: '2019-05-20 03:12:00',
+      vital_code: 'excrement'
+    },
+    {
+      temperature_type: '大便次数',
+      value: '2/人工肛门',
+      time_point: '2019-05-17 03:12:00',
+      vital_code: 'excrement'
+    },
+    {
+      temperature_type: '大便次数',
+      value: '灌肠/人工肛门',
+      time_point: '2019-05-18 03:12:00',
+      vital_code: 'excrement'
+    },
+    {
+      temperature_type: '大便次数',
+      value: '0/失禁',
+      time_point: '2019-05-16 03:12:00',
       vital_code: 'excrement'
     },
     // {
