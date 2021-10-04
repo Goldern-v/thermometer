@@ -453,7 +453,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -735,9 +735,9 @@ export default {
         .filter(
           (x) =>
             x.vital_code === 'nurseEvents' &&
-            (x.value === '手术' ||
-              x.value === '手术分娩|' ||
-              x.value === '手术入院|')
+            (x.value.includes('手术') ||
+              x.value.includes('手术分娩|') ||
+              x.value.includes('手术入院|'))
         )
         .map((x) => x.time_point)
     },
@@ -1263,10 +1263,8 @@ export default {
       const xaxisNew = this.handleNoteXaxis(xaxis)
       notes.forEach((x, i) => {
         let value = x.value
-        if (x.value.endsWith('|')) {
-          value = `${x.value.replace('|', '于')}${new Date(
-            x.time
-          ).getHours()}时${new Date(x.time).getMinutes()}分`
+        if (x.value.includes('|')) {
+          value = `${x.value.replace('|', '于')}`
         }
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
@@ -2144,17 +2142,21 @@ export default {
       return xaxisNew
     },
     //特殊处理病人事件时间expand2 换成 time_point
-    sortExpand2NurseEvents(resData){
+    sortExpand2NurseEvents(resData) {
       //this.apiData=resData;
-      if (!resData.vitalSigns && resData.vitalSigns.length==0) {
-        return false;
+      if (!resData.vitalSigns && resData.vitalSigns.length == 0) {
+        return false
       }
-      this.apiData.vitalSigns=resData.vitalSigns.map(item=>{
-        let newItem={...item};
+      this.apiData.vitalSigns = resData.vitalSigns.map((item) => {
+        let newItem = { ...item }
         //特殊处理病人事件
-        (item.vital_code=="nurseEvents" && item.expand2 && item.expand2!='') && (newItem.time_point=item.expand2) && (newItem.expand2=item.time_point);
+        item.vital_code == 'nurseEvents' &&
+          item.expand2 &&
+          item.expand2 != '' &&
+          (newItem.time_point = item.expand2) &&
+          (newItem.expand2 = item.time_point)
         return newItem
-      });
+      })
       // let newaa=[...this.apiData.vitalSigns];
       // this.apiData.vitalSigns=newaa.filter(item=>{
       //   console.log(item)
@@ -2162,7 +2164,7 @@ export default {
       //   return  item.time_point.substring(0,10)!='2021-10-01'
       // }).slice(0,2)
       // params.startTime =
-      console.log(this.apiData.vitalSigns,"病人事件")
+      console.log(this.apiData.vitalSigns, '病人事件')
     }
   },
   mounted() {

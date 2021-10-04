@@ -18,28 +18,29 @@ export const mockData = {
   vitalSigns: [
     {
       temperature_type: '病人事件',
-      value: '手术入院|',
+      value: '入院|十八时零分',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 13:10:00',
+      time_point: '2019-05-15 13:10:00',
       vital_code: 'nurseEvents'
     },
     {
       temperature_type: '病人事件',
-      value: '手术',
+      value: '手术入院',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 16:12:00',
       vital_code: 'nurseEvents'
     },
     {
       temperature_type: '病人事件',
-      value: '分娩',
+      value: '死亡|十八时零分',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-16 16:12:00',
+      time_point: '2019-05-18 16:12:00',
       vital_code: 'nurseEvents'
     },
+
     {
       temperature_type: '病人事件',
-      value: '手术',
+      value: '手术入院',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-23 16:12:00',
       vital_code: 'nurseEvents'
@@ -55,29 +56,8 @@ export const mockData = {
       temperature_type: '病人事件',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 16:12:00',
+      time_point: '2019-05-20 20:12:00',
       vital_code: 'nurseEvents'
-    },
-    // {
-    //   "temperature_type": "病人事件",
-    //   "value": "入院|",
-    //   // "time_point": "2020-12-15 03:12:00",
-    //   "time_point": "2019-05-18 03:12:00",
-    //   "vital_code": '4'
-    // },
-    {
-      temperature_type: '表底注释',
-      value: '请假',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 03:12:00',
-      vital_code: '4'
-    },
-    {
-      temperature_type: '表底注释',
-      value: '请假',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 03:12:00',
-      vital_code: '4'
     },
     {
       temperature_type: '表底注释',
@@ -186,13 +166,13 @@ export const mockData = {
     },
     {
       temperature_type: '过敏药物',
-      value: '啊路霉素  阴性',
+      value: '啊路霉素 阴性',
       time_point: '2019-05-17 13:12:00',
       vital_code: 'guominyaowu'
     },
     {
       temperature_type: '过敏药物',
-      value: '思路霉素  阳性',
+      value: '思路霉素 阳性',
       time_point: '2019-05-18 13:12:00',
       vital_code: 'guominyaowu'
     },
@@ -310,12 +290,12 @@ export const mockData = {
       time_point: '2019-05-17 13:12:00',
       vital_code: 'heartRate'
     },
-    {
-      temperature_type: '脉搏',
-      value: '89',
-      time_point: '2019-05-17 13:12:00',
-      vital_code: 'pulse'
-    },
+    // {
+    //   temperature_type: '脉搏',
+    //   value: '89',
+    //   time_point: '2019-05-17 13:12:00',
+    //   vital_code: 'pulse'
+    // },
     {
       temperature_type: '腋温',
       value: '37',
@@ -331,6 +311,24 @@ export const mockData = {
     {
       temperature_type: '心率',
       value: '100',
+      time_point: '2019-05-20 10:12:00',
+      vital_code: 'heartRate'
+    },
+    {
+      temperature_type: '心率',
+      value: '120',
+      time_point: '2019-05-21 10:12:00',
+      vital_code: 'heartRate'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '100',
+      time_point: '2019-05-21 10:12:00',
+      vital_code: 'pulse'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '110',
       time_point: '2019-05-20 10:12:00',
       vital_code: 'heartRate'
     },
