@@ -453,7 +453,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -1044,9 +1044,13 @@ export default {
           ['阳性', '阴性'].includes(item)
         )
         if (findeStr && findeStr == 0) {
-          return `${newStr[1]}(${newStr[0]})`
+          let statusStr=newStr[0]='阳性'?'+':'-'
+          // return `${newStr[1]}(${newStr[0]})`
+           return `${newStr[1]}(${statusStr})`
         } else if (findeStr && findeStr == 1) {
-          return `${newStr[0]}(${newStr[1]})`
+          let statusStr=newStr[1]='阳性'?'+':'-'
+          // return `${newStr[0]}(${newStr[1]})`
+          return `${newStr[0]}(${statusStr})`
         }
       }
     },
@@ -2192,6 +2196,36 @@ export default {
       // }).slice(0,2)
       // params.startTime =
       console.log(this.apiData.vitalSigns, '病人事件')
+    },
+    //同一时间，同一类型返回一条数据
+    setMedicineGroup(data,vital_code,symbol=" | ") {
+        let result = {}
+        data.forEach(item => {
+            if (item.vital_code == vital_code) {
+                let key = item.time_point.substring(0, 10)
+                result[key] = result[key] || []
+                result[key].push(item)
+            }
+        })
+        let arr = []
+        for (let key in result) {
+            let ele = result[key][0]
+            result[key].forEach((e, i) => {
+                if (i) {
+                    ele.value += `${symbol}${e.value}`
+                }
+            })
+            arr.push(ele)
+        }
+        return arr
+    },
+    //vital_code属性类型，symbol拼接符
+    formatType(vital_code,symbol=" | "){
+      let vitalSigns=this.apiData.vitalSigns;
+      if(!vitalSigns) return false
+      let filterList=vitalSigns.filter(item=>item.vital_code!=vital_code);
+      let typeList=this.setMedicineGroup(vitalSigns,vital_code,symbol)
+      this.apiData.vitalSigns=[...filterList,...typeList]
     }
   },
   mounted() {
@@ -2216,6 +2250,8 @@ export default {
         this.apiData = res.data
         ////特殊处理病人事件时间expand2 换成 time_point
         //this.sortExpand2NurseEvents(res.data);
+        //特殊处理过敏药物
+        //this.formatType("guomingyaowu");
         this.$nextTick(() => {
           this.handleData()
         })
