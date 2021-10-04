@@ -1044,11 +1044,11 @@ export default {
           ['阳性', '阴性'].includes(item)
         )
         if (findeStr && findeStr == 0) {
-          let statusStr=newStr[0]='阳性'?'+':'-'
+          let statusStr=newStr[0]=='阳性'?'+':'-'
           // return `${newStr[1]}(${newStr[0]})`
            return `${newStr[1]}(${statusStr})`
         } else if (findeStr && findeStr == 1) {
-          let statusStr=newStr[1]='阳性'?'+':'-'
+          let statusStr=newStr[1]=='阳性'?'+':'-'
           // return `${newStr[0]}(${newStr[1]})`
           return `${newStr[0]}(${statusStr})`
         }
