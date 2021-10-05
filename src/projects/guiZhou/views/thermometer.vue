@@ -1036,22 +1036,29 @@ export default {
 
       //   return `${str[0]}${str[1]}`
       // }
-      if (val !== '') {
-        //氯霉素 阴性 阴性
-        let str = val.split(' ')
-        let newStr = [...new Set(str)]
-        const findeStr = newStr.findIndex((item) =>
-          ['阳性', '阴性'].includes(item)
-        )
-        if (findeStr && findeStr == 0) {
-          let statusStr=newStr[0]=='阳性'?'+':'-'
-          // return `${newStr[1]}(${newStr[0]})`
+      if (val && val !== ' ') {
+        try{
+          //氯霉素 阴性 阴性
+          let str = val.split(' ')
+          let newStr = [...new Set(str)]
+          const findeStr = newStr.findIndex((item) =>
+           ['阳性', '阴性'].includes(item)
+          )
+          if (findeStr && findeStr == 0) {
+            let statusStr=newStr[0]=='阳性'?'+':'-'
+            // return `${newStr[1]}(${newStr[0]})`
            return `${newStr[1]}(${statusStr})`
-        } else if (findeStr && findeStr == 1) {
-          let statusStr=newStr[1]=='阳性'?'+':'-'
-          // return `${newStr[0]}(${newStr[1]})`
-          return `${newStr[0]}(${statusStr})`
+          } else if (findeStr && findeStr == 1) {
+            let statusStr=newStr[1]=='阳性'?'+':'-'
+            // return `${newStr[0]}(${newStr[1]})`
+            return `${newStr[0]}(${statusStr})`
+          }else {
+            return val;
+          }
+        }catch(error){
+          return val
         }
+        
       }
     },
     reset() {
