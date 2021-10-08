@@ -426,7 +426,7 @@
     </div>
     <div class="pagination" v-if="showInnerPage">
       <!-- <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i> -->
-      <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">
+      <button :dißsabled="currentPage === 1" @click="toPre" class="pre-btn">
         上一页
       </button>
       <span>第{{ currentPage }}页/共{{ pageTotal }}页</span>
@@ -453,7 +453,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -1003,6 +1003,7 @@ export default {
         switch (e.data.type) {
           case 'currentPage':
             if (e.data.value > 0) {
+              console.log('e.data', e.data, this.currentPage)
               this.currentPage = e.data.value
               document.getElementById('main').innerHTML = ''
               this.reset()
@@ -1024,41 +1025,28 @@ export default {
       }
     },
     formatAllergy(val) {
-      // if (val !== '') {
-      //   let str = val.split(' ')
-      //   console.log(str)
-      //   for (let i = 0; i < str.length; i++)
-      //     // console.log(item)
-      //     if (str[1] === '阳性' || str[1] === '阴性') {
-      //       // console.log(item)
-      //       str[1] === '阴性' ? (str[1] = '(-)') : (str[1] = '(+)')
-      //     }
-
-      //   return `${str[0]}${str[1]}`
-      // }
       if (val && val !== ' ') {
-        try{
+        try {
           //氯霉素 阴性 阴性
           let str = val.split(' ')
           let newStr = [...new Set(str)]
           const findeStr = newStr.findIndex((item) =>
-           ['阳性', '阴性'].includes(item)
+            ['阳性', '阴性'].includes(item)
           )
           if (findeStr && findeStr == 0) {
-            let statusStr=newStr[0]=='阳性'?'+':'-'
+            let statusStr = newStr[0] == '阳性' ? '+' : '-'
             // return `${newStr[1]}(${newStr[0]})`
-           return `${newStr[1]}(${statusStr})`
+            return `${newStr[1]}(${statusStr})`
           } else if (findeStr && findeStr == 1) {
-            let statusStr=newStr[1]=='阳性'?'+':'-'
+            let statusStr = newStr[1] == '阳性' ? '+' : '-'
             // return `${newStr[0]}(${newStr[1]})`
             return `${newStr[0]}(${statusStr})`
-          }else {
-            return val;
+          } else {
+            return val
           }
-        }catch(error){
+        } catch (error) {
           return val
         }
-        
       }
     },
     reset() {
@@ -1900,6 +1888,7 @@ export default {
         ) {
           if (
             this.temperatureNoteList.some((x) => {
+              console.log(x)
               return (
                 this.getTimeStamp(x.time) >= this.getTimeStamp(dots[i].time) &&
                 this.getTimeStamp(x.time) <= this.getTimeStamp(dots[i + 1].time)
@@ -2109,7 +2098,6 @@ export default {
               '人工肛门',
               '☆'
             )}`
-            console.log(targetList[j].value)
             item.value = targetList[j].value
             targetList.splice(j, 1)
             break
@@ -2202,37 +2190,38 @@ export default {
       //   return  item.time_point.substring(0,10)!='2021-10-01'
       // }).slice(0,2)
       // params.startTime =
-      console.log(this.apiData.vitalSigns, '病人事件')
     },
     //同一时间，同一类型返回一条数据
-    setMedicineGroup(data,vital_code,symbol=" | ") {
-        let result = {}
-        data.forEach(item => {
-            if (item.vital_code == vital_code) {
-                let key = item.time_point.substring(0, 10)
-                result[key] = result[key] || []
-                result[key].push(item)
-            }
-        })
-        let arr = []
-        for (let key in result) {
-            let ele = result[key][0]
-            result[key].forEach((e, i) => {
-                if (i) {
-                    ele.value += `${symbol}${e.value}`
-                }
-            })
-            arr.push(ele)
+    setMedicineGroup(data, vital_code, symbol = ' | ') {
+      let result = {}
+      data.forEach((item) => {
+        if (item.vital_code == vital_code) {
+          let key = item.time_point.substring(0, 10)
+          result[key] = result[key] || []
+          result[key].push(item)
         }
-        return arr
+      })
+      let arr = []
+      for (let key in result) {
+        let ele = result[key][0]
+        result[key].forEach((e, i) => {
+          if (i) {
+            ele.value += `${symbol}${e.value}`
+          }
+        })
+        arr.push(ele)
+      }
+      return arr
     },
     //vital_code属性类型，symbol拼接符
-    formatType(vital_code,symbol=" | "){
-      let vitalSigns=this.apiData.vitalSigns;
-      if(!vitalSigns) return false
-      let filterList=vitalSigns.filter(item=>item.vital_code!=vital_code);
-      let typeList=this.setMedicineGroup(vitalSigns,vital_code,symbol)
-      this.apiData.vitalSigns=[...filterList,...typeList]
+    formatType(vital_code, symbol = ' | ') {
+      let vitalSigns = this.apiData.vitalSigns
+      if (!vitalSigns) return false
+      let filterList = vitalSigns.filter(
+        (item) => item.vital_code != vital_code
+      )
+      let typeList = this.setMedicineGroup(vitalSigns, vital_code, symbol)
+      this.apiData.vitalSigns = [...filterList, ...typeList]
     }
   },
   mounted() {
@@ -2272,7 +2261,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 10mm 10mm 10mm 10mm; // 页面的边距
+    margin: 8mm 8mm 8mm 8mm; // 页面的边距
   }
 }
 .main-view {

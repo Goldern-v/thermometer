@@ -256,7 +256,10 @@
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatList({ tList: shitList })"
+              v-for="(item, index) in getFormatShitList({
+                tList: shitList,
+                childList: childShitList
+              })"
               :key="index"
               v-html="item.value"
             ></div>
@@ -478,6 +481,7 @@ export default {
       weightList: [], // 体重
       inputList: [], // 液体入量
       shitList: [], // 大便次数
+      childShitList: [], // 大便次数
       urineList: [], // 尿量
       outputList: [], // 出量
       physicsCoolList: [], // 物理降温
@@ -726,7 +730,7 @@ export default {
             ? days[index]
             : `${this.numToRome(index + 1)}-${days[index]}`
         } else {
-          return `${this.numToRome(index + 1)}`
+          return ''
         }
       })
     },
@@ -986,6 +990,9 @@ export default {
           case '24':
             this.shitList.push(item)
             break
+          case '2002':
+            this.childShitList.push(item)
+            break
           case '15':
             this.urineList.push(item)
             break
@@ -1114,10 +1121,31 @@ export default {
             new Date(x.time).getHours()
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
+        const bottomText = [
+          '拒测',
+          '不在',
+          '外出',
+          '请假',
+          '不升',
+          '右PPD',
+          '左PPD',
+          'PPD︵-︶',
+          'PPD︵+︶',
+          'PPD︵++︶',
+          'PPD︵+++︶',
+          '冰敷',
+          '退热贴',
+          '冷水枕',
+          '降温毯',
+          '温水浴',
+          '辅助呼吸',
+          '停辅助呼吸',
+          'PDD'
+        ]
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y,
+          y: bottomText.includes(value) ? y - 3 : y,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 2,
@@ -1704,8 +1732,53 @@ export default {
               '+',
               '<span class="increase">+</span>'
             )
+
             targetList.splice(j, 1)
             break
+          }
+        }
+        // console.log(item, 'ssssss')
+        list.push(item)
+      }
+      return list
+    },
+    //大便次数有些科室要特殊显示，需要特殊处理
+    getFormatShitList({
+      tList,
+      timeInterval = 24 * 60 * 60 * 1000,
+      childList
+    }) {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
+      const list = []
+      const targetList = [...tList]
+      const shitList = [...childList]
+      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+        const item = { timeNum: i, value: '' }
+        for (let j = targetList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(targetList[j].time)
+          if (timeNum >= i && timeNum < i + timeInterval) {
+            if (shitList.length !== 0) {
+              for (let k = 0; k < shitList.length; k++) {
+                if (
+                  targetList[j].time.slice(0, 10) ===
+                  shitList[k].time.slice(0, 10)
+                ) {
+                  // console.log('shitList', shitList[k].time.slice(0, 10))
+                  // console.log('targetList', targetList[j].time.slice(0, 10))
+                  item.value = `${targetList[j].value}/${shitList[k].value}g`
+                } else {
+                  item.value = targetList[j].value
+                  console.log('shitList', shitList[k].time.slice(0, 10))
+                  console.log('targetList', targetList[j].time.slice(0, 10))
+                  targetList.splice(j, 1)
+                  break
+                }
+              }
+            } else {
+              item.value = targetList[j].value
+              targetList.splice(j, 1)
+              break
+            }
           }
         }
         list.push(item)
@@ -1811,7 +1884,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 10mm 5mm 10mm 18mm; // 页面的边距
+    margin: 8mm 5mm 8mm 18mm; // 页面的边距
   }
 }
 .main-view {

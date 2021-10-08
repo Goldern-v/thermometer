@@ -1576,7 +1576,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 10mm 10mm 10mm 10mm; // 页面的边距
+    margin: 8mm 8mm 8mm 8mm; // 页面的边距
   }
 }
 
