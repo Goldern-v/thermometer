@@ -8,8 +8,19 @@
     <div class="head-hos">江门市妇幼保健院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
+      <div class="item" style="flex:none;">
+        病区：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
+      </div>
+      <div class="item" style="flex:none;">
+        床号：<span class="value">{{
+          bedExchangeLog || patInfo.bed_label
+        }}</span>
+      </div>
       <div class="item" style="width:220px;flex:none;">
         姓名：<span class="value">{{ patInfo.name }}</span>
+      </div>
+      <div class="item" style="text-align: right;">
+        住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
       <div class="item" style="width:160px;flex:none;">
         年龄：<span class="value">{{
@@ -18,6 +29,8 @@
             : patInfo.age
         }}</span>
       </div>
+    </div>
+    <div class="head-info-1">
       <div class="item" style="width:100px;flex:none;">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
@@ -25,19 +38,6 @@
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
-      </div>
-      <div class="item">
-        病区：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
-      </div>
-    </div>
-    <div class="head-info-1">
-      <div class="item">
-        床号：<span class="value">{{
-          bedExchangeLog || patInfo.bed_label
-        }}</span>
-      </div>
-      <div class="item" style="text-align: right;">
-        住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
     </div>
     <div class="table-area">
@@ -131,7 +131,7 @@
           ></div>
           <div class="value-item-box font-18">
             <div
-              class="value-item font-16"
+              class="value-item font-time"
               :style="smallTdStyle(index, timeTds.length)"
               v-for="(item, index) in timeTds"
               :key="index"
@@ -414,7 +414,7 @@ export default {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -1854,7 +1854,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 8mm 5mm 8mm 18mm; // 页面的边距
+    margin: 8mm 5mm 8mm 16mm; // 页面的边距
   }
 }
 .main-view {
@@ -2209,6 +2209,10 @@ export default {
 }
 .font-16 {
   font-size: 16px;
+}
+.font-time {
+  font-size: 16px;
+  font-weight: 400;
 }
 .font-18 {
   font-size: 18px;
