@@ -453,7 +453,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -1882,13 +1882,16 @@ export default {
       // 连线
       for (let i = 0; i < dots.length - 1; i++) {
         if (
-          ['yeTemperature', 'kouTemperature', 'gangTemperature'].includes(
-            vitalCode
-          )
+          [
+            'yeTemperature',
+            'kouTemperature',
+            'gangTemperature',
+            'pulse',
+            'heartRate'
+          ].includes(vitalCode)
         ) {
           if (
             this.temperatureNoteList.some((x) => {
-              console.log(x)
               return (
                 this.getTimeStamp(x.time) >= this.getTimeStamp(dots[i].time) &&
                 this.getTimeStamp(x.time) <= this.getTimeStamp(dots[i + 1].time)
