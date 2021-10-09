@@ -19,10 +19,10 @@
       <div class="item" style="width:220px;flex:none;">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item" style="text-align: right;">
+      <div class="item" style="text-align: right; flex:none">
         住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
-      <div class="item" style="width:160px;flex:none;">
+      <div class="item" style="flex:none;">
         年龄：<span class="value">{{
           typeof parseInt(patInfo.age) === 'number' && !isNaN(patInfo.age)
             ? patInfo.age + '岁'
