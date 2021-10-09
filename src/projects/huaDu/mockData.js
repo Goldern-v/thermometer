@@ -148,12 +148,48 @@ export const mockData = {
     //   "time_point": "2020-12-15 03:12:00",
     //   "vital_code": "29"
     // },
-    // {
-    //   "temperature_type": "大便次数",
-    //   "value": "1",
-    //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": "24"
-    // },
+    {
+      temperature_type: '大便次数',
+      value: '150',
+      time_point: '2019-05-15 03:12:00',
+      vital_code: '2002'
+    },
+    {
+      temperature_type: '大便次数',
+      value: '170',
+      time_point: '2019-05-17 03:12:00',
+      vital_code: '2002'
+    },
+    {
+      temperature_type: '大便次数',
+      value: '180',
+      time_point: '2019-05-18 03:12:00',
+      vital_code: '2002'
+    },
+    {
+      temperature_type: '大便总次数',
+      value: '2',
+      time_point: '2019-05-15 03:12:00',
+      vital_code: '24'
+    },
+    {
+      temperature_type: '大便总次数',
+      value: '6',
+      time_point: '2019-05-17 03:12:00',
+      vital_code: '24'
+    },
+    {
+      temperature_type: '大便总次数',
+      value: '4',
+      time_point: '2019-05-19 03:12:00',
+      vital_code: '24'
+    },
+    {
+      temperature_type: '大便总次数',
+      value: '4',
+      time_point: '2019-05-16 03:12:00',
+      vital_code: '24'
+    },
     {
       temperature_type: '发热体温',
       value: '40',
