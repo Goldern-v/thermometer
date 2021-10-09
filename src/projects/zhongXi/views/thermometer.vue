@@ -478,7 +478,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -619,7 +619,7 @@ export default {
         '23': '呼吸机R',
         '061': '大便次数',
         '10': '引流量',
-        '25': '护理事件',
+        // '25': '护理事件',
         '27': '物理降温',
         '28': '呕吐量',
         '29': '在线降温',

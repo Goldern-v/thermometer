@@ -34,7 +34,7 @@ export const mockData = {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-23 16:12:00',
+      time_point: '2019-05-15 16:12:00',
       vital_code: '5'
     },
     {
@@ -97,8 +97,15 @@ export const mockData = {
       temperature_type: '尿量',
       value: '23',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-21 03:12:00',
+      time_point: '2019-05-15 03:12:00',
       vital_code: '12'
+    },
+    {
+      temperature_type: '引流量',
+      value: '230',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-15 03:12:00',
+      vital_code: '10'
     },
     {
       temperature_type: '出量',
@@ -211,7 +218,7 @@ export const mockData = {
       temperature_type: '体重',
       value: '70',
       time_point: '2019-05-18 13:12:00',
-      vital_code: '09'
+      vital_code: '033'
     },
     {
       temperature_type: '腋温',
