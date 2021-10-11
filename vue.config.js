@@ -4,15 +4,44 @@ const { project } = require('./src/argvs')
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
-// const today = new Date()
-// const packageName = `<你的项目名称>(${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()})`
-
-// output: {
-//     path: resolve(__dirname, packageName)
-// }
-
+//配置体温单的打包路径和名字
+const projectName=(()=>{
+ switch(project){
+  case 'huaDu': // 花都人医
+  return '花都人民医院'
+case 'liaoCheng': // 聊城二院
+  return '聊城二院'
+case 'liaoChengNewBorn': // 聊城人民医院新生儿体温单
+  return '聊城人民医院新生儿体温单'
+case 'guiZhou': // 贵州省人医
+  return '贵州省人医'
+case 'jiangMenFuYou': // 江门妇幼
+  return '江门妇幼'
+case 'hengLi': // 东莞横沥
+  return '东莞横沥医院'
+case 'xieGang': // 谢岗
+  return '谢岗医院'
+case 'beiHai': // 北海人民医院
+  return '北海人民医院'
+case '曲周县医院': // 曲州
+  return './src/projects/quZhou/main.js'
+case 'wuJing': // 武警
+  return '武警广东省总队医院'
+case 'guiZhouNewBorn': // 贵州省人医新生儿体温单
+  return '贵州省人医新生儿体温单'
+case 'zhongXi': // 南方中西医结合医院
+  return '南方中西医结合医院'
+case 'common': // 可配置的通用版本
+  return '配置通用版本'
+default:
+  break
+ }
+})()
+const today = new Date()
+const packageName = `${projectName}体温单_${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日${today.getHours()}时${today.getMinutes()}分${today.getSeconds()}秒`
 module.exports = {
   publicPath: './',
+  outputDir: packageName,
   lintOnSave: false,
   configureWebpack: {
     entry: (() => {
