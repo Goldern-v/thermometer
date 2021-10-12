@@ -1157,7 +1157,8 @@ export default {
       const xaxis = notes.map((x) =>
         this.getXaxis(this.getLocationTime(x.time))
       )
-      const xaxisNew = this.handleNoteXaxis(xaxis)
+
+      const xaxisNew = this.handleNoteXaxis(xaxis, notes)
       notes.forEach((x, i) => {
         let value = x.value
         if (x.value.endsWith('|')) {
@@ -1614,12 +1615,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8))
       let str = ''
       const timeAreasMap = {
-        '02:00:00': ['00:00:00', '04:00:59'],
-        '06:00:00': ['04:01:00', '08:00:59'],
-        '10:00:00': ['08:01:00', '12:00:59'],
-        '14:00:00': ['12:01:00', '16:00:59'],
-        '18:00:00': ['16:01:00', '20:00:59'],
-        '22:00:00': ['20:01:00', '23:59:59']
+        '02:00:00': ['02:00:00', '06:00:59'],
+        '06:00:00': ['06:01:00', '10:00:59'],
+        '10:00:00': ['10:01:00', '14:00:59'],
+        '14:00:00': ['14:01:00', '18:00:59'],
+        '18:00:00': ['18:01:00', '22:00:59'],
+        '22:00:00': ['22:01:00', '23:59:59']
       }
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -1801,9 +1802,19 @@ export default {
       return overWan ? getWan(overWan) + '万' + getWan(noWan) : getWan(num)
     },
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
-    handleNoteXaxis(xaxisList) {
+    handleNoteXaxis(xaxisList, item) {
       const xaxisNew = []
       for (let i = 0; i < xaxisList.length; i++) {
+        //医院单独要求 体温单的入院 22-24-02这个区间显示在最后一格，所以把体温单的入院注释特殊处理
+        //截取小时+分钟判断是否在0-2这个区间，把他移动到最后一个格子
+        let hourStr = item[i].time.slice(10, 13)
+        let miStr = item[i].time.slice(14, 16)
+        const getTime = hourStr * 60 * 60 * 1000 + miStr * 60 * 1000
+        console.log(hourStr, miStr, getTime)
+        if (item[i].value.includes('入院') && getTime <= 7200000) {
+          console.log('ssss', item[i].time.slice(10, 16))
+          xaxisList[i] += this.xSpace * 6 - 8
+        }
         if (!xaxisNew.includes(xaxisList[i])) {
           xaxisNew.push(xaxisList[i])
         } else {
