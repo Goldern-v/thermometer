@@ -1807,13 +1807,14 @@ export default {
       for (let i = 0; i < xaxisList.length; i++) {
         //医院单独要求 体温单的入院 22-24-02这个区间显示在最后一格，所以把体温单的入院注释特殊处理
         //截取小时+分钟判断是否在0-2这个区间，把他移动到最后一个格子
+        let dataStr =item[i].time.slice(0, 10)+' 00:00'
         let hourStr = item[i].time.slice(10, 13)
         let miStr = item[i].time.slice(14, 16)
         const getTime = hourStr * 60 * 60 * 1000 + miStr * 60 * 1000
-        console.log(hourStr, miStr, getTime)
-        if (item[i].value.includes('入院') && getTime <= 7200000) {
-          console.log('ssss', item[i].time.slice(10, 16))
-          xaxisList[i] += this.xSpace * 6 - 8
+        let dataTime=this.getTimeNum(dataStr)-2*60*60*1000 //操作当天的时间回退2个小时，计算X轴坐标赋值给入院
+        if (['手术入院|','入院|'].includes(item[i].value)&& getTime <= 7200000) {
+          // console.log('ssss', item[i].time.slice(10, 16))
+          xaxisList[i] =this.getXaxis(dataTime)
         }
         if (!xaxisNew.includes(xaxisList[i])) {
           xaxisNew.push(xaxisList[i])
