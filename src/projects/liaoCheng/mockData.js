@@ -203,20 +203,51 @@ export const mockData = {
     },
     {
       temperature_type: '疼痛',
+      value: '4',
+      time_point: '2021-05-18 22:12:00',
+      vital_code: '092'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '4',
+      time_point: '2021-05-16 23:00:00',
+      vital_code: '092'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '4',
+      time_point: '2021-05-18 22:12:00',
+      vital_code: '092'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '6',
+      time_point: '2021-05-19 03:00:00',
+      vital_code: '092'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '4',
+      time_point: '2021-05-18 09:00:00',
+      vital_code: '092'
+    },
+    {
+      temperature_type: '疼痛',
       value: '2',
-      time_point: '2021-05-19 23:12:00',
+      time_point: '2021-05-15 03:00:00',
       vital_code: '092'
     },
     {
       temperature_type: '疼痛',
       value: '10',
-      time_point: '2021-05-20 23:12:00',
+      time_point: '2021-05-21 23:12:00',
       vital_code: '092'
     },
+
     {
       temperature_type: '疼痛干预',
       value: '8',
-      time_point: '2021-05-20 23:12:00',
+      time_point: '2021-05-21 23:12:00',
       vital_code: '093'
     },
     {
@@ -279,36 +310,36 @@ export const mockData = {
       time_point: '2021-05-20 13:20:00',
       vital_code: '20'
     },
-    // {
-    //   temperature_type: '腋温',
-    //   value: '38.2',
-    //   time_point: '2021-05-17 01:12:00',
-    //   vital_code: '01'
-    // },
-    // {
-    //   temperature_type: '腋温',
-    //   value: '37',
-    //   time_point: '2021-05-17 15:12:00',
-    //   vital_code: '01'
-    // },
-    // {
-    //   temperature_type: '口温',
-    //   value: '36',
-    //   time_point: '2021-05-16 13:00:00',
-    //   vital_code: '041'
-    // },
-    // {
-    //   temperature_type: '口温',
-    //   value: '37',
-    //   time_point: '2021-05-18 15:12:00',
-    //   vital_code: '041'
-    // },
-    // {
-    //   temperature_type: '口温',
-    //   value: '39',
-    //   time_point: '2021-05-20 15:12:00',
-    //   vital_code: '041'
-    // },
+    {
+      temperature_type: '腋温',
+      value: '38.2',
+      time_point: '2021-05-17 01:12:00',
+      vital_code: '01'
+    },
+    {
+      temperature_type: '腋温',
+      value: '37',
+      time_point: '2021-05-17 15:12:00',
+      vital_code: '01'
+    },
+    {
+      temperature_type: '口温',
+      value: '36',
+      time_point: '2021-05-16 13:00:00',
+      vital_code: '041'
+    },
+    {
+      temperature_type: '口温',
+      value: '37',
+      time_point: '2021-05-18 15:12:00',
+      vital_code: '041'
+    },
+    {
+      temperature_type: '口温',
+      value: '39',
+      time_point: '2021-05-20 15:12:00',
+      vital_code: '041'
+    },
     {
       temperature_type: '降温', // 自己捏造的标识
       value: '37',

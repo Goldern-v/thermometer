@@ -1191,24 +1191,82 @@ export default {
           if (['041', '01', '043'].includes(x.vitalCode)) {
             // 体温为不升时，折线需要断开
             data = [[]]
-            x.data.forEach((y) => {
-              if (y.value <= 35) {
-                data.push([])
-              } else {
+            x.data.forEach((y, index) => {
+              if (y.value > 35) {
                 data[data.length - 1].push(y)
+              }
+              if (index < x.data.length - 1) {
+                if (
+                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                    this.getTimeNum(y.time.slice(0, 10)) >=
+                  24 * 60 * 60 * 1000 * 2
+                ) {
+                  data.push([x.data[index + 1]])
+                }
+              } else {
+                const list = data[data.length - 1]
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y)
+                }
+              }
+            })
+            // x.data.forEach((y) => {
+            //   if (y.value <= 35) {
+            //     data.push([])
+            //   } else {
+            //     data[data.length - 1].push(y)
+            //   }
+            // })
+          }
+          if (['092'].includes(x.vitalCode)) {
+            data = [[]]
+            x.data.forEach((y, index) => {
+              data[data.length - 1].push(y)
+              if (index < x.data.length - 1) {
+                if (
+                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                    this.getTimeNum(y.time.slice(0, 10)) >=
+                  24 * 60 * 60 * 1000 * 2
+                ) {
+                  data.push([x.data[index + 1]])
+                }
+              } else {
+                const list = data[data.length - 1]
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y)
+                }
               }
             })
           }
           if (['02', '20'].includes(x.vitalCode)) {
             // 心率或脉搏过快时，折线需要断开
             data = [[]]
-            x.data.forEach((y) => {
-              if (y.value > this.pulseRange[1]) {
-                data.push([])
-              } else {
+            x.data.forEach((y, index) => {
+              if (y.value <= this.pulseRange[1]) {
                 data[data.length - 1].push(y)
               }
+              if (index < x.data.length - 1) {
+                if (
+                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                    this.getTimeNum(y.time.slice(0, 10)) >=
+                  24 * 60 * 60 * 1000 * 2
+                ) {
+                  data.push([x.data[index + 1]])
+                }
+              } else {
+                const list = data[data.length - 1]
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y)
+                }
+              }
             })
+            // x.data.forEach((y, index) => {
+            //   if (y.value > this.pulseRange[1]) {
+            //     data.push([])
+            //   } else {
+            //     data[data.length - 1].push(y)
+            //   }
+            // })
           }
           data.forEach((z) => {
             this.createBrokenLine({
@@ -1927,7 +1985,6 @@ export default {
     },
     // 大便次数有特殊的显示需求，计算底部数据的渲染列表
     getFormatListShit({ tList, timeInterval = 24 * 60 * 60 * 1000 }) {
-      console.log(this.timeRange)
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
       const list = []
       const newList = []
@@ -1945,7 +2002,6 @@ export default {
         if (item.value === '0') {
           newList.push(item)
         }
-        console.log(newList)
         list.push(item)
       }
       return list
