@@ -137,40 +137,40 @@ export const mockData = {
       time_point: '2021-05-17 03:12:00',
       vital_code: '061'
     },
-    // {
-    //   "temperature_type": "发热体温",
-    //   "value": "37.1",
-    //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": '21'
-    // },
-    // {
-    //   temperature_type: '肛温',
-    //   value: '36.9',
-    //   // "time_point": "2020-12-15 03:12:00",
-    //   time_point: '2021-05-20 03:12:00',
-    //   vital_code: '043'
-    // },
-    // {
-    //   temperature_type: '肛温',
-    //   value: '38',
-    //   // "time_point": "2020-12-15 03:12:00",
-    //   time_point: '2021-05-21 03:12:00',
-    //   vital_code: '043'
-    // },
-    // {
-    //   temperature_type: '肛温',
-    //   value: '36',
-    //   // "time_point": "2020-12-15 03:12:00",
-    //   time_point: '2021-05-17 03:12:00',
-    //   vital_code: '043'
-    // },
-    // {
-    //   temperature_type: '肛温',
-    //   value: '35',
-    //   // "time_point": "2020-12-15 03:12:00",
-    //   time_point: '2021-05-19 03:12:00',
-    //   vital_code: '043'
-    // },
+    {
+      "temperature_type": "发热体温",
+      "value": "37.1",
+      "time_point": "2020-12-15 03:12:00",
+      "vital_code": '21'
+    },
+    {
+      temperature_type: '肛温',
+      value: '36.9',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-20 03:12:00',
+      vital_code: '043'
+    },
+    {
+      temperature_type: '肛温',
+      value: '38',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-21 03:12:00',
+      vital_code: '043'
+    },
+    {
+      temperature_type: '肛温',
+      value: '36',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-17 03:12:00',
+      vital_code: '043'
+    },
+    {
+      temperature_type: '肛温',
+      value: '35',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-19 03:12:00',
+      vital_code: '043'
+    },
     {
       temperature_type: '呼吸',
       value: '20',

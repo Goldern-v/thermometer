@@ -433,12 +433,13 @@ import zrender from 'zrender'
 import { mockData } from 'src/projects/liaoCheng/mockData.js'
 
 export default {
+  props:['currentPage'],
   data() {
     const yRange = [34, 42]
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -601,7 +602,6 @@ export default {
         '092': 'pain'
       },
       pageTotal: 1,
-      currentPage: 1,
       showInnerPage: false, // 是否显示内部分页
       adtLog: '', // 转科
       bedExchangeLog: '' // 转床
