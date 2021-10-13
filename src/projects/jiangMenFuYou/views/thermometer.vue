@@ -8,19 +8,8 @@
     <div class="head-hos">江门市妇幼保健院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item" style="flex:none;">
-        病区：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
-      </div>
-      <div class="item" style="flex:none;">
-        床号：<span class="value">{{
-          bedExchangeLog || patInfo.bed_label
-        }}</span>
-      </div>
       <div class="item" style="width:220px;flex:none;">
         姓名：<span class="value">{{ patInfo.name }}</span>
-      </div>
-      <div class="item" style="text-align: right; flex:none">
-        住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
       <div class="item" style="flex:none;">
         年龄：<span class="value">{{
@@ -29,8 +18,6 @@
             : patInfo.age
         }}</span>
       </div>
-    </div>
-    <div class="head-info-1">
       <div class="item" style="width:100px;flex:none;">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
@@ -38,6 +25,19 @@
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
+      </div>
+      <div class="item">
+        病区：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
+      </div>
+    </div>
+    <div class="head-info-1">
+      <div class="item">
+        床号：<span class="value">{{
+          bedExchangeLog || patInfo.bed_label
+        }}</span>
+      </div>
+      <div class="item" style="text-align: right;">
+        住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
     </div>
     <div class="table-area">
@@ -414,7 +414,7 @@ export default {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -1807,14 +1807,17 @@ export default {
       for (let i = 0; i < xaxisList.length; i++) {
         //医院单独要求 体温单的入院 22-24-02这个区间显示在最后一格，所以把体温单的入院注释特殊处理
         //截取小时+分钟判断是否在0-2这个区间，把他移动到最后一个格子
-        let dataStr =item[i].time.slice(0, 10)+' 00:00'
+        let dataStr = item[i].time.slice(0, 10) + ' 00:00'
         let hourStr = item[i].time.slice(10, 13)
         let miStr = item[i].time.slice(14, 16)
         const getTime = hourStr * 60 * 60 * 1000 + miStr * 60 * 1000
-        let dataTime=this.getTimeNum(dataStr)-2*60*60*1000 //操作当天的时间回退2个小时，计算X轴坐标赋值给入院
-        if (['手术入院|','入院|'].includes(item[i].value)&& getTime <= 7200000) {
+        let dataTime = this.getTimeNum(dataStr) - 2 * 60 * 60 * 1000 //操作当天的时间回退2个小时，计算X轴坐标赋值给入院
+        if (
+          ['手术入院|', '入院|'].includes(item[i].value) &&
+          getTime <= 7200000
+        ) {
           // console.log('ssss', item[i].time.slice(10, 16))
-          xaxisList[i] =this.getXaxis(dataTime)
+          xaxisList[i] = this.getXaxis(dataTime)
         }
         if (!xaxisNew.includes(xaxisList[i])) {
           xaxisNew.push(xaxisList[i])
@@ -1840,6 +1843,11 @@ export default {
       this.apiData = mockData
       this.$nextTick(() => {
         this.handleData()
+        // this.currentPage = this.pageTotal
+        // window.parent.postMessage(
+        //   { type: 'pageTotal', value: this.pageTotal },
+        //   '*'
+        // )
       })
     } else {
       this.$http({
@@ -1855,6 +1863,11 @@ export default {
         this.apiData = res.data
         this.$nextTick(() => {
           this.handleData()
+          this.currentPage = this.pageTotal
+          window.parent.postMessage(
+            { type: 'pageTotal', value: this.pageTotal },
+            '*'
+          )
         })
       })
     }

@@ -10,7 +10,7 @@ export const mockData = {
       bed_label: '012',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
-      admission_date: '2019-05-15 08:12:30.0',
+      admission_date: '2021-10-07 11:15:24.0',
       age: '54',
       inp_no: '1568587'
     }
@@ -18,367 +18,346 @@ export const mockData = {
   vitalSigns: [
     {
       temperature_type: '病人事件',
-      value: '入院|十八时零分',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-15 13:10:00',
-      vital_code: 'nurseEvents'
-    },
-    {
-      temperature_type: '病人事件',
-      value: '手术入院',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 16:12:00',
-      vital_code: 'nurseEvents'
-    },
-    {
-      temperature_type: '病人事件',
-      value: '死亡|十八时零分',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 16:12:00',
-      vital_code: 'nurseEvents'
-    },
-
-    {
-      temperature_type: '病人事件',
-      value: '手术入院',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-23 16:12:00',
-      vital_code: 'nurseEvents'
-    },
-    {
-      temperature_type: '病人事件',
-      value: '手术',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 16:12:00',
-      vital_code: 'nurseEvents'
-    },
-    {
-      temperature_type: '病人事件',
-      value: '手术',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 20:12:00',
-      vital_code: 'nurseEvents'
-    },
-    {
-      temperature_type: '表底注释',
-      value: '请假',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 03:12:00',
-      vital_code: '4'
-    },
-    {
-      temperature_type: '出量',
-      value: '1475',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-21 03:12:00',
-      vital_code: 'chuliang'
-    },
-    {
-      temperature_type: '尿量',
-      value: '23',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-21 03:12:00',
-      vital_code: 'niaoliang'
-    },
-    {
-      temperature_type: '出量',
-      value: '1475',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-24 03:12:00',
-      vital_code: 'chuliang'
-    },
-    // {
-    //   "temperature_type": "在线降温",
-    //   "value": "0",
-    //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": '29'
-    // },
-    {
-      temperature_type: '大便次数',
-      value: '1/灌肠',
-      time_point: '2019-05-20 03:12:00',
-      vital_code: 'excrement'
-    },
-    {
-      temperature_type: '大便次数',
-      value: '2/人工肛门',
-      time_point: '2019-05-17 03:12:00',
-      vital_code: 'excrement'
-    },
-    {
-      temperature_type: '大便次数',
-      value: '灌肠/人工肛门',
-      time_point: '2019-05-18 03:12:00',
-      vital_code: 'excrement'
-    },
-    {
-      temperature_type: '大便次数',
-      value: '0/失禁',
-      time_point: '2019-05-16 03:12:00',
-      vital_code: 'excrement'
-    },
-    // {
-    //   "temperature_type": "发热体温",
-    //   "value": "37.1",
-    //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": '21'
-    // },
-    {
-      temperature_type: '肛温',
-      value: '36.9',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 03:12:00',
-      vital_code: 'gangTemperature'
-    },
-    {
-      temperature_type: '肛温',
-      value: '38',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-21 03:12:00',
-      vital_code: 'gangTemperature'
-    },
-    // {
-    //   temperature_type: '病人事件',
-    //   value: '拒测',
-    //   // "time_point": "2020-12-15 03:12:00",
-    //   time_point: '2019-05-20 03:12:00',
-    //   vital_code: 'nurseEvents'
-    // },
-    {
-      temperature_type: '肛温',
-      value: '36',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-19 03:12:00',
-      vital_code: 'gangTemperature'
-    },
-    {
-      temperature_type: '肛温',
-      value: '35',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-19 03:12:00',
-      vital_code: 'gangTemperature'
+      value: '入院|十一时十五分',
+      time_point: '2021-10-07 11:15:00',
+      vital_code: 'nurseEvents',
+      expand2: '2021-10-07 11:15:00'
     },
     {
       temperature_type: '呼吸',
-      value: '20',
-      time_point: '2019-05-19 23:12:00',
-      vital_code: 'breathe'
-    },
-    {
-      temperature_type: '呼吸',
-      value: '20',
-      time_point: '2019-05-16 13:12:00',
-      vital_code: 'breathe'
-    },
-    {
-      temperature_type: '呼吸机',
-      value: '呼吸机',
-      time_point: '2019-05-18 13:12:00',
-      vital_code: 'breatheMachine'
-    },
-    {
-      temperature_type: '呼吸',
-      value: '30',
-      time_point: '2019-05-17 13:12:00',
-      vital_code: 'breathe'
-    },
-    {
-      temperature_type: '过敏药物',
-      value: '啊路霉素 阴性',
-      time_point: '2019-05-17 13:12:00',
-      vital_code: 'guominyaowu'
-    },
-    {
-      temperature_type: '过敏药物',
-      value: '思路霉素 阳性',
-      time_point: '2019-05-18 13:12:00',
-      vital_code: 'guominyaowu'
-    },
-    {
-      temperature_type: '呼吸',
-      value: '20',
-      time_point: '2019-05-20 13:12:00',
-      vital_code: 'breathe'
-    },
-    {
-      temperature_type: '疼痛',
-      value: '2',
-      time_point: '2019-05-19 23:12:00',
-      vital_code: 'ttpf'
-    },
-    {
-      temperature_type: '疼痛',
-      value: '10',
-      time_point: '2019-05-20 23:12:00',
-      vital_code: 'ttpf'
-    },
-    {
-      temperature_type: '疼痛干预',
-      value: '8',
-      time_point: '2019-05-20 23:12:00',
-      vital_code: 'jtpf'
-    },
-    {
-      temperature_type: '血压',
-      value: '138/87',
-      time_point: '2019-05-18 01:12:00',
-      vital_code: 'bloodPressure'
-    },
-    {
-      temperature_type: '血压',
-      value: '139/89',
-      time_point: '2019-05-18 20:12:00',
-      vital_code: 'bloodPressure'
+      value: '25',
+      time_point: '2021-10-07 11:15:00',
+      vital_code: 'breathe',
+      expand2: null
     },
     {
       temperature_type: '体重',
-      value: '70',
-      time_point: '2019-05-18 13:12:00',
-      vital_code: 'weight'
-    },
-    {
-      temperature_type: '腋温',
-      value: '35.2',
-      time_point: '2019-05-18 01:12:00',
-      vital_code: 'yeTemperature'
-    },
-    {
-      temperature_type: '腋温',
-      value: '38',
-      time_point: '2019-05-17 01:12:00',
-      vital_code: 'yeTemperature'
-    },
-    {
-      temperature_type: '口温',
-      value: '36',
-      time_point: '2019-05-16 13:00:00',
-      vital_code: 'kouTemperature'
-    },
-    {
-      temperature_type: '口温',
-      value: '37',
-      time_point: '2019-05-18 15:12:00',
-      vital_code: 'kouTemperature'
-    },
-    {
-      temperature_type: '口温',
-      value: '39',
-      time_point: '2019-05-20 15:12:00',
-      vital_code: 'kouTemperature'
-    },
-    {
-      temperature_type: '降温', // 自己捏造的标识
-      value: '37',
-      time_point: '2019-05-20 15:12:00',
-      vital_code: 'downTemperature'
-    },
-    {
-      temperature_type: '自定义1',
-      value: '36.7',
-      time_point: '2019-05-17 01:12:00',
-      vital_code: 'other1'
-    },
-    {
-      temperature_type: '自定义1',
-      value: '36.7',
-      time_point: '2019-05-18 01:12:00',
-      vital_code: 'other2'
-    },
-    {
-      temperature_type: '自定义2',
-      value: '36.7',
-      time_point: '2019-05-17 01:12:00',
-      vital_code: 'other3'
-    },
-    {
-      temperature_type: '自定义2',
-      value: '36.7',
-      time_point: '2019-05-18 01:12:00',
-      vital_code: 'other4'
-    },
-    {
-      temperature_type: '自定义3',
-      value: '36.7',
-      time_point: '2019-05-16 01:12:00',
-      vital_code: 'other5'
+      value: '14',
+      time_point: '2021-10-07 11:15:00',
+      vital_code: 'weight',
+      expand2: null
     },
     {
       temperature_type: '心率',
-      value: '181',
-      time_point: '2019-05-17 13:12:00',
-      vital_code: 'heartRate'
-    },
-    // {
-    //   temperature_type: '脉搏',
-    //   value: '89',
-    //   time_point: '2019-05-17 13:12:00',
-    //   vital_code: 'pulse'
-    // },
-    {
-      temperature_type: '腋温',
-      value: '37',
-      time_point: '2019-05-20 10:12:00',
-      vital_code: 'yeTemperature'
-    },
-    {
-      temperature_type: '肛温',
-      value: '38',
-      time_point: '2019-05-20 10:12:00',
-      vital_code: 'gangTemperature'
-    },
-    {
-      temperature_type: '心率',
-      value: '100',
-      time_point: '2019-05-20 10:12:00',
-      vital_code: 'heartRate'
-    },
-    {
-      temperature_type: '心率',
-      value: '120',
-      time_point: '2019-05-21 10:12:00',
-      vital_code: 'heartRate'
-    },
-    {
-      temperature_type: '脉搏',
-      value: '100',
-      time_point: '2019-05-21 10:12:00',
-      vital_code: 'pulse'
-    },
-    {
-      temperature_type: '脉搏',
       value: '110',
-      time_point: '2019-05-20 10:12:00',
-      vital_code: 'heartRate'
+      time_point: '2021-10-07 11:15:00',
+      vital_code: 'heartRate',
+      expand2: null
     },
     {
-      temperature_type: '脉搏',
-      value: '80',
-      time_point: '2019-05-20 10:12:00',
-      vital_code: 'pulse'
+      temperature_type: '血压',
+      value: '105/78',
+      time_point: '2021-10-07 11:15:00',
+      vital_code: 'bloodPressure',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '36.8',
+      time_point: '2021-10-07 11:15:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '大便',
+      value: '1',
+      time_point: '2021-10-07 14:00:00',
+      vital_code: 'excrement',
+      expand2: null
+    },
+    {
+      temperature_type: '呼吸',
+      value: '22',
+      time_point: '2021-10-07 14:00:00',
+      vital_code: 'breathe',
+      expand2: null
     },
     {
       temperature_type: '心率',
-      value: '60',
-      time_point: '2019-05-16 13:00:00',
-      vital_code: 'heartRate'
+      value: '96',
+      time_point: '2021-10-07 14:00:00',
+      vital_code: 'heartRate',
+      expand2: null
     },
     {
-      temperature_type: '脉搏',
-      value: '55',
-      time_point: '2019-05-16 13:00:00',
-      vital_code: 'pulse'
+      temperature_type: '腋温',
+      value: '36.5',
+      time_point: '2021-10-07 14:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
     },
     {
-      temperature_type: '入量',
-      value: '55',
-      time_point: '2019-05-16 13:00:00',
-      vital_code: 'ruliang'
+      temperature_type: '呼吸',
+      value: '25',
+      time_point: '2021-10-07 18:00:00',
+      vital_code: 'breathe',
+      expand2: null
     },
     {
-      temperature_type: '身高',
-      value: '167',
-      time_point: '2019-05-16 13:00:00',
-      vital_code: 'height'
+      temperature_type: '心率',
+      value: '115',
+      time_point: '2021-10-07 18:00:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '37.1',
+      time_point: '2021-10-07 18:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '呼吸',
+      value: '26',
+      time_point: '2021-10-08 06:00:00',
+      vital_code: 'breathe',
+      expand2: null
+    },
+    {
+      temperature_type: '心率',
+      value: '114',
+      time_point: '2021-10-08 06:00:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '36.4',
+      time_point: '2021-10-08 06:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '大便',
+      value: '0',
+      time_point: '2021-10-08 14:00:00',
+      vital_code: 'excrement',
+      expand2: null
+    },
+    {
+      temperature_type: '呼吸',
+      value: '27',
+      time_point: '2021-10-08 14:00:00',
+      vital_code: 'breathe',
+      expand2: null
+    },
+    {
+      temperature_type: '心率',
+      value: '111',
+      time_point: '2021-10-08 14:00:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '36.3',
+      time_point: '2021-10-08 14:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '呼吸',
+      value: '25',
+      time_point: '2021-10-08 18:00:00',
+      vital_code: 'breathe',
+      expand2: null
+    },
+    {
+      temperature_type: '心率',
+      value: '105',
+      time_point: '2021-10-08 18:00:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '36.3',
+      time_point: '2021-10-08 18:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '呼吸',
+      value: '29',
+      time_point: '2021-10-08 22:00:00',
+      vital_code: 'breathe',
+      expand2: null
+    },
+    {
+      temperature_type: '心率',
+      value: '126',
+      time_point: '2021-10-08 22:00:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '37.1',
+      time_point: '2021-10-08 22:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '病人事件',
+      value: '外出',
+      time_point: '2021-10-09 02:00:00',
+      vital_code: 'nurseEvents',
+      expand2: null
+    },
+    {
+      temperature_type: '病人事件',
+      value: '外出',
+      time_point: '2021-10-09 06:00:00',
+      vital_code: 'nurseEvents',
+      expand2: null
+    },
+    {
+      temperature_type: '呼吸',
+      value: '26',
+      time_point: '2021-10-09 06:00:00',
+      vital_code: 'breathe',
+      expand2: null
+    },
+    {
+      temperature_type: '心率',
+      value: '105',
+      time_point: '2021-10-09 06:00:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '36.9',
+      time_point: '2021-10-09 06:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '大便',
+      value: '2',
+      time_point: '2021-10-09 14:00:00',
+      vital_code: 'excrement',
+      expand2: null
+    },
+    {
+      temperature_type: '呼吸',
+      value: '25',
+      time_point: '2021-10-09 14:00:00',
+      vital_code: 'breathe',
+      expand2: null
+    },
+    {
+      temperature_type: '心率',
+      value: '104',
+      time_point: '2021-10-09 14:00:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '36.5',
+      time_point: '2021-10-09 14:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '病人事件',
+      value: '外出',
+      time_point: '2021-10-09 18:00:00',
+      vital_code: 'nurseEvents',
+      expand2: null
+    },
+    {
+      temperature_type: '呼吸',
+      value: '24',
+      time_point: '2021-10-10 06:00:00',
+      vital_code: 'breathe',
+      expand2: null
+    },
+    {
+      temperature_type: '心率',
+      value: '102',
+      time_point: '2021-10-10 06:00:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '36.3',
+      time_point: '2021-10-10 06:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '大便',
+      value: '1',
+      time_point: '2021-10-10 10:00:00',
+      vital_code: 'excrement',
+      expand2: null
+    },
+    {
+      temperature_type: '病人事件',
+      value: '外出',
+      time_point: '2021-10-10 14:00:00',
+      vital_code: 'nurseEvents',
+      expand2: null
+    },
+    {
+      temperature_type: '大便',
+      value: '1',
+      time_point: '2021-10-11 14:00:00',
+      vital_code: 'excrement',
+      expand2: null
+    },
+    {
+      temperature_type: '呼吸',
+      value: '25',
+      time_point: '2021-10-11 14:00:00',
+      vital_code: 'breathe',
+      expand2: null
+    },
+    {
+      temperature_type: '心率',
+      value: '105',
+      time_point: '2021-10-11 14:00:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '36.5',
+      time_point: '2021-10-11 14:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '大便',
+      value: '0',
+      time_point: '2021-10-12 14:00:00',
+      vital_code: 'excrement',
+      expand2: null
+    },
+    {
+      temperature_type: '呼吸',
+      value: '25',
+      time_point: '2021-10-12 14:00:00',
+      vital_code: 'breathe',
+      expand2: null
+    },
+    {
+      temperature_type: '心率',
+      value: '103',
+      time_point: '2021-10-12 14:00:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '36.5',
+      time_point: '2021-10-12 14:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
     }
   ]
 }

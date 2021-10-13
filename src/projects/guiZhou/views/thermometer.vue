@@ -2234,6 +2234,11 @@ export default {
       this.apiData = mockData
       this.$nextTick(() => {
         this.handleData()
+        // this.currentPage = this.pageTotal
+        // window.parent.postMessage(
+        //   { type: 'pageTotal', value: this.pageTotal },
+        //   '*'
+        // )
       })
     } else {
       this.$http({
@@ -2253,6 +2258,11 @@ export default {
         //this.formatType("guomingyaowu");
         this.$nextTick(() => {
           this.handleData()
+          this.currentPage = this.pageTotal
+          window.parent.postMessage(
+            { type: 'pageTotal', value: this.pageTotal },
+            '*'
+          )
         })
       })
     }

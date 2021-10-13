@@ -92,12 +92,13 @@ module.exports = {
             case 'huaDu':
               return 'http://120.238.239.27:9091'
             case 'liaoCheng':
-              return 'http://172.17.5.41:9091'
+              // return 'http://172.17.5.41:9091'
+              return 'http://120.224.211.7:9091'
             case 'liaoChengNewBorn':
               // return 'http://120.224.211.7:9091'
               return 'http://172.17.5.41:9091'
             case 'jiangMenFuYou':
-              return 'http://172.17.5.41:9091'
+              return 'http://218.14.180.38:9091'
             case 'hengLi':
               return 'http://172.17.5.41:9091'
             case 'guiZhou':

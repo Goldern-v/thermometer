@@ -1183,7 +1183,6 @@ export default {
         */
         if (this.settingMap.heart.data.length > 0) {
           this.polygonPoints.forEach((x) => {
-            console.log(x)
             this.createPolygon({
               points: x,
               lineWidth: 1,

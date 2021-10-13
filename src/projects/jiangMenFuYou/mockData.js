@@ -11,7 +11,7 @@ export const mockData = {
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
       admission_date: '2019-05-15 08:12:30.0',
-      age: '30岁12个月',
+      age: '30岁12个月是',
       inp_no: '1568587'
     }
   },
