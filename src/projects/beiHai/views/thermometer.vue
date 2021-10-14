@@ -582,6 +582,7 @@ export default {
         '4': '表底注释', // 拒测,不在,外出不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
         '042': '腋表',
         '02': '脉搏',
+        '092': '小便', //次/日
         '20': '心率',
         '04': '呼吸',
         '062': '血压',
@@ -600,7 +601,7 @@ export default {
         '3': '物理降温',
         '28': '呕吐量',
         '29': '在线降温',
-        '14': '身高',
+        '094': '身高',
         '32': '自定义1',
         '33': '自定义2',
         '34': '自定义3',
@@ -1061,7 +1062,7 @@ export default {
           case '061':
             this.shitList.push(item)
             break
-          case '67':
+          case '092':
             this.peeList.push(item)
             break
           case '12':
@@ -1076,7 +1077,7 @@ export default {
           // case '093':
           //   this.ttgyList.push(item)
           //   break
-          case '14':
+          case '094':
             this.heightList.push(item)
             break
           default:
@@ -1918,6 +1919,11 @@ export default {
         this.apiData = res.data
         this.$nextTick(() => {
           this.handleData()
+          this.currentPage = this.pageTotal
+          window.parent.postMessage(
+            { type: 'pageTotal', value: this.pageTotal },
+            '*'
+          )
         })
       })
     }
