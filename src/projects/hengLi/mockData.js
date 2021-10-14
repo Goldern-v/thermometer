@@ -21,42 +21,42 @@ export const mockData = {
       value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 13:10:00',
-      vital_code: '0022'
+      vital_code: '0011'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 16:12:00',
-      vital_code: '0022'
+      vital_code: '0011'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-23 16:12:00',
-      vital_code: '0022'
+      vital_code: '0011'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-25 16:12:00',
-      vital_code: '0022'
+      vital_code: '0011'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-06-08 16:12:00',
-      vital_code: '0022'
+      vital_code: '0011'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-06-12 16:12:00',
-      vital_code: '0022'
+      vital_code: '0011'
     },
     // {
     //   "temperature_type": "表顶注释",
