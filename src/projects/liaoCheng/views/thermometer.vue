@@ -151,7 +151,7 @@
           </div>
         </div>
         <div
-          id="main"
+          ref="main"
           :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
         ></div>
       </div>
@@ -433,7 +433,22 @@ import zrender from 'zrender'
 import { mockData } from 'src/projects/liaoCheng/mockData.js'
 
 export default {
-  props:['currentPage'],
+  props: {
+    isPrintAll: {
+      type: Boolean,
+      default: false
+    },
+    printPage: {
+      type: Number,
+      default: 1
+    },
+    printData: {
+      type: Object,
+      default() {
+        return null
+      }
+    }
+  },
   data() {
     const yRange = [34, 42]
     const pulseRange = [20, 180]
@@ -602,6 +617,7 @@ export default {
         '092': 'pain'
       },
       pageTotal: 1,
+      currentPage: 1,
       showInnerPage: false, // 是否显示内部分页
       adtLog: '', // 转科
       bedExchangeLog: '' // 转床
@@ -726,7 +742,7 @@ export default {
           )
         ]
         if (days.every((z) => z < 0)) return ''
-        // 找到前一次手术（最后一次天数差是正整数的地方）
+        // 找到前一次手术（最后一次天数差是正整数或者0的地方）
         let index = 0
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i
@@ -735,12 +751,13 @@ export default {
         for (let i = 0; i < index; i++) {
           apart.unshift(days[i])
         }
+        const operationNum = apart.length // 记录此日之前所有的手术次数，不考虑间隔大于7天
         // 间隔大于7天的手术，分子分母的写法要重置
         if (apart.length) {
           apart.unshift(days[index])
           for (let i = 1; i < apart.length; i++) {
             if (apart[i] - apart[i - 1] > 7) {
-              apart = apart.slice(0, i)
+              apart = apart.slice(0, i) // 将间隔大于7天的之前的所有手术切割
               break
             }
           }
@@ -748,9 +765,11 @@ export default {
         }
         if (days[index] <= 7) {
           return index === 0 || !apart.length
-            ? days[index]
+            ? days[index] === 0 && operationNum
+              ? `(${operationNum + 1})`
+              : days[index]
             : days[index] === 0
-            ? `${apart.join('/')}(${apart.length + 1})`
+            ? `${apart.join('/')}(${operationNum + 1})`
             : `${days[index]}/${apart.join('/')}`
         } else {
           return ''
@@ -936,7 +955,7 @@ export default {
           case 'currentPage':
             if (e.data.value > 0) {
               this.currentPage = e.data.value
-              document.getElementById('main').innerHTML = ''
+              this.$refs.main.innerHTML = ''
               this.reset()
               this.handleData()
             }
@@ -981,14 +1000,14 @@ export default {
     toNext() {
       if (this.currentPage === this.pageTotal) return
       this.currentPage++
-      document.getElementById('main').innerHTML = ''
+      this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
     },
     toPre() {
       if (this.currentPage === 1) return
       this.currentPage--
-      document.getElementById('main').innerHTML = ''
+      this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
     },
@@ -1179,10 +1198,10 @@ export default {
       this.getAreaHeight() // 遍历一遍获取高度
       this.getAreaWidth() // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(document.getElementById('main'))
+        this.zr = zrender.init(this.$refs.main)
         const div = document.createElement('div')
         div.classList.add('tips')
-        document.getElementById('main').appendChild(div)
+        this.$refs.main.appendChild(div)
         this.yLine() //生成Y轴坐标
         this.xLine() //生成X轴坐标
         // 画折线
@@ -2070,6 +2089,15 @@ export default {
   mounted() {
     const urlParams = this.urlParse()
     this.showInnerPage = urlParams.showInnerPage === '1'
+    if (this.isPrintAll) {
+      // 批量打印
+      this.apiData = this.printData
+      this.currentPage = this.printPage
+      this.$nextTick(() => {
+        this.handleData()
+      })
+      return
+    }
     if (this.useMockData) {
       this.apiData = mockData
       this.$nextTick(() => {
