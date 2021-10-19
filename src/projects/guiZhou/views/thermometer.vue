@@ -292,7 +292,7 @@
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatShitList({ tList: shitList })"
+              v-for="(item, index) in getFormatList({ tList: shitList })"
               :key="index"
             >
               {{ item.value }}

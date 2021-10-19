@@ -238,7 +238,7 @@ export const mockData = {
       temperature_type: '小便',
       value: '1',
       time_point: '2019-05-18 13:12:00',
-      vital_code: '67'
+      vital_code: '092'
     },
     {
       temperature_type: '体重',

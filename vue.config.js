@@ -107,7 +107,7 @@ module.exports = {
             case 'xieGang':
               return 'http://172.17.5.41:9091'
             case 'beiHai':
-              return 'http://172.17.5.41:9091'
+              return 'http://219.159.198.37:9091'
             case 'guiZhouNewBorn':
               return 'http://172.17.5.41:9091'
             case 'quZhou':

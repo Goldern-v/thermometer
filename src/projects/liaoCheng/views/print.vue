@@ -21,12 +21,24 @@ export default {
   },
   data() {
     return {
-      useMockData: true,
+      useMockData: false,
       printData: null,
       pageTotal: 1
     }
   },
   methods: {
+    //外部打印事件
+    messageHandle(e) {
+      if (e && e.data) {
+        switch (e.data.type) {
+          case 'printingAll':
+            window.print()
+            break
+          default:
+            break
+        }
+      }
+    },
     urlParse() {
       let obj = {}
       let reg = /[?&][^?&]+=[^?&%]+/g
@@ -41,12 +53,19 @@ export default {
       return obj
     }
   },
+  created() {
+    // 实现外部分页和打印
+    window.addEventListener('message', this.messageHandle, false)
+  },
   mounted() {
     const urlParams = this.urlParse()
     if (this.useMockData) {
       this.printData = mockData
       setTimeout(() => {
         this.pageTotal = this.$refs.thermometer[0].pageTotal
+        setTimeout(() => {
+          window.print()
+        }, 1000)
       }, 0)
     } else {
       this.$http({
@@ -60,11 +79,23 @@ export default {
         }
       }).then((res) => {
         this.printData = res.data
-        this.$nextTick(() => {
+        setTimeout(() => {
           this.pageTotal = this.$refs.thermometer[0].pageTotal
-        })
+          // setTimeout(() => {
+          //   window.print()
+          // }, 1500)
+        }, 0)
       })
     }
+  },
+  watch: {
+    // 因为分页可能在体温单外面，所以给父页面传递pageTotal
+    // pageTotal(value) {
+    //   window.parent.postMessage({ type: 'pageTotal', value }, '*')
+    // }
+  },
+  beforeDestroy() {
+    window.removeEventListener('message', this.messageHandle, false)
   }
 }
 </script>
