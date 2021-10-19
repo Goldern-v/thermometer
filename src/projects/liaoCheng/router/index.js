@@ -10,7 +10,7 @@ const routes = [
     component: () => import('src/projects/liaoCheng/views/thermometer.vue')
   },
   {
-    path: '/print',
+    path: '/printAll',
     name: 'Print',
     component: () => import('src/projects/liaoCheng/views/print.vue')
   }

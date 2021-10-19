@@ -2120,7 +2120,6 @@ export default {
       }).then((res) => {
         this.apiData = res.data
         this.$nextTick(() => {
-          this.handleData()
           //每次获取数据都要传一次页数
           this.currentPage = this.pageTotal
           window.parent.postMessage(
@@ -2128,6 +2127,7 @@ export default {
 
             '*'
           )
+          this.handleData()
         })
       })
     }

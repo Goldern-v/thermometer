@@ -187,7 +187,7 @@
           </div>
         </div>
         <div
-          id="main"
+          ref="main"
           :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
         ></div>
       </div>
@@ -410,6 +410,22 @@ import zrender from 'zrender'
 import { mockData } from 'src/projects/jiangMenFuYou/mockData.js'
 
 export default {
+  props: {
+    isPrintAll: {
+      type: Boolean,
+      default: false
+    },
+    printPage: {
+      type: Number,
+      default: 1
+    },
+    printData: {
+      type: Object,
+      default() {
+        return null
+      }
+    }
+  },
   data() {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
@@ -840,20 +856,11 @@ export default {
           case 'currentPage':
             if (e.data.value > 0) {
               this.currentPage = e.data.value
-              document.getElementById('main').innerHTML = ''
+              this.$refs.main.innerHTML = ''
               this.reset()
               this.handleData()
             }
             break
-          // case 'pageTotal':
-          //   if (e.data.value > 0) {
-          //     this.currentPage = e.data.value
-          //     this.pageTotal = e.data.value
-          //     document.getElementById('main').innerHTML = ''
-          //     this.reset()
-          //     this.handleData()
-          //   }
-          //   break
           case 'printing':
             window.print()
             break
@@ -899,14 +906,14 @@ export default {
     toNext() {
       if (this.currentPage === this.pageTotal) return
       this.currentPage++
-      document.getElementById('main').innerHTML = ''
+      this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
     },
     toPre() {
       if (this.currentPage === 1) return
       this.currentPage--
-      document.getElementById('main').innerHTML = ''
+      this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
     },
@@ -1062,10 +1069,10 @@ export default {
       this.getAreaHeight() // 遍历一遍获取高度
       this.getAreaWidth() // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(document.getElementById('main'))
+        this.zr = zrender.init(this.$refs.main)
         const div = document.createElement('div')
         div.classList.add('tips')
-        document.getElementById('main').appendChild(div)
+        this.$refs.main.appendChild(div)
         this.yLine() //生成Y轴坐标
         this.xLine() //生成X轴坐标
         Object.values(this.settingMap).forEach((x) => {
@@ -1167,7 +1174,7 @@ export default {
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
         //画请假和手术的字体
-        let bottomContextList = ['温水擦浴', '不升', '特殊物理降温']
+        let bottomContextList = ['温水擦浴', '不升', '特殊物理降温', '辅助呼吸']
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
@@ -1615,12 +1622,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8))
       let str = ''
       const timeAreasMap = {
-        '02:00:00': ['02:00:00', '06:00:59'],
-        '06:00:00': ['06:01:00', '10:00:59'],
-        '10:00:00': ['10:01:00', '14:00:59'],
-        '14:00:00': ['14:01:00', '18:00:59'],
-        '18:00:00': ['18:01:00', '22:00:59'],
-        '22:00:00': ['22:01:00', '23:59:59']
+        '02:00:00': ['00:00:00', '04:00:59'],
+        '06:00:00': ['04:01:00', '8:00:59'],
+        '10:00:00': ['08:01:00', '12:00:59'],
+        '14:00:00': ['12:01:00', '16:00:59'],
+        '18:00:00': ['16:01:00', '20:00:59'],
+        '22:00:00': ['20:01:00', '23:59:59']
       }
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -1802,23 +1809,9 @@ export default {
       return overWan ? getWan(overWan) + '万' + getWan(noWan) : getWan(num)
     },
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
-    handleNoteXaxis(xaxisList, item) {
+    handleNoteXaxis(xaxisList) {
       const xaxisNew = []
       for (let i = 0; i < xaxisList.length; i++) {
-        //医院单独要求 体温单的入院 22-24-02这个区间显示在最后一格，所以把体温单的入院注释特殊处理
-        //截取小时+分钟判断是否在0-2这个区间，把他移动到最后一个格子
-        let dataStr = item[i].time.slice(0, 10) + ' 00:00'
-        let hourStr = item[i].time.slice(10, 13)
-        let miStr = item[i].time.slice(14, 16)
-        const getTime = hourStr * 60 * 60 * 1000 + miStr * 60 * 1000
-        let dataTime = this.getTimeNum(dataStr) - 2 * 60 * 60 * 1000 //操作当天的时间回退2个小时，计算X轴坐标赋值给入院
-        if (
-          ['手术入院|', '入院|'].includes(item[i].value) &&
-          getTime <= 7200000
-        ) {
-          // console.log('ssss', item[i].time.slice(10, 16))
-          xaxisList[i] = this.getXaxis(dataTime)
-        }
         if (!xaxisNew.includes(xaxisList[i])) {
           xaxisNew.push(xaxisList[i])
         } else {
@@ -1839,15 +1832,19 @@ export default {
   mounted() {
     const urlParams = this.urlParse()
     this.showInnerPage = urlParams.showInnerPage === '1'
+    if (this.isPrintAll) {
+      // 批量打印
+      this.apiData = this.printData
+      this.currentPage = this.printPage
+      this.$nextTick(() => {
+        this.handleData()
+      })
+      return
+    }
     if (this.useMockData) {
       this.apiData = mockData
       this.$nextTick(() => {
         this.handleData()
-        // this.currentPage = this.pageTotal
-        // window.parent.postMessage(
-        //   { type: 'pageTotal', value: this.pageTotal },
-        //   '*'
-        // )
       })
     } else {
       this.$http({
@@ -1862,12 +1859,14 @@ export default {
       }).then((res) => {
         this.apiData = res.data
         this.$nextTick(() => {
-          this.handleData()
+          // this.handleData()
+          //每次获取数据都要传一次页数
           this.currentPage = this.pageTotal
           window.parent.postMessage(
             { type: 'pageTotal', value: this.pageTotal },
             '*'
           )
+          this.handleData()
         })
       })
     }
@@ -1879,7 +1878,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 8mm 5mm 8mm 16mm; // 页面的边距
+    margin: 15mm 5mm 8mm 16mm; // 页面的边距
   }
 }
 .main-view {
