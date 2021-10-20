@@ -7,6 +7,7 @@
       v-for="(item, index) in pageTotal"
       :printPage="index + 1"
       :key="index"
+      :class="index + 1 <= pageTotal ? 'printBreak' : ''"
     />
   </div>
 </template>
@@ -21,7 +22,7 @@ export default {
   },
   data() {
     return {
-      useMockData: false,
+      useMockData: true,
       printData: null,
       pageTotal: 1
     }
@@ -63,9 +64,9 @@ export default {
       this.printData = mockData
       setTimeout(() => {
         this.pageTotal = this.$refs.thermometer[0].pageTotal
-        setTimeout(() => {
-          window.print()
-        }, 1000)
+        // setTimeout(() => {
+        //   window.print()
+        // }, 1000)
       }, 0)
     } else {
       this.$http({
@@ -97,4 +98,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.printBreak {
+  page-break-after: always;
+}
+</style>

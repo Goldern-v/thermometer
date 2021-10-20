@@ -115,7 +115,7 @@ module.exports = {
             case 'wuJing':
               return 'http://172.17.5.41:9091'
             case 'zhongXi':
-              return 'http://172.17.5.41:9091'
+              return 'http://218.107.37.134:9093/'
             case 'common':
               return 'http://172.17.5.41:9091'
             default:

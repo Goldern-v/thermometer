@@ -292,7 +292,7 @@
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatList({ tList: shitList })"
+              v-for="(item, index) in getFormatShitList({ tList: shitList })"
               :key="index"
             >
               {{ item.value }}
@@ -2257,13 +2257,13 @@ export default {
         //特殊处理过敏药物
         //this.formatType("guomingyaowu");
         this.$nextTick(() => {
-          this.handleData()
           this.currentPage = this.pageTotal
           window.parent.postMessage(
             { type: 'pageTotal', value: this.pageTotal },
             '*'
           )
         })
+        this.handleData()
       })
     }
   }

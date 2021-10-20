@@ -2061,11 +2061,14 @@ export default {
         if (strArr.length === 2 && strArr[1] === '1') {
           newNum = newNum.slice(1)
         }
+
         return newNum
       }
       let overWan = Math.floor(num / 10000)
       let noWan = num % 10000
-      if (noWan.toString().length < 4) {
+
+      if (noWan.toString().length < 2) {
+        console.log(noWan, 'sss')
         noWan = '0' + noWan
       }
       return overWan ? getWan(overWan) + '万' + getWan(noWan) : getWan(num)
@@ -2139,7 +2142,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 8mm 8mm 8mm 8mm; // 页面的边距
+    margin: 8mm 8mm 5mm 8mm; // 页面的边距
   }
 }
 .main-view {
