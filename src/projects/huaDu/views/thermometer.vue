@@ -28,10 +28,12 @@
     </div>
     <div class="head-info-1">
       <div class="item">
-        科室：<span class="value">{{ adtLog }}</span>
+        科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
       <div class="item">
-        床号：<span class="value">{{ bedExchangeLog }}</span>
+        床号：<span class="value">{{
+          bedExchangeLog || patInfo.bed_label
+        }}</span>
       </div>
     </div>
     <div class="table-area">
@@ -185,7 +187,7 @@
           </div>
         </div>
         <div
-          id="main"
+          ref="main"
           :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
         ></div>
       </div>
@@ -383,12 +385,28 @@ import zrender from 'zrender'
 import { mockData } from 'src/projects/huaDu/mockData.js'
 
 export default {
+  props: {
+    isPrintAll: {
+      type: Boolean,
+      default: false
+    },
+    printPage: {
+      type: Number,
+      default: 1
+    },
+    printData: {
+      type: Object,
+      default() {
+        return null
+      }
+    }
+  },
   data() {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -817,7 +835,7 @@ export default {
           case 'currentPage':
             if (e.data.value > 0) {
               this.currentPage = e.data.value
-              document.getElementById('main').innerHTML = ''
+              this.$refs.main.innerHTML = ''
               this.reset()
               this.handleData()
             }
@@ -864,14 +882,14 @@ export default {
     toNext() {
       if (this.currentPage === this.pageTotal) return
       this.currentPage++
-      document.getElementById('main').innerHTML = ''
+      this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
     },
     toPre() {
       if (this.currentPage === 1) return
       this.currentPage--
-      document.getElementById('main').innerHTML = ''
+      this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
     },
@@ -1018,10 +1036,10 @@ export default {
       this.getAreaHeight() // 遍历一遍获取高度
       this.getAreaWidth() // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(document.getElementById('main'))
+        this.zr = zrender.init(this.$refs.main)
         const div = document.createElement('div')
         div.classList.add('tips')
-        document.getElementById('main').appendChild(div)
+        this.$refs.main.appendChild(div)
         this.yLine() //生成Y轴坐标
         this.xLine() //生成X轴坐标
         Object.values(this.settingMap).forEach((x) => {
@@ -1768,8 +1786,6 @@ export default {
                   item.value = `${targetList[j].value}/${shitList[k].value}g`
                 } else {
                   item.value = targetList[j].value
-                  console.log('shitList', shitList[k].time.slice(0, 10))
-                  console.log('targetList', targetList[j].time.slice(0, 10))
                   targetList.splice(j, 1)
                   break
                 }
@@ -1854,6 +1870,15 @@ export default {
   mounted() {
     const urlParams = this.urlParse()
     this.showInnerPage = urlParams.showInnerPage === '1'
+    if (this.isPrintAll) {
+      // 批量打印
+      this.apiData = this.printData
+      this.currentPage = this.printPage
+      this.$nextTick(() => {
+        this.handleData()
+      })
+      return
+    }
     if (this.useMockData) {
       this.apiData = mockData
       this.$nextTick(() => {
@@ -1872,6 +1897,13 @@ export default {
       }).then((res) => {
         this.apiData = res.data
         this.$nextTick(() => {
+          // this.handleData()
+          //每次获取数据都要传一次页数
+          this.currentPage = this.pageTotal
+          window.parent.postMessage(
+            { type: 'pageTotal', value: this.pageTotal },
+            '*'
+          )
           this.handleData()
         })
       })
