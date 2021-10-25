@@ -60,7 +60,7 @@ export const mockData = {
     },
     {
       temperature_type: '大便',
-      value: '1',
+      value: '※',
       time_point: '2021-10-07 14:00:00',
       vital_code: 'excrement',
       expand2: null
@@ -130,7 +130,7 @@ export const mockData = {
     },
     {
       temperature_type: '大便',
-      value: '0',
+      value: '灌肠',
       time_point: '2021-10-08 14:00:00',
       vital_code: 'excrement',
       expand2: null
@@ -291,7 +291,7 @@ export const mockData = {
     },
     {
       temperature_type: '大便',
-      value: '1',
+      value: 'E /2',
       time_point: '2021-10-10 10:00:00',
       vital_code: 'excrement',
       expand2: null
@@ -305,7 +305,7 @@ export const mockData = {
     },
     {
       temperature_type: '大便',
-      value: '1',
+      value: '人工肛门',
       time_point: '2021-10-11 14:00:00',
       vital_code: 'excrement',
       expand2: null

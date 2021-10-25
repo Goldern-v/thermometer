@@ -1179,9 +1179,16 @@ export default {
       notes.forEach((x, i) => {
         let value = x.value
         if (x.value.endsWith('|')) {
-          value = `${x.value}${this.toChinesNum(
-            new Date(x.time).getHours()
-          )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
+          //如果分钟少于10，则加上0，比如05分  显示零五分
+          if (new Date(x.time).getMinutes() < 10) {
+            value = `${x.value}${this.toChinesNum(
+              new Date(x.time).getHours()
+            )}时零${this.toChinesNum(new Date(x.time).getMinutes())}分`
+          } else {
+            value = `${x.value}${this.toChinesNum(
+              new Date(x.time).getHours()
+            )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
+          }
         }
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,

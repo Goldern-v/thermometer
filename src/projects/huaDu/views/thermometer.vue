@@ -30,11 +30,7 @@
       <div class="item">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item">
-        床号：<span class="value">{{
-          bedExchangeLog || patInfo.bed_label
-        }}</span>
-      </div>
+      <div class="item"></div>
     </div>
     <div class="table-area">
       <div class="vline" :style="{ left: '-0.5px' }"></div>
@@ -289,7 +285,7 @@
             ></div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row font-17" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList0.label || '' }}
           </div>
@@ -303,7 +299,7 @@
             ></div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row font-17" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList1.label || '' }}
           </div>
@@ -317,7 +313,7 @@
             ></div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row font-17" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList2.label || '' }}
           </div>
@@ -332,7 +328,7 @@
           </div>
         </div>
         <div
-          class="row border-bottom-black-2"
+          class="row border-bottom-black-2 font-17"
           :style="{ height: `${trHeight}px` }"
         >
           <div class="label" :style="{ width: `${leftWidth}px` }">
@@ -1918,6 +1914,10 @@ export default {
     size: a4; //定义为a4纸
     margin: 8mm 5mm 8mm 18mm; // 页面的边距
   }
+  .pain-area :nth-child(5) {
+    margin-bottom: 4px;
+    color: red;
+  }
 }
 .main-view {
   padding: 5px 0;
@@ -2140,7 +2140,7 @@ export default {
       }
       .s-index {
         position: absolute;
-        bottom: -12px;
+        bottom: -10px;
         left: 50%;
         -webkit-transform: translate(-50%);
         -moz-transform: translate(-50%);
@@ -2251,6 +2251,9 @@ export default {
 }
 .font-18 {
   font-size: 18px;
+}
+.font-17 {
+  font-size: 17px;
 }
 .font-20 {
   font-size: 20px;
