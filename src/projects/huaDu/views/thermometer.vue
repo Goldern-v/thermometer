@@ -379,6 +379,7 @@
 <script>
 import zrender from 'zrender'
 import { mockData } from 'src/projects/huaDu/mockData.js'
+ import moment from 'moment'//导入文件 
 
 export default {
   props: {
@@ -402,7 +403,7 @@ export default {
     const pulseRange = [0, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -750,9 +751,18 @@ export default {
     },
     formatStayDayList() {
       return this.dateList.map((x) => {
-        if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0)
+            let tomorrow  = moment(new Date()).add(1,'d').format("YYYY-MM-DD");
+            let today = moment(new Date()).format("YYYY-MM-DD")
+       this.topSheetNote.forEach((y)=>{
+          if(y.time.slice(0,10)===tomorrow&&y.value.includes('出院')){
+           today= tomorrow
+      
+          }
+        })
+              if (this.dayInterval(x, today) > 0)
           return ''
         return this.dayInterval(x, this.patInfo.admission_date) + 1
+        
       })
     },
     formatDateList() {
@@ -1879,6 +1889,7 @@ export default {
       this.apiData = mockData
       this.$nextTick(() => {
         this.handleData()
+        this.currentPage=this.pageTotal
       })
     } else {
       this.$http({
