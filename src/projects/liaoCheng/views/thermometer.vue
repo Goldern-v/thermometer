@@ -1218,8 +1218,10 @@ export default {
             // 体温为不升时，折线需要断开
             data = [[]]
             x.data.forEach((y, index) => {
-              if (y.value > 35) {
+              if (y.value >= 35) {
                 data[data.length - 1].push(y)
+              } else {
+                data.push([])
               }
               if (index < x.data.length - 1) {
                 if (
@@ -1270,6 +1272,8 @@ export default {
             x.data.forEach((y, index) => {
               if (y.value <= this.pulseRange[1]) {
                 data[data.length - 1].push(y)
+              } else {
+                data.push([])
               }
               if (index < x.data.length - 1) {
                 if (
