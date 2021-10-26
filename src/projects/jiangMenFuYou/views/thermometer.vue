@@ -408,7 +408,7 @@
 <script>
 import zrender from 'zrender'
 import { mockData } from 'src/projects/jiangMenFuYou/mockData.js'
-
+import moment from 'moment' //导入文件
 export default {
   props: {
     isPrintAll: {
@@ -709,6 +709,7 @@ export default {
             x.value === '分娩|' ||
             x.value === '手术|' ||
             x.value === '分娩' ||
+            x.value.includes('出院') ||
             x.value === '手术分娩|' ||
             x.value === '手术入院|')
       )
@@ -727,15 +728,20 @@ export default {
             x
           ) /* obj:{2019-05-20:[{},{},{}],2019-05-21:[{},{}],} */
         }
+        if (x.value.includes('出院')) {
+          console.log(x)
+        }
       })
       oDateList.forEach((date) => {
-        // console.log(obj[date])
         if (obj[date].length > 0) {
           deliveryObj = obj[date].find((obj) => obj.value.includes('分娩'))
           for (let i = obj[date].length - 1; i >= 0; i--) {
             if (obj[date][i].value.includes('分娩')) {
               obj[date].splice(i, 1)
             }
+            // if (obj[date][i].value.includes('出院')) {
+            //   // obj[date].splice(i, 1)
+            // }
           }
           if (deliveryObj) {
             obj[date].push(deliveryObj)
@@ -753,6 +759,7 @@ export default {
         if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0)
           return ''
         if (!this.operateDateList.length) return ''
+        console.log(this.operateDateList)
         // 构造天数差数组，有相同天数差的说明在同一天x
         const days = this.operateDateList.map((y) => {
           return this.dayInterval(x, y)
@@ -774,9 +781,15 @@ export default {
       })
     },
     formatStayDayList() {
+      //如果出院了，就修改当前日期为出院日期，结束运算
+      let today = moment(new Date()).format('YYYY-MM-DD')
       return this.dateList.map((x) => {
-        if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0)
-          return ''
+        this.topSheetNote.forEach((y) => {
+          if (y.value.includes('出院')) {
+            today = y.time.slice(0, 10)
+          }
+        })
+        if (this.dayInterval(x, today) > 0) return ''
         return this.dayInterval(x, this.patInfo.admission_date) + 1
       })
     },
@@ -1878,7 +1891,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 15mm 5mm 8mm 16mm; // 页面的边距
+    margin: 8mm 5mm 8mm 16mm; // 页面的边距
   }
 }
 .main-view {
