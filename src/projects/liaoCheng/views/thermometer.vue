@@ -732,6 +732,7 @@ export default {
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0)
           return ''
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return ''
         if (!this.operateDateList.length) return ''
         // 构造天数差数组，有相同天数差的说明在同一天，所以要去重
         const days = [
@@ -948,6 +949,16 @@ export default {
         'border-color': `${(index - 1) % 2 === 0 ? 'transparent' : '#000'}`,
         transform: 'translateX(1px)'
       }
+    },
+    //找到存在出院或者转出的日期
+    getLeaveTime() {
+      let outTime = ''
+      this.topSheetNote.forEach((y) => {
+        if (y.value.includes('出院') || y.value.includes('转出')) {
+          outTime = y.time.slice(0, 10)
+        }
+      })
+      return outTime
     },
     messageHandle(e) {
       if (e && e.data) {

@@ -13,8 +13,12 @@
       <div class="item" style="width:80px;flex:none;">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="width:80px;flex:none;">
-        年龄：<span class="value">{{ patInfo.age }}岁</span>
+      <div class="item" style="flex:none;">
+        年龄：<span class="value">{{
+          typeof parseInt(patInfo.age) === 'number' && !isNaN(patInfo.age)
+            ? patInfo.age + '岁'
+            : patInfo.age
+        }}</span>
       </div>
       <div class="item">
         入院日期：<span class="value">{{
@@ -205,7 +209,7 @@
           </div>
         </div>
         <div
-          id="main"
+          ref="main"
           :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
         ></div>
       </div>
@@ -471,14 +475,31 @@
 <script>
 import zrender from 'zrender'
 import { mockData } from 'src/projects/zhongXi/mockData.js'
+import moment from 'moment' //导入文件
 
 export default {
+  props: {
+    isPrintAll: {
+      type: Boolean,
+      default: false
+    },
+    printPage: {
+      type: Number,
+      default: 1
+    },
+    printData: {
+      type: Object,
+      default() {
+        return null
+      }
+    }
+  },
   data() {
     const yRange = [34, 42]
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -750,6 +771,7 @@ export default {
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0)
           return ''
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return ''
         if (!this.operateDateList.length) return ''
         // 构造天数差数组，有相同天数差的说明在同一天，所以要去重
         const days = [
@@ -792,10 +814,15 @@ export default {
       })
     },
     formatStayDayList() {
-      /* 住院天数 */
+      //如果出院了，就修改当前日期为出院日期，结束运算
+      let today = moment(new Date()).format('YYYY-MM-DD')
       return this.dateList.map((x) => {
-        // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
-        //   return "";
+        this.topSheetNote.forEach((y) => {
+          if (y.value.includes('出院')) {
+            today = y.time.slice(0, 10)
+          }
+        })
+        if (this.dayInterval(x, today) > 0) return ''
         return this.dayInterval(x, this.patInfo.admission_date) + 1
       })
     },
@@ -891,13 +918,23 @@ export default {
         transform: 'translateX(1px)'
       }
     },
+    //找到存在出院或者转出的日期
+    getLeaveTime() {
+      let outTime = ''
+      this.topSheetNote.forEach((y) => {
+        if (y.value.includes('出院') || y.value.includes('转出')) {
+          outTime = y.time.slice(0, 10)
+        }
+      })
+      return outTime
+    },
     messageHandle(e) {
       if (e && e.data) {
         switch (e.data.type) {
           case 'currentPage':
             if (e.data.value > 0) {
               this.currentPage = e.data.value
-              document.getElementById('main').innerHTML = ''
+              this.$refs.main.innerHTML = ''
               this.reset()
               this.handleData()
             }
@@ -942,14 +979,14 @@ export default {
     toNext() {
       if (this.currentPage === this.pageTotal) return
       this.currentPage++
-      document.getElementById('main').innerHTML = ''
+      this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
     },
     toPre() {
       if (this.currentPage === 1) return
       this.currentPage--
-      document.getElementById('main').innerHTML = ''
+      this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
     },
@@ -1143,10 +1180,10 @@ export default {
       this.getAreaHeight() // 遍历一遍获取高度
       this.getAreaWidth() // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(document.getElementById('main'))
+        this.zr = zrender.init(this.$refs.main)
         const div = document.createElement('div')
         div.classList.add('tips')
-        document.getElementById('main').appendChild(div)
+        this.$refs.main.appendChild(div)
         this.yLine() //生成Y轴坐标
         this.xLine() //生成X轴坐标
         // 画折线
@@ -1942,6 +1979,19 @@ export default {
   mounted() {
     const urlParams = this.urlParse()
     this.showInnerPage = urlParams.showInnerPage === '1'
+    if (this.isPrintAll) {
+      // 批量打印
+      this.apiData = this.printData
+      this.currentPage = this.printPage
+      this.$nextTick(() => {
+        this.handleData()
+        // window.parent.postMessage(
+        //   { type: 'pageTotal', value: this.pageTotal },
+        //   '*'
+        // )
+      })
+      return
+    }
     if (this.useMockData) {
       this.apiData = mockData
       this.$nextTick(() => {
@@ -1960,6 +2010,13 @@ export default {
       }).then((res) => {
         this.apiData = res.data
         this.$nextTick(() => {
+          //每次获取数据都要传一次页数
+          this.currentPage = this.pageTotal
+          window.parent.postMessage(
+            { type: 'pageTotal', value: this.pageTotal },
+
+            '*'
+          )
           this.handleData()
         })
       })
@@ -1972,7 +2029,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 8mm 8mm 8mm 8mm; // 页面的边距
+    margin: 6mm 8mm 8mm 8mm; // 页面的边距
   }
 }
 .main-view {

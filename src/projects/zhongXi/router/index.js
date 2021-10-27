@@ -8,6 +8,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: () => import('src/projects/zhongXi/views/thermometer.vue')
+  },
+  {
+    path: '/printAll',
+    name: 'Print',
+    component: () => import('src/projects/zhongXi/views/print.vue')
   }
 ]
 

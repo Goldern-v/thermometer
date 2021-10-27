@@ -748,8 +748,6 @@ export default {
       return listNew.map((x) => x.time_point)
     },
     formatOperateDateList() {
-      this.getLeaveTime()
-
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0)
           return ''
