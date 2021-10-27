@@ -291,8 +291,8 @@ export const mockData = {
     // },
     {
       temperature_type: '表顶注释',
-      value: '出院|',
-      time_point: '2021-10-26 07:12:00',
+      value: '转出',
+      time_point: '2021-10-28 07:12:00',
       vital_code: '3'
     },
     {

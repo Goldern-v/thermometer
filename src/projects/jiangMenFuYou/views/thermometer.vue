@@ -709,7 +709,6 @@ export default {
             x.value === '分娩|' ||
             x.value === '手术|' ||
             x.value === '分娩' ||
-            x.value.includes('出院') ||
             x.value === '手术分娩|' ||
             x.value === '手术入院|')
       )
@@ -728,9 +727,6 @@ export default {
             x
           ) /* obj:{2019-05-20:[{},{},{}],2019-05-21:[{},{}],} */
         }
-        if (x.value.includes('出院')) {
-          console.log(x)
-        }
       })
       oDateList.forEach((date) => {
         if (obj[date].length > 0) {
@@ -739,9 +735,6 @@ export default {
             if (obj[date][i].value.includes('分娩')) {
               obj[date].splice(i, 1)
             }
-            // if (obj[date][i].value.includes('出院')) {
-            //   // obj[date].splice(i, 1)
-            // }
           }
           if (deliveryObj) {
             obj[date].push(deliveryObj)
@@ -755,11 +748,14 @@ export default {
       return listNew.map((x) => x.time_point)
     },
     formatOperateDateList() {
+      this.getLeaveTime()
+
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0)
           return ''
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return ''
+        // if (this.dayInterval(x, outTime) > 0) return ''
         if (!this.operateDateList.length) return ''
-        console.log(this.operateDateList)
         // 构造天数差数组，有相同天数差的说明在同一天x
         const days = this.operateDateList.map((y) => {
           return this.dayInterval(x, y)
@@ -862,6 +858,16 @@ export default {
         transform: 'translateX(1.5px)',
         'font-family': 'SimHei'
       }
+    },
+    //找到存在出院或者转出的日期
+    getLeaveTime() {
+      let outTime = ''
+      this.topSheetNote.forEach((y) => {
+        if (y.value.includes('出院') || y.value.includes('转出')) {
+          outTime = y.time.slice(0, 10)
+        }
+      })
+      return outTime
     },
     messageHandle(e) {
       if (e && e.data) {

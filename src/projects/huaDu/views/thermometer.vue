@@ -30,7 +30,11 @@
       <div class="item">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item"></div>
+      <div class="item">
+        床号：<span class="value">{{
+          bedExchangeLog || patInfo.bed_label
+        }}</span>
+      </div>
     </div>
     <div class="table-area">
       <div class="vline" :style="{ left: '-0.5px' }"></div>
@@ -756,7 +760,10 @@ export default {
           .format('YYYY-MM-DD')
         let today = moment(new Date()).format('YYYY-MM-DD')
         this.topSheetNote.forEach((y) => {
-          if (y.time.slice(0, 10) === tomorrow && y.value.includes('出院')) {
+          if (
+            y.time.slice(0, 10) === tomorrow &&
+            (y.value.includes('出院') || y.value.includes('转出'))
+          ) {
             today = tomorrow
           }
         })
