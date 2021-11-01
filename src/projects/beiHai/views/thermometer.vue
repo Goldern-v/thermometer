@@ -88,7 +88,7 @@
           :style="{ height: `${trHeight}px` }"
         >
           <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
-          <div class="value-item-box">
+          <div class="value-item-box red-font">
             <div
               class="value-item"
               v-for="(item, index) in formatStayDayList"
@@ -104,7 +104,7 @@
           </div>
           <div class="value-item-box">
             <div
-              class="value-item"
+              class="value-item red-font"
               v-for="(item, index) in formatOperateDateList"
               :key="index"
             >
@@ -209,7 +209,7 @@
         ></div>
         <div
           class="row border-top-red-2"
-          :style="{ height: `${trHeight * 2}px` }"
+          :style="{ height: `${trHeight * 2 - 6}px` }"
         >
           <div class="label" :style="{ width: `${leftWidth}px` }">
             呼吸(次/分)
@@ -337,7 +337,7 @@
           </div>
         </div>
 
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row font-11" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList0.label || '' }}
           </div>
@@ -351,7 +351,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row font-11" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList1.label || '' }}
           </div>
@@ -365,7 +365,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row font-11" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList2.label || '' }}
           </div>
@@ -379,7 +379,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row font-11" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList3.label || '' }}
           </div>
@@ -650,7 +650,7 @@ export default {
       return tds
     },
     trHeight() {
-      return this.ySpace
+      return this.ySpace + 4
     },
     formatPressureList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
@@ -770,22 +770,22 @@ export default {
         for (let i = 0; i < index; i++) {
           apart.unshift(days[i])
         }
-        // 间隔大于7天的手术，分子分母的写法要重置
+        // 间隔大于14天的手术或者超过十四天的手术不显示，分子分母的写法要重置
         if (apart.length) {
           apart.unshift(days[index])
           for (let i = 1; i < apart.length; i++) {
-            if (apart[i] - apart[i - 1] > 7) {
+            if (apart[i] - apart[i - 1] > 14 || apart[i] > 14) {
               apart = apart.slice(0, i)
               break
             }
           }
           apart.splice(0, 1)
         }
-        if (days[index] <= 7) {
+        if (days[index] <= 14) {
           return index === 0 || !apart.length
             ? days[index]
             : days[index] === 0
-            ? `${apart.join('/')}(${apart.length + 1})`
+            ? `${days[index]}/${apart.join('/')}`
             : `${days[index]}/${apart.join('/')}`
         } else {
           return ''
@@ -1027,22 +1027,20 @@ export default {
           if (
             ['02', '20'].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) > this.pulseRange[1]
-          )
-            if (
-              ['041', '042', '043'].includes(vitalSigns[i].vital_code) &&
-              Number(vitalSigns[i].value) <= 35
-            ) {
-              // {
-              //   this.topPulseNote.push({
-              //     time: vitalSigns[i].time_point,
-              //     value: '过快'
-              //   })
-              // } else
-              // this.bottomSheetNote.push({
-              //   time: vitalSigns[i].time_point,
-              //   value: '不升'
-              // })
-            }
+          ) {
+            // this.topPulseNote.push({
+            //   time: vitalSigns[i].time_point,
+            //   value: '过快'
+            // })
+          } else if (
+            ['041', '01', '043'].includes(vitalSigns[i].vital_code) &&
+            Number(vitalSigns[i].value) <= 35
+          ) {
+            this.bottomSheetNote.push({
+              time: vitalSigns[i].time_point,
+              value: '不升'
+            })
+          }
           this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
             time: vitalSigns[i].time_point,
             value: Number(vitalSigns[i].value)
@@ -1087,7 +1085,7 @@ export default {
           case '19':
             this.outputList.push(item)
             break
-          case '9':
+          case '3':
             this.coolList.push(item)
             break
           // case '093':
@@ -1159,17 +1157,17 @@ export default {
         // 画折线
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data]
-          // if (['041', '042', '043'].includes(x.vitalCode)) {
-          //   // 体温为不升时，折线需要断开
-          //   data = [[]]
-          //   x.data.forEach((y) => {
-          //     if (y.value <= 35) {
-          //       data.push([])
-          //     } else {
-          //       data[data.length - 1].push(y)
-          //     }
-          //   })
-          // }
+          if (['041', '042', '043'].includes(x.vitalCode)) {
+            // 体温为不升时，折线需要断开
+            data = [[]]
+            x.data.forEach((y) => {
+              if (y.value <= 35) {
+                data.push([])
+              } else {
+                data[data.length - 1].push(y)
+              }
+            })
+          }
           // if (['02', '20'].includes(x.vitalCode)) {
           //   // 心率或脉搏过快时，折线需要断开
           //   data = [[]]
@@ -1603,7 +1601,13 @@ export default {
             const item = this.coolList[i]
             const coolX = this.getXaxis(this.getLocationTime(item.time))
             const coolY = this.getYaxis(yRange, item.value, vitalCode)
-            if (coolX === cx) {
+
+            console.log(
+              this.getTimeStamp(item.time) - this.getTimeStamp(x.time)
+            )
+
+            if (coolX === cx && coolY !== cy) {
+              //体温和降温不重叠的情况
               this.createCircle({
                 cx: coolX,
                 cy: coolY,
@@ -1624,7 +1628,36 @@ export default {
                 lineDash: [3, 3]
               })
               this.coolList.splice(i, 1)
+            } else if (coolY === cy && coolX === cx) {
+              //体温和物理降温重叠，则要求用红色圆圈在体温外
+              this.createCircle({
+                cx: coolX,
+                cy: coolY,
+                r: 8,
+                color: 'red',
+                zlevel: 8,
+                tips: `${item.time} 降温：${item.value}`,
+                dotSolid: false
+              })
             }
+            //  else if (
+            //   this.getTimeStamp(item.time) - this.getTimeStamp(x.time) >
+            //     30 * 60 * 1000 &&
+            //   this.getTimeStamp(item.time) - this.getTimeStamp(x.time) <=
+            //     2 * 60 * 60 * 1000
+            // ) {
+            //   console.log('sssssss')
+            //   //降温后30分钟到两个小时用红色圈表示，不画线连接
+            //   this.createCircle({
+            //     cx: coolX,
+            //     cy: coolY,
+            //     r: 4,
+            //     color: 'red',
+            //     zlevel: 10,
+            //     tips: `${item.time} 降温：${item.value}`,
+            //     dotSolid: false
+            //   })
+            // }
           }
           // 画复试
           const createRepeatTest = () => {
@@ -2267,6 +2300,10 @@ export default {
 .font-12 {
   font-size: 12px;
 }
+.font-11 {
+  text-align: left;
+  font-size: 10px !important;
+}
 .border-top-red-2 {
   border-top: 2px solid red !important;
 }
@@ -2275,5 +2312,8 @@ export default {
 }
 .border-top-black-2 {
   border-top: 2px solid black !important;
+}
+.red-font {
+  color: red;
 }
 </style>

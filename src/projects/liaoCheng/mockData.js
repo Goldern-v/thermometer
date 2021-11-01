@@ -67,9 +67,9 @@ export const mockData = {
     },
     {
       temperature_type: '表底注释',
-      value: '请假',
+      value: '不升',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-18 03:12:00',
+      time_point: '2021-05-23 12:12:00',
       vital_code: '4'
     },
     {
@@ -148,6 +148,34 @@ export const mockData = {
       value: '36.9',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2021-05-20 03:12:00',
+      vital_code: '043'
+    },
+    {
+      temperature_type: '肛温',
+      value: '36.9',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-24 03:12:00',
+      vital_code: '043'
+    },
+    {
+      temperature_type: '肛温',
+      value: '38.9',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-24 13:12:00',
+      vital_code: '043'
+    },
+    {
+      temperature_type: '肛温',
+      value: '36.9',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-22 03:12:00',
+      vital_code: '043'
+    },
+    {
+      temperature_type: '肛温',
+      value: '36.9',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-23 03:12:00',
       vital_code: '043'
     },
     {
@@ -268,12 +296,12 @@ export const mockData = {
       time_point: '2021-05-18 13:12:00',
       vital_code: '09'
     },
-    // {
-    //   temperature_type: '腋温',
-    //   value: '35.2',
-    //   time_point: '2021-05-18 01:12:00',
-    //   vital_code: '01'
-    // },
+    {
+      temperature_type: '腋温',
+      value: '39.2',
+      time_point: '2021-05-15 01:12:00',
+      vital_code: '01'
+    },
     {
       temperature_type: '脉搏',
       value: '190',
@@ -313,37 +341,43 @@ export const mockData = {
     {
       temperature_type: '腋温',
       value: '38.2',
-      time_point: '2021-05-15 01:12:00',
+      time_point: '2021-05-22 01:12:00',
       vital_code: '01'
     },
     {
       temperature_type: '腋温',
       value: '38.2',
-      time_point: '2021-05-16 01:12:00',
+      time_point: '2021-05-23 01:12:00',
       vital_code: '01'
     },
     {
       temperature_type: '腋温',
       value: '38.2',
-      time_point: '2021-05-17 01:12:00',
+      time_point: '2021-05-24 01:12:00',
       vital_code: '01'
     },
     {
       temperature_type: '腋温',
-      value: '34.2',
-      time_point: '2021-05-18 01:12:00',
-      vital_code: '01'
-    },
-    {
-      temperature_type: '腋温',
-      value: '38.2',
-      time_point: '2021-05-19 01:12:00',
+      value: '33',
+      time_point: '2021-05-25 01:12:00',
       vital_code: '01'
     },
     {
       temperature_type: '腋温',
       value: '37',
-      time_point: '2021-05-20 15:12:00',
+      time_point: '2021-05-24 01:12:00',
+      vital_code: '01'
+    },
+    {
+      temperature_type: '腋温',
+      value: '38.2',
+      time_point: '2021-05-26 01:12:00',
+      vital_code: '01'
+    },
+    {
+      temperature_type: '腋温',
+      value: '37',
+      time_point: '2021-05-27 15:12:00',
       vital_code: '01'
     },
     {

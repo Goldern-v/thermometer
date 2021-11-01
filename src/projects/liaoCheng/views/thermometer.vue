@@ -454,7 +454,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -960,6 +960,16 @@ export default {
       })
       return outTime
     },
+    //找到表底存在不升的日期
+    getNotTemTime() {
+      let outTime = []
+      this.bottomSheetNote.forEach((y) => {
+        if (y.value.includes('不升')) {
+          outTime.push(y.time)
+        }
+      })
+      return outTime
+    },
     messageHandle(e) {
       if (e && e.data) {
         switch (e.data.type) {
@@ -1118,7 +1128,7 @@ export default {
             })
           } else if (
             ['041', '01', '043'].includes(vitalSigns[i].vital_code) &&
-            Number(vitalSigns[i].value) <= 35
+            Number(vitalSigns[i].value) < 35
           ) {
             this.bottomSheetNote.push({
               time: vitalSigns[i].time_point,
@@ -1231,16 +1241,20 @@ export default {
             x.data.forEach((y, index) => {
               if (y.value >= 35) {
                 data[data.length - 1].push(y)
-              } else {
+              }
+              if (y.value < 35) {
                 data.push([])
               }
               if (index < x.data.length - 1) {
-                if (
-                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
-                    this.getTimeNum(y.time.slice(0, 10)) >=
-                  24 * 60 * 60 * 1000 * 2
-                ) {
-                  data.push([x.data[index + 1]])
+                for (let item of this.getNotTemTime()) {
+                  if (
+                    this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                      this.getTimeNum(y.time.slice(0, 10)) >=
+                      24 * 60 * 60 * 1000 * 2 ||
+                    item.slice(0, 10) === y.time.slice(0, 10)
+                  ) {
+                    data.push([x.data[index + 1]])
+                  }
                 }
               } else {
                 const list = data[data.length - 1]
@@ -1782,7 +1796,15 @@ export default {
             ) {
               createRepeatTest()
             }
-          } else if (index === 0 && this.currentPage === 1) {
+            for (let item of this.getNotTemTime()) {
+              if (
+                this.getTimeNum(x.time) - this.getTimeNum(item) > 0 &&
+                index === 0
+              ) {
+                createRepeatTest()
+              }
+            }
+          } else if (index === 0) {
             // 入院首次体温≥38℃
             const list = [
               {

@@ -128,12 +128,12 @@ export const mockData = {
       time_point: '2019-05-24 03:12:00',
       vital_code: '19'
     },
-    // {
-    //   "temperature_type": "在线降温",
-    //   "value": "0",
-    //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": '29'
-    // },
+    {
+      temperature_type: '在线降温',
+      value: '37',
+      time_point: '2019-05-17 01:12:00',
+      vital_code: '3'
+    },
     {
       temperature_type: '大便次数',
       value: '1',
@@ -307,10 +307,10 @@ export const mockData = {
     //   vital_code: '02'
     // },
     {
-      temperature_type: '自定义1',
+      temperature_type: '十二指肠液（m',
       value: '36.7',
       time_point: '2019-05-17 01:12:00',
-      vital_code: null
+      vital_code: '33'
     },
     {
       temperature_type: '自定义1',
