@@ -585,7 +585,7 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [4, 8, 12, 16, 20, 24]
+      const list = [4, 8, 12, 4, 8, 12]
       const tds = []
       for (let i = 0; i < 7; i++) {
         tds.push(...list)
@@ -1883,6 +1883,7 @@ export default {
             { type: 'pageTotal', value: this.pageTotal },
             '*'
           )
+          
           this.handleData()
         })
       })
