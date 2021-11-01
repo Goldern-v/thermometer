@@ -961,6 +961,7 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: 'pageTotal', value }, '*')
     }
+    
   },
   created() {
     // 实现外部分页和打印
@@ -2262,8 +2263,9 @@ export default {
             { type: 'pageTotal', value: this.pageTotal },
             '*'
           )
+          this.handleData()
         })
-        this.handleData()
+        
       })
     }
   }
