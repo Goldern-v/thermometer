@@ -152,16 +152,16 @@ export const mockData = {
     },
     {
       temperature_type: '肛温',
-      value: '36.9',
+      value: '35',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-24 03:12:00',
+      time_point: '2021-05-30 03:12:00',
       vital_code: '043'
     },
     {
       temperature_type: '肛温',
       value: '38.9',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-24 13:12:00',
+      time_point: '2021-05-30 13:12:00',
       vital_code: '043'
     },
     {
@@ -298,8 +298,14 @@ export const mockData = {
     },
     {
       temperature_type: '腋温',
-      value: '39.2',
+      value: '34',
       time_point: '2021-05-15 01:12:00',
+      vital_code: '01'
+    },
+    {
+      temperature_type: '腋温',
+      value: '39.2',
+      time_point: '2021-05-28 22:00:00',
       vital_code: '01'
     },
     {
@@ -340,13 +346,13 @@ export const mockData = {
     },
     {
       temperature_type: '腋温',
-      value: '38.2',
+      value: '38.5',
       time_point: '2021-05-22 01:12:00',
       vital_code: '01'
     },
     {
       temperature_type: '腋温',
-      value: '38.2',
+      value: '39',
       time_point: '2021-05-23 01:12:00',
       vital_code: '01'
     },
@@ -370,7 +376,7 @@ export const mockData = {
     },
     {
       temperature_type: '腋温',
-      value: '38.2',
+      value: '39.2',
       time_point: '2021-05-26 01:12:00',
       vital_code: '01'
     },

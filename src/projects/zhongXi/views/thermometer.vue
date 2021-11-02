@@ -4,7 +4,7 @@
     :style="{ width: `${leftWidth + areaWidth}px` }"
     v-if="apiData"
   >
-    <div class="head-hos">南方医科大学中西医结合医院医院</div>
+    <div class="head-hos">南方医科大学中西医结合医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
       <div class="item" style="width:100px;flex:none;">
@@ -306,7 +306,7 @@
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatList({ tList: shitList })"
+              v-for="(item, index) in getFormatList({ tList: nounList })"
               :key="index"
             >
               {{ item.value }}
@@ -499,7 +499,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -635,6 +635,7 @@ export default {
         '033': '体重',
         '043': '肛温',
         '041': '口温',
+        '17': '腹围',
         '21': '发热体温',
         '22': '线上降温',
         '23': '呼吸机R',
@@ -1095,11 +1096,12 @@ export default {
               time: vitalSigns[i].time_point,
               value: '不升'
             })
+          } else {
+            this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
+              time: vitalSigns[i].time_point,
+              value: Number(vitalSigns[i].value)
+            })
           }
-          this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
-            time: vitalSigns[i].time_point,
-            value: Number(vitalSigns[i].value)
-          })
           continue
         }
         const item = {
@@ -1136,6 +1138,9 @@ export default {
             break
           case '19':
             this.outputList.push(item)
+            break
+          case '17':
+            this.nounList.push(item)
             break
           case '3':
             this.coolList.push(item)

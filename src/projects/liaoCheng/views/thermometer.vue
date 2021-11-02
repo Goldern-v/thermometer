@@ -1128,17 +1128,19 @@ export default {
             })
           } else if (
             ['041', '01', '043'].includes(vitalSigns[i].vital_code) &&
-            Number(vitalSigns[i].value) < 35
+            Number(vitalSigns[i].value) <= 35
           ) {
             this.bottomSheetNote.push({
               time: vitalSigns[i].time_point,
               value: '不升'
             })
+          } else {
+            this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
+              time: vitalSigns[i].time_point,
+              value: Number(vitalSigns[i].value)
+            })
           }
-          this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
-            time: vitalSigns[i].time_point,
-            value: Number(vitalSigns[i].value)
-          })
+
           continue
         }
         const item = {
@@ -1239,10 +1241,10 @@ export default {
             // 体温为不升时，折线需要断开
             data = [[]]
             x.data.forEach((y, index) => {
-              if (y.value >= 35) {
+              if (y.value > 35) {
                 data[data.length - 1].push(y)
               }
-              if (y.value < 35) {
+              if (y.value <= 35) {
                 data.push([])
               }
               if (index < x.data.length - 1) {
@@ -1776,9 +1778,10 @@ export default {
             }
           }
           // 画复试
+          const lastX = this.getXaxis(this.dateRange[1] + ' ' + ':22:00:00')
           const createRepeatTest = () => {
             this.createText({
-              x: cx + 8,
+              x: cx.toFixed(2) === lastX.toFixed(2) ? cx - 8 : cx + 8,
               y: cy - 20,
               value: 'v',
               color: 'red',
@@ -1796,15 +1799,16 @@ export default {
             ) {
               createRepeatTest()
             }
+            //找到表底录入的不升时间点，不升后面的第一个体温数据就画体温复试
             for (let item of this.getNotTemTime()) {
               if (
                 this.getTimeNum(x.time) - this.getTimeNum(item) > 0 &&
-                index === 0
+                index === 1
               ) {
                 createRepeatTest()
               }
             }
-          } else if (index === 0) {
+          } else if (index === 0 && this.currentPage === 1) {
             // 入院首次体温≥38℃
             const list = [
               {
@@ -2112,7 +2116,6 @@ export default {
       let noWan = num % 10000
 
       if (noWan.toString().length < 2) {
-        console.log(noWan, 'sss')
         noWan = '0' + noWan
       }
       return overWan ? getWan(overWan) + '万' + getWan(noWan) : getWan(num)

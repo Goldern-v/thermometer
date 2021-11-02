@@ -927,11 +927,12 @@ export default {
               time: vitalSigns[i].time_point,
               value: '不升'
             })
+          } else {
+            this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
+              time: vitalSigns[i].time_point,
+              value: Number(vitalSigns[i].value)
+            })
           }
-          this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
-            time: vitalSigns[i].time_point,
-            value: Number(vitalSigns[i].value)
-          })
           continue
         }
         const item = {

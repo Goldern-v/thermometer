@@ -453,7 +453,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -961,7 +961,6 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: 'pageTotal', value }, '*')
     }
-    
   },
   created() {
     // 实现外部分页和打印
@@ -1192,11 +1191,12 @@ export default {
               time: vitalSigns[i].time_point,
               value: '不升'
             })
+          } else {
+            this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
+              time: vitalSigns[i].time_point,
+              value: Number(vitalSigns[i].value)
+            })
           }
-          this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
-            time: vitalSigns[i].time_point,
-            value: Number(vitalSigns[i].value)
-          })
           continue
         }
         const item = {
@@ -2265,7 +2265,6 @@ export default {
           )
           this.handleData()
         })
-        
       })
     }
   }

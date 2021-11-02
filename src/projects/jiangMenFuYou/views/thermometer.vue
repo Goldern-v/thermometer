@@ -430,7 +430,7 @@ export default {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -1883,7 +1883,7 @@ export default {
             { type: 'pageTotal', value: this.pageTotal },
             '*'
           )
-          
+
           this.handleData()
         })
       })
