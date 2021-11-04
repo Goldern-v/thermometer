@@ -13,6 +13,11 @@ const routes = [
     path: '/printAll',
     name: 'Print',
     component: () => import('src/projects/beiHai/views/print.vue')
+  },
+  {
+    path: '/newBorn',
+    name: 'NewBorn',
+    component: () => import('src/projects/beiHai/views/thermometerNewBorn.vue')
   }
 ]
 

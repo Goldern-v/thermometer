@@ -157,6 +157,14 @@
                 <span class="axillary">x</span>
                 <i class="note-icon"></i>
               </template>
+              <template v-else-if="key === 'oralTemperature'">
+                <span class="oralTemperature-icon"></span>
+                <i class="note-icon"></i>
+              </template>
+              <template v-else-if="key === 'pulse'">
+                <span class="pulse-icon"></span>
+                <i class="note-icon"></i>
+              </template>
               <i
                 v-else
                 class="note-icon"
@@ -430,7 +438,7 @@ export default {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -1518,9 +1526,10 @@ export default {
               const sameAxisItem = tList.find(
                 (x) =>
                   // console.log(x.y,cy)
-                  x.x.toFixed(2) === cx.toFixed(2) &&
-                  x.y - 1 <= cy &&
-                  x.y + 1 >= cy
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 2 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 2
               )
               if (sameAxisItem) {
                 params = {
@@ -2188,6 +2197,26 @@ export default {
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
         border-bottom: 18px solid blue;
+      }
+      .pulse-icon {
+        position: absolute;
+        margin-top: 2px;
+        margin-left: -4px;
+        display: inline-block;
+        z-index: 2;
+        border: 8px solid red;
+        border-radius: 50%;
+        border-radius: 50px;
+      }
+      .oralTemperature-icon {
+        position: absolute;
+        margin-left: -4px;
+        margin-top: 2px;
+        display: inline-block;
+        z-index: 2;
+        border: 8px solid blue;
+        border-radius: 50%;
+        border-radius: 50px;
       }
     }
     .split-line {
