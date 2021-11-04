@@ -29,6 +29,8 @@
     "build:common": "vue-cli-service build --project=common",
     "dev:liaoChengNewBorn": "vue-cli-service serve --project=liaoChengNewBorn",
     "build:liaoChengNewBorn": "vue-cli-service build --project=liaoChengNewBorn",
+    "dev:foShanShiYi": "vue-cli-service serve --project=foShanShiYi",
+    "build:foShanShiYi": "vue-cli-service build --project=foShanShiYi",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },

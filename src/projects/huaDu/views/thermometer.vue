@@ -140,6 +140,10 @@
                 <span class="pain-icon"></span>
                 <i class="note-icon"></i>
               </template>
+              <template v-else-if="key === 'pulse'">
+                <span class="pulse-icon"></span>
+                <i class="note-icon"></i>
+              </template>
               <i
                 v-else
                 class="note-icon"
@@ -733,6 +737,8 @@ export default {
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), '{y}-{m}-{d}')) > 0)
           return ''
+        //获取出院日期，如果出院了就结束运算
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return ''
         if (!this.operateDateList.length) return ''
         // 构造天数差数组，有相同天数差的说明在同一天x
         const days = this.operateDateList.map((y) => {
@@ -840,6 +846,16 @@ export default {
         transform: 'translateX(1.5px)',
         'font-family': 'SimHei'
       }
+    },
+    //找到存在出院或者转出的日期
+    getLeaveTime() {
+      let outTime = ''
+      this.topSheetNote.forEach((y) => {
+        if (y.value.includes('出院') || y.value.includes('转出')) {
+          outTime = y.time.slice(0, 10)
+        }
+      })
+      return outTime
     },
     messageHandle(e) {
       if (e && e.data) {
@@ -1505,8 +1521,13 @@ export default {
               })
               const sameAxisItem = tList.find(
                 (x) =>
-                  x.x.toFixed(2) === cx.toFixed(2) &&
-                  x.y.toFixed(2) === cy.toFixed(2)
+                  //由于有些微小的偏差，比如存在一px左右的数据偏差，就写个区间
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 2 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 2
+                // x.x.toFixed(2) === cx.toFixed(2) &&
+                // x.y.toFixed(2) === cy.toFixed(2)
               )
               if (sameAxisItem) {
                 params = {
@@ -1928,7 +1949,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 8mm 5mm 8mm 18mm; // 页面的边距
+    margin: 5mm 5mm 5mm 13mm; // 页面的边距
   }
   .pain-area :nth-child(5) {
     margin-bottom: 4px;
@@ -2203,6 +2224,19 @@ export default {
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
         border-bottom: 18px solid blue;
+      }
+      .pulse-icon {
+        position: absolute;
+        margin-left: -4px;
+        margin-top: 2px;
+        display: inline-block;
+        z-index: 2;
+        border: 9px solid red;
+        border-radius: 50%;
+        border-radius: 50px;
+        // border-left: 10px solid transparent;
+        // border-right: 10px solid transparent;
+        // border-bottom: 18px solid red;
       }
     }
     .split-line {

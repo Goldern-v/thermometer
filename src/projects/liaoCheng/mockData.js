@@ -298,7 +298,7 @@ export const mockData = {
     },
     {
       temperature_type: '腋温',
-      value: '34',
+      value: '33',
       time_point: '2021-05-15 01:12:00',
       vital_code: '01'
     },

@@ -31,6 +31,8 @@ const projectName = (() => {
       return '贵州省人医新生儿体温单'
     case 'zhongXi': // 南方中西医结合医院
       return '南方中西医结合医院'
+    case 'foShanShiYi': // 南方中西医结合医院
+      return '佛山市第一人民医院'
     case 'common': // 可配置的通用版本
       return '配置通用版本'
     default:
@@ -69,8 +71,10 @@ module.exports = {
           return './src/projects/wuJing/main.js'
         case 'guiZhouNewBorn': // 贵州省人医新生儿体温单
           return './src/projects/guiZhouNewBorn/main.js'
-        case 'zhongXi': // 武警
+        case 'zhongXi': // 南方中西医
           return './src/projects/zhongXi/main.js'
+        case 'foShanShiYi': // 佛山市一
+          return './src/projects/foShanShiYi/main.js'
         case 'common': // 可配置的通用版本
           return './src/projects/common/main.js'
         default:
@@ -115,6 +119,8 @@ module.exports = {
             case 'wuJing':
               return 'http://172.17.5.41:9091'
             case 'zhongXi':
+              return 'http://218.107.37.134:9093/'
+            case 'foShanShiYi':
               return 'http://218.107.37.134:9093/'
             case 'common':
               return 'http://172.17.5.41:9091'
