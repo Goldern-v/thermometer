@@ -13,6 +13,11 @@ const routes = [
     path: '/printAll',
     name: 'Print',
     component: () => import('src/projects/wuJing/views/print.vue')
+  },
+  {
+    path: '/withoutPain',
+    name: 'WithoutPain',
+    component: () => import('src/projects/wuJing/views/withoutPain.vue')
   }
 ]
 
