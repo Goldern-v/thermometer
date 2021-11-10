@@ -308,7 +308,7 @@
               ></div>
             </div>
           </div>
-          <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="row" :style="{ height: `${trHeight + 15}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
               皮试
             </div>

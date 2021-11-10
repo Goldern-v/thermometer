@@ -385,23 +385,20 @@
             ></div>
           </div>
         </div>
-        <!-- <div
-          class="row border-bottom-black-2"
-          :style="{ height: `${trHeight}px` }"
-        >
+        <div class="row  font-14" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList3.label || '' }}
           </div>
           <div class="value-item-box">
             <div
-              class="value-item"
+              class="value-item font-14"
               :style="{ 'font-size': scaleFont(item.value) }"
               v-for="(item, index) in getFormatList({ tList: customList3 })"
               :key="index"
               v-html="item.value"
             ></div>
           </div>
-        </div> -->
+        </div>
         <div
           class="vtline"
           :style="{
@@ -461,7 +458,7 @@ export default {
     const pulseRange = [0, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -619,7 +616,7 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [4, 8, 12, 16, 20, 24]
+      const list = [2, 6, 10, 2, 6, 10]
       const tds = []
       for (let i = 0; i < 7; i++) {
         tds.push(...list)
@@ -1042,7 +1039,7 @@ export default {
           // 超出时间范围的抛弃
           continue
         }
-        if (!vitalSigns[i].vital_code || vitalSigns[i].vital_code === 'null') {
+        if (['4', '41', '42', '43'].includes(vitalSigns[i].vital_code)) {
           // 自定义字段填入
           const sign = vitalSigns[i].temperature_type
           const index = customSigns.indexOf(sign)
@@ -1493,8 +1490,8 @@ export default {
           'style',
           `
           position:absolute;
-          top:${y - 30}px;
-          left:${x - textWidth / 2}px;
+          top:${y + 60}px;
+          left:${x + textWidth / 2 - 30}px;
           display:block;
           font-size:12px;
           background-color:rgba(0,0,0,.7);
@@ -1705,12 +1702,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8))
       let str = ''
       const timeAreasMap = {
-        '02:00:00': ['00:00:00', '06:00:59'],
-        '06:00:00': ['06:01:00', '10:00:59'],
-        '10:00:00': ['10:01:00', '14:00:59'],
-        '14:00:00': ['14:01:00', '18:00:59'],
-        '18:00:00': ['18:01:00', '22:00:59'],
-        '22:00:00': ['22:01:00', '23:59:59']
+        '02:00:00': ['00:00:00', '04:00:59'],
+        '06:00:00': ['04:01:00', '8:00:59'],
+        '10:00:00': ['08:01:00', '12:00:59'],
+        '14:00:00': ['12:01:00', '16:00:59'],
+        '18:00:00': ['16:01:00', '20:00:59'],
+        '22:00:00': ['20:01:00', '23:59:59']
       }
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -2072,6 +2069,7 @@ export default {
     border: 1px solid;
     float: left;
     font-size: 18px;
+    border-left: 2px solid black;
     border-bottom: 2px solid black;
     border-top: none;
     padding-top: 10px;

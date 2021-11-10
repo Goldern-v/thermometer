@@ -1279,8 +1279,8 @@ export default {
       this.areaWidth = preSpace - this.xSpace
     },
     createText({
-      x,
-      y,
+      x: x,
+      y: y,
       value,
       color,
       fontSize = 16,
@@ -1433,8 +1433,8 @@ export default {
           'style',
           `
           position:absolute;
-          top:${y - 30}px;
-          left:${x - textWidth / 2}px;
+          top:${y + 60}px;
+          left:${x + textWidth / 2 - 30}px;
           display:block;
           font-size:12px;
           background-color:rgba(0,0,0,.7);
@@ -1650,12 +1650,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8))
       let str = ''
       const timeAreasMap = {
-        '02:00:00': ['00:00:00', '06:00:59'],
-        '06:00:00': ['06:01:00', '10:00:59'],
-        '10:00:00': ['10:01:00', '14:00:59'],
-        '14:00:00': ['14:01:00', '18:00:59'],
-        '18:00:00': ['18:01:00', '22:00:59'],
-        '22:00:00': ['22:01:00', '23:59:59']
+        '02:00:00': ['00:00:00', '05:59:59'],
+        '06:00:00': ['06:00:00', '09:59:59'],
+        '10:00:00': ['10:00:00', '13:59:59'],
+        '14:00:00': ['14:00:00', '17:59:59'],
+        '18:00:00': ['18:00:00', '21:59:59'],
+        '22:00:00': ['22:00:00', '23:59:59']
       }
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
