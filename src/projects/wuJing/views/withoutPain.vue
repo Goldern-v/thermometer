@@ -187,7 +187,7 @@
           </div>
         </div>
         <div
-          id="main"
+          ref="main"
           :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
         ></div>
       </div>
@@ -456,6 +456,22 @@ import zrender from 'zrender'
 import { mockData } from 'src/projects/wuJing/mockData.js'
 
 export default {
+  props: {
+    isPrintAll: {
+      type: Boolean,
+      default: false
+    },
+    printPage: {
+      type: Number,
+      default: 1
+    },
+    printData: {
+      type: Object,
+      default() {
+        return null
+      }
+    }
+  },
   data() {
     const yRange = [33, 42]
     const pulseRange = [0, 180]
@@ -866,7 +882,7 @@ export default {
           case 'currentPage':
             if (e.data.value > 0) {
               this.currentPage = e.data.value
-              document.getElementById('main').innerHTML = ''
+              this.$refs.main.innerHTML = ''
               this.reset()
               this.handleData()
             }
@@ -910,14 +926,14 @@ export default {
     toNext() {
       if (this.currentPage === this.pageTotal) return
       this.currentPage++
-      document.getElementById('main').innerHTML = ''
+      this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
     },
     toPre() {
       if (this.currentPage === 1) return
       this.currentPage--
-      document.getElementById('main').innerHTML = ''
+      this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
     },
@@ -1129,10 +1145,10 @@ export default {
       this.getAreaHeight() // 遍历一遍获取高度
       this.getAreaWidth() // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(document.getElementById('main'))
+        this.zr = zrender.init(this.$refs.main)
         const div = document.createElement('div')
         div.classList.add('tips')
-        document.getElementById('main').appendChild(div)
+        this.$refs.main.appendChild(div)
         this.yLine() //生成Y轴坐标
         this.xLine() //生成X轴坐标
         // 画折线
@@ -1887,6 +1903,19 @@ export default {
   mounted() {
     const urlParams = this.urlParse()
     this.showInnerPage = urlParams.showInnerPage === '1'
+    if (this.isPrintAll) {
+      // 批量打印
+      this.apiData = this.printData
+      this.currentPage = this.printPage
+      this.$nextTick(() => {
+        this.handleData()
+        // window.parent.postMessage(
+        //   { type: 'pageTotal', value: this.pageTotal },
+        //   '*'
+        // )
+      })
+      return
+    }
     if (this.useMockData) {
       this.apiData = mockData
       this.$nextTick(() => {
@@ -1905,6 +1934,13 @@ export default {
       }).then((res) => {
         this.apiData = res.data
         this.$nextTick(() => {
+          //每次获取数据都要传一次页数
+          this.currentPage = this.pageTotal
+          window.parent.postMessage(
+            { type: 'pageTotal', value: this.pageTotal },
+
+            '*'
+          )
           this.handleData()
         })
       })

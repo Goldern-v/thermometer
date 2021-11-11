@@ -474,7 +474,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -2155,6 +2155,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.timeRange[1])
     const urlParams = this.urlParse()
     this.showInnerPage = urlParams.showInnerPage === '1'
     if (this.isPrintAll) {
