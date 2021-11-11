@@ -774,6 +774,7 @@ export default {
           }
         })
         if (this.dayInterval(x, today) > 0) return ''
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return ''
         return this.dayInterval(x, this.patInfo.admission_date) + 1
       })
     },
@@ -1916,6 +1917,7 @@ export default {
       this.apiData = mockData
       this.$nextTick(() => {
         this.handleData()
+        this.currentPage = this.pageTotal
       })
     } else {
       this.$http({
