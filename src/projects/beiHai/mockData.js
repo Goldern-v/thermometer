@@ -135,6 +135,12 @@ export const mockData = {
       vital_code: '3'
     },
     {
+      temperature_type: '在线降温',
+      value: '39',
+      time_point: '2019-05-17 15:12:00',
+      vital_code: '3'
+    },
+    {
       temperature_type: '大便次数',
       value: '1',
       time_point: '2019-05-20 03:12:00',
@@ -411,7 +417,7 @@ export const mockData = {
     {
       temperature_type: '入量',
       value: '5512',
-      time_point: '2019-05-16 13:00:00',
+      time_point: '2019-05-16 03:00:00',
       vital_code: '091'
     },
     {

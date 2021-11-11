@@ -153,6 +153,14 @@
                 <span class="pain-icon"></span>
                 <i class="note-icon"></i>
               </template>
+              <template v-else-if="key === 'oralTemperature'">
+                <span class="oralTemperature-icon"></span>
+                <i class="note-icon"></i>
+              </template>
+              <template v-else-if="key === 'pulse'">
+                <span class="pulse-icon"></span>
+                <i class="note-icon"></i>
+              </template>
               <i
                 v-else
                 class="note-icon"
@@ -1118,6 +1126,7 @@ export default {
           '拒测',
           '不在',
           '外出',
+          '皮试',
           '不升',
           '请假',
           '右PPD',
@@ -1129,7 +1138,7 @@ export default {
           '温水浴',
           'PDD停辅助呼吸'
         ]
-        let centerText = ['辅助呼吸']
+        let centerText = ['辅助呼吸', '体温不升', '△']
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
@@ -1227,7 +1236,7 @@ export default {
           this.indexTextAreaHeight +
             this.timesTempAreaHeight -
             5 * (this.ySpace + 1),
-          'black'
+          'blue'
         )
       })
     },
@@ -1602,11 +1611,7 @@ export default {
             const item = this.coolList[i]
             const coolX = this.getXaxis(this.getLocationTime(item.time))
             const coolY = this.getYaxis(yRange, item.value, vitalCode)
-
-            console.log(
-              this.getTimeStamp(item.time) - this.getTimeStamp(x.time)
-            )
-
+            console
             if (coolX === cx && coolY !== cy) {
               //体温和降温不重叠的情况
               this.createCircle({
@@ -1626,7 +1631,7 @@ export default {
                 lineWidth: 1,
                 color: 'red',
                 zlevel: 1,
-                lineDash: [3, 3]
+                lineDash: coolY < cy ? '' : [3, 3] //如果降温比体温高，也就是降温的y轴坐标小，则用实线
               })
               this.coolList.splice(i, 1)
             } else if (coolY === cy && coolX === cx) {
@@ -2171,6 +2176,26 @@ export default {
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
         border-bottom: 18px solid blue;
+      }
+      .oralTemperature-icon {
+        position: absolute;
+        margin-left: 0px;
+        margin-top: 2px;
+        display: inline-block;
+        z-index: 2;
+        border: 8px solid blue;
+        border-radius: 50%;
+        border-radius: 50px;
+      }
+      .pulse-icon {
+        position: absolute;
+        margin-left: 0px;
+        margin-top: 2px;
+        display: inline-block;
+        z-index: 2;
+        border: 8px solid red;
+        border-radius: 50%;
+        border-radius: 50px;
       }
     }
     .times {
