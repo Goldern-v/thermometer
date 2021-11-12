@@ -454,7 +454,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -1805,13 +1805,15 @@ export default {
             //找到表底录入的不升时间点，不升后面的第一个体温数据就画体温复试
             for (let item of this.getNotTemTime()) {
               if (
-                this.getTimeNum(x.time) - this.getTimeNum(item) > 0 &&
-                index === 1
+                this.getTimeNum(x.time.slice(0, 10)) -
+                  this.getTimeNum(item.slice(0, 10)) >
+                  0 &&
+                index === 0
               ) {
                 createRepeatTest()
               }
             }
-          } else if (index === 0 && this.currentPage === 1) {
+          } else if (index === 0) {
             // 入院首次体温≥38℃
             const list = [
               {
@@ -1830,8 +1832,14 @@ export default {
               .filter((x) => Object.keys(x).length > 1)
               .sort((a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time))
             if (
-              vitalCode === list[0].vitalCode &&
-              Number(list[0].value) >= 38
+              //首次入院的体温高于38度，或者首次入院体温低于35度不升后一个体温要复测
+              (vitalCode === list[0].vitalCode &&
+                list[0].time.slice(0, 10) ===
+                  this.patInfo.admission_date.slice(0, 10) &&
+                Number(list[0].value) >= 38) ||
+              this.getTimeNum(list[0].time) -
+                this.getTimeNum(this.getNotTemTime()[0]) >
+                0
             ) {
               createRepeatTest()
             }

@@ -600,6 +600,7 @@ export default {
       shitList: [], // 大便次数
       yinliuList: [], // 引流量
       urineList: [], // 尿量
+      nounList: [],
       outputList: [], // 出量
       customList0: [], // 自定义1
       customList1: [], // 自定义2
@@ -965,6 +966,7 @@ export default {
       this.pressureList = []
       this.weightList = []
       this.heightList = []
+      this.nounList = []
       this.inputList = []
       this.shitList = []
       this.yinliuList = []

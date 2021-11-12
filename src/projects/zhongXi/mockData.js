@@ -77,6 +77,12 @@ export const mockData = {
       vital_code: '061'
     },
     {
+      temperature_type: '腹围',
+      value: '120',
+      time_point: '2021-10-18 15:00:00',
+      vital_code: '17'
+    },
+    {
       temperature_type: '体温',
       value: '36.7',
       time_point: '2021-10-18 15:00:00',
