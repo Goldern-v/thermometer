@@ -63,6 +63,12 @@ export const mockData = {
       value: '入院|十一时二分',
       time_point: '2021-11-01 11:02:35',
       vital_code: '5'
+    },
+    {
+      temperature_type: '事件名称',
+      value: '物理降温',
+      time_point: '2021-11-01 11:02:35',
+      vital_code: '4'
     }
   ]
 }

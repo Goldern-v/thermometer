@@ -454,7 +454,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -735,12 +735,18 @@ export default {
         if (this.dayInterval(x, this.getLeaveTime()) > 0) return ''
         if (!this.operateDateList.length) return ''
         // 构造天数差数组，有相同天数差的说明在同一天，所以要去重
+        // const days = [
+        //   ...new Set(
+        //     this.operateDateList.map((y) => {
+        //       console.log(y)
+        //       return this.dayInterval(x, y)
+        //     })
+        //   )
+        // ]
         const days = [
-          ...new Set(
-            this.operateDateList.map((y) => {
-              return this.dayInterval(x, y)
-            })
-          )
+          ...this.operateDateList.map((y) => {
+            return this.dayInterval(x, y)
+          })
         ]
         if (days.every((z) => z < 0)) return ''
         // 找到前一次手术（最后一次天数差是正整数或者0的地方）
@@ -765,12 +771,15 @@ export default {
           apart.splice(0, 1)
         }
         if (days[index] <= 7) {
+          console.log(apart)
           return index === 0 || !apart.length
             ? days[index] === 0 && operationNum
               ? `(${operationNum + 1})`
               : days[index]
             : days[index] === 0
             ? `${apart.join('/')}(${operationNum + 1})`
+            : apart[0] == days[index]
+            ? days[index]
             : `${days[index]}/${apart.join('/')}`
         } else {
           return ''

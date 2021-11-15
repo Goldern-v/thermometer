@@ -713,12 +713,12 @@ export default {
       const list = this.vitalSigns.filter(
         (x) =>
           x.vital_code === '5' &&
-          (x.value === '手术' ||
-            x.value === '分娩|' ||
-            x.value === '手术|' ||
-            x.value === '分娩' ||
-            x.value === '手术分娩|' ||
-            x.value === '手术入院|')
+          (x.value.includes('手术') ||
+            x.value.includes('分娩|') ||
+            x.value.includes('手术|') ||
+            x.value.includes('分娩') ||
+            x.value.includes('手术分娩|') ||
+            x.value.includes('手术入院|'))
       )
       const oDateList = list.map((x) => x.time_point.slice(0, 10))
       const obj = {}
@@ -1199,7 +1199,15 @@ export default {
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
         //画请假和手术的字体
-        let bottomContextList = ['温水擦浴', '不升', '特殊物理降温', '辅助呼吸']
+        let bottomContextList = [
+          '温水擦浴',
+          '不升',
+          '特殊物理降温',
+          '辅助呼吸',
+          '物理降温',
+          '回室',
+          '请假'
+        ]
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
