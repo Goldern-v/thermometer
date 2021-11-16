@@ -12,7 +12,11 @@
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item">
-        年龄：<span class="value">{{ patInfo.age }}岁</span>
+        年龄：<span class="value">{{
+          typeof parseInt(patInfo.age) === 'number' && !isNaN(patInfo.age)
+            ? patInfo.age + '岁'
+            : patInfo.age
+        }}</span>
       </div>
       <div class="item">
         性别：<span class="value">{{ patInfo.sex }}</span>
@@ -138,6 +142,10 @@
               </template>
               <template v-else-if="key === 'pain'">
                 <span class="pain-icon"></span>
+                <i class="note-icon"></i>
+              </template>
+              <template v-else-if="key === 'oralTemperature'">
+                <span class="oralTemperature-icon"></span>
                 <i class="note-icon"></i>
               </template>
               <template v-else-if="key === 'pulse'">
@@ -2234,6 +2242,19 @@ export default {
         display: inline-block;
         z-index: 2;
         border: 9px solid red;
+        border-radius: 50%;
+        border-radius: 50px;
+        // border-left: 10px solid transparent;
+        // border-right: 10px solid transparent;
+        // border-bottom: 18px solid red;
+      }
+      .oralTemperature-icon {
+        position: absolute;
+        margin-left: -4px;
+        margin-top: 2px;
+        display: inline-block;
+        z-index: 2;
+        border: 9px solid black;
         border-radius: 50%;
         border-radius: 50px;
         // border-left: 10px solid transparent;

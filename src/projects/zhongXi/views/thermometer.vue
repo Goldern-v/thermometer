@@ -20,12 +20,12 @@
             : patInfo.age
         }}</span>
       </div>
-      <div class="item">
+      <div class="item" style="flex:none;width:160px">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item">
+      <div class="item" style="flex:none;width:160px">
         病案号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
       <div class="item">
@@ -153,6 +153,10 @@
               </template>
               <template v-else-if="key === 'pain'">
                 <span class="pain-icon"></span>
+                <i class="note-icon"></i>
+              </template>
+              <template v-else-if="key === 'pulse'">
+                <span class="pulse-icon"></span>
                 <i class="note-icon"></i>
               </template>
               <i
@@ -2222,13 +2226,22 @@ export default {
       }
       .pain-icon {
         position: absolute;
-        right: 3px;
+        right: 2px;
         top: 2px;
         display: inline-block;
         z-index: 2;
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
         border-bottom: 18px solid blue;
+      }
+      .pulse-icon {
+        position: absolute;
+        margin-left: 20px;
+        margin-top: 2px;
+        display: inline-block;
+        z-index: 2;
+        border: 7.5px solid red;
+        border-radius: 50%;
       }
     }
     .times {

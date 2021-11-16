@@ -6,7 +6,7 @@ export const mockData = {
       patient_id: '0000590904',
       name: '陈小倩',
       sex: '女',
-      dept_name: '神经内科VIP病房（本部）',
+      dept_name: '外五科（神经外科）病区',
       bed_label: '012',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
