@@ -1081,9 +1081,9 @@ export default {
           case '12':
             this.outputList.push(item)
             break
-          // case '9':
-          //   this.coolList.push(item)
-          //   break
+          case '25':
+            this.coolList.push(item)
+            break
           case '11':
             this.entryList.push(item)
             break
