@@ -69,6 +69,18 @@ export const mockData = {
       value: '物理降温',
       time_point: '2021-11-01 11:02:35',
       vital_code: '4'
+    },
+    {
+      temperature_type: '事件名称',
+      value: '测试',
+      time_point: '2021-11-01 11:02:35',
+      vital_code: '4'
+    },
+    {
+      temperature_type: '事件名称',
+      value: '测试22',
+      time_point: '2021-11-01 11:02:35',
+      vital_code: '4'
     }
   ]
 }

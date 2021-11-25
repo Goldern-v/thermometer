@@ -1199,15 +1199,18 @@ export default {
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
         //画请假和手术的字体
-        let bottomContextList = [
-          '温水擦浴',
-          '不升',
-          '特殊物理降温',
-          '辅助呼吸',
-          '物理降温',
-          '回室',
-          '请假'
-        ]
+        let bottomContextList = this.bottomSheetNote.map((x) => {
+          return x.value
+        })
+        //[
+        //   '温水擦浴',
+        //   '不升',
+        //   '特殊物理降温',
+        //   '辅助呼吸',
+        //   '物理降温',
+        //   '回室',
+        //   '请假'
+        // ]
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
