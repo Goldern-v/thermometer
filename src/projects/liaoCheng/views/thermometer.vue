@@ -454,7 +454,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -771,7 +771,6 @@ export default {
           apart.splice(0, 1)
         }
         if (days[index] <= 7) {
-          console.log(apart)
           return index === 0 || !apart.length
             ? days[index] === 0 && operationNum
               ? `(${operationNum + 1})`
@@ -1225,7 +1224,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: value !== '过快' ? y + 2 : y - this.ySpace - 1,
+          y: value !== '过快' ? y : y - this.ySpace - 1,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1257,17 +1256,25 @@ export default {
                 data.push([])
               }
               if (index < x.data.length - 1) {
-                for (let item of this.getNotTemTime()) {
-                  if (
-                    this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
-                      this.getTimeNum(y.time.slice(0, 10)) >=
-                      24 * 60 * 60 * 1000 * 2 ||
-                    (this.getTimeNum(x.data[index + 1].time) >=
-                      this.getTimeNum(item) &&
-                      this.getTimeNum(y.time) <= this.getTimeNum(item))
-                    // item.slice(0, 10) === y.time.slice(0, 10)
-                  ) {
-                    data.push([x.data[index + 1]])
+                //超过一天的时间点，中间断开
+                if (
+                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                    this.getTimeNum(y.time.slice(0, 10)) >=
+                  24 * 60 * 60 * 1000 * 2
+                ) {
+                  data.push([x.data[index + 1]])
+                }
+                //如果存在中间不升的情况，中间断开
+                if (this.getNotTemTime() !== []) {
+                  for (let item of this.getNotTemTime()) {
+                    if (
+                      this.getTimeNum(x.data[index + 1].time) >=
+                        this.getTimeNum(item) &&
+                      this.getTimeNum(y.time) <= this.getTimeNum(item)
+                      // item.slice(0, 10) === y.time.slice(0, 10)
+                    ) {
+                      data.push([x.data[index + 1]])
+                    }
                   }
                 }
               } else {
@@ -1812,14 +1819,16 @@ export default {
               createRepeatTest()
             }
             //找到表底录入的不升时间点，不升后面的第一个体温数据就画体温复试
-            for (let item of this.getNotTemTime()) {
-              if (
-                this.getTimeNum(x.time.slice(0, 10)) -
-                  this.getTimeNum(item.slice(0, 10)) >
-                  0 &&
-                index === 0
-              ) {
-                createRepeatTest()
+            if (this.getNotTemTime() !== []) {
+              for (let item of this.getNotTemTime()) {
+                if (
+                  this.getTimeNum(x.time.slice(0, 10)) -
+                    this.getTimeNum(item.slice(0, 10)) >
+                    0 &&
+                  index === 0
+                ) {
+                  createRepeatTest()
+                }
               }
             }
           } else if (index === 0) {
@@ -1841,14 +1850,26 @@ export default {
               .filter((x) => Object.keys(x).length > 1)
               .sort((a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time))
             if (
-              //首次入院的体温高于38度，或者首次入院体温低于35度不升后一个体温要复测
-              (vitalCode === list[0].vitalCode &&
-                list[0].time.slice(0, 10) ===
-                  this.patInfo.admission_date.slice(0, 10) &&
-                Number(list[0].value) >= 38) ||
+              //存在第一天入院就不升的情况，那接后面的第一个体温就复测
+              vitalCode === list[0].vitalCode &&
               this.getTimeNum(list[0].time) -
                 this.getTimeNum(this.getNotTemTime()[0]) >
                 0
+            ) {
+              createRepeatTest()
+            }
+            if (
+              //断开的时候，体温单复测
+              vitalCode === list[0].vitalCode && //体温为第一个，就判断为断开
+              x.time !== list[0].time //排查第一个温度的情况
+            ) {
+              createRepeatTest()
+            }
+            if (
+              //首次入院的体温高于38度，用温度列表里面第一个时间跟时间想且当前页面为1等判断为第一天
+              x.time.slice(0, 10) === list[0].time.slice(0, 10) &&
+              Number(list[0].value) >= 38 &&
+              this.currentPage === 1
             ) {
               createRepeatTest()
             }

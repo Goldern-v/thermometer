@@ -37,6 +37,7 @@
   "dependencies": {
     "axios": "^0.21.0",
     "core-js": "^3.6.5",
+    "gm-crypt": "0.0.2",
     "moment": "^2.29.1",
     "normalize.css": "^8.0.1",
     "vue": "^2.6.11",
