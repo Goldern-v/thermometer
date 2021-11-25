@@ -476,7 +476,7 @@ export default {
     const pulseRange = [0, 180]
     // const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -1122,23 +1122,13 @@ export default {
             new Date(x.time).getHours()
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
-        const bottomText = [
-          '拒测',
-          '不在',
-          '外出',
-          '皮试',
-          '不升',
-          '请假',
-          '右PPD',
-          '左PPD',
-          '冰敷',
-          '退热贴',
-          '冷水枕',
-          '降温毯',
-          '温水浴',
-          'PDD停辅助呼吸'
-        ]
-        let centerText = ['辅助呼吸', '体温不升', '△']
+        const bottomText = this.bottomSheetNote.map((x) => {
+          return x.value
+        })
+        let centerText = this.centerSheetNote.map((x) => {
+          return x.value
+        })
+        //  ['辅助呼吸', '体温不升', '△']
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
