@@ -556,7 +556,11 @@ export default {
         '27': '物理降温',
         '28': '呕吐量',
         '29': '在线降温',
-        ttpf: '疼痛评分'
+        ttpf: '疼痛评分',
+        '4': '排出自定义',
+        '41': '自定义1',
+        '42': '自定义2',
+        '43': '自定义3'
       }, // vital_code是null的时候，是自定义字段，显示在体温表后面
       lineMap: {
         '2': 'oralTemperature',
@@ -700,10 +704,10 @@ export default {
       const list = this.vitalSigns.filter(
         (x) =>
           x.vital_code === '3' &&
-          (x.value === '手术' ||
-            x.value === '分娩|' ||
-            x.value === '手术分娩|' ||
-            x.value === '手术入院|')
+          (x.value.includes('手术') ||
+            x.value.includes('分娩|') ||
+            x.value.includes('手术分娩|') ||
+            x.value.includes('手术入院|'))
       )
       const oDateList = list.map((x) => x.time_point.slice(0, 10))
       const obj = {}
@@ -991,7 +995,7 @@ export default {
           // 超出时间范围的抛弃
           continue
         }
-        if (!vitalSigns[i].vital_code || vitalSigns[i].vital_code === 'null') {
+        if (['4', '41', '42', '43'].includes(vitalSigns[i].vital_code)) {
           // 自定义字段填入
           const sign = vitalSigns[i].temperature_type
           const index = customSigns.indexOf(sign)
@@ -1158,7 +1162,7 @@ export default {
         // 生成表底注释
         this.createNote(
           this.bottomSheetNote,
-          this.areaHeight - (this.ySpace + 2) * 14,
+          this.areaHeight - (this.ySpace + 2) * 14 - 3,
           'black'
         )
       })
@@ -1176,31 +1180,30 @@ export default {
             new Date(x.time).getHours()
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
-        const bottomText = [
-          '拒测',
-          '不在',
-          '外出',
-          '请假',
-          '不升',
-          '右PPD',
-          '左PPD',
-          'PPD︵-︶',
-          'PPD︵+︶',
-          'PPD︵++︶',
-          'PPD︵+++︶',
-          '冰敷',
-          '退热贴',
-          '冷水枕',
-          '降温毯',
-          '温水浴',
-          '辅助呼吸',
-          '停辅助呼吸',
-          'PDD'
-        ]
+        //
+        // 从第二项开始，和前面的x判断是否相同，相同则需处理y
+        let yNew = 0
+        for (let j = i - 1; j >= 0; j--) {
+          if (Math.abs(xaxisNew[j] - xaxisNew[i]) <= 1) {
+            if (notes[j].value.endsWith('|')) {
+              let noteTime = `${notes[j].value}${this.toChinesNum(
+                new Date(notes[j].time).getHours()
+              )}时${this.toChinesNum(new Date(notes[j].time).getMinutes())}分`
+              yNew += (noteTime.length + 3) * this.ySpace - 8
+            } else {
+              yNew += (notes[j].value.length + 1) * this.ySpace + 6
+            }
+          } else {
+            break
+          }
+        }
+        let bottomValu = this.bottomSheetNote.map((x) => {
+          return x.value
+        })
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: bottomText.includes(value) ? y - 3 : y,
+          y: bottomValu.includes(value) ? y : yNew,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 2,
@@ -1890,18 +1893,71 @@ export default {
     },
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
     handleNoteXaxis(xaxisList) {
+      //定义一个数组，为全部最后一格的数据，如果与最后一格重叠，就往底下移动
+      // const lastXaxis = [1, 2, 3, 4, 5, 6, 7].map((x) => {
+      //   return x * 6 * this.xSpace
+      // })
+      // const lastXaxis = [
+      //   116.67857142857143,
+      //   243.96428571428575,
+      //   371.25,
+      //   498.5357142857143,
+      //   625.8214285714286,
+      //   753.1071428571429,
+      //   880.3928571428572
+      // ]
+      // console.log('传进来的', JSON.parse(JSON.stringify(xaxisList)))
+
       const xaxisNew = []
       for (let i = 0; i < xaxisList.length; i++) {
-        if (!xaxisNew.includes(xaxisList[i])) {
-          xaxisNew.push(xaxisList[i])
+        let lastXaxis = this.getLastXasis(xaxisList[i])
+        // console.log(xaxisList[i], '前面是坐标，后面是坐标区域', lastXaxis)
+        if (!xaxisNew.includes(Math.floor(xaxisList[i]))) {
+          xaxisNew.push(Math.floor(xaxisList[i]))
         } else {
-          while (xaxisNew.includes(xaxisList[i])) {
+          while (
+            xaxisNew.includes(Math.floor(xaxisList[i])) &&
+            xaxisList[i] < lastXaxis
+          ) {
             xaxisList[i] += this.xSpace + 2
           }
-          xaxisNew.push(xaxisList[i])
+
+          xaxisNew.push(Math.floor(xaxisList[i]))
         }
       }
+      //存在数值误差，修复数值
+      // console.log(
+      //   '边缘区域1',
+      //   this.getXaxis(this.getTimeNum(this.dateList[6] + ' 23:59:00'))
+      // )
+      // const map1 = xaxisNew.map((x) => {
+      //   if (x == 4) {
+      //     return x * 2
+      //   }
+      //   return x
+      // })
+      // // xaxisNew.map((x) => (x = 0))
+      // console.log('传出去的', JSON.parse(JSON.stringify(xaxisNew)))
       return xaxisNew
+    },
+    //根据传过来的X轴地址获取到该区间的最后一格，如果小于最后一格，就右移动，到了最后一格就左移
+    getLastXasis(xaxis) {
+      if (xaxis > 0 && xaxis <= 117) {
+        return this.getXaxis(this.getTimeNum(this.dateList[0] + ' 20:00:00'))
+      } else if (xaxis > 117 && xaxis <= 245) {
+        return this.getXaxis(this.getTimeNum(this.dateList[1] + ' 20:00:00'))
+      }
+      if (xaxis > 245 && xaxis <= 372) {
+        return this.getXaxis(this.getTimeNum(this.dateList[2] + ' 20:00:00'))
+      } else if (xaxis > 372 && xaxis <= 509) {
+        return this.getXaxis(this.getTimeNum(this.dateList[3] + ' 20:00:00'))
+      } else if (xaxis > 509 && xaxis <= 636) {
+        return this.getXaxis(this.getTimeNum(this.dateList[4] + ' 20:00:00'))
+      } else if (xaxis > 636 && xaxis <= 763) {
+        return this.getXaxis(this.getTimeNum(this.dateList[5] + ' 20:00:00'))
+      } else if (xaxis > 763 && xaxis <= 891) {
+        return this.getXaxis(this.getTimeNum(this.dateList[6] + ' 20:00:00'))
+      }
     },
     scaleFont(val) {
       if (val.length > 5) {
