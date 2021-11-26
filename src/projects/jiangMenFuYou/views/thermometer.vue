@@ -13,7 +13,9 @@
       </div>
       <div class="item" style="flex:none;">
         年龄：<span class="value">{{
-          typeof parseInt(patInfo.age) === 'number' && !isNaN(patInfo.age)
+          PatientId.endsWith('_1')
+            ? '0岁'
+            : typeof parseInt(patInfo.age) === 'number' && !isNaN(patInfo.age)
             ? patInfo.age + '岁'
             : patInfo.age
         }}</span>
@@ -448,6 +450,7 @@ export default {
       leftWidth: 160, // 左侧内容宽度
       xRange: [1, 8],
       yRange,
+      PatientId: '',
       pulseRange,
       settingMap: {
         oralTemperature: {
@@ -1868,6 +1871,11 @@ export default {
   },
   mounted() {
     const urlParams = this.urlParse()
+    if (urlParams.PatientId !== undefined) {
+      this.PatientId = urlParams.PatientId
+    } else {
+      this.PatientId = ''
+    }
     this.showInnerPage = urlParams.showInnerPage === '1'
     if (this.isPrintAll) {
       // 批量打印
