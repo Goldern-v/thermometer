@@ -1201,6 +1201,10 @@ export default {
             new Date(x.time).getHours()
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
+        if (this.PatientId.endsWith('_1') && value.includes('入院')) {
+          value = ''
+        }
+
         //画请假和手术的字体
         let bottomContextList = this.bottomSheetNote.map((x) => {
           return x.value

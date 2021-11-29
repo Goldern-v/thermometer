@@ -454,6 +454,7 @@
 <script>
 import zrender from 'zrender'
 import { mockData } from 'src/projects/wuJing/mockData.js'
+const SM4 = require('gm-crypt').sm4
 
 export default {
   props: {
@@ -598,6 +599,18 @@ export default {
         age: ''
       },
       vitalSigns: [],
+      //SM4解密加密配置
+      sm4Config: {
+        // 解密加密的秘钥
+        key: '839Z3Hh9vb45r26C',
+
+        // iv是initialization vector的意思，就是加密的初始话矢量，
+        //初始化加密函数的变量，也叫初始向量。
+        //（本来应该动态生成的，由于项目没有严格的加密要求，直接写死一个）
+        mode: 'ecb', // default 可以是 'cbc' or 'ecb'
+        // 转换后加密的格式，可以是 'base64' 或者 'text'
+        cipherType: 'base64' // 秘钥生成的数据
+      },
       typeMap: {
         '21': '表顶注释', // 入院|,手术,分娩|,出院|,转入|,死亡|,排胎|,出生|,手术分娩|,手术入院|,转出|
         '22': '表底注释', // 拒测,不在,外出不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
@@ -864,6 +877,9 @@ export default {
         transform: 'translateX(1px)'
       }
     },
+    urlencode(str) {
+      return decodeURIComponent(str).replace(/\r\n/g, '+')
+    },
     middleTdStyle(index) {
       return {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 4 : 3)}px`,
@@ -875,6 +891,21 @@ export default {
         'border-color': `${(index - 1) % 2 === 0 ? 'transparent' : '#000'}`,
         transform: 'translateX(1px)'
       }
+    },
+    //SM4加密与SM4解密
+    //加密
+    encryptFun(val) {
+      let sm4Config = this.sm4Config
+      let sm4 = new SM4(sm4Config)
+      let ciphertext = sm4.encrypt(val)
+      return ciphertext
+    },
+    //解密
+    decryptFun(val) {
+      let sm4Config = this.sm4Config
+      let sm4 = new SM4(sm4Config)
+      let ciphertext = sm4.decrypt(val)
+      return ciphertext
     },
     messageHandle(e) {
       if (e && e.data) {
@@ -1110,22 +1141,10 @@ export default {
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
         const topText = ['过快']
-        const bottomText = [
-          '拒测',
-          '不在',
-          '外出',
-          '不升',
-          '请假',
-          '右PPD',
-          '左PPD',
-          '冰敷',
-          '退热贴',
-          '冷水枕',
-          '降温毯',
-          '温水浴',
-          '辅助呼吸',
-          'PDD停辅助呼吸'
-        ]
+        let bottomText = this.bottomSheetNote.map((x) => {
+          return x.value
+        })
+
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
@@ -1922,17 +1941,31 @@ export default {
         this.handleData()
       })
     } else {
+      let data = {
+        PatientId: urlParams.PatientId,
+        VisitId: urlParams.VisitId,
+        StartTime: urlParams.StartTime,
+        tradeCode: 'nurse_getPatientVitalSigns'
+      }
+
       this.$http({
         method: 'post',
         url: '/crHesb/hospital/common',
-        data: {
-          tradeCode: 'nurse_getPatientVitalSigns',
-          PatientId: urlParams.PatientId,
-          VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime
-        }
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        data: this.encryptFun(JSON.stringify(data))
+        // : encodeURI(this.encryptFun(JSON.stringify(data)))
+        // this.encryptFun(
+        //   JSON.stringify({
+        //     PatientId: urlParams.PatientId,
+        //     VisitId: urlParams.VisitId,
+        //     StartTime: urlParams.StartTime,
+        //     tradeCode: 'nurse_getPatientVitalSigns'
+        //   })
+        // )
       }).then((res) => {
-        this.apiData = res.data
+        this.apiData = JSON.parse(this.decryptFun(res.data))
         this.$nextTick(() => {
           //每次获取数据都要传一次页数
           this.currentPage = this.pageTotal
