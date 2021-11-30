@@ -453,7 +453,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -952,8 +952,14 @@ export default {
     },
     temperatureNoteList() {
       // 拒测,不在,外出,请假都是体温相关的注释，出现后体温曲线要在此时间点断开
-      const textList = ['拒测', '不在', '外出', '请假']
-      return this.topSheetNote.filter((x) => textList.includes(x.value))
+      // const textList = ['拒测', '不在', '外出', '请假']
+      return this.topSheetNote.filter(
+        (x) =>
+          x.value.includes('拒测') ||
+          x.value.includes('不在') ||
+          x.value.includes('外出') ||
+          x.value.includes('请假')
+      )
     }
   },
   watch: {

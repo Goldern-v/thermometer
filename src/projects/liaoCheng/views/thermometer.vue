@@ -454,7 +454,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -958,6 +958,17 @@ export default {
         transform: 'translateX(1px)'
       }
     },
+    //操作自定义的显示位置，存在空的自定义时 往上推不留空
+    handleCustomList() {
+      for (let k = 0; k < 6; k++) {
+        for (let j = k - 1; j >= 0; j--) {
+          if (this[`customList${j}`].length === 0) {
+            this[`customList${j}`] = this[`customList${k}`]
+            this[`customList${k}`] = []
+          }
+        }
+      }
+    },
     //找到存在出院或者转出的日期
     getLeaveTime() {
       let outTime = ''
@@ -1092,7 +1103,7 @@ export default {
       )
 
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
-      const customSigns = [] // 记录自定义字段的名字
+      // const customSigns = [] // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
@@ -1108,23 +1119,71 @@ export default {
         ) {
           // 自定义字段填入
           const sign = vitalSigns[i].temperature_type
-          const index = customSigns.indexOf(sign)
-          if (index < 0) {
-            customSigns.push(sign)
-            this[`customList${customSigns.length - 1}`].push({
-              time: vitalSigns[i].time_point,
-              value: vitalSigns[i].value
-            })
-            this[`customList${customSigns.length - 1}`].label = sign
-          } else {
-            this[`customList${index}`].push({
-              time: vitalSigns[i].time_point,
-              value: vitalSigns[i].value
-            })
-            this[`customList${index}`].label = sign
+          // const index = customSigns.indexOf(sign)
+          switch (vitalSigns[i].vital_code) {
+            case '32':
+              this.customList0.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value
+              })
+              this.customList0.label = sign
+              break
+            case '33':
+              this.customList1.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value
+              })
+              this.customList1.label = sign
+              break
+            case '34':
+              this.customList2.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value
+              })
+              this.customList2.label = sign
+              break
+            case '35':
+              this.customList3.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value
+              })
+              this.customList3.label = sign
+              break
+            case '36':
+              this.customList4.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value
+              })
+              this.customList4.label = sign
+              break
+            case '37':
+              this.customList5.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value
+              })
+              this.customList5.label = sign
+              break
+            default:
+              break
           }
-          continue
+
+          // if (index < 0) {
+          //   customSigns.push(sign)
+          //   this[`customList${customSigns.length - 1}`].push({
+          //     time: vitalSigns[i].time_point,
+          //     value: vitalSigns[i].value
+          //   })
+          //   this[`customList${customSigns.length - 1}`].label = sign
+          // } else {
+          //   this[`customList${index}`].push({
+          //     time: vitalSigns[i].time_point,
+          //     value: vitalSigns[i].value
+          //   })
+          //   this[`customList${index}`].label = sign
+          // }
+          // continue
         }
+
         if (this.lineMap[vitalSigns[i].vital_code]) {
           if (
             ['02', '20'].includes(vitalSigns[i].vital_code) &&
@@ -1199,6 +1258,7 @@ export default {
             break
         }
       }
+
       this.init()
     },
     createNote(notes, y, color) {
@@ -1356,6 +1416,8 @@ export default {
               dotType: x.dotType
             })
           })
+          //每次遍历数据的时候，调整自定义的显示位置
+          this.handleCustomList()
         })
         /*  画心率和脉搏的多边形，连线已经用折线画了，
             这里用多边形是为了生成阴影，多边形的边框颜色设为透明，
@@ -1425,6 +1487,7 @@ export default {
         this.createLine(params)
       }
     },
+
     xLine() {
       const totalLine =
         this.xRange[1] -

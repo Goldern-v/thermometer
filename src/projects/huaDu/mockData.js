@@ -302,35 +302,49 @@ export const mockData = {
       time_point: '2021-11-11 07:12:00',
       vital_code: '3'
     },
-    {
-      temperature_type: '自定义1',
-      value: 'PG(+)',
-      time_point: '2021-10-17 01:12:00',
-      vital_code: null
-    },
-    {
-      temperature_type: '自定义1',
-      value: '36.7',
-      time_point: '2021-10-18 01:12:00',
-      vital_code: null
-    },
-    {
-      temperature_type: '自定义2',
-      value: '36.7',
-      time_point: '2021-10-17 01:12:00',
-      vital_code: null
-    },
-    {
-      temperature_type: '自定义2',
-      value: '36.7',
-      time_point: '2021-10-18 01:12:00',
-      vital_code: null
-    },
+
     {
       temperature_type: '自定义3',
-      value: '36.7',
+      value: '自定义3',
       time_point: '2021-10-16 01:12:00',
-      vital_code: null
+      vital_code: '42'
+    },
+
+    {
+      temperature_type: '自定义4',
+      value: '自定义4',
+      time_point: '2021-10-22 01:12:00',
+      vital_code: '43'
+    },
+    {
+      temperature_type: '自定义2',
+      value: '自定义2',
+      time_point: '2021-10-23 01:12:00',
+      vital_code: '41'
+    },
+    {
+      temperature_type: '自定义1',
+      value: '自定义1',
+      time_point: '2021-10-23 01:12:00',
+      vital_code: '4'
+    },
+    {
+      temperature_type: '自定义1',
+      value: '自定义1',
+      time_point: '2021-10-18 01:12:00',
+      vital_code: '4'
+    },
+    {
+      temperature_type: '自定义2',
+      value: '自定义2',
+      time_point: '2021-10-16 04:12:00',
+      vital_code: '41'
+    },
+    {
+      temperature_type: '自定义4',
+      value: '自定义4',
+      time_point: '2021-10-16 01:12:00',
+      vital_code: '43'
     },
     {
       temperature_type: '肛温',

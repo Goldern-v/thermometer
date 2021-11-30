@@ -419,7 +419,7 @@ export default {
     const pulseRange = [0, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -847,6 +847,20 @@ export default {
         'font-family': 'SimHei'
       }
     },
+    bSort(arr) {
+      var len = arr.length
+      for (var i = 0; i < len - 1; i++) {
+        for (var j = 0; j < len - 1 - i; j++) {
+          // 相邻元素两两对比，元素交换，大的元素交换到后面
+          if (Number(arr[j].vital_code) > Number(arr[j + 1].vital_code)) {
+            var temp = arr[j]
+            arr[j] = arr[j + 1]
+            arr[j + 1] = temp
+          }
+        }
+      }
+      return arr
+    },
     middleTdStyle(index, length) {
       return {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 7 : 6)}px`,
@@ -858,6 +872,17 @@ export default {
         }`,
         transform: 'translateX(1.5px)',
         'font-family': 'SimHei'
+      }
+    },
+    //操作自定义的显示位置，存在空的自定义时 往上推不留空
+    handleCustomList() {
+      for (let k = 0; k < 4; k++) {
+        for (let j = k - 1; j >= 0; j--) {
+          if (this[`customList${j}`].length === 0) {
+            this[`customList${j}`] = this[`customList${k}`]
+            this[`customList${k}`] = []
+          }
+        }
       }
     },
     //找到存在出院或者转出的日期
@@ -986,7 +1011,6 @@ export default {
       )
 
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
-      const customSigns = [] // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
@@ -996,24 +1020,57 @@ export default {
           continue
         }
         if (['4', '41', '42', '43'].includes(vitalSigns[i].vital_code)) {
-          // 自定义字段填入
           const sign = vitalSigns[i].temperature_type
-          const index = customSigns.indexOf(sign)
-          if (index < 0) {
-            customSigns.push(sign)
-            this[`customList${customSigns.length - 1}`].push({
-              time: vitalSigns[i].time_point,
-              value: vitalSigns[i].value
-            })
-            this[`customList${customSigns.length - 1}`].label = sign
-          } else {
-            this[`customList${index}`].push({
-              time: vitalSigns[i].time_point,
-              value: vitalSigns[i].value
-            })
-            this[`customList${index}`].label = sign
+
+          switch (vitalSigns[i].vital_code) {
+            case '4':
+              this.customList0.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value
+              })
+              this.customList0.label = sign
+              break
+            case '41':
+              this.customList1.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value
+              })
+              this.customList1.label = sign
+              break
+            case '42':
+              this.customList2.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value
+              })
+              this.customList2.label = sign
+              break
+            case '43':
+              this.customList3.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value
+              })
+              this.customList3.label = sign
+              break
+            default:
+              break
           }
-          continue
+          // const index = customSigns.indexOf(sign)
+          // if (index < 0) {
+          //   customSigns.push(sign)
+          //   // console.log(this[`customList${customSigns.length - 1}`])
+          //   this[`customList${customSigns.length - 1}`].push({
+          //     time: vitalSigns[i].time_point,
+          //     value: vitalSigns[i].value
+          //   })
+          //   this[`customList${customSigns.length - 1}`].label = sign
+          // } else {
+          //   this[`customList${index}`].push({
+          //     time: vitalSigns[i].time_point,
+          //     value: vitalSigns[i].value
+          //   })
+          //   this[`customList${index}`].label = sign
+          // }
+          // continue
         }
         /* 获取各个体征数组对象 */
         if (this.lineMap[vitalSigns[i].vital_code]) {
@@ -1094,7 +1151,9 @@ export default {
             dotSolid: x.solid,
             dotType: x.dotType
           })
+          this.handleCustomList()
         })
+
         // 画线上降温，画红圈不用连线
         this.onLineCoolList.forEach((x) => {
           this.createCircle({

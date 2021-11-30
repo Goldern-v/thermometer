@@ -16,12 +16,6 @@ export const mockData = {
     }
   },
   vitalSigns: [
-    {
-      temperature_type: '脉搏',
-      value: '76',
-      time_point: '2021-11-03 07:00:00',
-      vital_code: '37'
-    },
     // {
     //   temperature_type: '身高',
     //   value: '165',
@@ -45,6 +39,84 @@ export const mockData = {
       value: '39',
       time_point: '2021-11-03 03:00:00',
       vital_code: '01'
+    },
+    // {
+    //   temperature_type: '自定义1',
+    //   value: '自定义1',
+    //   time_point: '2021-11-03 03:00:00',
+    //   vital_code: '32'
+    // },
+    // {
+    //   temperature_type: '自定义1',
+    //   value: '自定义1',
+    //   time_point: '2021-11-05 03:00:00',
+    //   vital_code: '32'
+    // },
+    // {
+    //   temperature_type: '自定义1',
+    //   value: '自定义1',
+    //   time_point: '2021-11-04 03:00:00',
+    //   vital_code: '32'
+    // },
+    {
+      temperature_type: '自定义2',
+      value: '自定义2',
+      time_point: '2021-11-03 03:00:00',
+      vital_code: '33'
+    },
+    {
+      temperature_type: '自定义4',
+      value: '自定义4',
+      time_point: '2021-11-03 03:00:00',
+      vital_code: '35'
+    },
+    {
+      temperature_type: '自定义2',
+      value: '自定义2',
+      time_point: '2021-11-10 03:00:00',
+      vital_code: '33'
+    },
+    {
+      temperature_type: '自定义4',
+      value: '自定义4',
+      time_point: '2021-11-10 03:00:00',
+      vital_code: '35'
+    },
+    {
+      temperature_type: '自定义3',
+      value: '自定义3',
+      time_point: '2021-11-03 03:00:00',
+      vital_code: '34'
+    },
+    {
+      temperature_type: '自定义4',
+      value: '自定义42',
+      time_point: '2021-11-03 03:00:00',
+      vital_code: '35'
+    },
+    {
+      temperature_type: '自定义4',
+      value: '自定义43',
+      time_point: '2021-11-04 03:00:00',
+      vital_code: '35'
+    },
+    {
+      temperature_type: '自定义4',
+      value: '自定义44',
+      time_point: '2021-11-04 03:00:00',
+      vital_code: '35'
+    },
+    {
+      temperature_type: '自定义5',
+      value: '自定义5',
+      time_point: '2021-11-03 03:00:00',
+      vital_code: '36'
+    },
+    {
+      temperature_type: '自定义6',
+      value: '自定义6',
+      time_point: '2021-11-03 03:00:00',
+      vital_code: '37'
     },
     {
       temperature_type: '体温',
