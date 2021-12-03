@@ -129,7 +129,7 @@ export const mockData = {
     //   vital_code: '31'
     // },
     {
-      temperature_type: '总排出量',
+      temperature_type: '总ww排出量',
       value: '1475',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2021-05-21 03:12:00',
@@ -139,7 +139,7 @@ export const mockData = {
       temperature_type: '总排出量',
       value: '1475',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-24 03:12:00',
+      time_point: '2021-05-24 08:12:00',
       vital_code: '34'
     },
     // {
@@ -299,7 +299,7 @@ export const mockData = {
       temperature_type: '自定义1',
       value: 'PG(+)',
       time_point: '2021-05-17 01:12:00',
-      vital_code: null
+      vital_code: '4'
     },
     {
       temperature_type: '自定义1',
@@ -323,13 +323,25 @@ export const mockData = {
       temperature_type: '自定义2',
       value: '36.7',
       time_point: '2021-05-18 01:12:00',
-      vital_code: null
+      vital_code: '41'
+    },
+    {
+      temperature_type: '自定义2',
+      value: '36.7',
+      time_point: '2021-05-18 01:12:00',
+      vital_code: '42'
+    },
+    {
+      temperature_type: '自定义3',
+      value: '36.7',
+      time_point: '2021-05-18 01:12:00',
+      vital_code: '43'
     },
     {
       temperature_type: '排出自定义',
       value: '36.7',
       time_point: '2021-05-16 01:12:00',
-      vital_code: null
+      vital_code: '4'
     },
     {
       temperature_type: '肛温',
