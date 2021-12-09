@@ -18,7 +18,12 @@ const routes = [
     path: '/newBorn',
     name: 'NewBorn',
     component: () => import('src/projects/beiHai/views/thermometerNewBorn.vue')
-  }
+  },
+  {
+    path: '/newBornPrintAll',
+    name: 'NewBornPrintAll',
+    component: () => import('src/projects/beiHai/views/newBornPrintAll.vue')
+  },
 ]
 
 const router = new VueRouter({
