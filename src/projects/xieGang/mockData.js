@@ -10,7 +10,7 @@ export const mockData = {
       bed_label: '012',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
-      admission_date: '2019-05-15 08:12:30.0',
+      admission_date: '2021-10-15 08:12:30.0',
       age: '54',
       inp_no: '1568587'
     }
@@ -20,355 +20,447 @@ export const mockData = {
       temperature_type: '表顶注释',
       value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 13:10:00',
-      vital_code: '5'
+      time_point: '2021-10-15 13:00:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '手术分娩|',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-15 10:12:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '分娩|',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-18 18:12:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '分娩|',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-20 11:12:00',
+      vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 16:12:00',
-      vital_code: '5'
+      time_point: '2021-10-20 15:12:00',
+      vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-23 16:12:00',
-      vital_code: '5'
+      time_point: '2021-11-06 15:12:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '手术入院|',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-20 18:12:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '手术入院|',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-17 19:12:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '手术入院|',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-15 10:12:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '分娩',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-15 10:12:00',
+      vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-25 16:12:00',
-      vital_code: '5'
+      time_point: '2021-10-15 10:12:00',
+      vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-06-08 16:12:00',
-      vital_code: '5'
+      time_point: '2021-10-15 10:12:00',
+      vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
-      value: '手术',
+      value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-06-12 16:12:00',
-      vital_code: '5'
+      time_point: '2021-10-23 18:12:00',
+      vital_code: '3'
     },
     // {
     //   "temperature_type": "表顶注释",
     //   "value": "入院|",
     //   // "time_point": "2020-12-15 03:12:00",
-    //   "time_point": "2019-05-18 03:12:00",
-    //   "vital_code": '4'
+    //   "time_point": "2021-10-18 03:12:00",
+    //   "vital_code": "3"
     // },
     {
       temperature_type: '表底注释',
       value: '请假',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 03:12:00',
-      vital_code: '4'
+      time_point: '2021-10-18 03:12:00',
+      vital_code: '31'
     },
+    // {
+    //   temperature_type: '表底注释',
+    //   value: '请假',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2021-10-18 03:12:00',
+    //   vital_code: '31'
+    // },
+    // {
+    //   temperature_type: '表底注释',
+    //   value: '请假',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2021-10-20 03:12:00',
+    //   vital_code: '31'
+    // },
     {
-      temperature_type: '表底注释',
-      value: '请假',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 03:12:00',
-      vital_code: '4'
-    },
-    {
-      temperature_type: '表底注释',
-      value: '请假',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 03:12:00',
-      vital_code: '4'
-    },
-    {
-      temperature_type: '出量',
+      temperature_type: '总排出量',
       value: '1475',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-21 03:12:00',
-      vital_code: '19'
+      time_point: '2021-10-21 03:12:00',
+      vital_code: '34'
     },
     {
-      temperature_type: '尿量',
-      value: '23',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-21 03:12:00',
-      vital_code: '12'
-    },
-    {
-      temperature_type: '出量',
+      temperature_type: '总排出量',
       value: '1475',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-24 03:12:00',
-      vital_code: '19'
+      time_point: '2021-10-24 03:12:00',
+      vital_code: '34'
     },
     // {
     //   "temperature_type": "在线降温",
     //   "value": "0",
     //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": '29'
+    //   "vital_code": "29"
     // },
     {
       temperature_type: '大便次数',
-      value: '1',
-      time_point: '2019-05-20 03:12:00',
-      vital_code: '061'
+      value: '150',
+      time_point: '2021-10-15 03:12:00',
+      vital_code: '2002'
     },
-    // {
-    //   "temperature_type": "发热体温",
-    //   "value": "37.1",
-    //   "time_point": "2020-12-15 03:12:00",
-    //   "vital_code": '21'
-    // },
+    {
+      temperature_type: '大便次数',
+      value: '170',
+      time_point: '2021-10-17 03:12:00',
+      vital_code: '2002'
+    },
+    {
+      temperature_type: '大便次数',
+      value: '180',
+      time_point: '2021-10-18 03:12:00',
+      vital_code: '2002'
+    },
+    {
+      temperature_type: '大便总次数',
+      value: '2',
+      time_point: '2021-10-15 03:12:00',
+      vital_code: '24'
+    },
+    {
+      temperature_type: '大便总次数',
+      value: '6',
+      time_point: '2021-10-17 03:12:00',
+      vital_code: '24'
+    },
+    {
+      temperature_type: '大便总次数',
+      value: '4',
+      time_point: '2021-10-19 03:12:00',
+      vital_code: '24'
+    },
+    {
+      temperature_type: '大便总次数',
+      value: '4',
+      time_point: '2021-10-16 03:12:00',
+      vital_code: '24'
+    },
+    {
+      temperature_type: '发热体温',
+      value: '40',
+      time_point: '2021-10-19 22:12:00',
+      vital_code: '21'
+    },
     {
       temperature_type: '肛温',
       value: '36.9',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-20 03:12:00',
-      vital_code: '043'
+      time_point: '2021-10-20 03:12:00',
+      vital_code: '19'
     },
     {
       temperature_type: '肛温',
       value: '38',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-21 03:12:00',
-      vital_code: '043'
+      time_point: '2021-10-21 03:12:00',
+      vital_code: '19'
     },
     {
       temperature_type: '肛温',
       value: '36',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-17 03:12:00',
-      vital_code: '043'
-    },
-    {
-      temperature_type: '肛温',
-      value: '35',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-19 03:12:00',
-      vital_code: '043'
+      time_point: '2021-10-19 03:12:00',
+      vital_code: '19'
     },
     {
       temperature_type: '呼吸',
       value: '20',
-      time_point: '2019-05-19 23:12:00',
-      vital_code: '04'
+      time_point: '2021-10-19 23:12:00',
+      vital_code: '13'
     },
     {
       temperature_type: '呼吸',
       value: '20',
-      time_point: '2019-05-16 13:12:00',
-      vital_code: '04'
+      time_point: '2021-10-16 13:12:00',
+      vital_code: '13'
     },
     {
       temperature_type: '呼吸',
       value: '30',
-      time_point: '2019-05-17 13:12:00',
-      vital_code: '04'
+      time_point: '2021-10-17 13:12:00',
+      vital_code: '13'
     },
     {
       temperature_type: '呼吸',
       value: '20',
-      time_point: '2019-05-20 13:12:00',
-      vital_code: '04'
+      time_point: '2021-10-20 5:59:00',
+      vital_code: '13'
     },
     {
       temperature_type: '疼痛',
       value: '2',
-      time_point: '2019-05-19 23:12:00',
-      vital_code: '092'
+      time_point: '2021-10-19 23:12:00',
+      vital_code: 'ttpf'
     },
     {
       temperature_type: '疼痛',
-      value: '10',
-      time_point: '2019-05-20 23:12:00',
-      vital_code: '092'
-    },
-    {
-      temperature_type: '疼痛干预',
-      value: '8',
-      time_point: '2019-05-20 23:12:00',
-      vital_code: '093'
+      value: '7',
+      time_point: '2021-10-20 23:12:00',
+      vital_code: 'ttpf'
     },
     {
       temperature_type: '血压',
-      value: '138/87',
-      time_point: '2019-05-18 01:12:00',
-      vital_code: '062'
+      value: '138/870',
+      time_point: '2021-10-18 01:12:00',
+      vital_code: '14'
     },
     {
       temperature_type: '血压',
       value: '139/89',
-      time_point: '2019-05-18 20:12:00',
-      vital_code: '062'
+      time_point: '2021-10-18 20:12:00',
+      vital_code: '14'
     },
     {
       temperature_type: '体重',
       value: '70',
-      time_point: '2019-05-18 13:12:00',
-      vital_code: '09'
+      time_point: '2021-10-18 13:12:00',
+      vital_code: '18'
     },
     {
-      temperature_type: '腋温',
+      temperature_type: '体温',
       value: '35.2',
-      time_point: '2019-05-18 01:12:00',
-      vital_code: '01'
+      time_point: '2021-10-18 01:12:00',
+      vital_code: '1'
     },
     {
-      temperature_type: '腋温',
+      temperature_type: '体温',
       value: '38',
-      time_point: '2019-05-17 01:12:00',
-      vital_code: '01'
+      time_point: '2021-10-25 01:12:00',
+      vital_code: '1'
     },
+    // {
+    //   "temperature_type": "呼吸机R",
+    //   "value": "3",
+    //   "time_point": "2020-12-15 03:12:00",
+    //   "vital_code": "23"
+    // },
     {
-      temperature_type: '腋温',
-      value: '37.4',
-      time_point: '2019-05-17 15:12:00',
-      vital_code: '01'
-    },
-    {
-      temperature_type: '口温',
-      value: '36',
-      time_point: '2019-05-16 13:00:00',
-      vital_code: '041'
-    },
-    {
-      temperature_type: '口温',
-      value: '37',
-      time_point: '2019-05-18 15:12:00',
-      vital_code: '041'
-    },
-    {
-      temperature_type: '口温',
-      value: '39',
-      time_point: '2019-05-20 15:12:00',
-      vital_code: '041'
-    },
-    {
-      temperature_type: '降温', // 自己捏造的标识
-      value: '37',
-      time_point: '2019-05-20 15:12:00',
+      temperature_type: '表顶注释',
+      value: '出院|',
+      time_point: '2021-11-11 07:12:00',
       vital_code: '3'
     },
-    {
-      temperature_type: '自定义1',
-      value: '36.7',
-      time_point: '2019-05-17 01:12:00',
-      vital_code: null
-    },
-    {
-      temperature_type: '自定义1',
-      value: '36.7',
-      time_point: '2019-05-18 01:12:00',
-      vital_code: null
-    },
-    {
-      temperature_type: '自定义2',
-      value: '36.7',
-      time_point: '2019-05-17 01:12:00',
-      vital_code: null
-    },
-    {
-      temperature_type: '自定义2',
-      value: '36.7',
-      time_point: '2019-05-18 01:12:00',
-      vital_code: null
-    },
+
     {
       temperature_type: '自定义3',
-      value: '36.7',
-      time_point: '2019-05-16 01:12:00',
-      vital_code: null
+      value: '自定义3',
+      time_point: '2021-10-16 01:12:00',
+      vital_code: '42'
+    },
+
+    {
+      temperature_type: '自定义4',
+      value: '自定义4',
+      time_point: '2021-10-22 01:12:00',
+      vital_code: '43'
     },
     {
-      temperature_type: '心率',
-      value: '181',
-      time_point: '2019-05-17 13:12:00',
-      vital_code: '20'
+      temperature_type: '自定义2',
+      value: '自定义2',
+      time_point: '2021-10-23 01:12:00',
+      vital_code: '41'
     },
     {
-      temperature_type: '脉搏',
-      value: '89',
-      time_point: '2019-05-17 13:12:00',
-      vital_code: '02'
+      temperature_type: '自定义1',
+      value: '自定义1',
+      time_point: '2021-10-23 01:12:00',
+      vital_code: '4'
     },
     {
-      temperature_type: '腋温',
-      value: '37',
-      time_point: '2019-05-20 10:12:00',
-      vital_code: '01'
+      temperature_type: '自定义1',
+      value: '自定义1',
+      time_point: '2021-10-18 01:12:00',
+      vital_code: '4'
+    },
+    {
+      temperature_type: '自定义2',
+      value: '自定义2',
+      time_point: '2021-10-16 04:12:00',
+      vital_code: '41'
+    },
+    {
+      temperature_type: '自定义4',
+      value: '自定义4',
+      time_point: '2021-10-16 01:12:00',
+      vital_code: '43'
     },
     {
       temperature_type: '肛温',
       value: '38',
-      time_point: '2019-05-20 10:12:00',
-      vital_code: '043'
+      time_point: '2021-10-17 13:12:00',
+      vital_code: '19'
     },
     {
       temperature_type: '心率',
       value: '100',
-      time_point: '2019-05-20 10:12:00',
-      vital_code: '20'
+      time_point: '2021-10-17 13:12:00',
+      vital_code: '12'
+    },
+    {
+      temperature_type: '体温',
+      value: '37',
+      time_point: '2021-10-17 13:12:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '物理降温',
+      value: '36',
+      time_point: '2021-10-17 13:12:00',
+      vital_code: '27'
     },
     {
       temperature_type: '脉搏',
       value: '80',
-      time_point: '2019-05-20 10:12:00',
-      vital_code: '02'
+      time_point: '2021-10-17 13:12:00',
+      vital_code: '11'
     },
     {
       temperature_type: '心率',
-      value: '100',
-      time_point: '2019-05-21 10:12:00',
-      vital_code: '20'
-    },
-    {
-      temperature_type: '脉搏',
       value: '80',
-      time_point: '2019-05-21 10:12:00',
-      vital_code: '02'
+      time_point: '2021-10-20 10:12:00',
+      vital_code: '12'
     },
     {
-      temperature_type: '心率',
-      value: '60',
-      time_point: '2019-05-15 13:00:00',
-      vital_code: '20'
-    },
-    {
-      temperature_type: '脉搏',
-      value: '55',
-      time_point: '2019-05-15 13:00:00',
-      vital_code: '02'
-    },
-    {
-      temperature_type: '心率',
-      value: '60',
-      time_point: '2019-05-16 13:00:00',
-      vital_code: '20'
+      temperature_type: '口温',
+      value: '36',
+      time_point: '2021-10-20 10:12:00',
+      vital_code: '2'
     },
     {
       temperature_type: '脉搏',
-      value: '55',
-      time_point: '2019-05-16 13:00:00',
-      vital_code: '02'
+      value: '60',
+      time_point: '2021-10-20 10:12:00',
+      vital_code: '11'
     },
     {
-      temperature_type: '入量',
-      value: '55',
-      time_point: '2019-05-16 13:00:00',
-      vital_code: '091'
+      temperature_type: '心率',
+      value: '75',
+      time_point: '2021-10-16 13:00:00',
+      vital_code: '12'
     },
     {
-      temperature_type: '身高',
-      value: '167',
-      time_point: '2019-05-16 13:00:00',
-      vital_code: '094'
+      temperature_type: '疼痛',
+      value: '1.25',
+      time_point: '2021-10-16 13:00:00',
+      vital_code: 'ttpf'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '20',
+      time_point: '2021-10-16 13:00:00',
+      vital_code: '11'
+    },
+    {
+      temperature_type: '线上降温',
+      value: '37',
+      time_point: '2021-10-16 13:00:00',
+      vital_code: '22'
+    },
+    {
+      temperature_type: '尿量',
+      value: '1470',
+      time_point: '2020-12-15 03:12:00',
+      vital_code: '15'
     }
+    // {
+    //   "temperature_type": "呕吐量",
+    //   "value": "0",
+    //   "time_point": "2020-12-15 03:12:00",
+    //   "vital_code": "28"
+    // },
+    // {
+    //   "temperature_type": "总入液量",
+    //   "value": "2992",
+    //   "time_point": "2020-12-15 03:12:00",
+    //   "vital_code": "33"
+    // },
+    // {
+    //   "temperature_type": "体温",
+    //   "value": "36.8",
+    //   "time_point": "2020-12-15 03:12:00",
+    //   "vital_code": "1"
+    // },
+    // {
+    //   "temperature_type": "心率",
+    //   "value": "58",
+    //   "time_point": "2020-12-15 03:12:00",
+    //   "vital_code": "12"
+    // },
+
+    // {
+    //   "temperature_type": "表顶注释",
+    //   "value": "手术",
+    //   "time_point": "2020-12-15 07:12:00",
+    //   "vital_code": "3"
+    // },
+    // {
+    //   "temperature_type": "体温",
+    //   "value": "37.2",
+    //   "time_point": "2020-12-15 07:12:00",
+    //   "vital_code": "1"
+    // }
   ]
 }
 

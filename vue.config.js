@@ -21,6 +21,8 @@ const projectName = (() => {
       return '东莞横沥医院'
     case 'xieGang': // 谢岗
       return '谢岗医院'
+    case 'xingTan': // 谢岗
+      return '顺德杏坛医院'
     case 'beiHai': // 北海人民医院
       return '北海人民医院'
     case '曲周县医院': // 曲州
@@ -63,6 +65,8 @@ module.exports = {
           return './src/projects/hengLi/main.js'
         case 'xieGang': // 谢岗
           return './src/projects/xieGang/main.js'
+        case 'xingTan': // 顺德杏坛医院
+          return './src/projects/xingTan/main.js'
         case 'beiHai': // 北海
           return './src/projects/beiHai/main.js'
         case 'quZhou': // 曲州
@@ -109,6 +113,8 @@ module.exports = {
               return 'http://10.207.40.22:9091'
             //return 'http://192.168.8.158:8588'//贵州测试
             case 'xieGang':
+              return 'http://172.17.5.41:9091'
+            case 'xingTan':
               return 'http://172.17.5.41:9091'
             case 'beiHai':
               return 'http://219.159.198.37:9091'

@@ -17,6 +17,8 @@
     "build:hengLi": "vue-cli-service build --project=hengLi",
     "dev:xieGang": "vue-cli-service serve --project=xieGang",
     "build:xieGang": "vue-cli-service build --project=xieGang",
+    "dev:xingTan": "vue-cli-service serve --project=xingTan",
+    "build:xingTan": "vue-cli-service build --project=xingTan",
     "dev:quZhou": "vue-cli-service serve --project=quZhou",
     "build:quZhou": "vue-cli-service build --project=quZhou",
     "dev:beiHai": "vue-cli-service serve --project=beiHai",

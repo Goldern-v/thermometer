@@ -7,12 +7,12 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('src/projects/xieGang/views/thermometer.vue')
+    component: () => import('src/projects/xingTan/views/thermometer.vue')
   },
   {
     path: '/printAll',
     name: 'Print',
-    component: () => import('src/projects/xieGang/views/print.vue')
+    component: () => import('src/projects/xingTan/views/print.vue')
   }
 ]
 

@@ -210,7 +210,7 @@
 
         <div
           class="row border-top-red-2"
-          :style="{ height: `${trHeight * 1.2}px` }"
+          :style="{ height: `${trHeight * 1.1}px` }"
         >
           <div class="label" :style="{ width: `${leftWidth}px` }">班次</div>
           <div class="value-item-box">
@@ -224,7 +224,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight * 1.2}px` }">
+        <div class="row" :style="{ height: `${trHeight * 1.1}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">体重</div>
           <div class="value-item-box">
             <div
@@ -238,10 +238,12 @@
           </div>
         </div>
         <div>
-          <div class="left_box" :style="{ height: `${trHeight * 2.6}px` }">
-            喂养<br />方式
+          <div class="left_box" :style="{ height: `${trHeight * 2.2}px` }">
+            <div class="left_box_text" style="padding-top: 5px">
+              喂养<br />方式
+            </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight * 1.3}px` }">
+          <div class="row font-14" :style="{ height: `${trHeight * 1.1}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               母乳喂养
             </div>
@@ -258,7 +260,7 @@
               </div>
             </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight * 1.3}px` }">
+          <div class="row font-14" :style="{ height: `${trHeight * 1.1}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               人工喂养
             </div>
@@ -274,38 +276,46 @@
               ></div>
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight * 1.2}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">大便次数</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              :style="middleTdStyle(index)"
-              v-for="(item, index) in getFormatList({ tList: shitList })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight * 1.2}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">小便次数</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              :style="middleTdStyle(index)"
-              v-for="(item, index) in getFormatList({ tList: peeList })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
+          <div class="clear"></div>
         </div>
         <div>
-          <div class="left_box" :style="{ height: `${trHeight * 2 * 1.2}px` }">
-            呕吐
+          <div class="row" :style="{ height: `${trHeight * 1.1}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              大便次数
+            </div>
+            <div class="value-item-box font-14">
+              <div
+                class="value-item"
+                :style="middleTdStyle(index)"
+                v-for="(item, index) in getFormatList({ tList: shitList })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
+            </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight * 1.2}px` }">
+          <div class="row" :style="{ height: `${trHeight * 1.1}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              小便次数
+            </div>
+            <div class="value-item-box font-14">
+              <div
+                class="value-item"
+                :style="middleTdStyle(index)"
+                v-for="(item, index) in getFormatList({ tList: peeList })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div>
+          <div class="left_box" :style="{ height: `${trHeight * 2.2}px` }">
+            <div class="left_box_text">呕吐</div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight * 1.1}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               有
             </div>
@@ -322,7 +332,7 @@
               </div>
             </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight * 1.2}px` }">
+          <div class="row font-14" :style="{ height: `${trHeight * 1.1}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               无
             </div>
@@ -339,12 +349,13 @@
               </div>
             </div>
           </div>
+          <div class="clear"></div>
         </div>
         <div>
-          <div class="left_box" :style="{ height: `${trHeight * 3 * 1.2}px` }">
-            皮<br />肤
+          <div class="left_box" :style="{ height: `${trHeight * 3 * 1.1}px` }">
+            <div class="left_box_text">皮<br />肤</div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight * 1.2}px` }">
+          <div class="row font-14" :style="{ height: `${trHeight * 1.1}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               黄染
             </div>
@@ -359,7 +370,7 @@
               </div>
             </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight * 1.2}px` }">
+          <div class="row font-14" :style="{ height: `${trHeight * 1.1}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               尿布疹
             </div>
@@ -374,7 +385,7 @@
               </div>
             </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight * 1.2}px` }">
+          <div class="row font-14" :style="{ height: `${trHeight * 1.1}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               正常
             </div>
@@ -389,12 +400,13 @@
               </div>
             </div>
           </div>
+          <div class="clear"></div>
         </div>
         <div>
-          <div class="left_box" :style="{ height: `${trHeight * 3 * 1.2}px` }">
-            脐<br />带
+          <div class="left_box" :style="{ height: `${trHeight * 3 * 1.1}px` }">
+            <div class="left_box_text">脐<br />带</div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight * 1.2}px` }">
+          <div class="row font-14" :style="{ height: `${trHeight * 1.1}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               干燥
             </div>
@@ -402,14 +414,14 @@
               <div
                 class="value-item font-14"
                 :style="middleTdStyle(index)"
-                v-for="(item, index) in getFormatList({ tList: unbilical })"
+                v-for="(item, index) in getFormatList({ tList: umbilical })"
                 :key="index"
               >
                 {{ item.value.includes("干燥") ? "✔️" : "" }}
               </div>
             </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight * 1.2}px` }">
+          <div class="row font-14" :style="{ height: `${trHeight * 1.1}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               掺血
             </div>
@@ -417,14 +429,14 @@
               <div
                 :style="middleTdStyle(index)"
                 class="value-item font-14"
-                v-for="(item, index) in getFormatList({ tList: unbilical })"
+                v-for="(item, index) in getFormatList({ tList: umbilical })"
                 :key="index"
               >
                 {{ item.value.includes("掺血") ? "✔️" : "" }}
               </div>
             </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight * 1.2}px` }">
+          <div class="row font-14" :style="{ height: `${trHeight * 1.1}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
               红肿
             </div>
@@ -432,13 +444,14 @@
               <div
                 :style="middleTdStyle(index)"
                 class="value-item font-14"
-                v-for="(item, index) in getFormatList({ tList: unbilical })"
+                v-for="(item, index) in getFormatList({ tList: umbilical })"
                 :key="index"
               >
                 {{ item.value.includes("红肿") ? "✔️" : "" }}
               </div>
             </div>
           </div>
+          <div class="clear"></div>
         </div>
         <!-- <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
@@ -685,7 +698,7 @@ export default {
       artificialFrequencyList: [], //人工喂养
       vomiting: [], //呕吐
       skin: [], //皮肤 黄染，尿布疼，正常
-      unbilical: [], //脐带 干燥 渗血，红肿
+      umbilical: [], //脐带 干燥 渗血，红肿
       inputList: [], // 液体入量
       inputList: [], // 液体入量
       // yinliuList: [], // 引流量
@@ -1044,7 +1057,7 @@ export default {
       artificialFrequencyList = [];
       vomiting = [];
       skin = [];
-      unbilical = [];
+      umbilical = [];
     },
     toNext() {
       if (this.currentPage === this.pageTotal) return;
@@ -1072,11 +1085,11 @@ export default {
           patientId: "71582493_1",
           visitId: 1,
           recordDate: this.patInfo.admissionDate,
-          vitalSigns: "表顶注释",
+          vitalSigns: "腋表",
           wardCode: "051102",
           vitalValue: "",
           units: "",
-          vitalCode: "5",
+          vitalCode: "042",
           classCode: "A",
           nurse: "admin",
           bedLabel: "",
@@ -1084,13 +1097,6 @@ export default {
           expand2: "",
           expand3: "",
           source: "CRWeb",
-          id: {
-            patientId: "71582493_1",
-            visitId: 1,
-            recordDate: "2021-12-03 12:00:00",
-            vitalSigns: "表顶注释",
-            wardCode: "051102",
-          },
         });
         // vitalSigns.push({
         //   // 空数据加个占位，否则样式会错乱
@@ -1219,8 +1225,8 @@ export default {
           case "skin":
             this.skin.push(item);
             break;
-          case "unbilical":
-            this.unbilical.push(item);
+          case "umbilical":
+            this.umbilical.push(item);
             break;
 
           default:
@@ -2133,7 +2139,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 8mm 8mm 8mm 8mm; // 页面的边距
+    margin: 6mm 8mm 6mm 8mm; // 页面的边距
   }
 }
 .main-view {
@@ -2206,8 +2212,14 @@ export default {
     float: left;
     font-size: 16px;
     border-top: none;
+    position: relative;
+  }
+  .left_box_text {
     font-weight: 400;
     padding-top: 10px;
+  }
+  .clear {
+    clear: both;
   }
   .row {
     display: flex;

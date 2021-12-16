@@ -3,6 +3,8 @@
     <Thermometer
       ref="thermometer"
       :printData="printData"
+      :PrintadtLog="PrintadtLog"
+      :PrintbedExchangeLog="PrintbedExchangeLog"
       isPrintAll
       v-for="(item, index) in pageTotal"
       :printPage="index + 1"
@@ -14,7 +16,7 @@
 
 <script>
 import Thermometer from "./thermometer.vue";
-import { mockData } from "src/projects/huaDu/mockData.js";
+import { mockData } from "src/projects/xieGang/mockData.js";
 
 export default {
   components: {
@@ -22,9 +24,12 @@ export default {
   },
   data() {
     return {
-      useMockData: false,
+      useMockData: true,
       printData: null,
       pageTotal: 1,
+      PrintadtLog: "",
+      PrintbedExchangeLog: "",
+      timeRange: [], //转科转床的时间数组，实际上是体温单本周的开头日期+结束日期
     };
   },
   methods: {
@@ -34,6 +39,12 @@ export default {
         switch (e.data.type) {
           case "printingAll":
             window.print();
+            break;
+          case "nurseExchangeInfo":
+            if (e.data.value) {
+              this.PrintadtLog = e.data.value.adtLog || ""; // 转科
+              this.PrintbedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
+            }
             break;
           default:
             break;
@@ -58,12 +69,13 @@ export default {
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
   },
-  async mounted() {
+  mounted() {
     const urlParams = this.urlParse();
     if (this.useMockData) {
       this.printData = mockData;
       setTimeout(() => {
         this.pageTotal = this.$refs.thermometer[0].pageTotal;
+
         // setTimeout(() => {
         //   window.print()
         // }, 1000)
@@ -82,16 +94,23 @@ export default {
         this.printData = res.data;
         setTimeout(() => {
           this.pageTotal = this.$refs.thermometer[0].pageTotal;
+          this.timeRange = this.$refs.thermometer[0].timeRange;
+          // console.log("yyyyyy", this.timeRange);
+          window.parent.postMessage(
+            {
+              type: "getNurseExchangeInfo",
+              value: {
+                startLogDateTime: this.timeRange[0],
+                endLogDateTime: this.timeRange[1],
+              },
+            },
+            "*"
+          );
         }, 0);
       });
     }
   },
-  watch: {
-    // 因为分页可能在体温单外面，所以给父页面传递pageTotal
-    // pageTotal(value) {
-    //   window.parent.postMessage({ type: 'pageTotal', value }, '*')
-    // }
-  },
+  watch: {},
   beforeDestroy() {
     window.removeEventListener("message", this.messageHandle, false);
   },

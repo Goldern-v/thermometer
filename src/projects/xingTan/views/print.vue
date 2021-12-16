@@ -14,7 +14,7 @@
 
 <script>
 import Thermometer from "./thermometer.vue";
-import { mockData } from "src/projects/huaDu/mockData.js";
+import { mockData } from "src/projects/xingTan/mockData.js";
 
 export default {
   components: {
@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      useMockData: false,
+      useMockData: true,
       printData: null,
       pageTotal: 1,
     };
@@ -58,7 +58,7 @@ export default {
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
   },
-  async mounted() {
+  mounted() {
     const urlParams = this.urlParse();
     if (this.useMockData) {
       this.printData = mockData;
