@@ -36,7 +36,7 @@
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="text-align: right">
+      <div class="item" style="text-align: right;flex:1.2">
         住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
     </div>

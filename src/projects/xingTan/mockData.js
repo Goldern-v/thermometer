@@ -3,8 +3,8 @@ export const mockData = {
   ErrorMsg: '查询成功',
   patientInfo: {
     patInfo: {
-      patient_id: '0000590904',
-      name: '陈小倩（婴）',
+      patient_id: '000059090411',
+      name: '陈小倩（婴）2',
       sex: '女',
       dept_name: '神经内科VIP病房（本部）',
       bed_label: '23',
@@ -12,7 +12,7 @@ export const mockData = {
       // "admission_date": "2020-12-02 08:12:30.0",
       admission_date: '2021-12-08 16:03:24.0',
       age: '30岁12个月',
-      inp_no: '1568587'
+      inp_no: '15685872222'
     }
   },
   vitalSigns: [

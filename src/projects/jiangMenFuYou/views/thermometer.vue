@@ -14,7 +14,7 @@
       <div class="item" style="flex: none">
         年龄：<span class="value">{{
           PatientId.endsWith("_1")
-            ? "0岁"
+            ? "0天"
             : typeof parseInt(patInfo.age) === "number" && !isNaN(patInfo.age)
             ? patInfo.age + "岁"
             : patInfo.age

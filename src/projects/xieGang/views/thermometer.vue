@@ -466,22 +466,13 @@ export default {
         return null;
       },
     },
-
-    PrintadtLog: {
-      type: String,
-      default: "",
-    },
-    PrintbedExchangeLog: {
-      type: String,
-      default: "",
-    },
   },
   data() {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -620,7 +611,7 @@ export default {
         28: "呕吐量",
         29: "在线降温",
         ttpf: "疼痛评分",
-        4: "排出自定义",
+        4: "自定义0",
         41: "自定义1",
         42: "自定义2",
         43: "自定义3",
@@ -2108,8 +2099,6 @@ export default {
     if (this.isPrintAll) {
       // 批量打印
       this.apiData = this.printData;
-      this.adtLog = this.PrintadtLog;
-      this.bedExchangeLog = this.PrintbedExchangeLog;
       this.currentPage = this.printPage;
       this.$nextTick(() => {
         this.handleData();

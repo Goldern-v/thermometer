@@ -3,7 +3,7 @@
     <Thermometer
       ref="thermometer"
       :printData="printData"
-      isPrintAll
+      :isPrintAll="isPrintAll"
       v-for="(item, index) in pageTotal"
       :printPage="index + 1"
       :key="index"
@@ -11,7 +11,6 @@
     />
   </div>
 </template>
-
 <script>
 import Thermometer from "./thermometer.vue";
 import { mockData } from "src/projects/xingTan/mockData.js";
@@ -24,6 +23,7 @@ export default {
     return {
       useMockData: true,
       printData: null,
+      isPrintAll: true,
       pageTotal: 1,
     };
   },
@@ -33,7 +33,7 @@ export default {
       if (e && e.data) {
         switch (e.data.type) {
           case "printingAll":
-            window.print();
+            this.isPrintAll = window.print();
             break;
           default:
             break;
