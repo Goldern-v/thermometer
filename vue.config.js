@@ -4,6 +4,7 @@ const { project } = require('./src/argvs')
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
+//打包配置自动忽略console.log等
 //配置体温单的打包路径和名字
 const projectName = (() => {
   switch (project) {
@@ -48,6 +49,19 @@ module.exports = {
   publicPath: './',
   outputDir: packageName,
   lintOnSave: false,
+//   plugins:[
+//     //打包环境去掉console.log等
+// new UglifyJsPlugin({
+//   uglifyOptions: {
+//      compress: {
+//        warnings: false,
+//        drop_console: true,  //注释console
+//        drop_debugger: true, //注释debugger
+//        pure_funcs: ['console.log'], //移除console.log
+//      },
+//    },
+// }),
+//   ],
   configureWebpack: {
     entry: (() => {
       switch (project) {

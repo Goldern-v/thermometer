@@ -472,7 +472,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -633,7 +633,7 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [4, 8, 12, 16, 20, 24];
+      const list = [3, 7, 11, 15, 19, 23];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
@@ -709,12 +709,8 @@ export default {
           end: this.getTimeNum(`${x} 24:00:00`),
         };
       });
-      const timeAdd = (i) => {
-        return timeNumList.some((x) => x.start === i)
-          ? 6 * 60 * 60 * 1000
-          : timeNumList.some((x) => x.end - 2 * 60 * 60 * 1000 === i)
-          ? 2 * 60 * 60 * 1000
-          : 4 * 60 * 60 * 1000;
+      const timeAdd = () => {
+        return 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
@@ -1793,12 +1789,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "05:59:59"],
-        "06:00:00": ["06:00:00", "09:59:59"],
-        "10:00:00": ["10:00:00", "13:59:59"],
-        "14:00:00": ["14:00:00", "17:59:59"],
-        "18:00:00": ["18:00:00", "21:59:59"],
-        "22:00:00": ["22:00:00", "23:59:59"],
+        "02:00:00": ["00:00:00", "04:00:59"],
+        "06:00:00": ["04:01:00", "8:00:59"],
+        "10:00:00": ["08:01:00", "12:00:59"],
+        "14:00:00": ["12:01:00", "16:00:59"],
+        "18:00:00": ["16:01:00", "20:00:59"],
+        "22:00:00": ["20:01:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {

@@ -1882,6 +1882,7 @@ export default {
                   targetList[j].time.slice(0, 10) ===
                   shitList[k].time.slice(0, 10)
                 ) {
+                  console.log('测试测试')
                   // console.log('shitList', shitList[k].time.slice(0, 10))
                   // console.log('targetList', targetList[j].time.slice(0, 10))
                   item.value = `${targetList[j].value}/${shitList[k].value}g`;

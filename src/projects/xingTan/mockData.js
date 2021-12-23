@@ -6,13 +6,13 @@ export const mockData = {
       patient_id: '000059090411',
       name: '陈小倩（婴）2',
       sex: '女',
-      dept_name: '神经内科VIP病房（本部）',
+      dept_name: '神经内科测试',
       bed_label: '23',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
       admission_date: '2021-12-08 16:03:24.0',
       age: '30岁12个月',
-      inp_no: '15685872222'
+      inp_no: '156858722223'
     }
   },
   vitalSigns: [

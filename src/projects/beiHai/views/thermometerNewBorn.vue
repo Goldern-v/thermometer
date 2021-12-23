@@ -649,7 +649,7 @@ export default {
     const pulseRange = [0, 180];
     // const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1997,6 +1997,7 @@ export default {
       const list = [];
       const targetList = [...tList];
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+        console.log(timeNumRange[0]);
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);

@@ -11,7 +11,7 @@
       <div class="item" style="flex: 1.2">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item">
+      <div class="item" style="flex: 0.8" >
         年龄：<span class="value">{{
           PatientId.endsWith("_1")
             ? "0岁"
@@ -28,7 +28,7 @@
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item" style="flex: 1.7">
+      <div class="item" style="flex: 1.3">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
       <div class="item" style="flex: 0.5">
@@ -36,7 +36,7 @@
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="text-align: right;flex:1.2">
+      <div class="item" style="text-align: right;flex:1.5">
         住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
     </div>
@@ -943,7 +943,6 @@ export default {
       this.handleData();
     },
     handleData() {
-      console.log("ssss", this.patInfo.admission_date);
       if (this.apiData.patientInfo)
         this.patInfo = this.apiData.patientInfo.patInfo;
       const vitalSigns = this.apiData.vitalSigns.sort(
@@ -1918,7 +1917,6 @@ export default {
             { type: "pageTotal", value: this.pageTotal },
             "*"
           );
-
           this.handleData();
         });
       });
