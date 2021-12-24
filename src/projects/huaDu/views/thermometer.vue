@@ -106,7 +106,7 @@
             :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
             v-html="`时&emsp;&emsp;间`"
           ></div>
-          <div class="value-item-box font-18">
+          <div class="value-item-box time-font">
             <div
               class="value-item"
               :style="smallTdStyle(index, timeTds.length)"
@@ -232,7 +232,7 @@
           >
             血压(mmHg)
           </div>
-          <div class="value-item-box font-18" style="color: blue">
+          <div class="value-item-box font-16" style="color: blue">
             <div
               class="value-item"
               :style="middleTdStyle(index, formatBreatheList.length)"
@@ -1263,7 +1263,7 @@ export default {
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 2,
-          fontWeight: "bold",
+          fontWeight: "normal",
           fontFamily: "SimHei",
         });
       });
@@ -2432,6 +2432,10 @@ export default {
 }
 .font-18 {
   font-size: 18px;
+}
+.time-font{
+  font-size:16px ;
+  font-weight: normal;
 }
 .font-17 {
   font-size: 17px;

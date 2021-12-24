@@ -126,7 +126,7 @@
             }"
             v-html="`时&emsp;&emsp;间`"
           ></div>
-          <div class="value-item-box font-18">
+          <div class="value-item-box font-16">
             <div
               class="value-item font-time"
               :style="smallTdStyle(index, timeTds.length)"
@@ -472,7 +472,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData:false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -742,6 +742,7 @@ export default {
       for (let i = min; i <= max; i += 24 * 60 * 60 * 1000) {
         list.push(this.parseTime(i, "{y}-{m}-{d}"));
       }
+
       return list;
     },
     dateRange() {
@@ -751,6 +752,12 @@ export default {
       return [
         `${this.dateList[0]} 00:00:00`,
         `${this.dateList[this.dateList.length - 1]} 24:00:00`,
+      ];
+    },
+    timeRangeExchange() {
+      return [
+        `${this.dateList[0]} 00:00:00`,
+        `${this.dateList[this.dateList.length - 1]} 23:59:59`,
       ];
     },
     operateDateList() {
@@ -784,7 +791,6 @@ export default {
         }
       });
       oDateList.forEach((date) => {
-        // console.log(obj[date])
         if (obj[date].length > 0) {
           deliveryObj = obj[date].find((obj) => obj.value.includes("分娩"));
           for (let i = obj[date].length - 1; i >= 0; i--) {
@@ -1017,6 +1023,7 @@ export default {
       this.handleData();
     },
     handleData() {
+      console.log(this.apiData.patientInfo.patInfo);
       if (this.apiData.patientInfo)
         this.patInfo = this.apiData.patientInfo.patInfo;
       const vitalSigns = this.apiData.vitalSigns.sort(
@@ -1040,6 +1047,7 @@ export default {
       const admissionDateNum = new Date(
         `${this.patInfo.admission_date.slice(0, 10)} 00:00:00`
       ).getTime();
+      let test=`${this.patInfo.admission_date.slice(0, 10)} 00:00:00`
       // 根据入院时间和最大标识时间计算出页数和每页的时间范围
       const dateRangeList = [];
       for (
@@ -1056,12 +1064,13 @@ export default {
       this.pageTotal = dateRangeList.length;
 
       // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
+      if(this.timeRangeExchange[0].includes(''))
       window.parent.postMessage(
         {
           type: "getNurseExchangeInfo",
           value: {
-            startLogDateTime: this.timeRange[0],
-            endLogDateTime: this.timeRange[1],
+            startLogDateTime: this.timeRangeExchange[0],
+            endLogDateTime: this.timeRangeExchange[1],
           },
         },
         "*"
@@ -1927,7 +1936,6 @@ export default {
             break;
           }
         }
-        // console.log(item, 'ssssss')
         list.push(item);
       }
       return list;
@@ -1953,8 +1961,6 @@ export default {
                   targetList[j].time.slice(0, 10) ===
                   shitList[k].time.slice(0, 10)
                 ) {
-                  // console.log('shitList', shitList[k].time.slice(0, 10))
-                  // console.log('targetList', targetList[j].time.slice(0, 10))
                   item.value = `${targetList[j].value}/${shitList[k].value}g`;
                 } else {
                   item.value = targetList[j].value;
@@ -2030,12 +2036,10 @@ export default {
       //   753.1071428571429,
       //   880.3928571428572
       // ]
-      // console.log('传进来的', JSON.parse(JSON.stringify(xaxisList)))
 
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {
         let lastXaxis = this.getLastXasis(xaxisList[i]);
-        // console.log(xaxisList[i], '前面是坐标，后面是坐标区域', lastXaxis)
         if (!xaxisNew.includes(Math.floor(xaxisList[i]))) {
           xaxisNew.push(Math.floor(xaxisList[i]));
         } else {

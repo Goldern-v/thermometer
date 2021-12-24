@@ -367,6 +367,12 @@ export const mockData = {
       vital_code: '043'
     },
     {
+      temperature_type: '肛温',
+      value: '33.2',
+      time_point: '2019-05-20 10:12:00',
+      vital_code: '043'
+    },
+    {
       temperature_type: '心率',
       value: '100',
       time_point: '2019-05-20 10:12:00',

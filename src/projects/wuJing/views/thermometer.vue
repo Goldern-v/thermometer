@@ -22,10 +22,10 @@
         }}</span>
       </div>
       <div class="item" style="width: 150px; flex: none">
-        病案号：<span class="value">{{ patInfo.patient_id }}</span>
+        住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
       <div class="item">
-        科别：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
+        科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
       <div class="item" style="width: 80px; flex: none">
         床号：<span class="value">{{
@@ -71,10 +71,26 @@
             :style="{ width: `${leftWidth}px` }"
             v-html="`日期`"
           ></div>
+          
           <div class="value-item-box">
             <div
               class="value-item"
               v-for="(item, index) in formatDateList"
+              :key="index"
+            >
+              {{ item }}
+            </div>
+          </div>
+        </div>
+         <div
+          class="row border-bottom-black-2"
+          :style="{ height: `${trHeight}px` }"
+         >
+          <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in formatStayDayList"
               :key="index"
             >
               {{ item }}
@@ -474,7 +490,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData:true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1318,11 +1334,11 @@ export default {
             ? y - this.ySpace - 1
             : bottomText.includes(value)
             ? y - 2 * this.ySpace - 2
-            : y,
+            : y+2,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
-          fontWeight: "bold",
+          fontWeight: "nomal",
         });
       });
     },
@@ -1330,7 +1346,8 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(this.$refs.main);
+        let ops={renderer:'svg'}
+        this.zr = zrender.init(this.$refs.main,ops);
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
@@ -1444,15 +1461,15 @@ export default {
             ①只填写脉搏没有填写心率的单据，不需要连接成闭环形成阴影
             ②填写脉搏和心率的单据需要连接两者数据点形成阴影(此情况为房颤患者)
         */
-        if (this.settingMap.heart.data.length > 0) {
-          this.polygonPoints.forEach((x) => {
-            this.createPolygon({
-              points: x,
-              lineWidth: 1,
-              color: "transparent",
-            });
-          });
-        }
+        // if (this.settingMap.heart.data.length > 0) {
+        //   this.polygonPoints.forEach((x) => {
+        //     this.createPolygon({
+        //       points: x,
+        //       lineWidth: 1,
+        //       color: "transparent",
+        //     });
+        //   });
+        // }
         // 生成心率脉搏过快注释
         this.createNote(this.topPulseNote, this.ySpace + 2, "black");
         // 生成表顶注释
@@ -1610,16 +1627,20 @@ export default {
     },
     //先在外层画一个多边形，然后根据多边形画虚线连接，有心率和脉搏就画虚线区域
     createPolygon({ points, lineWidth, color, zlevel = 0 }) {
-      const canvas = document.createElement("canvas");
-      canvas.width = 10;
-      canvas.height = 10;
-      const ctx = canvas.getContext("2d");
-      ctx.moveTo(canvas.width, 0);
-      ctx.lineTo(0, canvas.height);
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = "red";
-      ctx.stroke();
-
+      //通过createElementNS创建svg元素并设置属性
+		var svg=document.createElementNS('http://www.w3.org/2000/svg','svg'); 	
+		svg.setAttribute("viewBox","0 0 10 10");	
+		svg.setAttribute("style","fill:none;stroke:black;stroke-width:3;width:10;height:10;");	
+    console.log(svg);			
+      // const svg= document.createElement("svg");
+      // canvas.width = 10;
+      // canvas.height = 10;
+      // const ctx = canvas.getContext("2d");
+      // ctx.moveTo(canvas.width, 0);
+      // ctx.lineTo(0, canvas.height);
+      // ctx.lineWidth = 1;
+      // ctx.strokeStyle = "red";
+      // ctx.stroke();
       const polygon = new zrender.Polygon({
         zlevel,
         shape: {
@@ -1631,7 +1652,7 @@ export default {
           lineWidth,
           stroke: color,
           fill: {
-            image: canvas,
+            image:svg,
           },
         },
       });

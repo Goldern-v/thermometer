@@ -6,7 +6,7 @@
   >
     <div class="head-hos">武警广东省总队医院</div>
     <div class="head-title">体温单</div>
-    <div class="head-info">
+   <div class="head-info">
       <div class="item" style="width: 105px; flex: none">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
@@ -16,13 +16,13 @@
       <div class="item" style="width: 100px; flex: none">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
-      <div class="item" style="width: 150px; flex: none">
-        病案号：<span class="value">{{ patInfo.patient_id }}</span>
-      </div>
       <div class="item" style="width: 160px; flex: none">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
+      </div>
+      <div class="item" style="width: 150px; flex: none">
+        住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
       <div class="item">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
@@ -85,7 +85,7 @@
         <div
           class="row border-bottom-black-2"
           :style="{ height: `${trHeight}px` }"
-        >
+         >
           <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
           <div class="value-item-box">
             <div
@@ -663,7 +663,7 @@ export default {
       return tds;
     },
     trHeight() {
-      return this.ySpace;
+      return this.ySpace+4;
     },
     formatPressureList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
@@ -862,7 +862,7 @@ export default {
     smallTdStyle(index) {
       return {
         color:
-          index % 6 === 0 || (index - 4) % 6 === 0 || (index - 5) % 6 === 0
+          index % 6 === 0 || (index - 1) % 6 === 0 || (index - 5) % 6 === 0
             ? "red"
             : "",
         width: `${this.xSpace + ((index - 5) % 6 === 0 ? 2 : 1)}px`,
@@ -1088,7 +1088,7 @@ export default {
         }
         if (this.lineMap[vitalSigns[i].vital_code]) {
           if (
-            ["7", "6"].includes(vitalSigns[i].vital_code) &&
+            ["5", "4"].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) > this.pulseRange[1]
           ) {
             this.topPulseNote.push({
@@ -1184,12 +1184,12 @@ export default {
           y: topText.includes(value)
             ? y - this.ySpace - 1
             : bottomText.includes(value)
-            ? y - 2 * this.ySpace - 2
-            : y,
+            ? y - 2 * this.ySpace +1
+            : y+1,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
-          fontWeight: "bold",
+          fontWeight: "nomal",
         });
       });
     },
@@ -1197,7 +1197,8 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(this.$refs.main);
+        let ops={renderer:'svg'}
+        this.zr = zrender.init(this.$refs.main,ops);
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
@@ -1400,15 +1401,15 @@ export default {
     },
     //先在外层画一个多边形，然后根据多边形画虚线连接，有心率和脉搏就画虚线区域
     createPolygon({ points, lineWidth, color, zlevel = 0 }) {
-      const canvas = document.createElement("canvas");
-      canvas.width = 10;
-      canvas.height = 10;
-      const ctx = canvas.getContext("2d");
-      ctx.moveTo(canvas.width, 0);
-      ctx.lineTo(0, canvas.height);
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = "red";
-      ctx.stroke();
+      // const canvas = document.createElement("canvas");
+      // canvas.width = 10;
+      // canvas.height = 10;
+      // const ctx = canvas.getContext("2d");
+      // ctx.moveTo(canvas.width, 0);
+      // ctx.lineTo(0, canvas.height);
+      // ctx.lineWidth = 1;
+      // ctx.strokeStyle = "red";
+      // ctx.stroke();
 
       const polygon = new zrender.Polygon({
         zlevel,
