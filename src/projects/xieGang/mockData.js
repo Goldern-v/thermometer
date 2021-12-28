@@ -3,7 +3,7 @@ export const mockData = {
   ErrorMsg: '查询成功',
   patientInfo: {
     patInfo: {
-      patient_id: '590904',
+      patient_id: '590904000000',
       name: '陈小倩',
       sex: '女',
       dept_name: '乳腺胸外科',

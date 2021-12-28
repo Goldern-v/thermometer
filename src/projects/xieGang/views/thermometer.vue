@@ -29,12 +29,12 @@
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="flex: 1.5">
+      <div class="item" style="flex: 1.3">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item" style="text-align: right">
+      <div class="item" style="text-align: right;flex: 1.3" >
         住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
     </div>
@@ -1204,7 +1204,8 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(this.$refs.main);
+        let ops={renderer:'svg'}
+        this.zr = zrender.init(this.$refs.main,ops);
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);

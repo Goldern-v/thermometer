@@ -20,7 +20,7 @@
           >&emsp;{{ bedExchangeLog || patInfo.bed_label }}&emsp;</span
         >
       </div>
-      <div class="item">
+      <div class="item" >
         入院日期<span class="value"
           >&emsp;{{ patInfo.admission_date.slice(0, 10) }}&emsp;</span
         >
