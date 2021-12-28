@@ -992,6 +992,17 @@ export default {
         transform: 'translateX(1px)'
       }
     },
+    //操作自定义的显示位置，存在空的自定义时 往上推不留空
+    handleCustomList() {
+      for (let k = 0; k < 4; k++) {
+        for (let j = k - 1; j >= 0; j--) {
+          if (this[`customList${j}`].length === 0) {
+            this[`customList${j}`] = this[`customList${k}`];
+            this[`customList${k}`] = [];
+          }
+        }
+      }
+    },
     middleTdStyle(index) {
       return {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 4 : 3)}px`,
@@ -1154,40 +1165,59 @@ export default {
           // 超出时间范围的抛弃
           continue
         }
-        if (
-          ['other1', 'other2', 'other3', 'other4', 'other5', 'other6'].includes(
+        if (['other1', 'other2', 'other3', 'other4', 'other5', 'other6'].includes(
             vitalSigns[i].vital_code
-          )
-        ) {
-          // 自定义字段填入
-          const sign = vitalSigns[i].temperature_type
-          const index = customSigns.indexOf(sign)
-          if (index < 0) {
-            customSigns.push(sign)
-            this[`customList${customSigns.length - 1}`].push({
-              time: vitalSigns[i].time_point,
-              value: vitalSigns[i].value
-            })
-            this[`customList${customSigns.length - 1}`].label = sign
-          } else {
-            this[`customList${index}`].push({
-              time: vitalSigns[i].time_point,
-              value: vitalSigns[i].value
-            })
-            this[`customList${index}`].label = sign
+          )) {
+          const sign = vitalSigns[i].temperature_type;
+          switch (vitalSigns[i].vital_code) {
+            case "other1":
+              this.customList0.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList0.label = sign;
+              break;
+            case "other2":
+              this.customList1.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList1.label = sign;
+              break;
+            case "other3":
+              this.customList2.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList2.label = sign;
+              break;
+            case "other4":
+              this.customList3.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList3.label = sign;
+              break;
+            case "other5":
+              this.customList4.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList4.label = sign;
+              break;
+            case "other6":
+              this.customList5.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList5.label = sign;
+              break;
+            default:
+              break;
           }
-          continue
         }
         if (this.lineMap[vitalSigns[i].vital_code]) {
-          if (
-            ['pulse', 'heartRate'].includes(vitalSigns[i].vital_code) &&
-            Number(vitalSigns[i].value) > this.pulseRange[1]
-          ) {
-            // this.topPulseNote.push({
-            //   time: vitalSigns[i].time_point,
-            //   value: '过快'
-            // })
-          } else if (
+           if (
             ['kouTemperature', 'yeTemperature', 'gangTemperature'].includes(
               vitalSigns[i].vital_code
             ) &&
@@ -1260,6 +1290,7 @@ export default {
         }
       }
       this.init()
+
     },
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
@@ -1267,6 +1298,7 @@ export default {
         this.getXaxis(this.getLocationTime(x.time))
       )
       const xaxisNew = this.handleNoteXaxis(xaxis)
+
       notes.forEach((x, i) => {
         let value = x.value
         if (x.value.includes('|')) {
@@ -1282,12 +1314,15 @@ export default {
           fontWeight: 'bold'
         })
       })
+      
     },
     init() {
+      
       this.getAreaHeight() // 遍历一遍获取高度
       this.getAreaWidth() // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(document.getElementById('main'))
+         let ops={renderer:'svg'}
+        this.zr = zrender.init(document.getElementById('main'),ops)
         const div = document.createElement('div')
         div.classList.add('tips')
         document.getElementById('main').appendChild(div)
@@ -1333,7 +1368,10 @@ export default {
               dotSolid: x.solid,
               dotType: x.dotType
             })
+          this.handleCustomList();//遍历数据时修改自定义位置
+            
           })
+          
         })
         /*  画心率和脉搏的多边形，连线已经用折线画了，
             这里用多边形是为了生成阴影，多边形的边框颜色设为透明，
@@ -1704,7 +1742,8 @@ export default {
           case 'Circle':
             if (vitalCode === 'pulse' || vitalCode === 'heartRate') {
               // 如果脉搏或心率超限过快，则在最高的格子中间用实心红圈描点
-              if (x.value > this.pulseRange[1]) {
+              if (Number(x.value) > this.pulseRange[1]) {
+                console.log(x,this.pulseRange[1])
                 cy = this.getYaxis(yRange, yRange[1] - 2, vitalCode)
                 params = {
                   cx,

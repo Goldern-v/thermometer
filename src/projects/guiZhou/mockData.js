@@ -529,7 +529,7 @@ export const mockData = {
     },
     {
       temperature_type: '心率',
-      value: '180',
+      value: '200',
       time_point: '2021-10-29 14:00:00',
       vital_code: 'heartRate',
       expand2: null
@@ -573,14 +573,14 @@ export const mockData = {
       temperature_type: '心包引流',
       value: '20',
       time_point: '2021-10-29 22:00:00',
-      vital_code: 'other1',
+      vital_code: 'other3',
       expand2: null
     },
     {
       temperature_type: '纵膈引流',
       value: '25',
       time_point: '2021-10-29 22:00:00',
-      vital_code: 'other2',
+      vital_code: 'other3',
       expand2: null
     },
     {
@@ -663,15 +663,15 @@ export const mockData = {
     {
       temperature_type: '心包引流',
       value: '0',
-      time_point: '2021-10-30 22:00:00',
-      vital_code: 'other1',
+      time_point: '2021-10-29 22:00:00',
+      vital_code: 'other3',
       expand2: null
     },
     {
       temperature_type: '纵膈引流',
       value: '25',
-      time_point: '2021-10-30 22:00:00',
-      vital_code: 'other2',
+      time_point: '2021-10-28 22:00:00',
+      vital_code: 'other3',
       expand2: null
     },
     {
@@ -879,7 +879,7 @@ export const mockData = {
     },
     {
       temperature_type: '心率',
-      value: '158',
+      value: '185',
       time_point: '2021-11-02 14:00:00',
       vital_code: 'heartRate',
       expand2: null
