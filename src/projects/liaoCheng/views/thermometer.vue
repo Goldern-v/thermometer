@@ -795,10 +795,11 @@ export default {
     },
     formatDateList() {
       return this.dateList.map((x, i) => {
+        console.log(x.slice(8,10))
         if (i === 0 || this.dateList[i - 1].slice(0, 4) !== x.slice(0, 4)) {
           return x
         } else {
-          return x.slice(5)
+          return x.slice(8,10)
         }
       })
     },
@@ -1284,7 +1285,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: value !== '过快' ? y : y - this.ySpace - 1,
+          y: value !== '过快' ? y+2 : y - this.ySpace - 1,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1296,7 +1297,9 @@ export default {
       this.getAreaHeight() // 遍历一遍获取高度
       this.getAreaWidth() // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(this.$refs.main)
+        // this.zr = zrender.init(this.$refs.main)
+         let ops={renderer:'svg'}
+        this.zr = zrender.init(this.$refs.main,ops);
         const div = document.createElement('div')
         div.classList.add('tips')
         this.$refs.main.appendChild(div)

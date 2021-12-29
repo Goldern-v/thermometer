@@ -17,7 +17,7 @@
       <div class="item" style="width: 100px; flex: none">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
-      <div class="item" style="width: 150px; flex: none">
+      <div class="item" style="width: 130px; flex: none">
         住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
       <div class="item" style="width: 160px; flex: none">
@@ -28,7 +28,7 @@
       <div class="item">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" style="width: 80px; flex: none">
+      <div class="item" style="flex:1.5" >
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
