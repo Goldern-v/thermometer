@@ -4,9 +4,9 @@ export const mockData = {
   patientInfo: {
     patInfo: {
       patient_id: '590904000000',
-      name: '陈小倩',
+      name: '陈小倩是是是',
       sex: '女',
-      dept_name: '乳腺胸外科',
+      dept_name: '乳腺胸外科护护士站',
       bed_label: '012',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
@@ -226,7 +226,7 @@ export const mockData = {
     },
     {
       temperature_type: '呼吸',
-      value: '20',
+      value: 'R',
       time_point: '2021-10-19 23:12:00',
       vital_code: '13'
     },

@@ -21,7 +21,7 @@
             : patInfo.age
         }}</span>
       </div>
-      <div class="item">
+      <div class="item" style="flex: 1.4">
         病区：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
       <div class="item">
@@ -29,7 +29,7 @@
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="flex: 1.3">
+      <div class="item" style="flex: 1.2">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
@@ -258,7 +258,7 @@
               v-for="(item, index) in formatBreatheList"
               :key="index"
             >
-              {{ item.value }}
+              {{ item.value.includes('R')||item.value.includes('r')?'®':item.value}}
             </div>
           </div>
         </div>
@@ -602,6 +602,7 @@ export default {
         18: "体重",
         19: "肛温",
         2: "口温",
+        26:"皮试",
         21: "发热体温",
         22: "线上降温",
         23: "呼吸机R",
@@ -1172,6 +1173,9 @@ export default {
           case "24":
             this.shitList.push(item);
             break;
+          case "26":
+            this.skinTest.push(item);
+            break;
           case "2002":
             this.childShitList.push(item);
             break;
@@ -1333,7 +1337,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: bottomValu.includes(value) ? y : yNew,
+          y: bottomValu.includes(value) ? y : yNew+2,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 2,
@@ -2173,7 +2177,7 @@ export default {
   }
   .head-info {
     display: flex;
-    font-size: 17px;
+    font-size: 16px;
     .item {
       flex: 1;
       text-align: left;
