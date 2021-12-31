@@ -1095,7 +1095,8 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(this.$refs.main);
+         let ops={renderer:'svg'}
+        this.zr = zrender.init(this.$refs.main,ops);
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
@@ -1461,8 +1462,8 @@ export default {
           "style",
           `
           position:absolute;
-          top:${y - 30}px;
-          left:${x - textWidth / 2}px;
+          top:${y + 110}px;
+          left:${x - textWidth / 2+20}px;
           display:block;
           font-size:12px;
           background-color:rgba(0,0,0,.7);

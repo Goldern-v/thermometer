@@ -773,11 +773,13 @@ export default {
       return this.vitalSigns
         .filter(
           (x) =>
-            x.vital_code === "21" &&
-            (x.value === "手术" ||
-              x.value === "分娩|" ||
-              x.value === "手术分娩|" ||
-              x.value === "手术入院|")
+          x.vital_code === "21" &&
+          (x.value.includes("手术") ||
+            x.value.includes("分娩|") ||
+            x.value.includes("手术|") ||
+            x.value.includes("分娩") ||
+            x.value.includes("手术分娩|") ||
+            x.value.includes("手术入院|"))
         )
         .map((x) => x.time_point);
     },
