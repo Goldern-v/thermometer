@@ -24,7 +24,8 @@ export default {
     return {
       useMockData: false,
       printData: null,
-      pageTotal: 1
+      pageTotal: 1,
+      exchangeInfoAll:[],
     }
   },
   methods: {
@@ -35,11 +36,26 @@ export default {
           case 'printingAll':
             window.print()
             break
+             case "nurseExchangeInfoAll":
+            if(e.data.value.length!==0){
+                 this.exchangeInfoAll=e.data.value
+              this.nurseExchangeInfoAll()
+            }
+            break;
           default:
             break
         }
       }
     },
+     nurseExchangeInfoAll(){
+     let nurseExchangeInfo=this.exchangeInfoAll//所有的批量转床转科记录
+   this.$nextTick(()=>{
+          for(let i=0;i<this.$refs.thermometer.length;i++){
+            this.$refs.thermometer[i].adtLog=nurseExchangeInfo[i].adtLog
+            this.$refs.thermometer[i].bedExchangeLog=nurseExchangeInfo[i].bedExchangeLog
+          }
+          })
+ },
     urlParse() {
       let obj = {}
       let reg = /[?&][^?&]+=[^?&%]+/g
@@ -82,6 +98,16 @@ export default {
         this.printData = res.data
         setTimeout(() => {
           this.pageTotal = this.$refs.thermometer[0].pageTotal
+           let dataRangePrintAll=this.$refs.thermometer[0].dateRangeList
+        let value= {startLogDateTime:dataRangePrintAll[0][0] +' 00:00:00',endLogDateTime:dataRangePrintAll[dataRangePrintAll.length-1][1]+' 24:00:00'}
+          // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
+      window.parent.postMessage(
+        {
+          type: "getNurseExchangeInfoAll",
+          value
+        },
+        "*"
+      );
         }, 0)
       })
     }

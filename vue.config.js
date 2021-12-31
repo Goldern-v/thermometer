@@ -47,21 +47,8 @@ const packageName = `${projectName}体温单_${today.getFullYear()}年${today.ge
   1}月${today.getDate()}日${today.getHours()}时${today.getMinutes()}分${today.getSeconds()}秒`
 module.exports = {
   publicPath: './',
-  outputDir: packageName,
+  outputDir:packageName,
   lintOnSave: false,
-//   plugins:[
-//     //打包环境去掉console.log等
-// new UglifyJsPlugin({
-//   uglifyOptions: {
-//      compress: {
-//        warnings: false,
-//        drop_console: true,  //注释console
-//        drop_debugger: true, //注释debugger
-//        pure_funcs: ['console.log'], //移除console.log
-//      },
-//    },
-// }),
-//   ],
   configureWebpack: {
     entry: (() => {
       switch (project) {
