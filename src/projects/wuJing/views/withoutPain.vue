@@ -16,22 +16,22 @@
       <div class="item" style="width: 100px; flex: none">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
-      <div class="item" style="width: 160px; flex: none">
+      <div class="item" >
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item" style="width: 150px; flex: none">
+      <div class="item" >
         住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
-      <div class="item">
+      <div class="item" style="flex:1.2">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" style="width: 80px; flex: none">
+      <!-- <div class="item" style="width: 80px; flex: none">
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
-      </div>
+      </div> -->
     </div>
     <!-- <div class="head-info-1">
       
@@ -203,8 +203,8 @@
         ></div>
         <div
           class="row border-top-red-2"
-          :style="{ height: `${trHeight * 2}px` }"
-        >
+          :style="{ height: `${trHeight * 2-7}px` }"
+          >
           <div class="label" :style="{ width: `${leftWidth}px` }">
             呼吸(次/分)
           </div>
@@ -228,10 +228,17 @@
             血压(mmHg)
           </div>
           <div class="value-item-box">
-            <div
+            <!-- <div
               class="value-item"
               :style="middleTdStyle(index)"
               v-for="(item, index) in formatPressureList"
+              :key="index"
+            >
+              {{ item.value }}
+            </div> -->
+             <div
+              class="value-item"
+              v-for="(item, index) in getFormatList({ tList: pressureList })"
               :key="index"
             >
               {{ item.value }}
@@ -416,7 +423,7 @@
         </div> -->
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            手术或产后天数
+            术后天数
           </div>
           <div class="value-item-box">
             <div
@@ -476,7 +483,7 @@ export default {
     const pulseRange = [0, 180];
     // const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -2353,7 +2360,7 @@ export default {
   font-size: 12px;
 }
 .border-top-red-2 {
-  border-top: 2px solid red !important;
+  border-top: 2px solid black !important;
 }
 .border-bottom-black-2 {
   border-bottom: 2px solid black !important;

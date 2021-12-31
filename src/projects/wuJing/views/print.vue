@@ -25,6 +25,7 @@ export default {
       useMockData: false,
       printData: null,
       pageTotal: 1,
+      exchangeInfoAll:[],
       //SM4解密加密配置
       sm4Config: {
         // 解密加密的秘钥

@@ -210,7 +210,7 @@ export const mockData = {
     {
       temperature_type: '血压',
       value: '139/89',
-      time_point: '2019-05-18 20:12:00',
+      time_point: '2019-05-17 20:12:00',
       vital_code: '7'
     },
     {

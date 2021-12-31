@@ -16,22 +16,22 @@
       <div class="item" style="width: 100px; flex: none">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
-      <div class="item" style="width: 160px; flex: none">
+      <div class="item" >
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item" style="width: 150px; flex: none">
+      <div class="item" >
         住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
-      <div class="item">
+      <div class="item" style="flex:1.2">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" style="width: 80px; flex: none">
+      <!-- <div class="item" style="width: 80px; flex: none">
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
-      </div>
+      </div> -->
     </div>
     <!-- <div class="head-info-1">
       
@@ -126,7 +126,7 @@
           <i
             class="split-line"
             :style="{
-              bottom: `${painAreaHeight + bottomAreaHeight - 1}px`,
+              bottom: `${painAreaHeight + bottomAreaHeight+1 }px`,
             }"
           ></i>
           <div class="notes">
@@ -170,7 +170,7 @@
               <span>{{ item }}</span>
             </div>
             <div class="pain-area" :style="`height: ${painAreaHeight}px`">
-              疼<br />痛<br />评<br />分
+              疼<br />痛<br />评<br />分<br />N<br />R<br />S
             </div>
             <div
               class="bottom-area"
@@ -216,7 +216,7 @@
         ></div>
         <div
           class="row border-top-red-2"
-          :style="{ height: `${trHeight * 2}px` }"
+          :style="{ height: `${trHeight * 2-7}px` }"
         >
           <div class="label" :style="{ width: `${leftWidth}px` }">
             呼吸(次/分)
@@ -241,10 +241,17 @@
             血压(mmHg)
           </div>
           <div class="value-item-box">
-            <div
+            <!-- <div
               class="value-item"
               :style="middleTdStyle(index)"
               v-for="(item, index) in formatPressureList"
+              :key="index"
+            >
+              {{ item.value }}
+            </div> -->
+             <div
+              class="value-item"
+              v-for="(item, index) in getFormatList({ tList: pressureList })"
               :key="index"
             >
               {{ item.value }}
@@ -429,7 +436,7 @@
         </div> -->
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            手术或产后天数
+            术后天数
           </div>
           <div class="value-item-box">
             <div
@@ -486,8 +493,8 @@ export default {
     },
   },
   data() {
-    const yRange = [34, 42];
-    const pulseRange = [20, 180];
+    const yRange = [34, 41];
+    const pulseRange = [20, 160];
     const painRange = [0, 10];
     return {
       useMockData:true,
@@ -862,15 +869,13 @@ export default {
       return list;
     },
     indexTextAreaHeight() {
-      return this.ySpace * 2 + 1;
+      return this.ySpace * 5 + 5;
     },
     timesTempAreaHeight() {
       return (
         this.areaHeight -
         this.indexTextAreaHeight -
-        this.painAreaHeight +
-        3 * this.ySpace +
-        2
+        this.painAreaHeight -this.ySpace-2
       );
     },
     painAreaHeight() {
@@ -1333,8 +1338,8 @@ export default {
           y: topText.includes(value)
             ? y - this.ySpace - 1
             : bottomText.includes(value)
-            ? y - 2 * this.ySpace - 2
-            : y+2,
+            ? y - 5 * this.ySpace - 5
+            : y-3*this.ySpace - 3,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1488,19 +1493,15 @@ export default {
       const totalLine =
         this.yRange[1] -
         this.yRange[0] +
-        1 +
-        (this.yRange[1] - this.yRange[0]) * 4 +
-        3 +
-        6;
+        (this.yRange[1] - this.yRange[0]) * 6-2
       let preSpace = 0;
       let breakIndex = 0;
       for (let i = 0; i < totalLine; i++) {
-        const isPainBreak = this.yRange[1] - breakIndex === 34;
+        const isPainBreak = i===44;
         const isBreak =
-          (((i - 2) % 5 === 0 && i < 40) ||
+          ((i  % 5 === 0 && i < 40) ||
             isPainBreak ||
-            i === 39 ||
-            i === 43) &&
+            i === 40||i===44 ) &&
           i > 0 &&
           i < totalLine - 1;
         const isboundary = i === 0 || i === totalLine - 1;
@@ -1550,7 +1551,7 @@ export default {
         this.yRange[1] -
         this.yRange[0] +
         1 +
-        (this.yRange[1] - this.yRange[0]) * 4 +
+        (this.yRange[1] - this.yRange[0]) * 5 +
         4;
       let preSpace = 0;
       let breakIndex = 0;
@@ -1629,9 +1630,8 @@ export default {
     createPolygon({ points, lineWidth, color, zlevel = 0 }) {
       //通过createElementNS创建svg元素并设置属性
 		var svg=document.createElementNS('http://www.w3.org/2000/svg','svg'); 	
-		svg.setAttribute("viewBox","0 0 10 10");	
-		svg.setAttribute("style","fill:none;stroke:black;stroke-width:3;width:10;height:10;");	
-    console.log(svg);			
+		// svg.setAttribute("viewBox","0 0 10 10");	
+		// svg.setAttribute("style","fill:none;stroke:black;stroke-width:3;width:10;height:10;");	
       // const svg= document.createElement("svg");
       // canvas.width = 10;
       // canvas.height = 10;
@@ -1729,7 +1729,7 @@ export default {
           n,
         },
         style: {
-          fill: dotSolid ? color : "#fff",
+          fill: dotSolid ? color:"#fff",
           stroke: color,
           lineWidth: 2,
         },
@@ -1997,13 +1997,9 @@ export default {
         ? ((yRange[1] - value) / (yRange[1] - yRange[0])) *
             this.painAreaHeight +
             this.indexTextAreaHeight +
-            this.timesTempAreaHeight -
-            3 * this.ySpace -
-            1
+            this.timesTempAreaHeight +this.ySpace+2
         : ((yRange[1] - value) / (yRange[1] - yRange[0])) *
-            this.timesTempAreaHeight +
-            this.indexTextAreaHeight +
-            1;
+            this.timesTempAreaHeight +this.indexTextAreaHeight 
     },
     // 根据时间点计算横坐标
     getXaxis(time) {
@@ -2371,9 +2367,6 @@ export default {
     z-index: 30;
   }
 }
-.pain-area:nth-child(3) {
-  color: red;
-}
 .table-box {
   position: relative;
   z-index: 20;
@@ -2453,12 +2446,13 @@ export default {
           text-align: center;
         }
       }
-      .pain-area :nth-child(1) {
-        margin-top: 12px;
+      .pain-area :nth-child(4) {
+       color:red;
       }
       .pain-area {
         position: relative;
         display: flex;
+        top:39px;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -2475,13 +2469,17 @@ export default {
           bottom: -7px;
         }
       }
+     
     }
+     .pain-area:nth-child(4){
+        color:red;
+      }
     .notes {
       font-size: 14px;
       position: absolute;
       color: blue;
       left: 7px;
-      bottom: 140px;
+      bottom: 125px;
       .note-item {
         position: relative;
       }
@@ -2514,10 +2512,13 @@ export default {
         top: 2px;
         display: inline-block;
         z-index: 2;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-bottom: 18px solid rgb(255, 0, 0);
+        border-left: 9px solid transparent;
+        border-right: 9px solid transparent;
+        border-bottom: 18px solid rgb(248, 2, 2);
+        
+        
       }
+
       .pulse-icon {
         position: absolute;
         margin-left: 21px;
@@ -2577,60 +2578,56 @@ export default {
       }
     }
     .temp :nth-child(2) > span {
-      margin-top: -8px;
+      margin-top: -5px;
     }
     .temp :nth-child(3) > span {
-      margin-top: 3px;
+      margin-top: -3px;
     }
     .temp :nth-child(4) > span {
-      margin-top: 12px;
-    }
-    .temp :nth-child(5) > span {
-      margin-top: 19px;
-    }
-    .temp :nth-child(6) > span {
-      margin-top: 28px;
-    }
-    .temp :nth-child(7) > span {
-      margin-top: 37px;
-    }
-    .temp :nth-child(8) > span {
-      margin-top: 44px;
-    }
-    .temp :nth-child(9) > span {
-      margin-top: 52px;
-    }
-    .times :nth-child(2) > span {
-      margin-top: -8px;
-    }
-    .times :nth-child(3) > span {
       margin-top: 3px;
     }
+    .temp :nth-child(5) > span {
+      margin-top: 9px;
+    }
+    .temp :nth-child(6) > span {
+      margin-top: 10px;
+    }
+    .temp :nth-child(7) > span {
+      margin-top: 15px;
+    }
+    .temp :nth-child(8) > span {
+      margin-top: 18px;
+    }
+    
+    .times :nth-child(2) > span {
+      margin-top: -5px;
+    }
+    .times :nth-child(3) > span {
+      margin-top: -3px;
+    }
     .times :nth-child(4) > span {
-      margin-top: 12px;
+      margin-top: 3px;
     }
     .times :nth-child(5) > span {
-      margin-top: 19px;
+      margin-top: 9px;
     }
     .times :nth-child(6) > span {
-      margin-top: 28px;
+      margin-top: 10px;
     }
     .times :nth-child(7) > span {
-      margin-top: 37px;
+      margin-top: 15px;
     }
     .times :nth-child(8) > span {
-      margin-top: 44px;
+      margin-top: 18px;
     }
-    .times :nth-child(9) > span {
-      margin-top: 52px;
-    }
+
 
     .split-line {
       display: block;
       position: absolute;
       left: 0;
       right: -1px;
-      border-bottom: 2px solid red;
+      border-bottom: 2px solid rgb(0, 0, 0);
     }
   }
 }
@@ -2679,7 +2676,7 @@ export default {
   font-size: 12px;
 }
 .border-top-red-2 {
-  border-top: 2px solid red !important;
+  border-top: 2px solid black !important;
 }
 .border-bottom-black-2 {
   border-bottom: 2px solid black !important;
