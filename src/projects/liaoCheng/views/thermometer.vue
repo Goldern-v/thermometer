@@ -7,14 +7,17 @@
     <div class="head-hos">聊城市第二人民医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item" style="width:105px;flex:none;">
+      <div class="item" style="width:120px;flex:none;">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item" style="width:70px;flex:none;">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="width:100px;flex:none;">
+      <div class="item" v-if="patInfo.dept_name!=='新生儿科病房'" style="width:100px;flex:none;">
         年龄：<span class="value">{{ patInfo.age }}</span>
+      </div>
+      <div class="item" v-if="patInfo.dept_name==='新生儿科病房'" style="width:160px;flex:none;" >
+        出生日期：<span class="value">{{ patInfo.birthday }}</span>
       </div>
       <div class="item" style="width:160px;flex:none;">
         入院日期：<span class="value">{{
@@ -795,7 +798,6 @@ export default {
     },
     formatDateList() {
       return this.dateList.map((x, i) => {
-        console.log(x.slice(8,10))
         if (i === 0 || this.dateList[i - 1].slice(0, 4) !== x.slice(0, 4)) {
           return x
         } else {

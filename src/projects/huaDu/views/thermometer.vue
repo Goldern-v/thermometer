@@ -419,7 +419,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -726,7 +726,6 @@ export default {
         }
       });
       oDateList.forEach((date) => {
-        // console.log(obj[date])
         if (obj[date].length > 0) {
           deliveryObj = obj[date].find((obj) => obj.value.includes("分娩"));
           for (let i = obj[date].length - 1; i >= 0; i--) {
@@ -747,10 +746,23 @@ export default {
     },
     formatOperateDateList() {
       return this.dateList.map((x) => {
-        if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
-          return "";
-        //获取出院日期，如果出院了就结束运算
+         let tomorrow = moment(new Date()).add(1, "d").format("YYYY-MM-DD");
+        let today = moment(new Date()).format("YYYY-MM-DD");
+        this.topSheetNote.forEach((y) => {
+          if (
+            y.time.slice(0, 10) === tomorrow &&
+            (y.value.includes("出院") || y.value.includes("转出"))
+          ) {
+            today = tomorrow;
+          }
+        });
+        //1.如果当前日期>出院日期，则停止计算 
+        //2.存在跨日期上班的护士，他是今年录入明天的出院数据的，所以存在这种数据就把当前日期+1,然后再计算出院的间隔
+        // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
+        //   return "";
         if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
+         if (this.dayInterval(x, today) > 0) return "";
+
         if (!this.operateDateList.length) return "";
         // 构造天数差数组，有相同天数差的说明在同一天x
         const days = this.operateDateList.map((y) => {
@@ -1051,23 +1063,6 @@ export default {
             default:
               break;
           }
-          // const index = customSigns.indexOf(sign)
-          // if (index < 0) {
-          //   customSigns.push(sign)
-          //   // console.log(this[`customList${customSigns.length - 1}`])
-          //   this[`customList${customSigns.length - 1}`].push({
-          //     time: vitalSigns[i].time_point,
-          //     value: vitalSigns[i].value
-          //   })
-          //   this[`customList${customSigns.length - 1}`].label = sign
-          // } else {
-          //   this[`customList${index}`].push({
-          //     time: vitalSigns[i].time_point,
-          //     value: vitalSigns[i].value
-          //   })
-          //   this[`customList${index}`].label = sign
-          // }
-          // continue
         }
         /* 获取各个体征数组对象 */
         if (this.lineMap[vitalSigns[i].vital_code]) {
@@ -1131,7 +1126,8 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(this.$refs.main);
+        let ops={renderer:'svg'}
+        this.zr = zrender.init(this.$refs.main,ops);
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
@@ -1259,7 +1255,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: bottomValu.includes(value) ? y : yNew,
+          y: bottomValu.includes(value) ? y+1 : yNew+2,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 2,
@@ -1856,7 +1852,6 @@ export default {
             break;
           }
         }
-        // console.log(item, 'ssssss')
         list.push(item);
       }
       return list;
@@ -1882,9 +1877,6 @@ export default {
                   targetList[j].time.slice(0, 10) ===
                   shitList[k].time.slice(0, 10)
                 ) {
-                  console.log('测试测试')
-                  // console.log('shitList', shitList[k].time.slice(0, 10))
-                  // console.log('targetList', targetList[j].time.slice(0, 10))
                   item.value = `${targetList[j].value}/${shitList[k].value}g`;
                 } else {
                   item.value = targetList[j].value;
@@ -1948,24 +1940,9 @@ export default {
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
     handleNoteXaxis(xaxisList) {
       //定义一个数组，为全部最后一格的数据，如果与最后一格重叠，就往底下移动
-      // const lastXaxis = [1, 2, 3, 4, 5, 6, 7].map((x) => {
-      //   return x * 6 * this.xSpace
-      // })
-      // const lastXaxis = [
-      //   116.67857142857143,
-      //   243.96428571428575,
-      //   371.25,
-      //   498.5357142857143,
-      //   625.8214285714286,
-      //   753.1071428571429,
-      //   880.3928571428572
-      // ]
-      // console.log('传进来的', JSON.parse(JSON.stringify(xaxisList)))
-
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {
         let lastXaxis = this.getLastXasis(xaxisList[i]);
-        // console.log(xaxisList[i], '前面是坐标，后面是坐标区域', lastXaxis)
         if (!xaxisNew.includes(Math.floor(xaxisList[i]))) {
           xaxisNew.push(Math.floor(xaxisList[i]));
         } else {
@@ -1979,19 +1956,6 @@ export default {
           xaxisNew.push(Math.floor(xaxisList[i]));
         }
       }
-      //存在数值误差，修复数值
-      // console.log(
-      //   '边缘区域1',
-      //   this.getXaxis(this.getTimeNum(this.dateList[6] + ' 23:59:00'))
-      // )
-      // const map1 = xaxisNew.map((x) => {
-      //   if (x == 4) {
-      //     return x * 2
-      //   }
-      //   return x
-      // })
-      // // xaxisNew.map((x) => (x = 0))
-      // console.log('传出去的', JSON.parse(JSON.stringify(xaxisNew)))
       return xaxisNew;
     },
     //根据传过来的X轴地址获取到该区间的最后一格，如果小于最后一格，就右移动，到了最后一格就左移
@@ -2159,6 +2123,7 @@ export default {
       align-items: center;
       justify-content: center;
       height: 100%;
+      font-weight: normal;
       .increase {
         color: red;
         display: inline-block;

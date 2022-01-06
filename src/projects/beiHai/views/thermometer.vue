@@ -1651,54 +1651,54 @@ export default {
             //   })
             // }
           }
-          // 画复试
-          const createRepeatTest = () => {
-            this.createText({
-              x: cx + 8,
-              y: cy - 25,
-              value: "v",
-              color: "red",
-              tips: "体温复试",
-              fontWeight: "bold",
-              zlevel: 10,
-              fontSize: 18,
-            });
-          };
-          if (index > 0) {
-            // 与上次记录的体温相比上升(1.5℃)或下降(2℃)
-            if (
-              x.value - data[index - 1].value >= 1.5 ||
-              x.value - data[index - 1].value <= -2
-            ) {
-              createRepeatTest();
-            }
-          } else if (index === 0 && this.currentPage === 1) {
-            // 入院首次体温≥38℃
-            const list = [
-              {
-                vitalCode: "041",
-                ...this.settingMap.oralTemperature.data[0],
-              },
-              {
-                vitalCode: "042",
-                ...this.settingMap.axillaryTemperature.data[0],
-              },
-              {
-                vitalCode: "043",
-                ...this.settingMap.analTemperature.data[0],
-              },
-            ]
-              .filter((x) => Object.keys(x).length > 1)
-              .sort(
-                (a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time)
-              );
-            if (
-              vitalCode === list[0].vitalCode &&
-              Number(list[0].value) >= 38
-            ) {
-              createRepeatTest();
-            }
-          }
+          // // 画复试
+          // const createRepeatTest = () => {
+          //   this.createText({
+          //     x: cx + 8,
+          //     y: cy - 25,
+          //     value: "v",
+          //     color: "red",
+          //     tips: "体温复试",
+          //     fontWeight: "bold",
+          //     zlevel: 10,
+          //     fontSize: 18,
+          //   });
+          // };
+          // if (index > 0) {
+          //   // 与上次记录的体温相比上升(1.5℃)或下降(2℃)
+          //   if (
+          //     x.value - data[index - 1].value >= 1.5 ||
+          //     x.value - data[index - 1].value <= -2
+          //   ) {
+          //     createRepeatTest();
+          //   }
+          // } else if (index === 0 && this.currentPage === 1) {
+          //   // 入院首次体温≥38℃
+          //   const list = [
+          //     {
+          //       vitalCode: "041",
+          //       ...this.settingMap.oralTemperature.data[0],
+          //     },
+          //     {
+          //       vitalCode: "042",
+          //       ...this.settingMap.axillaryTemperature.data[0],
+          //     },
+          //     {
+          //       vitalCode: "043",
+          //       ...this.settingMap.analTemperature.data[0],
+          //     },
+          //   ]
+          //     .filter((x) => Object.keys(x).length > 1)
+          //     .sort(
+          //       (a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time)
+          //     );
+          //   if (
+          //     vitalCode === list[0].vitalCode &&
+          //     Number(list[0].value) >= 38
+          //   ) {
+          //     createRepeatTest();
+          //   }
+          // }
         }
       });
       //图标连接的折线路部分
