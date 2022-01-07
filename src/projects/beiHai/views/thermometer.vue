@@ -1570,8 +1570,10 @@ export default {
                   r: 8,
                   color: "red",
                   zlevel: 9,
+                   dotSolid: true,
+                   dotType: "Circle",
+                   filter:"red",
                   tips: `${x.time} ${label}：${x.value}`,
-                  dotSolid: false,
                 };
               }
             }

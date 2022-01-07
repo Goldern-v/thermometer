@@ -229,7 +229,7 @@
         ></div>
         <div
           class="row border-top-red-2"
-          :style="{ height: `${trHeight * 2}px` }"
+          :style="{ height: `${trHeight * 2-5}px` }"
         >
           <div class="label" :style="{ width: `${leftWidth}px` }">
             呼吸(次/分)
@@ -1191,7 +1191,8 @@ export default {
       this.getAreaHeight() // 遍历一遍获取高度
       this.getAreaWidth() // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(this.$refs.main)
+       let ops={renderer:'svg'}
+        this.zr = zrender.init(this.$refs.main,ops);
         const div = document.createElement('div')
         div.classList.add('tips')
         this.$refs.main.appendChild(div)
@@ -1606,7 +1607,16 @@ export default {
                   y: this.getYaxis(this.yRange, x.value)
                 }
               })
-              const sameAxisItem = tList.find((x) => x.x === cx && x.y === cy)
+             const sameAxisItem = tList.find(
+                (x) =>
+                  //由于有些微小的偏差，比如存在一px左右的数据偏差，就写个区间
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 2 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 2
+                // x.x.toFixed(2) === cx.toFixed(2) &&
+                // x.y.toFixed(2) === cy.toFixed(2)
+              );
               if (sameAxisItem) {
                 params = {
                   cx,
@@ -2040,7 +2050,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 6mm 8mm 8mm 8mm; // 页面的边距
+    margin: 6mm 8mm 6mm 8mm; // 页面的边距
   }
 }
 .main-view {
@@ -2209,7 +2219,7 @@ export default {
         border-width: 2px;
         border-style: solid;
         border-color: #fff;
-        transform: translate(-4px, 2px);
+        transform: translate(-5px, 2px);
         margin-left: 25px;
       }
       .axillary {
@@ -2226,7 +2236,7 @@ export default {
       }
       .pain-icon {
         position: absolute;
-        right: 2px;
+        right: 3px;
         top: 2px;
         display: inline-block;
         z-index: 2;
@@ -2240,7 +2250,7 @@ export default {
         margin-top: 2px;
         display: inline-block;
         z-index: 2;
-        border: 7.5px solid red;
+        border: 8px solid red;
         border-radius: 50%;
       }
     }
