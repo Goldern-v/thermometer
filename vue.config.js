@@ -36,6 +36,8 @@ const projectName = (() => {
       return '南方中西医结合医院'
     case 'foShanShiYi': // 南方中西医结合医院
       return '佛山市第一人民医院'
+    case 'wuHanFeiKe': // 武汉肺科医院
+      return '武汉结核病防治所'
     case 'common': // 可配置的通用版本
       return '配置通用版本'
     default:
@@ -80,6 +82,8 @@ module.exports = {
           return './src/projects/zhongXi/main.js'
         case 'foShanShiYi': // 佛山市一
           return './src/projects/foShanShiYi/main.js'
+        case 'wuHanFeiKe': // 武汉结核病防治所
+          return './src/projects/wuHanFeiKe/main.js'
         case 'common': // 可配置的通用版本
           return './src/projects/common/main.js'
         default:
@@ -128,6 +132,8 @@ module.exports = {
             case 'zhongXi':
               return 'http://218.107.37.134:9093/'
             case 'foShanShiYi':
+              return 'http://218.107.37.134:9093/'
+            case 'wuHanFeiKe':
               return 'http://218.107.37.134:9093/'
             case 'common':
               return 'http://172.17.5.41:9091'

@@ -58,7 +58,7 @@
         <div
           class="row border-top-black-2"
           :style="{ height: `${trHeight}px` }"
-        >
+         >
           <div
             class="label"
             :style="{ width: `${leftWidth}px` }"
@@ -419,7 +419,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度

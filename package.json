@@ -33,6 +33,8 @@
     "build:liaoChengNewBorn": "vue-cli-service build --project=liaoChengNewBorn",
     "dev:foShanShiYi": "vue-cli-service serve --project=foShanShiYi",
     "build:foShanShiYi": "vue-cli-service build --project=foShanShiYi",
+    "dev:wuHanFeiKe": "vue-cli-service serve --project=wuHanFeiKe",
+    "build:wuHanFeiKe": "vue-cli-service build --project=wuHanFeiKe",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },

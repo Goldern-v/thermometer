@@ -88,7 +88,7 @@ export const mockData = {
     },
     {
       temperature_type: '表底注释',
-      value: '请假',
+      value: '请假|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 03:12:00',
       vital_code: '4'
