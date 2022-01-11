@@ -38,6 +38,13 @@ export const mockData = {
       expand2: null
     },
     {
+      temperature_type: '心率',
+      value: '110',
+      time_point: '2021-10-18 10:34:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
       temperature_type: '身高',
       value: '79',
       time_point: '2021-10-18 10:34:00',
@@ -84,6 +91,13 @@ export const mockData = {
       value: '60',
       time_point: '2021-10-18 14:00:00',
       vital_code: 'pulse',
+      expand2: null
+    },
+    {
+      temperature_type: '心率',
+      value: '120',
+      time_point: '2021-10-18 14:00:00',
+      vital_code: 'heartRate',
       expand2: null
     },
     {
@@ -529,7 +543,7 @@ export const mockData = {
     },
     {
       temperature_type: '心率',
-      value: '200',
+      value: '180',
       time_point: '2021-10-29 14:00:00',
       vital_code: 'heartRate',
       expand2: null
@@ -573,14 +587,14 @@ export const mockData = {
       temperature_type: '心包引流',
       value: '20',
       time_point: '2021-10-29 22:00:00',
-      vital_code: 'other3',
+      vital_code: 'other1',
       expand2: null
     },
     {
       temperature_type: '纵膈引流',
       value: '25',
       time_point: '2021-10-29 22:00:00',
-      vital_code: 'other3',
+      vital_code: 'other2',
       expand2: null
     },
     {
@@ -663,15 +677,15 @@ export const mockData = {
     {
       temperature_type: '心包引流',
       value: '0',
-      time_point: '2021-10-29 22:00:00',
-      vital_code: 'other3',
+      time_point: '2021-10-30 22:00:00',
+      vital_code: 'other1',
       expand2: null
     },
     {
       temperature_type: '纵膈引流',
       value: '25',
-      time_point: '2021-10-28 22:00:00',
-      vital_code: 'other3',
+      time_point: '2021-10-30 22:00:00',
+      vital_code: 'other2',
       expand2: null
     },
     {
@@ -879,16 +893,9 @@ export const mockData = {
     },
     {
       temperature_type: '心率',
-      value: '185',
+      value: '158',
       time_point: '2021-11-02 14:00:00',
       vital_code: 'heartRate',
-      expand2: null
-    },
-    {
-      temperature_type: '病人事件',
-      value: '拒测于',
-      time_point: '2021-10-22 18:00:00',
-      vital_code: 'nurseEvents',
       expand2: null
     },
     {

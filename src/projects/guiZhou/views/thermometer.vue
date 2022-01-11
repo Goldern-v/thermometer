@@ -426,7 +426,7 @@
     </div>
     <div class="pagination" v-if="showInnerPage">
       <!-- <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i> -->
-      <button :dißsabled="currentPage === 1" @click="toPre" class="pre-btn">
+      <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">
         上一页
       </button>
       <span>第{{ currentPage }}页/共{{ pageTotal }}页</span>
@@ -1321,7 +1321,7 @@ export default {
       this.getAreaHeight() // 遍历一遍获取高度
       this.getAreaWidth() // 遍历一遍获取宽度
       this.$nextTick(() => {
-         let ops={renderer:'svg'}
+         let ops={renderer:'canvas'}
         this.zr = zrender.init(document.getElementById('main'),ops)
         const div = document.createElement('div')
         div.classList.add('tips')
