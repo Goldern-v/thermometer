@@ -187,7 +187,7 @@
             <div class="index" v-for="item in temperaturelist" :key="item">
               <span>{{ item }}</span>
             </div>
-            <div class="pain-area" :style="`height: ${painAreaHeight}px`">
+            <div class="pain-area-value" :style="`height: ${painAreaHeight}px`">
               <div class="pain-index" v-for="item in painList" :key="item">
                 <span>{{ item }}</span>
               </div>
@@ -493,11 +493,11 @@ export default {
     },
   },
   data() {
-    const yRange = [34, 41];
-    const pulseRange = [20, 160];
+    const yRange = [34, 42];
+    const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData:false,
+      useMockData:true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -871,7 +871,7 @@ export default {
       return list;
     },
     indexTextAreaHeight() {
-      return this.ySpace * 5 + 5;
+      return this.ySpace * 2 + 2;
     },
     timesTempAreaHeight() {
       return (
@@ -1263,6 +1263,7 @@ export default {
         switch (vitalSigns[i].vital_code) {
           case "21":
             this.topSheetNote.push(item);
+            console.log(this.topSheetNote)
             break;
           case "22":
             this.bottomSheetNote.push(item);
@@ -1341,8 +1342,8 @@ export default {
             ? y - this.ySpace - 1
             : bottomText.includes(value)
             ? y - 5 * this.ySpace - 5
-            : y-3*this.ySpace - 3,
-          value: this.addn(value),
+            : y,
+          value: this.addn(value,bottomText),
           color,
           textLineHeight: this.ySpace + 1,
           fontWeight: "nomal",
@@ -1495,15 +1496,14 @@ export default {
       const totalLine =
         this.yRange[1] -
         this.yRange[0] +
-        (this.yRange[1] - this.yRange[0]) * 6-2
+        (this.yRange[1] - this.yRange[0]-1) * 6-1
       let preSpace = 0;
       let breakIndex = 0;
       for (let i = 0; i < totalLine; i++) {
-        const isPainBreak = i===44;
+        const isPainBreak = i===46;
         const isBreak =
-          ((i  % 5 === 0 && i < 40) ||
-            isPainBreak ||
-            i === 40||i===44 ) &&
+          (((i-2)  % 5 === 0 && i < 45) ||
+            isPainBreak) &&
           i > 0 &&
           i < totalLine - 1;
         const isboundary = i === 0 || i === totalLine - 1;
@@ -1553,8 +1553,7 @@ export default {
         this.yRange[1] -
         this.yRange[0] +
         1 +
-        (this.yRange[1] - this.yRange[0]) * 5 +
-        4;
+        (this.yRange[1] - this.yRange[0]) * 5 ;
       let preSpace = 0;
       let breakIndex = 0;
       for (let i = 0; i < totalLine; i++) {
@@ -2013,10 +2012,19 @@ export default {
       return xAxis;
     },
     // 增加字符（过快，不升，请假等字符的换行）换行符
-    addn(str) {
+    addn(str,bottomText) {
       let formatStr = "";
-      if (str.length < 2) {
-        return str;
+      let formatTopValu=""
+      if (str.length <=2&&!bottomText.includes(str)) {
+          for (let i = 0; i < str.length; i++) {
+           formatTopValu+=
+            isNaN(str[i]) || (!isNaN(str[i]) && isNaN(str[i + 1]))
+              ? `${str[i]} \n \n \n \n`
+              : str[i];
+        }
+          return formatTopValu
+       
+      // 
       } else {
         for (let i = 0; i < str.length; i++) {
           formatStr +=
@@ -2231,14 +2239,17 @@ export default {
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
     handleNoteXaxis(xaxisList) {
       const xaxisNew = [];
-      for (let i = 0; i < xaxisList.length; i++) {
-        if (!xaxisNew.includes(xaxisList[i])) {
-          xaxisNew.push(xaxisList[i]);
+     for (let i = 0; i < xaxisList.length; i++) {
+        if (!xaxisNew.includes(Math.floor(xaxisList[i]))) {
+          xaxisNew.push(Math.floor(xaxisList[i]));
         } else {
-          while (xaxisNew.includes(xaxisList[i])) {
-            xaxisList[i] += this.xSpace;
+          while (
+            xaxisNew.includes(Math.floor(xaxisList[i]))
+          ) {
+            xaxisList[i] += this.xSpace + 2;
           }
-          xaxisNew.push(xaxisList[i]);
+
+          xaxisNew.push(Math.floor(xaxisList[i]));
         }
       }
       return xaxisNew;
@@ -2314,7 +2325,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 8mm 8mm 5mm 8mm; // 页面的边距
+    margin: 8mm 8mm 5mm 20mm; // 页面的边距
   }
 }
 .main-view {
@@ -2326,14 +2337,15 @@ export default {
   font-family: Simsun;
   .head-hos {
     padding-top: 10px;
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: bold;
   }
   .head-title {
     padding: 15px 0;
     font-size: 24px;
   }
   .head-info {
-    font-size: 14px;
+    font-size: 16px;
     display: flex;
     .item {
       flex: 1;
@@ -2440,7 +2452,7 @@ export default {
         }
       }
       .index {
-        height: 81.7px;
+        height: 141.7px;
         position: relative;
         > span {
           display: block;
@@ -2448,13 +2460,33 @@ export default {
           text-align: center;
         }
       }
-      .pain-area :nth-child(4) {
+      .pain-area-value :nth-child(4) {
        color:red;
       }
       .pain-area {
         position: relative;
         display: flex;
-        top:39px;
+        top:3px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .pain-index {
+          height: 81.7px;
+          > span {
+            display: block;
+            margin-top: 4px;
+          }
+        }
+
+        .s-index {
+          position: absolute;
+          bottom: -7px;
+        }
+      }
+      .pain-area-value {
+        position: relative;
+        display: flex;
+        top:-3px;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -2481,7 +2513,7 @@ export default {
       position: absolute;
       color: blue;
       left: 7px;
-      bottom: 125px;
+      bottom: 115px;
       .note-item {
         position: relative;
       }
@@ -2579,49 +2611,49 @@ export default {
         }
       }
     }
-    .temp :nth-child(2) > span {
-      margin-top: -5px;
-    }
-    .temp :nth-child(3) > span {
-      margin-top: -3px;
-    }
-    .temp :nth-child(4) > span {
-      margin-top: 3px;
-    }
-    .temp :nth-child(5) > span {
-      margin-top: 9px;
-    }
-    .temp :nth-child(6) > span {
-      margin-top: 10px;
-    }
-    .temp :nth-child(7) > span {
-      margin-top: 15px;
-    }
-    .temp :nth-child(8) > span {
-      margin-top: 18px;
-    }
+    // .temp :nth-child(2) > span {
+    //   margin-top: -5px;
+    // }
+    // .temp :nth-child(3) > span {
+    //   margin-top: -3px;
+    // }
+    // .temp :nth-child(4) > span {
+    //   margin-top: 3px;
+    // }
+    // .temp :nth-child(5) > span {
+    //   margin-top: 9px;
+    // }
+    // .temp :nth-child(6) > span {
+    //   margin-top: 10px;
+    // }
+    // .temp :nth-child(7) > span {
+    //   margin-top: 15px;
+    // }
+    // .temp :nth-child(8) > span {
+    //   margin-top: 18px;
+    // }
     
-    .times :nth-child(2) > span {
-      margin-top: -5px;
-    }
-    .times :nth-child(3) > span {
-      margin-top: -3px;
-    }
-    .times :nth-child(4) > span {
-      margin-top: 3px;
-    }
-    .times :nth-child(5) > span {
-      margin-top: 9px;
-    }
-    .times :nth-child(6) > span {
-      margin-top: 10px;
-    }
-    .times :nth-child(7) > span {
-      margin-top: 15px;
-    }
-    .times :nth-child(8) > span {
-      margin-top: 18px;
-    }
+    // .times :nth-child(2) > span {
+    //   margin-top: -5px;
+    // }
+    // .times :nth-child(3) > span {
+    //   margin-top: -3px;
+    // }
+    // .times :nth-child(4) > span {
+    //   margin-top: 3px;
+    // }
+    // .times :nth-child(5) > span {
+    //   margin-top: 9px;
+    // }
+    // .times :nth-child(6) > span {
+    //   margin-top: 10px;
+    // }
+    // .times :nth-child(7) > span {
+    //   margin-top: 15px;
+    // }
+    // .times :nth-child(8) > span {
+    //   margin-top: 18px;
+    // }
 
 
     .split-line {

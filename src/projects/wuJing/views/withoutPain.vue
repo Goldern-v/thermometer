@@ -479,11 +479,11 @@ export default {
     },
   },
   data() {
-    const yRange = [33, 42];
-    const pulseRange = [0, 180];
+    const yRange = [34, 43];
+    const pulseRange = [20, 200];
     // const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1194,8 +1194,8 @@ export default {
             ? y - this.ySpace - 1
             : bottomText.includes(value)
             ? y - 2 * this.ySpace +1
-            : y+1,
-          value: this.addn(value),
+            : y+3*this.ySpace+5,
+          value: this.addn(value,bottomText),
           color,
           textLineHeight: this.ySpace + 1,
           fontWeight: "nomal",
@@ -1757,10 +1757,19 @@ export default {
       return xAxis;
     },
     // 增加字符（过快，不升，请假等字符的换行）换行符
-    addn(str) {
+    addn(str,bottomText) {
       let formatStr = "";
-      if (str.length < 2) {
-        return str;
+      let formatTopValu=""
+      if (str.length <=2&&!bottomText.includes(str)) {
+          for (let i = 0; i < str.length; i++) {
+           formatTopValu+=
+            isNaN(str[i]) || (!isNaN(str[i]) && isNaN(str[i + 1]))
+              ? `${str[i]} \n \n \n \n`
+              : str[i];
+        }
+          return formatTopValu
+       
+      // 
       } else {
         for (let i = 0; i < str.length; i++) {
           formatStr +=
@@ -2032,7 +2041,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 8mm 8mm 8mm 8mm; // 页面的边距
+    margin: 8mm 8mm 8mm 20mm; // 页面的边距
   }
 }
 .main-view {
@@ -2044,14 +2053,15 @@ export default {
   font-family: Simsun;
   .head-hos {
     padding-top: 10px;
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: bold;
   }
   .head-title {
     padding: 15px 0;
     font-size: 24px;
   }
   .head-info {
-    font-size: 14px;
+    font-size: 16px;
     display: flex;
     .item {
       flex: 1;
