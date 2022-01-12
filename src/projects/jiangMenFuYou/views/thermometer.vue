@@ -1208,15 +1208,6 @@ export default {
         let bottomContextList = this.bottomSheetNote.map((x) => {
           return x.value;
         });
-        //[
-        //   '温水擦浴',
-        //   '不升',
-        //   '特殊物理降温',
-        //   '辅助呼吸',
-        //   '物理降温',
-        //   '回室',
-        //   '请假'
-        // ]
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
@@ -1852,13 +1843,17 @@ export default {
     handleNoteXaxis(xaxisList) {
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {
-        if (!xaxisNew.includes(xaxisList[i])) {
-          xaxisNew.push(xaxisList[i]);
+        if (!xaxisNew.includes(Math.floor(xaxisList[i]))) {
+          xaxisNew.push(Math.floor(xaxisList[i]));
         } else {
-          while (xaxisNew.includes(xaxisList[i])) {
+          while (
+            xaxisNew.includes(Math.floor(xaxisList[i])) 
+            
+          ) {
             xaxisList[i] += this.xSpace + 2;
           }
-          xaxisNew.push(xaxisList[i]);
+
+          xaxisNew.push(Math.floor(xaxisList[i]));
         }
       }
       return xaxisNew;
