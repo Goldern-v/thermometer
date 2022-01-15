@@ -471,6 +471,7 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/wuJing/mockData.js";
+import moment from "moment"; //导入文件
 // import { sm4 } from '../assets/js/SM4Encode'
 const SM4 = require("gm-crypt").sm4;
 
@@ -496,7 +497,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData:true,
+      useMockData:false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -780,9 +781,24 @@ export default {
     },
     formatOperateDateList() {
       return this.dateList.map((x) => {
-        if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
-          return "";
+         let tomorrow = moment(new Date()).add(1, "d").format("YYYY-MM-DD");
+          let today = moment(new Date()).format("YYYY-MM-DD");
+        this.topSheetNote.forEach((y) => {
+          if (
+            y.time.slice(0, 10) === tomorrow &&
+            (y.value.includes("出院") || y.value.includes("转出"))
+          ) {
+            today = tomorrow;
+          }
+        });
+        //1.如果当前日期>出院日期，则停止计算 
+        //2.存在跨日期上班的护士，他是今年录入明天的出院数据的，所以存在这种数据就把当前日期+1,然后再计算出院的间隔
+        // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
+        //   return "";
+        
         if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
+         if (this.dayInterval(x, today) > 0) return "";
+
         if (!this.operateDateList.length) return "";
         // 构造天数差数组，有相同天数差的说明在同一天，所以要去重
         const days = [
@@ -827,11 +843,20 @@ export default {
         }
       });
     },
-    formatStayDayList() {
-      /* 住院天数 */
+   formatStayDayList() {
       return this.dateList.map((x) => {
-        // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
-        //   return "";
+        let tomorrow = moment(new Date()).add(1, "d").format("YYYY-MM-DD");
+        let today = moment(new Date()).format("YYYY-MM-DD");
+        this.topSheetNote.forEach((y) => {
+          if (
+            y.time.slice(0, 10) === tomorrow &&
+            (y.value.includes("出院") || y.value.includes("转出"))
+          ) {
+            today = tomorrow;
+          }
+        });
+        if (this.dayInterval(x, today) > 0) return "";
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
         return this.dayInterval(x, this.patInfo.admission_date) + 1;
       });
     },
@@ -2618,6 +2643,7 @@ export default {
       }
     }
     .temp {
+      
       overflow: hidden;
       .text {
         flex-shrink: 0;
@@ -2628,49 +2654,55 @@ export default {
         }
       }
     }
-    // .temp :nth-child(2) > span {
-    //   margin-top: -5px;
-    // }
-    // .temp :nth-child(3) > span {
-    //   margin-top: -3px;
-    // }
-    // .temp :nth-child(4) > span {
-    //   margin-top: 3px;
-    // }
-    // .temp :nth-child(5) > span {
-    //   margin-top: 9px;
-    // }
-    // .temp :nth-child(6) > span {
-    //   margin-top: 10px;
-    // }
-    // .temp :nth-child(7) > span {
-    //   margin-top: 15px;
-    // }
-    // .temp :nth-child(8) > span {
-    //   margin-top: 18px;
-    // }
+    .temp :nth-child(2) > span {
+      margin-top: -5px;
+    }
+    .temp :nth-child(3) > span {
+      margin-top: -10px;
+    }
+    .temp :nth-child(4) > span {
+      margin-top: -10px;
+    }
+    .temp :nth-child(5) > span {
+      margin-top: -11px;
+    }
+    .temp :nth-child(6) > span {
+      margin-top: -10px;
+    }
+    .temp :nth-child(7) > span {
+      margin-top: -10px;
+    }
+    .temp :nth-child(8) > span {
+      margin-top: -10px;
+    }
+    .temp :nth-child(9) > span {
+      margin-top: -10px;
+    }
     
-    // .times :nth-child(2) > span {
-    //   margin-top: -5px;
-    // }
-    // .times :nth-child(3) > span {
-    //   margin-top: -3px;
-    // }
-    // .times :nth-child(4) > span {
-    //   margin-top: 3px;
-    // }
-    // .times :nth-child(5) > span {
-    //   margin-top: 9px;
-    // }
-    // .times :nth-child(6) > span {
-    //   margin-top: 10px;
-    // }
-    // .times :nth-child(7) > span {
-    //   margin-top: 15px;
-    // }
-    // .times :nth-child(8) > span {
-    //   margin-top: 18px;
-    // }
+    .times :nth-child(2) > span {
+      margin-top: -5px;
+    }
+    .times :nth-child(3) > span {
+      margin-top: -10px;
+    }
+    .times :nth-child(4) > span {
+      margin-top: -10px;
+    }
+    .times :nth-child(5) > span {
+      margin-top: -11px;
+    }
+    .times :nth-child(6) > span {
+      margin-top: -10px;
+    }
+    .times :nth-child(7) > span {
+      margin-top: -10px;
+    }
+    .times :nth-child(8) > span {
+      margin-top: -10px;
+    }
+    .times :nth-child(9) > span {
+      margin-top: -10px;
+    }
 
 
     .split-line {

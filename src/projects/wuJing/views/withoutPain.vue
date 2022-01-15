@@ -457,6 +457,7 @@
 
 <script>
 import zrender from "zrender";
+import moment from "moment"; //导入文件
 import { mockData } from "src/projects/wuJing/mockData.js";
 const SM4 = require("gm-crypt").sm4;
 
@@ -764,8 +765,24 @@ export default {
     },
     formatOperateDateList() {
       return this.dateList.map((x) => {
-        if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
-          return "";
+        let tomorrow = moment(new Date()).add(1, "d").format("YYYY-MM-DD");
+        let today = moment(new Date()).format("YYYY-MM-DD");
+        this.topSheetNote.forEach((y) => {
+          if (
+            y.time.slice(0, 10) === tomorrow &&
+            (y.value.includes("出院") || y.value.includes("转出"))
+          ) {
+            today = tomorrow;
+          }
+        });
+        //1.如果当前日期>出院日期，则停止计算 
+        //2.存在跨日期上班的护士，他是今年录入明天的出院数据的，所以存在这种数据就把当前日期+1,然后再计算出院的间隔
+        // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
+        //   return "";
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
+         if (this.dayInterval(x, today) > 0) return "";
+        // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
+        //   return "";
         if (!this.operateDateList.length) return "";
         // 构造天数差数组，有相同天数差的说明在同一天，所以要去重
         const days = [
@@ -808,10 +825,19 @@ export default {
       });
     },
     formatStayDayList() {
-      /* 住院天数 */
       return this.dateList.map((x) => {
-        // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
-        //   return "";
+        let tomorrow = moment(new Date()).add(1, "d").format("YYYY-MM-DD");
+        let today = moment(new Date()).format("YYYY-MM-DD");
+        this.topSheetNote.forEach((y) => {
+          if (
+            y.time.slice(0, 10) === tomorrow &&
+            (y.value.includes("出院") || y.value.includes("转出"))
+          ) {
+            today = tomorrow;
+          }
+        });
+        if (this.dayInterval(x, today) > 0) return "";
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
         return this.dayInterval(x, this.patInfo.admission_date) + 1;
       });
     },
@@ -889,6 +915,16 @@ export default {
           }
         }
       }
+    },
+     //找到存在出院或者转出的日期
+    getLeaveTime() {
+      let outTime = "";
+      this.topSheetNote.forEach((y) => {
+        if (y.value.includes("出院") || y.value.includes("转出")) {
+          outTime = y.time.slice(0, 10);
+        }
+      });
+      return outTime;
     },
     middleTdStyle(index) {
       return {
@@ -1298,7 +1334,7 @@ export default {
           y2: preSpace,
           lineWidth,
           color: isBreak
-            ? i === 25
+            ? i === 30
               ? "red"
               : "#000"
             : isboundary
@@ -2205,7 +2241,7 @@ export default {
       position: absolute;
       color: blue;
       left: 7px;
-      bottom: 17px;
+      bottom: 40px;
       .note-item {
         position: relative;
       }
@@ -2300,49 +2336,49 @@ export default {
         }
       }
     }
-    .temp :nth-child(3) > span {
-      margin-top: -2px;
-    }
-    .temp :nth-child(4) > span {
-      margin-top: 3px;
-    }
-    .temp :nth-child(5) > span {
-      margin-top: 9px;
-    }
-    .temp :nth-child(6) > span {
-      margin-top: 13px;
-    }
-    .temp :nth-child(7) > span {
-      margin-top: 17px;
-    }
-    .temp :nth-child(8) > span {
-      margin-top: 22px;
-    }
+    // .temp :nth-child(3) > span {
+    //   margin-top: -2px;
+    // }
+    // .temp :nth-child(4) > span {
+    //   margin-top: 3px;
+    // }
+    // .temp :nth-child(5) > span {
+    //   margin-top: 9px;
+    // }
+    // .temp :nth-child(6) > span {
+    //   margin-top: 13px;
+    // }
+    // .temp :nth-child(7) > span {
+    //   margin-top: 17px;
+    // }
+    // .temp :nth-child(8) > span {
+    //   margin-top: 22px;
+    // }
     .temp :nth-child(9) > span {
-      margin-top: 22px;
+      margin-top: 0px;
     }
 
-    .times :nth-child(3) > span {
-      margin-top: -2px;
-    }
-    .times :nth-child(4) > span {
-      margin-top: 3px;
-    }
-    .times :nth-child(5) > span {
-      margin-top: 9px;
-    }
-    .times :nth-child(6) > span {
-      margin-top: 13px;
-    }
-    .times :nth-child(7) > span {
-      margin-top: 17px;
-    }
-    .times :nth-child(8) > span {
-      margin-top: 22px;
-    }
-    .times :nth-child(9) > span {
-      margin-top: 22px;
-    }
+    // .times :nth-child(3) > span {
+    //   margin-top: -2px;
+    // }
+    // .times :nth-child(4) > span {
+    //   margin-top: 3px;
+    // }
+    // .times :nth-child(5) > span {
+    //   margin-top: 9px;
+    // }
+    // .times :nth-child(6) > span {
+    //   margin-top: 13px;
+    // }
+    // .times :nth-child(7) > span {
+    //   margin-top: 17px;
+    // }
+    // .times :nth-child(8) > span {
+    //   margin-top: 22px;
+    // }
+    // .times :nth-child(9) > span {
+    //   margin-top: 22px;
+    // }
     .split-line {
       display: block;
       position: absolute;
