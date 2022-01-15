@@ -1,6 +1,7 @@
 'use strict'
 const path = require('path')
 const { project } = require('./src/argvs')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
@@ -38,12 +39,17 @@ const projectName = (() => {
       return '佛山市第一人民医院'
     case 'wuHanFeiKe': // 武汉肺科医院
       return '武汉结核病防治所'
+    case 'wuHanYaXin': // 武汉亚洲心脏病医院
+      return '武汉亚洲心脏病医院'
     case 'common': // 可配置的通用版本
       return '配置通用版本'
     default:
       break
   }
 })()
+//配置代码运行的环境
+let environment="production";
+// let environment="test";
 const today = new Date()
 const packageName = `${projectName}体温单_${today.getFullYear()}年${today.getMonth() +
   1}月${today.getDate()}日${today.getHours()}时${today.getMinutes()}分${today.getSeconds()}秒`
@@ -52,6 +58,25 @@ module.exports = {
   outputDir:packageName,
   lintOnSave: false,
   configureWebpack: {
+    //配置代码运行的环境 production的时候，自动删除代码console和debugger
+    mode:environment ,
+    optimization: {
+        minimizer: [
+          new UglifyJsPlugin({
+            uglifyOptions: {
+              // 删除注释
+              output:{
+                comments: false
+              },
+              compress: {
+                drop_console: true, // 删除所有调式带有console的
+                drop_debugger: true,
+                pure_funcs: ['console.log','alert','debugger'] // 删除console.log
+              }
+            }
+          })
+        ]
+      } ,
     entry: (() => {
       switch (project) {
         case 'huaDu': // 花都人医
@@ -84,6 +109,8 @@ module.exports = {
           return './src/projects/foShanShiYi/main.js'
         case 'wuHanFeiKe': // 武汉结核病防治所
           return './src/projects/wuHanFeiKe/main.js'
+        case 'wuHanYaXin': // 武汉亚洲心脏病医院
+          return './src/projects/wuHanYaXin/main.js'
         case 'common': // 可配置的通用版本
           return './src/projects/common/main.js'
         default:
@@ -134,6 +161,8 @@ module.exports = {
             case 'foShanShiYi':
               return 'http://218.107.37.134:9093/'
             case 'wuHanFeiKe':
+              return 'http://218.107.37.134:9093/'
+            case 'wuHanYaXin':
               return 'http://218.107.37.134:9093/'
             case 'common':
               return 'http://172.17.5.41:9091'
