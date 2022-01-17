@@ -395,6 +395,7 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/huaDu/mockData.js";
+import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
 import moment from "moment"; //导入文件
 
 export default {
@@ -762,7 +763,6 @@ export default {
         //   return "";
         if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
          if (this.dayInterval(x, today) > 0) return "";
-
         if (!this.operateDateList.length) return "";
         // 构造天数差数组，有相同天数差的说明在同一天x
         const days = this.operateDateList.map((y) => {
@@ -917,13 +917,9 @@ export default {
             }
             break;
           case "printing":
-            window.print();
-            break;
-          case "nurseExchangeInfo":
-            if (e.data.value) {
-              this.adtLog = e.data.value.adtLog || ""; // 转科
-              this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
-            }
+            setTimeout(() => {
+          window.print()
+        }, 1000)
             break;
           default:
             break;
@@ -1007,18 +1003,17 @@ export default {
       }
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
-      // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
-      window.parent.postMessage(
-        {
-          type: "getNurseExchangeInfo",
-          value: {
-            startLogDateTime: this.timeRange[0],
-            endLogDateTime: this.timeRange[1],
-          },
-        },
-        "*"
-      );
-
+      const urlParams = this.urlParse();
+        let data={
+           startLogDateTime: this.timeRange[0],
+             endLogDateTime: this.timeRange[1],
+          visitId: urlParams.VisitId,
+          patientId: urlParams.PatientId,
+        }
+      getNurseExchangeInfoByTime(data).then((res) => {
+         this.adtLog = res.data.data.adtLog; // 转科
+              this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+      });
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
@@ -2001,16 +1996,13 @@ export default {
         this.handleData();
       });
     } else {
-      this.$http({
-        method: "post",
-        url: "/crHesb/hospital/common",
-        data: {
+      let data={
           tradeCode: "nurse_getPatientVitalSigns",
           PatientId: urlParams.PatientId,
           VisitId: urlParams.VisitId,
           StartTime: urlParams.StartTime,
-        },
-      }).then((res) => {
+        }
+      common(data).then((res) => {
         this.apiData = res.data;
         this.$nextTick(() => {
           // this.handleData()

@@ -15,7 +15,7 @@
 <script>
 import Thermometer from './thermometer.vue'
 import { mockData } from 'src/projects/jiangMenFuYou/mockData.js'
-
+import { common , getNurseExchangeInfoByTime } from "src/api/index.js"
 export default {
   components: {
     Thermometer
@@ -87,16 +87,13 @@ export default {
         // }, 1000)
       }, 0)
     } else {
-      this.$http({
-        method: 'post',
-        url: '/crHesb/hospital/common',
-        data: {
-          tradeCode: 'nurse_getPatientVitalSigns',
+      let data={
+          tradeCode: "nurse_getPatientVitalSigns",
           PatientId: urlParams.PatientId,
           VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime
+          StartTime: urlParams.StartTime,
         }
-      }).then((res) => {
+      common(data).then((res) => {
         this.printData = res.data
         setTimeout(() => {
           this.pageTotal = this.$refs.thermometer[0].pageTotal

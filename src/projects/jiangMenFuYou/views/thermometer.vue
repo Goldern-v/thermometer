@@ -417,6 +417,7 @@
 import zrender from "zrender";
 import { mockData } from "src/projects/jiangMenFuYou/mockData.js";
 import moment from "moment"; //导入文件
+import { common , getNurseExchangeInfoByTime } from "src/api/index.js"
 export default {
   props: {
     isPrintAll: {
@@ -890,12 +891,12 @@ export default {
           case "printing":
             window.print();
             break;
-          case "nurseExchangeInfo":
-            if (e.data.value) {
-              this.adtLog = e.data.value.adtLog || ""; // 转科
-              this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
-            }
-            break;
+          // case "nurseExchangeInfo":
+          //   if (e.data.value) {
+          //     this.adtLog = e.data.value.adtLog || ""; // 转科
+          //     this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
+          //   }
+          //   break;
           default:
             break;
         }
@@ -982,17 +983,17 @@ export default {
       this.dateRangeList = dateRangeList;
 
       this.pageTotal = dateRangeList.length;
-      // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
-      window.parent.postMessage(
-        {
-          type: "getNurseExchangeInfo",
-          value: {
-            startLogDateTime: this.timeRange[0],
-            endLogDateTime: this.timeRange[1],
-          },
-        },
-        "*"
-      );
+     const urlParams = this.urlParse();
+        let data={
+           startLogDateTime: this.timeRange[0],
+             endLogDateTime: this.timeRange[1],
+          visitId: urlParams.VisitId,
+          patientId: urlParams.PatientId,
+        }
+      getNurseExchangeInfoByTime().then((res) => {
+         this.adtLog = res.data.data.adtLog; // 转科
+              this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+      });
 
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       // const customSigns = [] // 记录自定义字段的名字
@@ -1004,26 +1005,6 @@ export default {
           // 超出时间范围的抛弃
           continue;
         }
-        // if (!vitalSigns[i].vital_code || vitalSigns[i].vital_code === 'null') {
-        //   // 自定义字段填入
-        //   const sign = vitalSigns[i].temperature_type
-        //   const index = customSigns.indexOf(sign)
-        //   if (index < 0) {
-        //     customSigns.push(sign)
-        //     this[`customList${customSigns.length - 1}`].push({
-        //       time: vitalSigns[i].time_point,
-        //       value: vitalSigns[i].value
-        //     })
-        //     this[`customList${customSigns.length - 1}`].label = sign
-        //   } else {
-        //     this[`customList${index}`].push({
-        //       time: vitalSigns[i].time_point,
-        //       value: vitalSigns[i].value
-        //     })
-        //     this[`customList${index}`].label = sign
-        //   }
-        //   continue
-        // }
         /* 获取各个体征数组对象 */
         if (this.lineMap[vitalSigns[i].vital_code]) {
           this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
@@ -1887,16 +1868,13 @@ export default {
         this.handleData();
       });
     } else {
-      this.$http({
-        method: "post",
-        url: "/crHesb/hospital/common",
-        data: {
+     let data={
           tradeCode: "nurse_getPatientVitalSigns",
           PatientId: urlParams.PatientId,
           VisitId: urlParams.VisitId,
           StartTime: urlParams.StartTime,
-        },
-      }).then((res) => {
+        }
+      common(data).then((res) => {
         this.apiData = res.data;
         this.$nextTick(() => {
           // this.handleData()

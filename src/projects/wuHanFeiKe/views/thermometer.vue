@@ -489,7 +489,7 @@ export default {
     const yRange = [35, 42];
     const pulseRange = [40, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1727,12 +1727,14 @@ export default {
       );
     },
     // 根据值计算纵坐标, vitalCode会传过来判断数据类型  这里不需要用到先删掉
-    getYaxis(yRange, value) {
-      return (
-        ((yRange[1] - value) / (yRange[1] - yRange[0])) *
-          this.timesTempAreaHeight
-        
-      );
+    getYaxis(yRange, value,vitalCode) {
+   return ['20','21'].includes(vitalCode)
+        ? ((this.pulseRange[1]+10 - value) / (this.pulseRange[1]+10 - this.pulseRange[0])) *
+            this.timesTempAreaHeight+1.5*this.ySpace+2
+        : ((yRange[1]+1 - value) /
+            (yRange[1]+1 - yRange[0])) *
+            this.timesTempAreaHeight +3
+          
     },
     // 增加换行符
     addn(str) {
@@ -2053,18 +2055,16 @@ export default {
     display: flex;
     .item {
       padding: 0 5px 5px 5px;
-      margin-right: 680px;
+      text-align:left;
+       &:nth-child(1) {
+        flex: 2;
+      }
       text-align: left;
       .value {
         font-weight: normal;
       }
     }
-    .item2 {
-      color:green;
-      float: right;
-      text-align: right;
-
-    }
+    
   }
   
 }

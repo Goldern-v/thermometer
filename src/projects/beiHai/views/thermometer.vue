@@ -17,7 +17,7 @@
       <div class="item" style="width: 100px; flex: none">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
-      <div class="item" style="width: 130px; flex: none">
+      <div class="item" style="width: 150px; flex: none">
         住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
       <div class="item" style="width: 160px; flex: none">
@@ -472,7 +472,7 @@ export default {
     const pulseRange = [0, 180];
     // const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -894,12 +894,12 @@ export default {
           case "printing":
             window.print();
             break;
-          case "nurseExchangeInfo":
-            if (e.data.value) {
-              this.adtLog = e.data.value.adtLog || ""; // 转科
-              this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
-            }
-            break;
+          // case "nurseExchangeInfo":
+          //   if (e.data.value) {
+          //     this.adtLog = e.data.value.adtLog || ""; // 转科
+          //     this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
+          //   }
+          //   break;
           default:
             break;
         }
@@ -980,18 +980,25 @@ export default {
       }
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
-
-      // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
-      window.parent.postMessage(
-        {
-          type: "getNurseExchangeInfo",
-          value: {
-            startLogDateTime: this.timeRange[0],
-            endLogDateTime: this.timeRange[1],
-          },
+    const urlParams = this.urlParse();
+      this.$http({
+        method: "post",
+        url: "crNursing/api/nurseLog/getNurseExchangeInfo",
+        headers: {
+          "App-Token-Nursing": "51e827c9-d80e-40a1-a95a-1edc257596e7",
+          "Auth-Token-Nursing": urlParams.authTokenNursing,
         },
-        "*"
-      );
+        data: {
+           startLogDateTime: this.timeRange[0],
+             endLogDateTime: this.timeRange[1],
+          visitId: urlParams.VisitId,
+          patientId: urlParams.PatientId,
+        },
+      }).then((res) => {
+         this.adtLog = res.data.data.adtLog; // 转科
+              this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+      });
+
 
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const customSigns = []; // 记录自定义字段的名字
@@ -1197,7 +1204,6 @@ export default {
         */
         // if (this.settingMap.heart.data.length > 0) {
         //   this.polygonPoints.forEach((x) => {
-        //     console.log(x)
         //     this.createPolygon({
         //       points: x,
         //       lineWidth: 1,
@@ -1640,7 +1646,6 @@ export default {
             //   this.getTimeStamp(item.time) - this.getTimeStamp(x.time) <=
             //     2 * 60 * 60 * 1000
             // ) {
-            //   console.log('sssssss')
             //   //降温后30分钟到两个小时用红色圈表示，不画线连接
             //   this.createCircle({
             //     cx: coolX,

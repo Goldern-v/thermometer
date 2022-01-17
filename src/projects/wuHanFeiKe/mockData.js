@@ -13,7 +13,7 @@ export const mockData = {
       admission_date: '2021-12-08 16:03:24.0',
       age: '30岁',
       inp_no: '1568587',
-      diagnose:'肺感染'
+      diagnose:'肺感染少时诵诗书所所所所所是是是'
     }
   },
   vitalSigns: [
@@ -23,7 +23,7 @@ export const mockData = {
 
     { temperature_type: "身高", value: "120", time_point: "2021-12-08 12:00:00", vital_code: "094" },
 
-    { temperature_type: "体温", value: "38.7", time_point: "2021-12-08 12:00:00", vital_code: "01" },
+    { temperature_type: "体温", value: "40", time_point: "2021-12-08 12:00:00", vital_code: "01" },
 
     { temperature_type: "体重", value: "22", time_point: "2021-12-08 12:00:00", vital_code: "033" },
 
@@ -34,19 +34,19 @@ export const mockData = {
     { temperature_type: "血压", value: "115/16点", time_point: "2021-12-10 15:59:00", vital_code: "062" },
     { temperature_type: "血压", value: "115/23点", time_point: "2021-12-10 23:00:00", vital_code: "062" },
 
-    { temperature_type: "心率", value: "115", time_point: "2021-12-08 12:00:00", vital_code: "20" },
+    { temperature_type: "心率", value: "130", time_point: "2021-12-08 12:00:00", vital_code: "20" },
 
     { temperature_type: "体温", value: "39.6", time_point: "2021-12-08 16:00:00", vital_code: "01" },
 
     { temperature_type: "呼吸", value: "30", time_point: "2021-12-08 16:00:00", vital_code: "04" },
 
-    { temperature_type: "心率", value: "119", time_point: "2021-12-08 16:00:00", vital_code: "20" },
+    { temperature_type: "心率", value: "140", time_point: "2021-12-08 16:00:00", vital_code: "20" },
 
     { temperature_type: "呼吸", value: "28", time_point: "2021-12-08 20:00:00", vital_code: "04" },
 
     { temperature_type: "体温", value: "38.6", time_point: "2021-12-08 20:00:00", vital_code: "01" },
 
-    { temperature_type: "心率", value: "116", time_point: "2021-12-08 20:00:00", vital_code: "20" },
+    { temperature_type: "心率", value: "140", time_point: "2021-12-08 20:00:00", vital_code: "20" },
 
     { temperature_type: "呼吸", value: "34", time_point: "2021-12-08 23:00:00", vital_code: "04" },
 

@@ -60,6 +60,10 @@ module.exports = {
   configureWebpack: {
     //配置代码运行的环境 production的时候，自动删除代码console和debugger
     mode:environment ,
+    performance:{//打包文件大小配置
+      "maxEntrypointSize": 10000000,
+      "maxAssetSize": 30000000
+    },
     optimization: {
         minimizer: [
           new UglifyJsPlugin({
