@@ -889,7 +889,9 @@ export default {
             }
             break;
           case "printing":
-            window.print();
+            setTimeout(() => {
+          window.print()
+        }, 1000)
             break;
           // case "nurseExchangeInfo":
           //   if (e.data.value) {
@@ -990,7 +992,7 @@ export default {
           visitId: urlParams.VisitId,
           patientId: urlParams.PatientId,
         }
-      getNurseExchangeInfoByTime().then((res) => {
+      getNurseExchangeInfoByTime(data).then((res) => {
          this.adtLog = res.data.data.adtLog; // 转科
               this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
       });
