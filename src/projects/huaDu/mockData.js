@@ -175,13 +175,13 @@ export const mockData = {
     },
     {
       temperature_type: '大便总次数',
-      value: '2',
+      value: '15',
       time_point: '2021-10-15 03:12:00',
       vital_code: '24'
     },
     {
       temperature_type: '大便总次数',
-      value: '6',
+      value: '17',
       time_point: '2021-10-17 03:12:00',
       vital_code: '24'
     },
@@ -195,6 +195,12 @@ export const mockData = {
       temperature_type: '大便总次数',
       value: '4',
       time_point: '2021-10-16 03:12:00',
+      vital_code: '24'
+    },
+    {
+      temperature_type: '大便总次数',
+      value: '18',
+      time_point: '2021-10-18 03:12:00',
       vital_code: '24'
     },
     {
@@ -226,7 +232,7 @@ export const mockData = {
     },
     {
       temperature_type: '呼吸',
-      value: '20',
+      value: '120',
       time_point: '2021-10-19 23:12:00',
       vital_code: '13'
     },

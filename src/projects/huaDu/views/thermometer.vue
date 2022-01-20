@@ -211,7 +211,7 @@
           >
             呼吸(次/分)
           </div>
-          <div class="value-item-box font-18">
+          <div class="value-item-box font-14">
             <div
               class="value-item"
               :style="{
@@ -1864,27 +1864,25 @@ export default {
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
-          const timeNum = this.getTimeNum(targetList[j].time);
-          if (timeNum >= i && timeNum < i + timeInterval) {
-            if (shitList.length !== 0) {
-              for (let k = 0; k < shitList.length; k++) {
-                if (
-                  targetList[j].time.slice(0, 10) ===
-                  shitList[k].time.slice(0, 10)
-                ) {
-                  item.value = `${targetList[j].value}/${shitList[k].value}g`;
-                } else {
-                  item.value = targetList[j].value;
-                  targetList.splice(j, 1);
-                  break;
-                }
-              }
-            } else {
-              item.value = targetList[j].value;
+          if(shitList.length !== 0){
+            for (let k = 0; k < shitList.length; k++) {
+              const timeNum = this.getTimeNum(targetList[j].time);
+              const timeNumKid = this.getTimeNum(shitList[k].time);
+              if (timeNum >= i && timeNum < i + timeInterval) {
+              item.value = `${targetList[j].value}`;
+          }
+           if((timeNum >= i && timeNum < i + timeInterval)&&(timeNumKid >= i && timeNumKid < i + timeInterval)){
+              item.value = `${targetList[j].value}/${shitList[k].value}g`;
               targetList.splice(j, 1);
               break;
-            }
           }
+          }
+          }else{
+             item.value = `${targetList[j].value}`;
+              targetList.splice(j, 1);
+              break;
+          }
+          
         }
         list.push(item);
       }
@@ -2003,6 +2001,7 @@ export default {
           StartTime: urlParams.StartTime,
         }
       common(data).then((res) => {
+        console.log(res)
         this.apiData = res.data;
         this.$nextTick(() => {
           // this.handleData()
