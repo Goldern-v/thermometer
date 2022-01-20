@@ -130,6 +130,56 @@ module.exports = {
   },
   devServer: {
     proxy: {
+      '/crNursing/api': {
+        target:(() => {
+          switch (project) {
+            case 'huaDu':
+              return 'http://120.238.239.27:9091'
+            case 'liaoCheng':
+              // return 'http://172.17.5.41:9091'
+              return 'http://120.224.211.7:9091'
+            case 'liaoChengNewBorn':
+              // return 'http://120.224.211.7:9091'
+              return 'http://172.17.5.41:9091'
+            case 'jiangMenFuYou':
+              return 'http://218.14.180.38:9094'
+            case 'hengLi':
+              return 'http://172.17.5.41:9091'
+            case 'guiZhou':
+              return 'http://10.207.40.22:9091'
+            case 'xieGang':
+              return 'http://183.124.1.124:9091'
+            case 'xingTan':
+              return 'http://172.17.5.41:9091'
+            case 'beiHai':
+              return 'http://219.159.198.37:9091'
+            case 'guiZhouNewBorn':
+              return 'http://172.17.5.41:9091'
+            case 'quZhou':
+              return 'http://172.17.5.41:9091'
+            case 'wuJing':
+              return 'http://120.24.240.231:15091'
+            case 'zhongXi':
+              return 'http://218.107.37.134:9093/'
+            case 'foShanShiYi':
+              return 'http://218.107.37.134:9093/'
+            case 'wuHanFeiKe':
+              return 'http://218.107.37.134:9093/'
+            case 'wuHanYaXin':
+              return 'http://218.107.37.134:9093/'
+            case 'common':
+              return 'http://172.17.5.41:9091'
+            default:
+              break
+          }
+        })(), 
+        changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+        ws: true,
+        pathRewrite: {
+            '^/crNursing/api': '/crNursing/api'
+        }
+      },
+     
       '/': {
         target: (() => {
           switch (project) {
@@ -142,7 +192,7 @@ module.exports = {
               // return 'http://120.224.211.7:9091'
               return 'http://172.17.5.41:9091'
             case 'jiangMenFuYou':
-              return 'http://218.14.180.38:9091'
+              return 'http://218.14.180.38:9094'
             case 'hengLi':
               return 'http://172.17.5.41:9091'
             case 'guiZhou':
@@ -174,8 +224,10 @@ module.exports = {
               break
           }
         })(),
-        changeOrigin: true
-      }
+        changeOrigin: true,
+      },
+      
+      
     }
   }
 }

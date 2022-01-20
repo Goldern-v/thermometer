@@ -8,24 +8,24 @@
     <div class="head-hos">广西医科大学第九附属医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item" style="width: 105px; flex: none">
+      <div class="item" style="flex: 0.9">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item" style="width: 70px; flex: none">
+      <div class="item" style="flex: 0.7">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="width: 100px; flex: none">
+      <div class="item" style="flex: 0.7">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
-      <div class="item" style="width: 150px; flex: none">
+      <div class="item" style="flex: 1.5">
         住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
-      <div class="item" style="width: 160px; flex: none">
+      <div class="item" style="flex: 1.5">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item">
+      <div class="item " style="flex: 1.7">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
       <div class="item" style="flex:1.5" >
@@ -217,7 +217,7 @@
         ></div>
         <div
           class="row border-top-red-2"
-          :style="{ height: `${trHeight * 2 - 6}px` }"
+          :style="{ height: `${trHeight * 2 - 10}px` }"
         >
           <div class="label" :style="{ width: `${leftWidth}px` }">
             呼吸(次/分)
@@ -449,6 +449,8 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/beiHai/mockData.js";
+import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
+
 
 export default {
   props: {
@@ -472,7 +474,7 @@ export default {
     const pulseRange = [0, 180];
     // const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -892,14 +894,9 @@ export default {
             }
             break;
           case "printing":
-            window.print();
-            break;
-          // case "nurseExchangeInfo":
-          //   if (e.data.value) {
-          //     this.adtLog = e.data.value.adtLog || ""; // 转科
-          //     this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
-          //   }
-          //   break;
+            setTimeout(() => {
+          window.print()
+        }, 1000)
           default:
             break;
         }
@@ -981,25 +978,16 @@ export default {
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
     const urlParams = this.urlParse();
-      this.$http({
-        method: "post",
-        url: "crNursing/api/nurseLog/getNurseExchangeInfo",
-        headers: {
-          "App-Token-Nursing": "51e827c9-d80e-40a1-a95a-1edc257596e7",
-          "Auth-Token-Nursing": urlParams.authTokenNursing,
-        },
-        data: {
+        let data={
            startLogDateTime: this.timeRange[0],
              endLogDateTime: this.timeRange[1],
           visitId: urlParams.VisitId,
           patientId: urlParams.PatientId,
-        },
-      }).then((res) => {
+        }
+      getNurseExchangeInfoByTime(data).then((res) => {
          this.adtLog = res.data.data.adtLog; // 转科
               this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
       });
-
-
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const customSigns = []; // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
@@ -1962,16 +1950,13 @@ export default {
         this.handleData();
       });
     } else {
-      this.$http({
-        method: "post",
-        url: "/crHesb/hospital/common",
-        data: {
+      let data={
           tradeCode: "nurse_getPatientVitalSigns",
           PatientId: urlParams.PatientId,
           VisitId: urlParams.VisitId,
           StartTime: urlParams.StartTime,
-        },
-      }).then((res) => {
+        }
+      common(data).then((res) => {
         this.apiData = res.data;
         this.$nextTick(() => {
           // this.handleData()
@@ -1993,7 +1978,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 6mm 8mm 8mm 8mm; // 页面的边距
+    margin: 6mm 8mm 6mm 8mm; // 页面的边距
   }
 }
 .main-view {

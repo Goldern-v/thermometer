@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {apiPath,authToken} from '../api/apiConfig'
+import {apiPath,authToken,appToken} from '../api/apiConfig'
 
 // 患者：获取患者体征信息的记录
 export const common = (data) => {
@@ -16,7 +16,7 @@ export const getNurseExchangeInfoByTime = (data) => {
     url: `${apiPath}nurseLog/getNurseExchangeInfo`,
     data,
     headers: {
-      "App-Token-Nursing": "51e827c9-d80e-40a1-a95a-1edc257596e7",
+      "App-Token-Nursing": appToken,
       "Auth-Token-Nursing": authToken,
     }
   })
@@ -28,7 +28,7 @@ export const getNurseExchangeInfoBatch = (data) => {
     url: `${apiPath}nurseLog/getNurseExchangeInfoBatch`,
     data,
     headers: {
-      "App-Token-Nursing": "51e827c9-d80e-40a1-a95a-1edc257596e7",
+      "App-Token-Nursing":appToken,
       "Auth-Token-Nursing": authToken,
     }
   })
