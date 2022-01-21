@@ -469,5 +469,5 @@ export const mockData = {
     // }
   ]
 }
-
+export const jsonMockData=require('../huaDu/mockData.json')
 export default {}

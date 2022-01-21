@@ -11,10 +11,9 @@
     />
   </div>
 </template>
-
 <script>
 import Thermometer from "./thermometer.vue";
-import { mockData } from "src/projects/foShanShiYi/mockData.js";
+import { mockData } from "src/projects/wuHanYaXin/mockData.js";
 import { common , getNurseExchangeInfoBatch } from "src/api/index.js"
 
 export default {
@@ -23,7 +22,7 @@ export default {
   },
   data() {
     return {
-      useMockData: false,
+      useMockData: true,
       printData: null,
       pageTotal: 1,
       isPrintAll: true,
@@ -104,10 +103,6 @@ export default {
     }
   },
   watch: {
-    // 因为分页可能在体温单外面，所以给父页面传递pageTotal
-    // pageTotal(value) {
-    //   window.parent.postMessage({ type: 'pageTotal', value }, '*')
-    // }
   },
   beforeDestroy() {
     window.removeEventListener("message", this.messageHandle, false);

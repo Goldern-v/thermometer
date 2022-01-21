@@ -432,6 +432,7 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/foShanShiYi/mockData.js";
+import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
 import moment from "moment"; //导入文件
 
 export default {
@@ -939,12 +940,12 @@ export default {
           case "printing":
             window.print();
             break;
-          case "nurseExchangeInfo":
-            if (e.data.value) {
-              this.adtLog = e.data.value.adtLog || ""; // 转科
-              this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
-            }
-            break;
+          // case "nurseExchangeInfo":
+          //   if (e.data.value) {
+          //     this.adtLog = e.data.value.adtLog || ""; // 转科
+          //     this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
+          //   }
+          //   break;
           default:
             break;
         }
@@ -1028,18 +1029,19 @@ export default {
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
 
-      // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
-      window.parent.postMessage(
-        {
-          type: "getNurseExchangeInfo",
-          value: {
-            startLogDateTime: this.timeRange[0],
-            endLogDateTime: this.timeRange[1],
-          },
-        },
-        "*"
-      );
-
+     const urlParams = this.urlParse();
+        let data={
+           startLogDateTime: this.timeRange[0],
+             endLogDateTime: this.timeRange[1],
+          visitId: urlParams.VisitId,
+          patientId: urlParams.PatientId,
+        }
+      if(!this.useMockData&&!this.isPrintAll){
+           getNurseExchangeInfoByTime(data).then((res) => {
+         this.adtLog = res.data.data.adtLog; // 转科
+              this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+      });
+        }
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const customSigns = []; // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
@@ -1670,7 +1672,7 @@ export default {
                 color: "red",
                 zlevel: 10,
                 tips: `${item.time} 物理降温：${item.value}`,
-                dotSolid: false,
+                dotSolid: true,
               });
               this.createLine({
                 x1: cx,
@@ -2013,16 +2015,14 @@ export default {
         this.handleData();
       });
     } else {
-      this.$http({
-        method: "post",
-        url: "/crHesb/hospital/common",
-        data: {
+      let data={
           tradeCode: "nurse_getPatientVitalSigns",
           PatientId: urlParams.PatientId,
           VisitId: urlParams.VisitId,
           StartTime: urlParams.StartTime,
-        },
-      }).then((res) => {
+        }
+      common(data).then((res) => {
+        console.log(res)
         this.apiData = res.data;
         this.$nextTick(() => {
           // this.handleData()

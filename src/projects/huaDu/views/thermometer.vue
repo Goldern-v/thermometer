@@ -394,7 +394,7 @@
 
 <script>
 import zrender from "zrender";
-import { mockData } from "src/projects/huaDu/mockData.js";
+import { mockData,jsonMockData} from "src/projects/huaDu/mockData.js";
 import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
 import moment from "moment"; //导入文件
 
@@ -420,7 +420,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度

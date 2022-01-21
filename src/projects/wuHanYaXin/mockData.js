@@ -31,9 +31,10 @@ export const mockData = {
       vital_code: 'breathe',
       expand2: null
     },
+   
     {
       temperature_type: '脉搏',
-      value: '96',
+      value: '120',
       time_point: '2021-10-18 10:34:00',
       vital_code: 'pulse',
       expand2: null
@@ -75,15 +76,15 @@ export const mockData = {
     },
     {
       temperature_type: '呼吸',
-      value: '21',
+      value: 'R',
       time_point: '2021-10-18 14:00:00',
       vital_code: 'breathe',
       expand2: null
     },
     {
       temperature_type: '脉搏',
-      value: '60',
-      time_point: '2021-10-18 14:00:00',
+      value: '120',
+      time_point: '2021-10-18 23:00:00',
       vital_code: 'pulse',
       expand2: null
     },
@@ -101,16 +102,16 @@ export const mockData = {
       vital_code: 'breathe',
       expand2: null
     },
-    {
-      temperature_type: '脉搏',
-      value: '98',
-      time_point: '2021-10-18 18:00:00',
-      vital_code: 'pulse',
-      expand2: null
-    },
+    // {
+    //   temperature_type: '脉搏',
+    //   value: '98',
+    //   time_point: '2021-10-18 18:00:00',
+    //   vital_code: 'pulse',
+    //   expand2: null
+    // },
     {
       temperature_type: '腋温',
-      value: '36.1',
+      value: '36',
       time_point: '2021-10-18 18:00:00',
       vital_code: 'yeTemperature',
       expand2: null
@@ -208,7 +209,7 @@ export const mockData = {
     },
     {
       temperature_type: '腋温',
-      value: '36.1',
+      value: '36',
       time_point: '2021-10-20 14:00:00',
       vital_code: 'yeTemperature',
       expand2: null
@@ -257,7 +258,7 @@ export const mockData = {
     },
     {
       temperature_type: '腋温',
-      value: '36.1',
+      value: '36',
       time_point: '2021-10-21 14:00:00',
       vital_code: 'yeTemperature',
       expand2: null
@@ -278,7 +279,7 @@ export const mockData = {
     },
     {
       temperature_type: '腋温',
-      value: '36.1',
+      value: '36',
       time_point: '2021-10-21 18:00:00',
       vital_code: 'yeTemperature',
       expand2: null
@@ -306,7 +307,7 @@ export const mockData = {
     },
     {
       temperature_type: '腋温',
-      value: '36.1',
+      value: '36',
       time_point: '2021-10-22 14:00:00',
       vital_code: 'yeTemperature',
       expand2: null
@@ -488,7 +489,7 @@ export const mockData = {
     },
     {
       temperature_type: '腋温',
-      value: '36.1',
+      value: '36',
       time_point: '2021-10-27 06:00:00',
       vital_code: 'yeTemperature',
       expand2: null

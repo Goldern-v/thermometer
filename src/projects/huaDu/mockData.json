@@ -1,0 +1,490 @@
+{
+    "data": {
+        "ErrorCode": "1",
+        "ErrorMsg": "查询成功",
+        "patientInfo": {
+            "patInfo": {
+                "patient_id": "626299",
+                "name": "曾咏斯之大子",
+                "dept_name": "新生儿科T",
+                "bed_label": "J05",
+                "visit_id": "1",
+                "admission_date": "2022-01-15 21:14:15.0",
+                "age": "21分钟",
+                "inp_no": "1643567",
+                "sex": "男"
+            }
+        },
+        "vitalSigns": [
+            {
+                "temperature_type": "总入液量",
+                "value": "81.3",
+                "time_point": "2022-01-15 07:00:00",
+                "vital_code": "33"
+            },
+            {
+                "temperature_type": "大便次数",
+                "value": "0",
+                "time_point": "2022-01-15 07:00:00",
+                "vital_code": "24"
+            },
+            {
+                "temperature_type": "尿量",
+                "value": "55",
+                "time_point": "2022-01-15 07:00:00",
+                "vital_code": "15"
+            },
+            {
+                "temperature_type": "呼吸",
+                "value": "62",
+                "time_point": "2022-01-15 21:14:00",
+                "vital_code": "13"
+            },
+            {
+                "temperature_type": "表底注释",
+                "value": "辅助呼吸",
+                "time_point": "2022-01-15 21:14:00",
+                "vital_code": "31"
+            },
+            {
+                "temperature_type": "表顶注释",
+                "value": "入院|",
+                "time_point": "2022-01-15 21:14:00",
+                "vital_code": "3"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.8",
+                "time_point": "2022-01-15 21:14:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "血压",
+                "value": "59/23",
+                "time_point": "2022-01-15 21:14:00",
+                "vital_code": "14"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "120",
+                "time_point": "2022-01-15 21:14:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体重",
+                "value": "1.3",
+                "time_point": "2022-01-15 21:14:00",
+                "vital_code": "18"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "140",
+                "time_point": "2022-01-15 23:59:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.5",
+                "time_point": "2022-01-15 23:59:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "138",
+                "time_point": "2022-01-16 04:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.5",
+                "time_point": "2022-01-16 04:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "总入液量",
+                "value": "143.3",
+                "time_point": "2022-01-16 07:00:00",
+                "vital_code": "33"
+            },
+            {
+                "temperature_type": "大便次数",
+                "value": "0",
+                "time_point": "2022-01-16 07:00:00",
+                "vital_code": "24"
+            },
+            {
+                "temperature_type": "尿量",
+                "value": "190",
+                "time_point": "2022-01-16 07:00:00",
+                "vital_code": "15"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "137",
+                "time_point": "2022-01-16 08:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.8",
+                "time_point": "2022-01-16 08:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "血压",
+                "value": "73/40",
+                "time_point": "2022-01-16 08:00:00",
+                "vital_code": "14"
+            },
+            {
+                "temperature_type": "体重",
+                "value": "1.29",
+                "time_point": "2022-01-16 08:00:00",
+                "vital_code": "18"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "142",
+                "time_point": "2022-01-16 12:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.8",
+                "time_point": "2022-01-16 12:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "121",
+                "time_point": "2022-01-16 16:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.5",
+                "time_point": "2022-01-16 16:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "133",
+                "time_point": "2022-01-16 20:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.8",
+                "time_point": "2022-01-16 20:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "126",
+                "time_point": "2022-01-16 23:59:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "37",
+                "time_point": "2022-01-16 23:59:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "37",
+                "time_point": "2022-01-17 04:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "129",
+                "time_point": "2022-01-17 04:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "大便次数",
+                "value": "2/20g",
+                "time_point": "2022-01-17 07:00:00",
+                "vital_code": "24"
+            },
+            {
+                "temperature_type": "总入液量",
+                "value": "152.3",
+                "time_point": "2022-01-17 07:00:00",
+                "vital_code": "33"
+            },
+            {
+                "temperature_type": "尿量",
+                "value": "185",
+                "time_point": "2022-01-17 07:00:00",
+                "vital_code": "15"
+            },
+            {
+                "temperature_type": "血压",
+                "value": "72/41",
+                "time_point": "2022-01-17 08:00:00",
+                "vital_code": "14"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "135",
+                "time_point": "2022-01-17 08:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.8",
+                "time_point": "2022-01-17 08:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.8",
+                "time_point": "2022-01-17 12:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "体重",
+                "value": "1.23",
+                "time_point": "2022-01-17 12:00:00",
+                "vital_code": "18"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "138",
+                "time_point": "2022-01-17 12:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "140",
+                "time_point": "2022-01-17 16:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.8",
+                "time_point": "2022-01-17 16:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "146",
+                "time_point": "2022-01-17 20:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.9",
+                "time_point": "2022-01-17 20:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.9",
+                "time_point": "2022-01-17 23:59:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "145",
+                "time_point": "2022-01-17 23:59:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "大便",
+                "value": "20",
+                "time_point": "2022-01-18 00:00:00",
+                "vital_code": "2002"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "146",
+                "time_point": "2022-01-18 04:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.9",
+                "time_point": "2022-01-18 04:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "总入液量",
+                "value": "183.3",
+                "time_point": "2022-01-18 07:00:00",
+                "vital_code": "33"
+            },
+            {
+                "temperature_type": "尿量",
+                "value": "145",
+                "time_point": "2022-01-18 07:00:00",
+                "vital_code": "15"
+            },
+            {
+                "temperature_type": "大便次数",
+                "value": "0",
+                "time_point": "2022-01-18 07:00:00",
+                "vital_code": "24"
+            },
+            {
+                "temperature_type": "血压",
+                "value": "73/40",
+                "time_point": "2022-01-18 08:00:00",
+                "vital_code": "14"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.7",
+                "time_point": "2022-01-18 08:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "135",
+                "time_point": "2022-01-18 08:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体重",
+                "value": "1.24",
+                "time_point": "2022-01-18 08:00:00",
+                "vital_code": "18"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "139",
+                "time_point": "2022-01-18 12:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.9",
+                "time_point": "2022-01-18 12:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "139",
+                "time_point": "2022-01-18 16:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.5",
+                "time_point": "2022-01-18 16:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.5",
+                "time_point": "2022-01-18 20:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "141",
+                "time_point": "2022-01-18 20:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.8",
+                "time_point": "2022-01-18 23:59:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "140",
+                "time_point": "2022-01-18 23:59:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.8",
+                "time_point": "2022-01-19 04:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "140",
+                "time_point": "2022-01-19 04:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "体重",
+                "value": "1.25",
+                "time_point": "2022-01-19 08:00:00",
+                "vital_code": "18"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.5",
+                "time_point": "2022-01-19 08:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "140",
+                "time_point": "2022-01-19 08:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "血压",
+                "value": "72/41",
+                "time_point": "2022-01-19 08:00:00",
+                "vital_code": "14"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "36.5",
+                "time_point": "2022-01-19 12:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "142",
+                "time_point": "2022-01-19 12:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "呼吸",
+                "value": "48°",
+                "time_point": "2022-01-19 16:00:00",
+                "vital_code": "13"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "37",
+                "time_point": "2022-01-19 16:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "137",
+                "time_point": "2022-01-19 16:00:00",
+                "vital_code": "12"
+            },
+            {
+                "temperature_type": "呼吸",
+                "value": "48°",
+                "time_point": "2022-01-19 20:00:00",
+                "vital_code": "13"
+            },
+            {
+                "temperature_type": "体温",
+                "value": "37.1",
+                "time_point": "2022-01-19 20:00:00",
+                "vital_code": "1"
+            },
+            {
+                "temperature_type": "心率",
+                "value": "138",
+                "time_point": "2022-01-19 20:00:00",
+                "vital_code": "12"
+            }
+        ]
+    }
+
+}
