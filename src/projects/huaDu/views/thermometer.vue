@@ -420,7 +420,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1864,9 +1864,9 @@ export default {
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(targetList[j].time);
           if(shitList.length !== 0){
             for (let k = 0; k < shitList.length; k++) {
-              const timeNum = this.getTimeNum(targetList[j].time);
               const timeNumKid = this.getTimeNum(shitList[k].time);
               if (timeNum >= i && timeNum < i + timeInterval) {
               item.value = `${targetList[j].value}`;
@@ -1878,9 +1878,11 @@ export default {
           }
           }
           }else{
+            if (timeNum >= i && timeNum < i + timeInterval) {
              item.value = `${targetList[j].value}`;
               targetList.splice(j, 1);
               break;
+            }
           }
           
         }
@@ -2001,7 +2003,6 @@ export default {
           StartTime: urlParams.StartTime,
         }
       common(data).then((res) => {
-        console.log(res)
         this.apiData = res.data;
         this.$nextTick(() => {
           // this.handleData()

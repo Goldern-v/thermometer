@@ -457,7 +457,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -940,12 +940,6 @@ export default {
           case "printing":
             window.print();
             break;
-          // case "nurseExchangeInfo":
-          //   if (e.data.value) {
-          //     this.adtLog = e.data.value.adtLog || ""; // 转科
-          //     this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
-          //   }
-          //   break;
           default:
             break;
         }
@@ -1028,7 +1022,6 @@ export default {
       }
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
-
      const urlParams = this.urlParse();
         let data={
            startLogDateTime: this.timeRange[0],
@@ -1088,23 +1081,7 @@ export default {
             default:
               break;
           }
-          // const index = customSigns.indexOf(sign)
-          // if (index < 0) {
-          //   customSigns.push(sign)
-          //   // console.log(this[`customList${customSigns.length - 1}`])
-          //   this[`customList${customSigns.length - 1}`].push({
-          //     time: vitalSigns[i].time_point,
-          //     value: vitalSigns[i].value
-          //   })
-          //   this[`customList${customSigns.length - 1}`].label = sign
-          // } else {
-          //   this[`customList${index}`].push({
-          //     time: vitalSigns[i].time_point,
-          //     value: vitalSigns[i].value
-          //   })
-          //   this[`customList${index}`].label = sign
-          // }
-          // continue
+         
         }
         /* 获取各个体征数组对象 */
         if (this.lineMap[vitalSigns[i].vital_code]) {
@@ -1272,27 +1249,9 @@ export default {
             new Date(x.time).getHours()
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`;
         }
-        const bottomText = [
-          "拒测",
-          "不在",
-          "外出",
-          "请假",
-          "不升",
-          "右PPD",
-          "左PPD",
-          "PPD︵-︶",
-          "PPD︵+︶",
-          "PPD︵++︶",
-          "PPD︵+++︶",
-          "冰敷",
-          "退热贴",
-          "冷水枕",
-          "降温毯",
-          "温水浴",
-          "辅助呼吸",
-          "停辅助呼吸",
-          "PDD",
-        ];
+        const bottomText = this.bottomSheetNote.map((x) => {
+          return x.value;
+        });
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
@@ -1888,7 +1847,6 @@ export default {
             break;
           }
         }
-        // console.log(item, 'ssssss')
         list.push(item);
       }
       return list;
@@ -1906,29 +1864,25 @@ export default {
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
-          const timeNum = this.getTimeNum(targetList[j].time);
-          if (timeNum >= i && timeNum < i + timeInterval) {
-            if (shitList.length !== 0) {
-              for (let k = 0; k < shitList.length; k++) {
-                if (
-                  targetList[j].time.slice(0, 10) ===
-                  shitList[k].time.slice(0, 10)
-                ) {
-                  // console.log('shitList', shitList[k].time.slice(0, 10))
-                  // console.log('targetList', targetList[j].time.slice(0, 10))
-                  item.value = `${targetList[j].value}/${shitList[k].value}g`;
-                } else {
-                  item.value = targetList[j].value;
-                  targetList.splice(j, 1);
-                  break;
-                }
-              }
-            } else {
-              item.value = targetList[j].value;
+          if(shitList.length !== 0){
+            for (let k = 0; k < shitList.length; k++) {
+              const timeNum = this.getTimeNum(targetList[j].time);
+              const timeNumKid = this.getTimeNum(shitList[k].time);
+              if (timeNum >= i && timeNum < i + timeInterval) {
+              item.value = `${targetList[j].value}`;
+          }
+           if((timeNum >= i && timeNum < i + timeInterval)&&(timeNumKid >= i && timeNumKid < i + timeInterval)){
+              item.value = `${targetList[j].value}/${shitList[k].value}g`;
               targetList.splice(j, 1);
               break;
-            }
           }
+          }
+          }else{
+             item.value = `${targetList[j].value}`;
+              targetList.splice(j, 1);
+              break;
+          }
+          
         }
         list.push(item);
       }
@@ -2022,7 +1976,6 @@ export default {
           StartTime: urlParams.StartTime,
         }
       common(data).then((res) => {
-        console.log(res)
         this.apiData = res.data;
         this.$nextTick(() => {
           // this.handleData()

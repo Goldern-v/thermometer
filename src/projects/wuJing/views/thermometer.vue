@@ -497,7 +497,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData:true,
+      useMockData:false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -2352,7 +2352,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 8mm 8mm 5mm 20mm; // 页面的边距
+    margin: 6mm 8mm 5mm 20mm; // 页面的边距
   }
 }
 .main-view {

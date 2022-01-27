@@ -31,7 +31,7 @@
       <div class="item" style="flex: 1.3">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" style="flex: 0.5">
+      <div class="item" >
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
@@ -437,7 +437,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度

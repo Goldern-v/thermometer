@@ -7,7 +7,7 @@ export const mockData = {
       name: '陈小倩是是是',
       sex: '女',
       dept_name: '乳腺胸外科护护士站',
-      bed_label: '012',
+      bed_label: 'BBBBB012',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
       admission_date: '2021-10-15 08:12:30.0',

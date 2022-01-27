@@ -7,7 +7,7 @@ export const mockData = {
       name: '陈小倩（婴）2',
       sex: '女',
       dept_name: '神经内科测试',
-      bed_label: '23',
+      bed_label: 'BBBBB23',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
       admission_date: '2021-12-08 16:03:24.0',
