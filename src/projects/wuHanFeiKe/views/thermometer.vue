@@ -9,7 +9,7 @@
     <div class="head-title">体温单</div>
    
     <div class="head-info">
-      <div class="item"  >
+      <div class="item"  style="flex:none">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item" style="flex:0.6">
@@ -41,8 +41,7 @@
      
     </div>
      <div class="head-info-1">
-     
-      <div class="item" style="text-align:left">
+      <div :class="patInfo.diagnose!==''?'item':'itemNull'" style="text-align:left">
         住院病例号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
        <div class="item2" >
@@ -189,10 +188,9 @@
               <div class="p-r-5"
                       >脉搏</div>
               <div style="font-size:14px">(次/分)</div>
-           <div class="text" style="height:18px">
+           <div class="text" style="height:46px">
 
             </div>
-              
             </div>
             <div class="index" v-for="item in pulseList" :key="item">
               <span>{{ item }}</span>
@@ -247,7 +245,7 @@
          <div>
           <div class="left_box" :style="{ height: `${trHeight * 3}px`}">
             <div class="left_box_lable">
-              血压
+              血压(mmHg)
             </div>
           </div>
          <div class="row" :style="{ height: `${trHeight}px` }">
@@ -306,7 +304,20 @@
           </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            大便次数
+            大便次数(次/天)
+          </div>
+          <div class="value-item-box">
+            <div
+              class="value-item font-16"
+              v-for="(item, index) in getFormatList({ tList: shitList })"
+              :key="index"
+              v-html="item.value"
+            ></div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            饮入量(ml)
           </div>
           <div class="value-item-box">
             <div
@@ -319,12 +330,12 @@
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            饮入量
+            排出量(ml)
           </div>
           <div class="value-item-box">
             <div
               class="value-item font-16"
-              v-for="(item, index) in getFormatList({ tList: inputList })"
+              v-for="(item, index) in getFormatList({ tList: outputList })"
               :key="index"
               v-html="item.value"
             ></div>
@@ -332,25 +343,12 @@
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            排出量
+            尿量(ml)
           </div>
           <div class="value-item-box">
             <div
               class="value-item font-16"
-              v-for="(item, index) in getFormatList({ tList: inputList })"
-              :key="index"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            尿量
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-16"
-              v-for="(item, index) in getFormatList({ tList: inputList })"
+              v-for="(item, index) in getFormatList({ tList: urineList })"
               :key="index"
               v-html="item.value"
             ></div>
@@ -363,7 +361,7 @@
           <div class="value-item-box">
             <div
               class="value-item font-16"
-              v-for="(item, index) in getFormatList({ tList: inputList })"
+              v-for="(item, index) in getFormatList({ tList: contractList })"
               :key="index"
               v-html="item.value"
             ></div>
@@ -467,6 +465,7 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/wuHanFeiKe/mockData.js";
+import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
 import moment from "moment"; //导入文件
 export default {
   props: {
@@ -489,7 +488,7 @@ export default {
     const yRange = [35, 42];
     const pulseRange = [40, 180];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -515,7 +514,7 @@ export default {
         },
         axillaryTemperature: {
           vitalCode: "01",
-          label: "腋表",
+          label: "腋温",
           color: "blue",
           lineColor: "blue",
           dotType: "Text",
@@ -526,7 +525,7 @@ export default {
         },
         analTemperature: {
           vitalCode: "043",
-          label: "肛表",
+          label: "肛温",
           color: "blue",
           range: yRange,
           dotType: "Circle",
@@ -576,8 +575,7 @@ export default {
       physicsCoolList: [], // 物理降温
       onLineCoolList: [], // 线上降温
       feverList: [], // 发热体温
-      otherList: [],
-      otherList2: [],
+      contractList: [],
       skinTest: [],
       // customList0: [], // 自定义1
       // customList1: [], // 自定义2
@@ -618,6 +616,7 @@ export default {
         25: "护理事件",
         3: "物理降温",
         28: "呕吐量",
+        38:"有创动脉收缩压",
         29: "在线降温",
         30: "皮试",
         32: "自定义1",
@@ -645,7 +644,7 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [4, 8, 12, 4, 8, 12];
+      const list = [2, 6, 10, 14, 18, 22];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
@@ -893,10 +892,10 @@ export default {
     },
     formatDateList() {
       return this.dateList.map((x, i) => {
-        if (i === 0 || this.dateList[i - 1].slice(0, 4) !== x.slice(0, 4)) {
+        if (i === 0 ) {
           return x
-        } else {
-          return x.slice(8,10)
+        } else if(i>0){
+          return this.dateList[i - 1].slice(0, 7) !== x.slice(0, 7) ? x : x.slice(8,10)
         }
       })
     },
@@ -1006,14 +1005,14 @@ export default {
       this.weightList = [];
       this.inputList = [];
       this.shitList = [];
+      this.contractList = [];
       this.urineList = [];
       this.outputList = [];
       this.physicsCoolList = [];
       this.onLineCoolList = [];
       this.feverList = [];
       this.dateRangeList = [];
-      this.otherList = [];
-      this.otherList2 = [];
+     
       this.skinTest = [];
       for (let i = 0; i < 4; i++) {
         this[`customList${i}`] = [];
@@ -1157,6 +1156,9 @@ export default {
           case "34":
             this.outputList.push(item);
             break;
+          case "38":
+            this.contractList.push(item);
+            break;
           case "27":
             this.physicsCoolList.push(item);
             break;
@@ -1166,15 +1168,7 @@ export default {
           case "21":
             this.feverList.push(item);
             break;
-          case "30":
-            this.skinTest.push(item);
-            break;
           case "50":
-            this.otherList.push(item);
-            break;
-          case "51":
-            this.otherList2.push(item);
-            break;
           default:
             break;
         }
@@ -1360,7 +1354,7 @@ export default {
           y2: this.areaHeight,
           lineWidth,
           // lineDash: isBreak ? [] : [1, 1],
-          color: isBreak ? "red" : "#000",
+          color: isBreak ? "#000" : "#000",
         };
 
         preSpace += lineWidth + this.xSpace;
@@ -1755,12 +1749,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "04:00:59"],
-        "06:00:00": ["04:01:00", "8:00:59"],
-        "10:00:00": ["08:01:00", "12:00:59"],
-        "14:00:00": ["12:01:00", "16:00:59"],
-        "18:00:00": ["16:01:00", "20:00:59"],
-        "22:00:00": ["20:01:00", "23:59:59"],
+        "02:00:00": ["00:00:00", "03:59:59"],
+        "06:00:00": ["04:00:00", "07:59:59"],
+        "10:00:00": ["8:00:00", "11:59:59"],
+        "14:00:00": ["12:00:00", "15:59:59"],
+        "18:00:00": ["16:00:00", "19:59:59"],
+        "22:00:00": ["20:00:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -1982,16 +1976,13 @@ export default {
         this.handleData();
       });
     } else {
-      this.$http({
-        method: "post",
-        url: "/crHesb/hospital/common",
-        data: {
+     let data={
           tradeCode: "nurse_getPatientVitalSigns",
           PatientId: urlParams.PatientId,
           VisitId: urlParams.VisitId,
           StartTime: urlParams.StartTime,
-        },
-      }).then((res) => {
+        }
+      common(data).then((res) => {
         this.apiData = res.data;
         this.$nextTick(() => {
           // this.handleData()
@@ -2057,8 +2048,21 @@ export default {
       padding: 0 5px 5px 5px;
       text-align:left;
        &:nth-child(1) {
-        flex: 2;
+        flex: 1;
       }
+      
+      text-align: left;
+      .value {
+        font-weight: normal;
+      }
+    }
+    .itemNull {
+      padding: 0 5px 5px 5px;
+      text-align:left;
+       &:nth-child(1) {
+        flex: 0.2;
+      }
+      
       text-align: left;
       .value {
         font-weight: normal;
@@ -2105,9 +2109,6 @@ export default {
   }
   .left_box_lable {
     margin: 30px;
-      color:green;
-
-    
   }
   .row {
     display: flex;
@@ -2215,7 +2216,7 @@ background-color: rgb(2, 2, 2);}
     }
     .temp {
       .text {
-        height: 82.7px;
+        height: 81.7px;
         .p-r-5{
           font-size: 14px;
 
@@ -2254,7 +2255,7 @@ background-color: rgb(2, 2, 2);}
        
       }
        span{
-          margin-top: 25px;
+          // margin-top: 25px;
         }
     }
     
@@ -2280,8 +2281,47 @@ background-color: rgb(2, 2, 2);}
     .times :nth-child(9) > span {
       margin-top: 63px;
     }
+    .temp :nth-child(5) > span {
+margin-top:5px;
+   }
+    .temp :nth-child(6) > span {
+margin-top:5px;
+   }
+    .temp :nth-child(7) > span {
+margin-top:10px;
+   }
+    .temp :nth-child(8) > span {
+margin-top:10px;
+   }
+    .temp :nth-child(9) > span {
+margin-top:15px;
+   }
+    .temp :nth-child(10) > span {
+margin-top:15px;
+   }
+    .temp :nth-child(11) > span {
+margin-top:20px;
+   }
+    .temp :nth-child(12) > span {
+margin-top:17px;
+   }
+    .temp :nth-child(13) > span {
+margin-top:23px;
+   }
+    .temp :nth-child(14) > span {
+margin-top:23px;
+
+   }
+    .temp :nth-child(15)  {
+margin-top:-10px;
+   }
+    .temp :nth-child(15) > span {
+margin-top:23px;
+
+   }
     .temp :nth-child(16) > span {
-margin-top: 14px;
+margin-top:22px;
+padding-top: 2px;
    }
    
     .pain-area {
