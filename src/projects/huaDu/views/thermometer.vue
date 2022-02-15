@@ -420,7 +420,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: false ,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1859,6 +1859,7 @@ export default {
     }) {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
+      let special=['E','※']
       const targetList = [...tList];
       const shitList = [...childList];
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
@@ -1872,7 +1873,8 @@ export default {
               item.value = `${targetList[j].value}`;
           }
            if((timeNum >= i && timeNum < i + timeInterval)&&(timeNumKid >= i && timeNumKid < i + timeInterval)){
-              item.value = `${targetList[j].value}/${shitList[k].value}g`;
+             //小孩子的大便或者大人的大便存在灌肠或者失禁事件时，不用带////
+              item.value =(shitList[k].value.includes('E')||targetList[j].value.includes('E'))||(shitList[k].value.includes('※')||targetList[j].value.includes('※'))? `${targetList[j].value} ${shitList[k].value}g`:`${targetList[j].value}/${shitList[k].value}g`;
               targetList.splice(j, 1);
               break;
           }

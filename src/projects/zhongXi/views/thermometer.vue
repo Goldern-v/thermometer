@@ -479,6 +479,7 @@
 <script>
 import zrender from 'zrender'
 import { mockData } from 'src/projects/zhongXi/mockData.js'
+import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
 import moment from 'moment' //导入文件
 
 export default {
@@ -766,10 +767,12 @@ export default {
         .filter(
           (x) =>
             x.vital_code === '5' &&
-            (x.value === '手术' ||
-              x.value === '分娩|' ||
-              x.value === '手术分娩|' ||
-              x.value === '手术入院|')
+            (x.value.includes("手术") ||
+            x.value.includes("分娩|") ||
+            x.value.includes("手术|") ||
+            x.value.includes("分娩") ||
+            x.value.includes("手术分娩|") ||
+            x.value.includes("手术入院|"))
         )
         .map((x) => x.time_point)
     },
@@ -834,10 +837,10 @@ export default {
     },
     formatDateList() {
       return this.dateList.map((x, i) => {
-        if (i === 0 || this.dateList[i - 1].slice(0, 4) !== x.slice(0, 4)) {
+        if (i === 0 ) {
           return x
-        } else {
-          return x.slice(5)
+        } else if(i>0){
+          return this.dateList[i - 1].slice(0, 7) !== x.slice(0, 7) ? x : x.slice(8,10)
         }
       })
     },
@@ -1176,10 +1179,12 @@ export default {
             new Date(x.time).getHours()
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
         }
+         let bottomText = this.bottomSheetNote.map((x) => {
+          return x.value;
+        });
         this.createText({
-          // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y,
+          y:bottomText.includes(value) ? y : y-2*this.ySpace-2,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -2019,16 +2024,13 @@ export default {
         this.handleData()
       })
     } else {
-      this.$http({
-        method: 'post',
-        url: '/crHesb/hospital/common',
-        data: {
-          tradeCode: 'nurse_getPatientVitalSigns',
+       let data={
+          tradeCode: "nurse_getPatientVitalSigns",
           PatientId: urlParams.PatientId,
           VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime
+          StartTime: urlParams.StartTime,
         }
-      }).then((res) => {
+      common(data).then((res) => {
         this.apiData = res.data
         this.$nextTick(() => {
           //每次获取数据都要传一次页数

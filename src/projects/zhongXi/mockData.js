@@ -29,6 +29,12 @@ export const mockData = {
       vital_code: '5'
     },
     {
+      temperature_type: '表顶注释',
+      value: '入院',
+      time_point: '2021-10-18 09:14:34',
+      vital_code: '4'
+    },
+    {
       temperature_type: '血压',
       value: '112/92',
       time_point: '2021-10-18 11:00:00',
