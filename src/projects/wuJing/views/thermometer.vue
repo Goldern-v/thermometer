@@ -497,7 +497,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData:false,
+      useMockData:true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -862,12 +862,12 @@ export default {
     },
     formatDateList() {
       return this.dateList.map((x, i) => {
-        if (i === 0 || this.dateList[i - 1].slice(0, 4) !== x.slice(0, 4)) {
-          return x;
-        } else {
-          return x.slice(5);
+        if (i === 0 ) {
+          return x
+        } else if(i>0){
+          return this.dateList[i - 1].slice(0, 7) !== x.slice(0, 7) ? x : x.slice(8,10)
         }
-      });
+      })
     },
     temperaturelist() {
       const list = [];
@@ -1348,7 +1348,7 @@ export default {
         });
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-          x: xaxisNew[i],
+          x: xaxisNew[i]-1,
           y: bottomText.includes(value)
             ? y - 5 * this.ySpace +3
             : y-3,
@@ -1993,7 +1993,7 @@ export default {
           // 画脉搏/心率超限过快
           if (x.value > this.pulseRange[1]-30) {
             this.createText({
-              x: cx,
+              x: cx-1.2,
               y: cy - this.ySpace * 1.6,
               value: x.value,
               color: 'red',
@@ -2046,7 +2046,7 @@ export default {
           for (let i = 0; i < str.length; i++) {
            formatTopValu+=
             isNaN(str[i]) || (!isNaN(str[i]) && isNaN(str[i + 1]))
-              ? `${str[i]} \n \n \n \n`
+              ? `${str[i]}\n\n\n\n`
               : str[i];
         }
           return formatTopValu
@@ -2352,7 +2352,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 6mm 8mm 5mm 20mm; // 页面的边距
+    margin: 5mm 8mm 5mm 20mm; // 页面的边距
   }
 }
 .main-view {

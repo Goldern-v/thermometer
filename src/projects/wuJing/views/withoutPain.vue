@@ -843,12 +843,12 @@ export default {
     },
     formatDateList() {
       return this.dateList.map((x, i) => {
-        if (i === 0 || this.dateList[i - 1].slice(0, 4) !== x.slice(0, 4)) {
-          return x;
-        } else {
-          return x.slice(5);
+        if (i === 0 ) {
+          return x
+        } else if(i>0){
+          return this.dateList[i - 1].slice(0, 7) !== x.slice(0, 7) ? x : x.slice(8,10)
         }
-      });
+      })
     },
     temperaturelist() {
       const list = [];
@@ -1809,7 +1809,7 @@ export default {
           for (let i = 0; i < str.length; i++) {
            formatTopValu+=
             isNaN(str[i]) || (!isNaN(str[i]) && isNaN(str[i + 1]))
-              ? `${str[i]} \n \n \n \n`
+              ? `${str[i]}\n\n\n\n`
               : str[i];
         }
           return formatTopValu
@@ -2053,15 +2053,6 @@ export default {
           "Content-Type": "text/plain",
         },
         data: this.encryptFun(JSON.stringify(data)),
-        // : encodeURI(this.encryptFun(JSON.stringify(data)))
-        // this.encryptFun(
-        //   JSON.stringify({
-        //     PatientId: urlParams.PatientId,
-        //     VisitId: urlParams.VisitId,
-        //     StartTime: urlParams.StartTime,
-        //     tradeCode: 'nurse_getPatientVitalSigns'
-        //   })
-        // )
       }).then((res) => {
         this.apiData = JSON.parse(this.decryptFun(res.data));
         
@@ -2085,7 +2076,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 6mm 8mm 5mm 20mm; // 页面的边距
+    margin: 5mm 8mm 5mm 20mm; // 页面的边距
   }
 }
 .main-view {
