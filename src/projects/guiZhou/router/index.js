@@ -8,7 +8,12 @@ const routes = [
     path: '/',
     name: 'Home',
     component: () => import('src/projects/guiZhou/views/thermometer.vue')
-  }
+  },
+  {
+    path: '/printAll',
+    name: 'Print',
+    component: () => import('src/projects/guiZhou/views/print.vue')
+  },
 ]
 
 const router = new VueRouter({

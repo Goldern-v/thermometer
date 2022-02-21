@@ -206,7 +206,7 @@
           </div>
         </div>
         <div
-          id="main"
+          ref="main"
           :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
         ></div>
       </div>
@@ -317,6 +317,20 @@
             <div
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: heightList })"
+              :key="index"
+            >
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            腹围(cm)
+          </div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in getFormatList({ tList: nounList })"
               :key="index"
             >
               {{ item.value }}
@@ -448,6 +462,22 @@ import zrender from 'zrender'
 import { mockData } from 'src/projects/guiZhou/mockData.js'
 
 export default {
+  props: {
+    isPrintAll: {
+      type: Boolean,
+      default: false,
+    },
+    printPage: {
+      type: Number,
+      default: 1,
+    },
+    printData: {
+      type: Object,
+      default() {
+        return null;
+      },
+    },
+  },
   data() {
     const yRange = [34, 42]
     const pulseRange = [20, 180]
@@ -565,6 +595,7 @@ export default {
       customList5: [], // 自定义6
       coolList: [], // 降温
       ttgyList: [], // 疼痛干预
+      nounList: [], // 腹围
       dateRangeList: [], // 数组长度决定页数
       patInfo: {
         patient_id: '',
@@ -1022,7 +1053,7 @@ export default {
             if (e.data.value > 0) {
               console.log('e.data', e.data, this.currentPage)
               this.currentPage = e.data.value
-              document.getElementById('main').innerHTML = ''
+              this.$refs.main.innerHTML = ''
               this.reset()
               this.handleData()
             }
@@ -1085,6 +1116,7 @@ export default {
       this.outputList = []
       this.coolList = []
       this.ttgyList = []
+      this.nounList=[]
       this.dateRangeList = []
       for (let i = 0; i < 6; i++) {
         this[`customList${i}`] = []
@@ -1093,14 +1125,14 @@ export default {
     toNext() {
       if (this.currentPage === this.pageTotal) return
       this.currentPage++
-      document.getElementById('main').innerHTML = ''
+      this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
     },
     toPre() {
       if (this.currentPage === 1) return
       this.currentPage--
-      document.getElementById('main').innerHTML = ''
+      this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
     },
@@ -1285,6 +1317,9 @@ export default {
           case 'height':
             this.heightList.push(item)
             break
+          case 'AC':
+            this.nounList.push(item)
+            break
           default:
             break
         }
@@ -1322,10 +1357,10 @@ export default {
       this.getAreaWidth() // 遍历一遍获取宽度
       this.$nextTick(() => {
          let ops={renderer:'canvas'}
-        this.zr = zrender.init(document.getElementById('main'),ops)
+        this.zr = zrender.init(this.$refs.main,ops)
         const div = document.createElement('div')
         div.classList.add('tips')
-        document.getElementById('main').appendChild(div)
+        this.$refs.main.appendChild(div)
         this.yLine() //生成Y轴坐标
         this.xLine() //生成X轴坐标
         // 画折线
@@ -2274,45 +2309,46 @@ export default {
     }
   },
   mounted() {
-    const urlParams = this.urlParse()
-    this.showInnerPage = urlParams.showInnerPage === '1'
-    if (this.useMockData) {
-      this.apiData = mockData
+    const urlParams = this.urlParse();
+    this.showInnerPage = urlParams.showInnerPage === "1";
+    if (this.isPrintAll) {
+      // 批量打印
+      this.apiData = this.printData;
+      this.currentPage = this.printPage;
       this.$nextTick(() => {
-        this.handleData()
-        // this.currentPage = this.pageTotal
-        // window.parent.postMessage(
-        //   { type: 'pageTotal', value: this.pageTotal },
-        //   '*'
-        // )
-      })
+        this.handleData();
+      });
+      return;
+    }
+    if (this.useMockData) {
+      this.apiData = mockData;
+      this.$nextTick(() => {
+        this.handleData();
+       
+      });
     } else {
-      this.$http({
-        method: 'post',
-        url: '/crHesb/hospital/common',
-        data: {
-          tradeCode: 'nurse_getPatientVitalSigns',
+      let data={
+          tradeCode: "nurse_getPatientVitalSigns",
           PatientId: urlParams.PatientId,
           VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime
+          StartTime: urlParams.StartTime,
         }
-      }).then((res) => {
-        this.apiData = res.data
-        ////特殊处理病人事件时间expand2 换成 time_point
-        //this.sortExpand2NurseEvents(res.data);
-        //特殊处理过敏药物
-        //this.formatType("guomingyaowu");
+      common(data).then((res) => {
+        this.apiData = res.data;
         this.$nextTick(() => {
-          this.currentPage = this.pageTotal
+          // this.handleData()
+          //每次获取数据都要传一次页数
+          this.currentPage = this.pageTotal;
           window.parent.postMessage(
-            { type: 'pageTotal', value: this.pageTotal },
-            '*'
-          )
-          this.handleData()
-        })
-      })
+            { type: "pageTotal", value: this.pageTotal },
+            "*"
+          );
+          this.handleData();
+        });
+      });
+    
     }
-  }
+  },
 }
 </script>
 

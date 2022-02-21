@@ -12,7 +12,7 @@
       <div class="item"  style="flex:none">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item" style="flex:0.6">
+      <div class="item" style="flex:0.7">
         年龄：<span class="value">{{
           PatientId.endsWith("_1")
             ? "0天"
@@ -21,31 +21,24 @@
             : patInfo.age
         }}</span>
       </div>
-      <div class="item" style="flex:0.7">
+      <div class="item" style="flex:0.5">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-       <div class="item" style="flex:1.5">
+       <div class="item" style="flex:2.3">
         科别：<span class="value" > {{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" >
+      <div class="item" style="flex:0.5">
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="flex:1.4">
+      <div class="item" style="flex:1.2">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      
-     
-    </div>
-     <div class="head-info-1">
-      <div :class="patInfo.diagnose!==''?'item':'itemNull'" style="text-align:left">
+      <div class="item" style="text-align:left;flex:1.2">
         住院病例号：<span class="value">{{ patInfo.inp_no }}</span>
-      </div>
-       <div class="item2" >
-        诊断：<span class="value">{{ patInfo.diagnose }}</span>
       </div>
     </div>
     
@@ -84,7 +77,7 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">住院日数</div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
           <div class="value-item-box color-blue">
             <div
               class="value-item"
@@ -98,7 +91,7 @@
 
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            手术或产后日数
+            手术后天数
           </div>
           <div class="value-item-box" style="color: red">
             <div
@@ -187,7 +180,7 @@
             <div class="text">
               <div class="p-r-5"
                       >脉搏</div>
-              <div style="font-size:14px">(次/分)</div>
+              <div style="font-size:14px;font-weight:normal;text-align:center">(次/分)</div>
            <div class="text" style="height:46px">
 
             </div>
@@ -199,7 +192,7 @@
           <div class="item times color-blue">
             <div class="text">
               <div class="p-r-5">体温</div>
-              <div>(℃)</div>
+              <div style="font-size:16px;text-align:center">(℃)</div>
             </div>
             <div class="index " v-for="item in temperaturelist" :key="item">
               <span class="color-blue">{{ item }}</span>
@@ -208,7 +201,7 @@
           <div class="item times color-green" >
             <div class="text">
               <div class="p-r-5">膀胱温</div>
-              <div >(℃)</div>
+              <div style="font-size:16px;text-align:center">(℃)</div>
             </div>
             <div class="index" v-for="item in temperaturelist" :key="item">
               <span class="color-green">{{ item }}</span>
@@ -485,8 +478,8 @@ export default {
     },
   },
   data() {
-    const yRange = [35, 42];
-    const pulseRange = [40, 180];
+    const yRange = [34, 42];
+    const pulseRange = [30, 180];
     return {
       useMockData: true,
       apiData: "", // 接口数据
@@ -901,7 +894,7 @@ export default {
     },
     temperaturelist() {
       const list = [];
-      for (let i = this.yRange[1]; i >=this.yRange[0]; i--) {
+      for (let i = this.yRange[1]; i >this.yRange[0]; i--) {
         list.push(i);
       }
       return list;
@@ -910,7 +903,7 @@ export default {
       const list = [];
       for (
         let i = this.pulseRange[1];
-        i >= this.pulseRange[0];
+        i > this.pulseRange[0];
         i = i - 10
       ) {
         list.push(i);
@@ -1126,9 +1119,6 @@ export default {
           value: vitalSigns[i].value,
         };
         switch (vitalSigns[i].vital_code) {
-          case "3":
-            this.physicsCoolList.push(item);
-            break;
           case "5":
             this.topSheetNote.push(item);
             break;
@@ -1153,7 +1143,7 @@ export default {
           case "12":
             this.urineList.push(item);
             break;
-          case "34":
+          case "19":
             this.outputList.push(item);
             break;
           case "38":
@@ -1364,8 +1354,8 @@ export default {
     getAreaHeight() {
       const totalLine =
         this.yRange[1] -
-        this.yRange[0] +
-        (this.yRange[1] - this.yRange[0]) * 4 +
+        this.yRange[0]-1 +
+        (this.yRange[1] - this.yRange[0]-1) * 4 +
         6;
       let preSpace = 0;
       for (let i = 0; i < totalLine; i++) {
@@ -1626,9 +1616,9 @@ export default {
                 (x) =>
                   // console.log(x.y,cy)
                   Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
-                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 2 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 3 &&
                   Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
-                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 2
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 3
               );
               if (sameAxisItem) {
                 params = {
@@ -1668,7 +1658,7 @@ export default {
             if (coolX === cx) {
               this.createCircle({
                 cx: coolX,
-                cy: coolY,
+                cy: coolY-2,
                 r: 7,
                 color: "red",
                 zlevel: 10,
@@ -1683,7 +1673,7 @@ export default {
                 lineWidth: 1,
                 color: "red",
                 zlevel: 1,
-                // lineDash: [3, 3],
+                lineDash: [2, 2],
               });
               this.physicsCoolList.splice(i, 1);
             }
@@ -1720,15 +1710,14 @@ export default {
         this.areaWidth
       );
     },
-    // 根据值计算纵坐标, vitalCode会传过来判断数据类型  这里不需要用到先删掉
+    // 根据值计算纵坐标, vitalCode会传过来判断数据类型 
     getYaxis(yRange, value,vitalCode) {
-   return ['20','21'].includes(vitalCode)
+   return ['20','02'].includes(vitalCode)
         ? ((this.pulseRange[1]+10 - value) / (this.pulseRange[1]+10 - this.pulseRange[0])) *
-            this.timesTempAreaHeight+1.5*this.ySpace+2
+            this.timesTempAreaHeight+3+2.5*this.ySpace
         : ((yRange[1]+1 - value) /
-            (yRange[1]+1 - yRange[0])) *
-            this.timesTempAreaHeight +3
-          
+            (yRange[1]+1 - yRange[0]-1)) *
+            this.timesTempAreaHeight 
     },
     // 增加换行符
     addn(str) {
@@ -2185,7 +2174,6 @@ export default {
       }
       .text {
         padding-top: 5px;
-        padding-right: 5px;
         font-size: 18px;
 
       }
@@ -2202,6 +2190,7 @@ export default {
         height: 82.7px;
         .p-r-5{
           font-size: 14px;
+          text-align: center;
 
         }
         .s-line{
@@ -2219,7 +2208,7 @@ background-color: rgb(2, 2, 2);}
         height: 81.7px;
         .p-r-5{
           font-size: 14px;
-
+          text-align: center;
         }
         .s-line{
           width: 111%;
@@ -2297,7 +2286,7 @@ margin-top:10px;
 margin-top:15px;
    }
     .temp :nth-child(10) > span {
-margin-top:15px;
+margin-top:13px;
    }
     .temp :nth-child(11) > span {
 margin-top:20px;
@@ -2309,7 +2298,7 @@ margin-top:17px;
 margin-top:23px;
    }
     .temp :nth-child(14) > span {
-margin-top:23px;
+margin-top:25px;
 
    }
     .temp :nth-child(15)  {

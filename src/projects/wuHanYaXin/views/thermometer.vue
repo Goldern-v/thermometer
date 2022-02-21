@@ -2194,7 +2194,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    padding: 4mm 4mm 4mm 0mm; // 页面的边距
+    margin:8mm 8mm 5mm 8mm;
   }
   .main-view {
     transform: scaleX(0.85);

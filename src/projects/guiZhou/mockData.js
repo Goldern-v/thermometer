@@ -486,6 +486,13 @@ export const mockData = {
       expand2: null
     },
     {
+      temperature_type: '腹围',
+      value: '1000',
+      time_point: '2021-10-19 06:00:00',
+      vital_code: 'AC',
+      expand2: null
+    },
+    {
       temperature_type: '呼吸',
       value: '22',
       time_point: '2021-10-27 06:00:00',

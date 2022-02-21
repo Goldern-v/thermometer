@@ -12,7 +12,7 @@ export const mockData = {
       // "admission_date": "2020-12-02 08:12:30.0",
       admission_date: '2021-12-08 16:03:24.0',
       age: '30岁',
-      inp_no: '1568587',
+      inp_no: '1568587', 
       diagnose:'肺感染少时诵诗书所所所所所是是是红红火火恍恍惚惚或'
     }
   },
@@ -34,9 +34,12 @@ export const mockData = {
     { temperature_type: "血压", value: "115/16点", time_point: "2021-12-10 15:59:00", vital_code: "062" },
     { temperature_type: "血压", value: "115/23点", time_point: "2021-12-10 23:00:00", vital_code: "062" },
 
-    { temperature_type: "心率", value: "130", time_point: "2021-12-08 12:00:00", vital_code: "20" },
+    { temperature_type: "心率", value: "111", time_point: "2021-12-14 12:00:00", vital_code: "20" },
 
     { temperature_type: "体温", value: "39.6", time_point: "2021-12-08 16:00:00", vital_code: "01" },
+    { temperature_type: "体温", value: "40", time_point: "2021-12-13 16:00:00", vital_code: "01" },
+    { temperature_type: "体温", value: "40", time_point: "2021-12-12 16:00:00", vital_code: "01" },
+    { temperature_type: "体温", value: "40", time_point: "2021-12-14 16:00:00", vital_code: "01" },
 
     { temperature_type: "呼吸", value: "30", time_point: "2021-12-08 16:00:00", vital_code: "04" },
 
@@ -96,6 +99,7 @@ export const mockData = {
     { temperature_type: "体温", value: "37.3", time_point: "2021-12-09 23:00:00", vital_code: "01" },
 
     { temperature_type: "心率", value: "86", time_point: "2021-12-09 23:00:00", vital_code: "20" },
+    { temperature_type: "脉搏", value: "78", time_point: "2021-12-12 23:00:00", vital_code: "02" },
 
     { temperature_type: "呼吸", value: "24", time_point: "2021-12-10 04:00:00", vital_code: "04" },
 
@@ -169,12 +173,12 @@ export const mockData = {
     //   time_point: '2021-11-01 11:02:35',
     //   vital_code: '5'
     // },
-    // {
-    //   temperature_type: '事件名称',
-    //   value: '物理降温',
-    //   time_point: '2021-11-01 11:02:35',
-    //   vital_code: '4'
-    // },
+    {
+      temperature_type: '物理降温',
+      value: '38',
+      time_point: '2021-12-08 16:00:00',
+      vital_code: '27'
+    },
     // {
     //   temperature_type: '事件名称',
     //   value: '测试',

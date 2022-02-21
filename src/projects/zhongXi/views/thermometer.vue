@@ -726,7 +726,10 @@ export default {
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time)
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
-            item.value = breatheList[j].value
+           typeof parseInt(breatheList[j].value) === "number" &&
+            !isNaN(breatheList[j].value)
+              ? (item.value = breatheList[j].value)
+              : (item.value = "Ⓡ");
             breatheList.splice(j, 1)
             break
           }

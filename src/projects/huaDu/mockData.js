@@ -323,9 +323,33 @@ export const mockData = {
       vital_code: '43'
     },
     {
-      temperature_type: '自定义2',
-      value: '自定义2',
+      temperature_type: '自定义2第二周',
+      value: '自定义2第二周2',
       time_point: '2021-10-23 01:12:00',
+      vital_code: '41'
+    },
+    {
+      temperature_type: '自定义2第二周',
+      value: '自定义2第二周2',
+      time_point: '2021-10-24 01:12:00',
+      vital_code: '41'
+    },
+    {
+      temperature_type: '自定义2第二周',
+      value: '自定义2第二周2',
+      time_point: '2021-10-25 01:12:00',
+      vital_code: '41'
+    },
+    {
+      temperature_type: '自定义2第三周',
+      value: '自定义2第三周2',
+      time_point: '2021-10-29 01:12:00',
+      vital_code: '41'
+    },
+    {
+      temperature_type: '自定义2第三周',
+      value: '自定义2第三周2',
+      time_point: '2021-10-30 01:12:00',
       vital_code: '41'
     },
     {
@@ -341,9 +365,21 @@ export const mockData = {
       vital_code: '4'
     },
     {
-      temperature_type: '自定义2',
-      value: '自定义2',
+      temperature_type: '自定义2第一周',
+      value: '自定义2111',
       time_point: '2021-10-16 04:12:00',
+      vital_code: '41'
+    },
+    {
+      temperature_type: '自定义2第一周',
+      value: '自定义211111',
+      time_point: '2021-10-17 04:12:00',
+      vital_code: '41'
+    },
+    {
+      temperature_type: '自定义2第一周',
+      value: '自定义211111',
+      time_point: '2021-10-18 04:12:00',
       vital_code: '41'
     },
     {

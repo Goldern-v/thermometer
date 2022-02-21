@@ -420,7 +420,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false ,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1582,11 +1582,9 @@ export default {
                 (x) =>
                   //由于有些微小的偏差，比如存在一px左右的数据偏差，就写个区间
                   Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
-                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 2 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 4 &&
                   Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
-                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 2
-                // x.x.toFixed(2) === cx.toFixed(2) &&
-                // x.y.toFixed(2) === cy.toFixed(2)
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 4
               );
               if (sameAxisItem) {
                 params = {
