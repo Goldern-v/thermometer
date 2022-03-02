@@ -3,6 +3,7 @@
     class="main-view"
     :style="{ width: `${leftWidth + areaWidth}px` }"
     v-if="apiData"
+    @dblclick="dblclick"
   >
     <div class="head-hos">武警广东省总队医院</div>
     <div class="head-title">体温单</div>
@@ -483,7 +484,7 @@ export default {
     const pulseRange = [20, 200];
     // const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -925,6 +926,10 @@ export default {
         }
       });
       return outTime;
+    },
+    dblclick() {
+      // 和iframe外部通信，传递双击事件
+      window.parent.postMessage({ type: "dblclick" }, "*");
     },
     middleTdStyle(index) {
       return {

@@ -1,5 +1,6 @@
 <template>
   <div
+  @dblclick="dblclick"
     class="main-view"
     :style="{ width: `${leftWidth + areaWidth}px` }"
     v-if="apiData"
@@ -1044,6 +1045,10 @@ export default {
         }
       });
       return outTime;
+    },
+    dblclick() {
+      // 和iframe外部通信，传递双击事件
+      window.parent.postMessage({ type: "dblclick" }, "*");
     },
     //SM4加密与SM4解密
     //加密

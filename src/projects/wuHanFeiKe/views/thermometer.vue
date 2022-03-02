@@ -5,7 +5,9 @@
     v-if="apiData"
     :style="{ width: `${leftWidth + areaWidth}px` }"
   >
-    <div class="head-hos">武汉市结核病防治所</div>
+    <div class="head-hos"> 
+      <img :src="logoUrl" class="logo">
+      武汉市肺科医院(武汉市结核病防治所)</div>
     <div class="head-title">体温单</div>
    
     <div class="head-info">
@@ -37,11 +39,13 @@
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
+      
+    </div>
+    <div class="head-info-1">
       <div class="item" style="text-align:left;flex:1.2">
-        住院病例号：<span class="value">{{ patInfo.inp_no }}</span>
+        住院病历号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
     </div>
-    
     <div class="table-area">
       <div class="vline" :style="{ left: '-0.5px' }"></div>
       <div class="vline" :style="{ left: `${leftWidth}px` }"></div>
@@ -481,7 +485,7 @@ export default {
     const yRange = [34, 42];
     const pulseRange = [30, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -575,6 +579,7 @@ export default {
       // customList2: [], // 自定义3
       // customList3: [], // 自定义4
       dateRangeList: [], // 数组长度决定页数
+      logoUrl:require("src/projects/wuHanFeiKe/assets/logo.png"),
       patInfo: {
         patient_id: "",
         name: "",
@@ -2010,6 +2015,11 @@ export default {
     font-family: SimHei;
     font-size: 30px;
     font-weight: bold;
+
+    .logo {
+      transform:translate(10px,45px)
+      
+    }
   }
   .head-title {
     font-family: SimHei;

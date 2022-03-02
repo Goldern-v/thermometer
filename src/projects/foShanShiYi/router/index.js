@@ -10,6 +10,11 @@ const routes = [
     component: () => import('src/projects/foShanShiYi/views/thermometer.vue')
   },
   {
+    path: '/detailed',
+    name: 'Detailed',
+    component: () => import('src/projects/foShanShiYi/views/detailed.vue')
+  },
+  {
     path: '/printAll',
     name: 'Print',
     component: () => import('src/projects/foShanShiYi/views/print.vue')

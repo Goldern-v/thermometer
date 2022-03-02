@@ -283,7 +283,6 @@
             ></div>
           </div>
         </div>
-
         <div>
           <div class="left_box" :style="{ height: `${trHeight * 3}px` }">
             排<br />出<br />量
@@ -337,6 +336,32 @@
               <div
                 class="value-item font-14"
                 v-for="(item, index) in getFormatList({ tList: weightList })"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              身高(cm)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                v-for="(item, index) in getFormatList({ tList: heightList })"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              BMI
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                v-for="(item, index) in getFormatList({ tList: BMIList })"
                 :key="index"
                 v-html="item.value"
               ></div>
@@ -457,7 +482,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -558,6 +583,8 @@ export default {
       physicsCoolList: [], // 物理降温
       onLineCoolList: [], // 线上降温
       feverList: [], // 发热体温
+      heightList: [], // 身高
+      BMIList: [], // BMI
       outCustomList: [], // 自定义1
       customList0: [], // 自定义2
       customList1: [], // 自定义3
@@ -642,7 +669,7 @@ export default {
       return list;
     },
     trHeight() {
-      return this.ySpace * 2;
+      return this.ySpace * 2-3;
     },
     formatPressureList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
@@ -837,12 +864,12 @@ export default {
     },
     formatDateList() {
       return this.dateList.map((x, i) => {
-        if (i === 0 || this.dateList[i - 1].slice(0, 4) !== x.slice(0, 4)) {
-          return x;
-        } else {
-          return x.slice(5);
+        if (i === 0 ) {
+          return x
+        } else if(i>0){
+          return this.dateList[i - 1].slice(0, 7) !== x.slice(0, 7) ? x : x.slice(8,10)
         }
-      });
+      })
     },
     temperaturelist() {
       const list = [];
@@ -962,6 +989,8 @@ export default {
       this.shitList = [];
       this.urineList = [];
       this.outputList = [];
+      this.heightList = [];
+      this.BMIList = [];
       this.physicsCoolList = [];
       this.onLineCoolList = [];
       this.feverList = [];
@@ -1135,6 +1164,12 @@ export default {
           case "21":
             this.feverList.push(item);
             break;
+          case "32":
+            this.heightList.push(item);
+            break;
+          case "36":
+            this.BMIList.push(item);
+            break;
           default:
             break;
         }
@@ -1147,7 +1182,7 @@ export default {
       this.$nextTick(() => {
         this.zr = zrender.init(this.$refs.main);
         const div = document.createElement("div");
-        div.classList.add("tips");
+        div.classList.add("tips");``
         this.$refs.main.appendChild(div);
         this.yLine(); //生成Y轴坐标
         this.xLine(); //生成X轴坐标

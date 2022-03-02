@@ -3,6 +3,7 @@
     class="main-view"
     :style="{ width: `${leftWidth + areaWidth}px` }"
     v-if="apiData"
+     @dblclick="dblclick"
   >
     <div class="head-hos">贵州省人民医院</div>
     <div class="head-title">体温单</div>
@@ -460,6 +461,7 @@
 <script>
 import zrender from 'zrender'
 import { mockData } from 'src/projects/guiZhou/mockData.js'
+import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
 
 export default {
   props: {
@@ -1096,6 +1098,10 @@ export default {
           return val
         }
       }
+    },
+    dblclick() {
+      // 和iframe外部通信，传递双击事件
+      window.parent.postMessage({ type: "dblclick" }, "*");
     },
     reset() {
       Object.keys(this.settingMap).forEach((x) => {
