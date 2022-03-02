@@ -37,6 +37,8 @@
     "build:wuHanFeiKe": "vue-cli-service build --project=wuHanFeiKe",
     "dev:wuHanYaXin": "vue-cli-service serve --project=wuHanYaXin",
     "build:wuHanYaXin": "vue-cli-service build --project=wuHanYaXin",
+    "dev:longJiang": "vue-cli-service serve --project=longJiang",
+    "build:longJiang": "vue-cli-service build --project=longJiang",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
