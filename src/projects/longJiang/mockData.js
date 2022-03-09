@@ -496,5 +496,6 @@ export const mockData = {
     // }
   ]
 }
+export const jsonMockData=require('../longJiang/mockData.json')
 
 export default {}

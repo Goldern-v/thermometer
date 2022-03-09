@@ -371,7 +371,7 @@
               ></div>
             </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <!--<div class="row font-14" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">22:00 血压(mmHg)</div>
             <div class="value-item-box">
               <div
@@ -403,10 +403,10 @@
                 v-html="item.value"
               ></div>
             </div>
-          </div>
+          </div>-->
         </div>
 
-        <!-- <div class="row font-14" :style="{ height: `${trHeight}px` }">
+        <div class="row font-14" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList0.label || "" }}
           </div>
@@ -447,7 +447,7 @@
               v-html="item.value"
             ></div>
           </div>
-        </div> -->
+        </div> 
         <div
           class="vtline"
           :style="{
@@ -482,7 +482,7 @@
 
 <script>
 import zrender from "zrender";
-import { mockData } from "src/projects/longJiang/mockData.js";
+import { mockData,jsonMockData } from "src/projects/longJiang/mockData.js";
 import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
 import moment from "moment"; //导入文件
 
@@ -508,7 +508,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -717,7 +717,6 @@ export default {
         }
         list.push(item);
       }
-      console.log(list)
       return list;
     },
 
@@ -819,7 +818,6 @@ export default {
                 ? { "align-items": "flex-start" }
                 : { "align-items": "flex-end" })
         );
-        console.log(list,'ssss')
       return list;
     },
     dateList() {
@@ -871,7 +869,6 @@ export default {
         }
       });
       oDateList.forEach((date) => {
-        // console.log(obj[date])
         if (obj[date].length > 0) {
           deliveryObj = obj[date].find((obj) => obj.value.includes("分娩"));
           for (let i = obj[date].length - 1; i >= 0; i--) {
@@ -2069,7 +2066,8 @@ export default {
       return;
     }
     if (this.useMockData) {
-      this.apiData = mockData;
+      this.apiData = jsonMockData;
+      console.log('接口数据',this.apiData)
       this.$nextTick(() => {
         this.handleData();
       });

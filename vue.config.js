@@ -43,6 +43,8 @@ const projectName = (() => {
       return '武汉亚洲心脏病医院'
     case 'longJiang': // 广东医科大学附属第三医院(顺德龙江医院)
       return '广东医科大学附属第三医院(顺德龙江医院)'
+    case 'linYi': // 广东医科大学附属第三医院(顺德龙江医院)
+      return '临邑县人民医院'
     case 'common': // 可配置的通用版本
       return '配置通用版本'
     default:
@@ -119,6 +121,8 @@ module.exports = {
           return './src/projects/wuHanYaXin/main.js'
         case 'longJiang': // 广东医科大学附属第三医院(顺德龙江医院)
           return './src/projects/longJiang/main.js'
+        case 'linYi': // 临邑县人民医院
+          return './src/projects/linYi/main.js'
         case 'common': // 可配置的通用版本
           return './src/projects/common/main.js'
         default:
@@ -166,12 +170,14 @@ module.exports = {
             case 'zhongXi':
               return 'http://218.107.37.134:9093/'
             case 'foShanShiYi':
-              return 'http://218.107.37.134:9093/'
+              return 'https://cr.fsyyy.com:9091'
             case 'wuHanFeiKe':
               return 'http://218.107.37.134:9093/'
             case 'wuHanYaXin':
               return 'http://218.107.37.134:9093/'
             case 'longJiang':
+              return 'http://218.107.37.134:9093/'
+            case 'linYi':
               return 'http://218.107.37.134:9093/'
             case 'common':
               return 'http://172.17.5.41:9091'
@@ -215,16 +221,18 @@ module.exports = {
             case 'quZhou':
               return 'http://172.17.5.41:9091'
             case 'wuJing':
-              return 'http://120.24.240.231:15091'
+              return 'https://info.cr-health.com:20809/'
             case 'zhongXi':
               return 'http://218.107.37.134:9093/'
             case 'foShanShiYi':
-              return 'http://218.107.37.134:9093/'
+              return 'https://cr.fsyyy.com:9094'
             case 'wuHanFeiKe':
               return 'http://218.107.37.134:9093/'
             case 'wuHanYaXin':
               return 'http://218.107.37.134:9093/'
             case 'longJiang':
+              return 'http://218.107.37.134:9093/'
+            case 'linYi':
               return 'http://218.107.37.134:9093/'
             case 'common':
               return 'http://172.17.5.41:9091'
