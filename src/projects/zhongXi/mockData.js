@@ -132,9 +132,15 @@ export const mockData = {
     },
     {
       temperature_type: '疼痛',
-      value: '0',
+      value: '6',
       time_point: '2021-10-19 15:00:00',
       vital_code: '092'
+    },
+    {
+      temperature_type: '疼痛干预',
+      value: '3',
+      time_point: '2021-10-19 15:00:00',
+      vital_code: '093'
     },
     {
       temperature_type: '脉搏',
@@ -248,6 +254,12 @@ export const mockData = {
       temperature_type: '体温',
       value: '36.8',
       time_point: '2021-10-21 07:00:00',
+      vital_code: '01'
+    },
+    {
+      temperature_type: '体温',
+      value: '39.8',
+      time_point: '2021-10-21 13:00:00',
       vital_code: '01'
     },
     {
@@ -522,7 +534,13 @@ export const mockData = {
     },
     {
       temperature_type: '体温',
-      value: '36.1',
+      value: '39.1',
+      time_point: '2021-10-24 07:00:00',
+      vital_code: '01'
+    },
+    {
+      temperature_type: '体温',
+      value: '38.1',
       time_point: '2021-10-24 07:00:00',
       vital_code: '01'
     },
@@ -564,7 +582,7 @@ export const mockData = {
     },
     {
       temperature_type: '体温',
-      value: '36',
+      value: '39',
       time_point: '2021-10-24 15:00:00',
       vital_code: '01'
     },

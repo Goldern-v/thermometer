@@ -247,7 +247,7 @@
           </div>
          <div class="row" :style="{ height: `${trHeight}px` }">
           
-          <div class="value-item-box font-14" style="color: blue">
+          <div class="value-item-box font-24" style="color: blue">
             <div
               class="value-item"
               :style="middleTdStyle(index, formatBreatheList.length)"
@@ -260,7 +260,7 @@
         </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
          
-          <div class="value-item-box font-14" style="color: blue">
+          <div class="value-item-box font-24" style="color: blue">
             <div
               class="value-item"
               :style="middleTdStyle(index, formatBreatheList.length)"
@@ -273,7 +273,7 @@
         </div>
          <div class="row" :style="{ height: `${trHeight}px` }">
          
-          <div class="value-item-box font-14" style="color: blue">
+          <div class="value-item-box font-24" style="color: blue">
             <div
               class="value-item"
               :style="middleTdStyle(index, formatBreatheList.length)"
@@ -292,7 +292,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-16"
+                class="value-item font-24"
                 v-for="(item, index) in getFormatList({ tList: weightList })"
                 :key="index"
                 v-html="item.value"
@@ -305,7 +305,7 @@
           </div>
           <div class="value-item-box">
             <div
-              class="value-item font-16"
+              class="value-item font-24"
               v-for="(item, index) in getFormatList({ tList: shitList })"
               :key="index"
               v-html="item.value"
@@ -318,7 +318,7 @@
           </div>
           <div class="value-item-box">
             <div
-              class="value-item font-16"
+              class="value-item font-24"
               v-for="(item, index) in getFormatList({ tList: inputList })"
               :key="index"
               v-html="item.value"
@@ -331,7 +331,7 @@
           </div>
           <div class="value-item-box">
             <div
-              class="value-item font-16"
+              class="value-item font-24"
               v-for="(item, index) in getFormatList({ tList: outputList })"
               :key="index"
               v-html="item.value"
@@ -344,7 +344,7 @@
           </div>
           <div class="value-item-box">
             <div
-              class="value-item font-16"
+              class="value-item font-24"
               v-for="(item, index) in getFormatList({ tList: urineList })"
               :key="index"
               v-html="item.value"
@@ -357,7 +357,7 @@
           </div>
           <div class="value-item-box">
             <div
-              class="value-item font-16"
+              class="value-item font-24"
               v-for="(item, index) in getFormatList({ tList: contractList })"
               :key="index"
               v-html="item.value"
@@ -1999,8 +1999,11 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-       margin: 5mm 10mm 5mm 10mm; // 页面的边距
+       margin: 5mm 12mm 5mm 12mm; // 页面的边距
 
+  }
+  .main-view {
+    transform: scaleY(1.1);
   }
 }
 .main-view {
@@ -2032,16 +2035,18 @@ export default {
       text-align: center;
 
     .item {
+      font-weight: normal;
       flex: 1;
       padding: 0 5px 5px 5px;
-      font-size: 16px;
+      font-size: 18px;
       .value {
         font-weight: normal;
       }
     }
   }
    .head-info-1 {
-      font-size: 16px;
+     font-weight: normal;
+      font-size: 18px;
     display: flex;
     .item {
       padding: 0 5px 5px 5px;
@@ -2464,8 +2469,8 @@ padding-top: 2px;
 .font-13 {
   font-size: 13px;
 }
-.font-16 {
-  font-size: 16px;
+.font-24 {
+  font-size: 24px;
 }
 .font-time {
   font-size: 16px;

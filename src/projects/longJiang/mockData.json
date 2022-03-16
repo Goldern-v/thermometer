@@ -119,16 +119,16 @@
           "vital_code": "15"
       },
       {
-          "temperature_type": "身高",
-          "value": "175",
-          "time_point": "2022-03-08 17:24:12",
-          "vital_code": "32"
-      },
-      {
           "temperature_type": "体温",
           "value": "36",
           "time_point": "2022-03-08 17:24:12",
           "vital_code": "1"
+      },
+      {
+          "temperature_type": "皮试",
+          "value": "35阿斯达",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "35"
       },
       {
           "temperature_type": "体重",
@@ -136,6 +136,20 @@
           "time_point": "2022-03-08 17:24:12",
           "vital_code": "18"
       },
+      {
+          "temperature_type": "体重",
+          "value": "223",
+          "time_point": "2022-03-10 17:24:12",
+          "vital_code": "18"
+      },
+      {
+          "temperature_type": "身高",
+          "value": "155",
+          "time_point": "2022-03-08 20:24:12",
+          "vital_code": "32"
+      },
+      
+      
       {
           "temperature_type": "物理降温",
           "value": "35",
@@ -159,6 +173,12 @@
           "value": "120",
           "time_point": "2022-03-08 17:24:12",
           "vital_code": "14"
+      },
+      {
+        "temperature_type": "自定义1",
+       "value" : "PG(+)",
+        "time_point": "2022-03-08 01:12:00",
+        "vital_code": "4"
       },
       {
           "temperature_type": "呼吸",

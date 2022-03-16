@@ -2,7 +2,9 @@
   <div
     class="main-view"
     :style="{ width: `${leftWidth + areaWidth}px` }"
+    @dblclick="dblclick"
     v-if="apiData"
+
   >
     <div class="head-hos">南方医科大学中西医结合医院</div>
     <div class="head-title">体温单</div>
@@ -574,7 +576,7 @@ export default {
         pain: {
           vitalCode: '092',
           label: '疼痛',
-          color: 'red',
+          color: 'blue',
           solid: true,
           dotType: 'Isogon',
           range: painRange,
@@ -940,6 +942,10 @@ export default {
       })
       return outTime
     },
+        dblclick() {
+      // 和iframe外部通信，传递双击事件
+      window.parent.postMessage({ type: "dblclick" }, "*");
+    },
     messageHandle(e) {
       if (e && e.data) {
         switch (e.data.type) {
@@ -1154,7 +1160,7 @@ export default {
           case '17':
             this.nounList.push(item)
             break
-          case '3':
+          case '03':
             this.coolList.push(item)
             break
           case '093':
@@ -1656,6 +1662,14 @@ export default {
         }
         if (['01', '043', '041'].includes(vitalCode)) {
           // 画降温
+          //南方中西医如果体温超过39度，那么下一次温度如果是在同一个时间点，那就是进行了温度干预，直接吊灯笼
+          if(x.value>=39){
+            if(data[index+1]&&data[index+1].value<x.value){
+              this.coolList.push(data[index+1])
+                  data.splice(index,1)
+            }
+            
+          }
           for (let i = this.coolList.length - 1; i >= 0; i--) {
             const item = this.coolList[i]
             const coolX = this.getXaxis(this.getLocationTime(item.time))
@@ -1684,51 +1698,51 @@ export default {
             }
           }
           // 画复试
-          const createRepeatTest = () => {
-            this.createText({
-              x: cx + 8,
-              y: cy - 20,
-              value: 'v',
-              color: 'red',
-              tips: '体温复试',
-              fontWeight: 'bold',
-              zlevel: 10,
-              fontSize: 18
-            })
-          }
-          if (index > 0) {
-            // 与上次记录的体温相比上升(1.5℃)或下降(2℃)
-            if (
-              x.value - data[index - 1].value >= 1.5 ||
-              x.value - data[index - 1].value <= -2
-            ) {
-              createRepeatTest()
-            }
-          } else if (index === 0 && this.currentPage === 1) {
-            // 入院首次体温≥38℃
-            const list = [
-              // {
-              //   vitalCode: '041',
-              //   ...this.settingMap.oralTemperature.data[0]
-              // },
-              {
-                vitalCode: '01',
-                ...this.settingMap.axillaryTemperature.data[0]
-              }
-              // {
-              //   vitalCode: '043',
-              //   ...this.settingMap.analTemperature.data[0]
-              // }
-            ]
-              .filter((x) => Object.keys(x).length > 1)
-              .sort((a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time))
-            if (
-              vitalCode === list[0].vitalCode &&
-              Number(list[0].value) >= 38
-            ) {
-              createRepeatTest()
-            }
-          }
+          // const createRepeatTest = () => {
+          //   this.createText({
+          //     x: cx + 8,
+          //     y: cy - 20,
+          //     value: 'v',
+          //     color: 'red',
+          //     tips: '体温复试',
+          //     fontWeight: 'bold',
+          //     zlevel: 10,
+          //     fontSize: 18
+          //   })
+          // }
+          // if (index > 0) {
+          //   // 与上次记录的体温相比上升(1.5℃)或下降(2℃)
+          //   if (
+          //     x.value - data[index - 1].value >= 1.5 ||
+          //     x.value - data[index - 1].value <= -2
+          //   ) {
+          //     createRepeatTest()
+          //   }
+          // } else if (index === 0 && this.currentPage === 1) {
+          //   // 入院首次体温≥38℃
+          //   const list = [
+          //     // {
+          //     //   vitalCode: '041',
+          //     //   ...this.settingMap.oralTemperature.data[0]
+          //     // },
+          //     {
+          //       vitalCode: '01',
+          //       ...this.settingMap.axillaryTemperature.data[0]
+          //     }
+          //     // {
+          //     //   vitalCode: '043',
+          //     //   ...this.settingMap.analTemperature.data[0]
+          //     // }
+          //   ]
+          //     .filter((x) => Object.keys(x).length > 1)
+          //     .sort((a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time))
+          //   if (
+          //     vitalCode === list[0].vitalCode &&
+          //     Number(list[0].value) >= 38
+          //   ) {
+          //     createRepeatTest()
+          //   }
+          // }
         } else if (vitalCode === '092') {
           // 画疼痛干预
           for (let i = this.ttgyList.length - 1; i >= 0; i--) {

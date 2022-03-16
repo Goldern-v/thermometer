@@ -20,7 +20,7 @@
       <div class="item" v-if="patInfo.dept_name==='新生儿科病房'" style="width:160px;flex:none;" >
         出生日期：<span class="value">{{ patInfo.birthday }}</span>
       </div>
-      <div class="item" style="width:160px;flex:none;">
+      <div class="item" style="width:180px;flex:none;">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>

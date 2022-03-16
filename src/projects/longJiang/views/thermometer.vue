@@ -29,7 +29,7 @@
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-       <div class="item" style="flex: 1.5">
+      <div class="item" style="flex: 1.5">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
       <div class="item">
@@ -37,7 +37,7 @@
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="text-align: right;flex: 1.5">
+      <div class="item" style="text-align: right; flex: 1.5">
         住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
     </div>
@@ -101,10 +101,10 @@
             </div>
           </div>
         </div>
-        <div
+        <!-- <div
           class="row border-bottom-black-2"
           :style="{ height: `${trHeight}px` }"
-        >
+         >
           <div class="label" :style="{ width: `${leftWidth}px` }"></div>
           <div class="value-item-box">
             <div
@@ -116,16 +116,17 @@
               {{ item }}
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            <span
-              class="time-label"
-              :style="`transform: translateY(-${trHeight / 2}px);`"
-              v-html="`时&emsp;&emsp;间`"
-            ></span>
-          </div>
-          <div class="value-item-box font-18">
+        </div> -->
+        <div
+          class="row border-bottom-black-2"
+          :style="{ height: `${trHeight}px` }"
+        >
+          <div
+            class="label"
+            :style="{ width: `${leftWidth}px` }"
+            v-html="`时间`"
+          ></div>
+          <div class="value-item-box" style="font-weight: 400;font-size:18px">
             <div
               class="value-item"
               :style="smallTdStyle(index, timeTds.length)"
@@ -317,35 +318,39 @@
           </div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-             其他
+              {{ outCustomList.label || "其他" }}
             </div>
             <div class="value-item-box">
               <div
                 class="value-item font-14"
-                v-for="(item, index) in getFormatList({ tList: urineList })"
+                :style="{ 'font-size': scaleFont(item.value) }"
+                v-for="(item, index) in getFormatList({ tList: outCustomList })"
                 :key="index"
                 v-html="item.value"
               ></div>
             </div>
           </div>
-          
+
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
-            <div class="label border-right" :style="{ width: `${leftWidth/2}px` }">
+            <div
+              class="label border-right"
+              :style="{ width: `${leftWidth / 2}px` }"
+            >
               体重(Kg)
             </div>
-              <div class="label" :style="{ width: `${leftWidth/2}px` }">
+            <div class="label" :style="{ width: `${leftWidth / 2}px` }">
               身高(CM)
             </div>
             <div class="value-item-box font-14" style="color: blue">
-            <div
-              class="value-item font-14"
-              :style="middleTdStyle(index, formatWeightHeight.length)"
-              v-for="(item, index) in formatWeightHeight"
-              :key="index"
-            >
-              {{ item.value }}
+              <div
+                class="value-item font-14"
+                :style="middleTdStyle(index, formatWeightHeight.length)"
+                v-for="(item, index) in formatWeightHeight"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
-          </div>
           </div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
@@ -371,39 +376,6 @@
               ></div>
             </div>
           </div>
-          <!--<div class="row font-14" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">22:00 血压(mmHg)</div>
-            <div class="value-item-box">
-              <div
-                class="value-item font-14"
-                v-for="(item, index) in getFormatList({ tList: skinTest })"
-                :key="index"
-                v-html="item.value"
-              ></div>
-            </div>
-          </div>
-          <div class="row font-14" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">电子血糖mmol/L</div>
-            <div class="value-item-box">
-              <div
-                class="value-item font-14"
-                v-for="(item, index) in getFormatList({ tList: skinTest })"
-                :key="index"
-                v-html="item.value"
-              ></div>
-            </div>
-          </div>
-          <div class="row font-14" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">其他</div>
-            <div class="value-item-box">
-              <div
-                class="value-item font-14"
-                v-for="(item, index) in getFormatList({ tList: skinTest })"
-                :key="index"
-                v-html="item.value"
-              ></div>
-            </div>
-          </div>-->
         </div>
 
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
@@ -447,7 +419,7 @@
               v-html="item.value"
             ></div>
           </div>
-        </div> 
+        </div>
         <div
           class="vtline"
           :style="{
@@ -482,8 +454,8 @@
 
 <script>
 import zrender from "zrender";
-import { mockData,jsonMockData } from "src/projects/longJiang/mockData.js";
-import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
+import { mockData, jsonMockData } from "src/projects/longJiang/mockData.js";
+import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
 import moment from "moment"; //导入文件
 
 export default {
@@ -508,7 +480,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -650,7 +622,7 @@ export default {
         28: "呕吐量",
         29: "在线降温",
         ttpf: "疼痛评分",
-        4: "排出自定义",
+        4: "其他",
         41: "自定义1",
         42: "自定义2",
         43: "自定义3",
@@ -672,21 +644,21 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [2, 6, 10, 2, 6, 10];
+      const list = [2, 6, 10, 14, 18, 22];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
       }
       return tds;
     },
-    maTds() {
-      const list = ["上午", "下午"];
-      const tds = [];
-      for (let i = 0; i < 7; i++) {
-        tds.push(...list);
-      }
-      return tds;
-    },
+    // maTds() {
+    //   const list = ["上午", "下午"];
+    //   const tds = [];
+    //   for (let i = 0; i < 7; i++) {
+    //     tds.push(...list);
+    //   }
+    //   return tds;
+    // },
     painList() {
       const list = [];
       for (let i = this.painRange[1]; i > this.painRange[0]; i -= 2) {
@@ -695,7 +667,7 @@ export default {
       return list;
     },
     trHeight() {
-      return this.ySpace * 2-3;
+      return this.ySpace * 2 - 3;
     },
     formatPressureList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
@@ -791,20 +763,19 @@ export default {
         const item2 = { timeNum: i, value: "" };
         for (let j = weightList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(weightList[j].time);
-         for(let k=heightList.length-1;k>=0;k--){
-          const timeNum2 = this.getTimeNum(heightList[k].time);
-
-          if (timeNum >= i && timeNum < i + 24*60*60*1000) {
+          if (timeNum >= i && timeNum < i + 24 * 60 * 60 * 1000) {
             item.value = weightList[j].value;
-            heightList.splice(j, 1);
+            weightList.splice(j, 1);
             break;
           }
-          if (timeNum2 >= i && timeNum2 < i + 24*60*60*1000) {
+        }
+        for (let k = heightList.length - 1; k >= 0; k--) {
+          const timeNum2 = this.getTimeNum(heightList[k].time);
+          if (timeNum2 >= i && timeNum2 < i + 24 * 60 * 60 * 1000) {
             item2.value = heightList[k].value;
             heightList.splice(k, 1);
             break;
           }
-         }
         }
         list.push(item);
         list.push(item2);
@@ -931,12 +902,14 @@ export default {
     },
     formatDateList() {
       return this.dateList.map((x, i) => {
-        if (i === 0 ) {
-          return x
-        } else if(i>0){
-          return this.dateList[i - 1].slice(0, 7) !== x.slice(0, 7) ? x : x.slice(8,10)
+        if (i === 0) {
+          return x;
+        } else if (i > 0) {
+          return this.dateList[i - 1].slice(0, 7) !== x.slice(0, 7)
+            ? x
+            : x.slice(8, 10);
         }
-      })
+      });
     },
     temperaturelist() {
       const list = [];
@@ -990,7 +963,7 @@ export default {
       return {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 7 : 6)}px`,
         flex: "auto",
-        "border-right-style":"solid",
+        "border-right-style": "solid",
         "border-width": `${(index - 1) % 2 === 0 ? 3 : 2}px`,
         "border-color": `${
           (index - 1) % 2 === 0 && index < length - 1 ? "transparent" : "#000"
@@ -1118,19 +1091,19 @@ export default {
       }
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
-     const urlParams = this.urlParse();
-        let data={
-           startLogDateTime: this.timeRange[0],
-             endLogDateTime: this.timeRange[1],
-          visitId: urlParams.VisitId,
-          patientId: urlParams.PatientId,
-        }
-      if(!this.useMockData&&!this.isPrintAll){
-           getNurseExchangeInfoByTime(data).then((res) => {
-         this.adtLog = res.data.data.adtLog; // 转科
-              this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
-      });
-        }
+      const urlParams = this.urlParse();
+      let data = {
+        startLogDateTime: this.timeRange[0],
+        endLogDateTime: this.timeRange[1],
+        visitId: urlParams.VisitId,
+        patientId: urlParams.PatientId,
+      };
+      if (!this.useMockData && !this.isPrintAll) {
+        getNurseExchangeInfoByTime(data).then((res) => {
+          this.adtLog = res.data.data.adtLog; // 转科
+          this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+        });
+      }
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const customSigns = []; // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
@@ -1177,7 +1150,6 @@ export default {
             default:
               break;
           }
-         
         }
         /* 获取各个体征数组对象 */
         if (this.lineMap[vitalSigns[i].vital_code]) {
@@ -1234,6 +1206,9 @@ export default {
           case "32":
             this.heightList.push(item);
             break;
+          case "35":
+            this.skinTest.push(item);
+            break;
           case "36":
             this.BMIList.push(item);
             break;
@@ -1249,7 +1224,8 @@ export default {
       this.$nextTick(() => {
         this.zr = zrender.init(this.$refs.main);
         const div = document.createElement("div");
-        div.classList.add("tips");``
+        div.classList.add("tips");
+        ``;
         this.$refs.main.appendChild(div);
         this.yLine(); //生成Y轴坐标
         this.xLine(); //生成X轴坐标
@@ -1966,25 +1942,29 @@ export default {
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
-          if(shitList.length !== 0){
+          if (shitList.length !== 0) {
             for (let k = 0; k < shitList.length; k++) {
               const timeNum = this.getTimeNum(targetList[j].time);
               const timeNumKid = this.getTimeNum(shitList[k].time);
               if (timeNum >= i && timeNum < i + timeInterval) {
-              item.value = `${targetList[j].value}`;
+                item.value = `${targetList[j].value}`;
+              }
+              if (
+                timeNum >= i &&
+                timeNum < i + timeInterval &&
+                timeNumKid >= i &&
+                timeNumKid < i + timeInterval
+              ) {
+                item.value = `${targetList[j].value}/${shitList[k].value}g`;
+                targetList.splice(j, 1);
+                break;
+              }
+            }
+          } else {
+            item.value = `${targetList[j].value}`;
+            targetList.splice(j, 1);
+            break;
           }
-           if((timeNum >= i && timeNum < i + timeInterval)&&(timeNumKid >= i && timeNumKid < i + timeInterval)){
-              item.value = `${targetList[j].value}/${shitList[k].value}g`;
-              targetList.splice(j, 1);
-              break;
-          }
-          }
-          }else{
-             item.value = `${targetList[j].value}`;
-              targetList.splice(j, 1);
-              break;
-          }
-          
         }
         list.push(item);
       }
@@ -2067,17 +2047,16 @@ export default {
     }
     if (this.useMockData) {
       this.apiData = jsonMockData;
-      console.log('接口数据',this.apiData)
       this.$nextTick(() => {
         this.handleData();
       });
     } else {
-      let data={
-          tradeCode: "nurse_getPatientVitalSigns",
-          PatientId: urlParams.PatientId,
-          VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime,
-        }
+      let data = {
+        tradeCode: "nurse_getPatientVitalSigns",
+        PatientId: urlParams.PatientId,
+        VisitId: urlParams.VisitId,
+        StartTime: urlParams.StartTime,
+      };
       common(data).then((res) => {
         this.apiData = res.data;
         this.$nextTick(() => {
@@ -2131,7 +2110,7 @@ export default {
       flex: 1;
       text-align: left;
       padding: 0 5px 5px 5px;
-      font-size:18px;
+      font-size: 18px;
       .value {
         font-weight: normal;
       }
@@ -2211,9 +2190,9 @@ export default {
     }
   }
 }
- .border-right {
-        border-right:solid 2px black;
-      }
+.border-right {
+  border-right: solid 2px black;
+}
 .info-box {
   .temp:nth-child(6) {
     color: red;
@@ -2273,13 +2252,13 @@ export default {
         bottom: -6px;
       }
     }
-   
+
     .temp {
       .text {
         flex: 1;
       }
     }
-    
+
     .temp :nth-child(2) > span {
       margin-top: -10px;
     }
@@ -2360,7 +2339,7 @@ export default {
         position: relative;
         margin-bottom: 22px;
       }
-      
+
       .note-icon {
         display: inline-block;
         width: 18px;
