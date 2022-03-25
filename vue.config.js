@@ -222,7 +222,7 @@ module.exports = {
             case 'wuJing':
               return 'https://info.cr-health.com:20809'
             case 'zhongXi':
-              return 'http://218.107.37.134:9093'
+              return 'http://218.107.37.134:9091'
             case 'foShanShiYi':
               return 'https://cr.fsyyy.com:9094'
             case 'wuHanFeiKe':

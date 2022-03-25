@@ -286,7 +286,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">尿量(ml)</div>
           <div class="value-item-box">
             <div
@@ -297,7 +297,7 @@
               {{ item.value }}
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList0.label || '' }}
@@ -484,7 +484,7 @@ export default {
         },
         axillaryTemperature: {
           vitalCode: '01',
-          label: '腋温',
+          label: '体温',
           color: 'blue',
           lineColor: 'blue',
           dotType: 'Text',
@@ -725,10 +725,10 @@ export default {
         .filter(
           (x) =>
             x.vital_code === '5' &&
-            (x.value === '手术' ||
-              x.value === '分娩|' ||
-              x.value === '手术分娩|' ||
-              x.value === '手术入院|')
+            (x.value.includes("手术") ||
+            x.value.includes("分娩|") ||
+            x.value.includes("手术分娩|") ||
+            x.value.includes("手术入院|"))
         )
         .map((x) => x.time_point)
     },
@@ -835,8 +835,8 @@ export default {
         this.areaHeight -
         this.indexTextAreaHeight -
         this.painAreaHeight +
-        3 * this.ySpace +
-        2
+        2 * this.ySpace +
+        1
       )
     },
     painAreaHeight() {
@@ -1437,8 +1437,8 @@ export default {
           this.polygonPoints.forEach((x) => {
             this.createPolygon({
               points: x,
-              lineWidth: 1,
-              color: 'transparent'
+              lineWidth: 2,
+              color: 'red'
             })
           })
         }
@@ -1462,17 +1462,16 @@ export default {
         this.yRange[0] +
         1 +
         (this.yRange[1] - this.yRange[0]) * 4 +
-        3 +
-        6
+        10 
       let preSpace = 0
       let breakIndex = 0
       for (let i = 0; i < totalLine; i++) {
-        const isPainBreak = this.yRange[1] - breakIndex === 34
+        const isPainBreak =  i === 39
         const isBreak =
           (((i - 2) % 5 === 0 && i < 40) ||
             isPainBreak ||
-            i === 39 ||
-            i === 43) &&
+            i === 40 ||
+            i === 44) &&
           i > 0 &&
           i < totalLine - 1
         const isboundary = i === 0 || i === totalLine - 1
@@ -1484,7 +1483,7 @@ export default {
           y2: preSpace,
           lineWidth,
           color: isBreak
-            ? this.yRange[1] - breakIndex++ - 2 === 35 || isPainBreak
+            ?  this.yRange[1] - breakIndex++ - 2 === 35 || isPainBreak
               ? 'red'
               : '#000'
             : isboundary
@@ -1524,7 +1523,7 @@ export default {
         this.yRange[0] +
         1 +
         (this.yRange[1] - this.yRange[0]) * 4 +
-        4
+        5
       let preSpace = 0
       let breakIndex = 0
       for (let i = 0; i < totalLine; i++) {
@@ -1609,7 +1608,6 @@ export default {
       ctx.lineWidth = 1
       ctx.strokeStyle = 'red'
       ctx.stroke()
-
       const polygon = new zrender.Polygon({
         zlevel,
         shape: {
@@ -1997,7 +1995,7 @@ export default {
             this.painAreaHeight +
             this.indexTextAreaHeight +
             this.timesTempAreaHeight -
-            3 * this.ySpace -
+            2 * this.ySpace -
             1
         : ((yRange[1] - value) / (yRange[1] - yRange[0])) *
             this.timesTempAreaHeight +

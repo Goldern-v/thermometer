@@ -3,7 +3,7 @@ export const mockData = {
   ErrorMsg: '查询成功',
   patientInfo: {
     patInfo: {
-      patient_id: '000059090400000',
+      patient_id: '000059090',
       name: '陈小倩',
       sex: '女',
       dept_name: '外五科（神经外科）病区',
@@ -138,7 +138,13 @@ export const mockData = {
     },
     {
       temperature_type: '疼痛干预',
-      value: '3',
+      value: '4',
+      time_point: '2021-10-19 15:00:00',
+      vital_code: '093'
+    },
+    {
+      temperature_type: '疼痛干预',
+      value: '2',
       time_point: '2021-10-19 15:00:00',
       vital_code: '093'
     },

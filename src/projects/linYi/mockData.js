@@ -3,7 +3,7 @@ export const mockData = {
   ErrorMsg: '查询成功',
   patientInfo: {
     patInfo: {
-      patient_id: '1000799307',
+      patient_id: '0000590904',
       name: '陈小倩',
       sex: '女',
       dept_name: '神经内科VIP病房（本部）',
@@ -174,7 +174,7 @@ export const mockData = {
     // },
     {
       temperature_type: '体温',
-      value: '36.1',
+      value: '36',
       time_point: '2021-11-03 15:00:00',
       vital_code: '01'
     },
@@ -204,7 +204,7 @@ export const mockData = {
     },
     {
       temperature_type: '血压',
-      value: '126/80',
+      value: '左126/80右',
       time_point: '2021-11-05 07:00:00',
       vital_code: '062'
     },
@@ -228,9 +228,15 @@ export const mockData = {
     },
     {
       temperature_type: '脉搏',
-      value: '90',
+      value: '100',
       time_point: '2021-11-05 15:00:00',
       vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '80',
+      time_point: '2021-11-05 15:00:00',
+      vital_code: '20'
     },
     {
       temperature_type: '呼吸',
@@ -287,6 +293,12 @@ export const mockData = {
       vital_code: '02'
     },
     {
+      temperature_type: '脉搏',
+      value: '120',
+      time_point: '2021-11-05 19:00:00',
+      vital_code: '20'
+    },
+    {
       temperature_type: '体温',
       value: '36.5',
       time_point: '2021-11-06 07:00:00',
@@ -303,6 +315,12 @@ export const mockData = {
       value: '96',
       time_point: '2021-11-06 07:00:00',
       vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '76',
+      time_point: '2021-11-06 07:00:00',
+      vital_code: '20'
     },
     {
       temperature_type: '血压',

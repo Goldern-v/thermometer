@@ -285,8 +285,14 @@ export const mockData = {
     },
     {
       temperature_type: '体温',
-      value: '35.2',
-      time_point: '2021-05-18 01:12:00',
+      value: '39.1',
+      time_point: '2021-05-18 12:00:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
+      value: '37.1',
+      time_point: '2021-05-18 16:00:00',
       vital_code: '1'
     },
     {
@@ -371,6 +377,30 @@ export const mockData = {
       temperature_type: '体温',
       value: '37',
       time_point: '2021-05-17 13:12:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
+      value: '37.2',
+      time_point: '2021-05-17 04:12:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
+      value: '36.2',
+      time_point: '2021-05-17 18:12:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
+      value: '37.2',
+      time_point: '2021-05-18 04:12:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
+      value: '37',
+      time_point: '2021-05-17 03:12:00',
       vital_code: '1'
     },
     {

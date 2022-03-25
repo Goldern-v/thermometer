@@ -247,7 +247,7 @@
           </div>
          <div class="row" :style="{ height: `${trHeight}px` }">
           
-          <div class="value-item-box font-24" style="color: blue">
+          <div class="value-item-box font-21" style="color: blue">
             <div
               class="value-item"
               :style="middleTdStyle(index, formatBreatheList.length)"
@@ -260,7 +260,7 @@
         </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
          
-          <div class="value-item-box font-24" style="color: blue">
+          <div class="value-item-box font-21" style="color: blue">
             <div
               class="value-item"
               :style="middleTdStyle(index, formatBreatheList.length)"
@@ -273,7 +273,7 @@
         </div>
          <div class="row" :style="{ height: `${trHeight}px` }">
          
-          <div class="value-item-box font-24" style="color: blue">
+          <div class="value-item-box font-21" style="color: blue">
             <div
               class="value-item"
               :style="middleTdStyle(index, formatBreatheList.length)"
@@ -292,7 +292,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-24"
+                class="value-item font-21"
                 v-for="(item, index) in getFormatList({ tList: weightList })"
                 :key="index"
                 v-html="item.value"
@@ -305,7 +305,7 @@
           </div>
           <div class="value-item-box">
             <div
-              class="value-item font-24"
+              class="value-item font-21"
               v-for="(item, index) in getFormatList({ tList: shitList })"
               :key="index"
               v-html="item.value"
@@ -318,7 +318,7 @@
           </div>
           <div class="value-item-box">
             <div
-              class="value-item font-24"
+              class="value-item font-21"
               v-for="(item, index) in getFormatList({ tList: inputList })"
               :key="index"
               v-html="item.value"
@@ -331,7 +331,7 @@
           </div>
           <div class="value-item-box">
             <div
-              class="value-item font-24"
+              class="value-item font-21"
               v-for="(item, index) in getFormatList({ tList: outputList })"
               :key="index"
               v-html="item.value"
@@ -344,7 +344,7 @@
           </div>
           <div class="value-item-box">
             <div
-              class="value-item font-24"
+              class="value-item font-21"
               v-for="(item, index) in getFormatList({ tList: urineList })"
               :key="index"
               v-html="item.value"
@@ -357,7 +357,7 @@
           </div>
           <div class="value-item-box">
             <div
-              class="value-item font-24"
+              class="value-item font-21"
               v-for="(item, index) in getFormatList({ tList: contractList })"
               :key="index"
               v-html="item.value"
@@ -2469,8 +2469,8 @@ padding-top: 2px;
 .font-13 {
   font-size: 13px;
 }
-.font-24 {
-  font-size: 24px;
+.font-21 {
+  font-size: 21px;
 }
 .font-time {
   font-size: 16px;

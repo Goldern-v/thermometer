@@ -36,9 +36,6 @@
         }}</span>
       </div>
     </div>
-    <!-- <div class="head-info-1">
-      
-    </div> -->
     <div class="table-area">
       <div
         class="vline"
@@ -204,7 +201,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight+15}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             血压(mmHg)
           </div>
@@ -724,11 +721,11 @@ export default {
         .filter(
           (x) =>
             x.vital_code === '5' &&
-            (x.value === '手术' ||
-              x.value === '分娩|' ||
-              x.value === '手术分娩|' ||
-              x.value === '手术入院|')
-        )
+             (x.value.includes("手术") ||
+            x.value.includes("分娩|") ||
+            x.value.includes("手术分娩|") ||
+            x.value.includes("手术入院|"))
+      )
         .map((x) => x.time_point)
     },
     formatOperateDateList() {

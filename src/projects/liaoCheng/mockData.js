@@ -204,7 +204,7 @@ export const mockData = {
     },
     {
       temperature_type: '血压',
-      value: '126/80',
+      value: '左126/80右',
       time_point: '2021-11-05 07:00:00',
       vital_code: '062'
     },
@@ -231,6 +231,12 @@ export const mockData = {
       value: '90',
       time_point: '2021-11-05 15:00:00',
       vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '80',
+      time_point: '2021-11-05 15:00:00',
+      vital_code: '20'
     },
     {
       temperature_type: '呼吸',
@@ -285,6 +291,12 @@ export const mockData = {
       value: '102',
       time_point: '2021-11-05 19:00:00',
       vital_code: '02'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '120',
+      time_point: '2021-11-05 19:00:00',
+      vital_code: '20'
     },
     {
       temperature_type: '体温',
