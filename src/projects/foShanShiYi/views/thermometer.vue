@@ -457,7 +457,6 @@ import zrender from "zrender";
 import { mockData } from "src/projects/foShanShiYi/mockData.js";
 import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
 import moment from "moment"; //导入文件
-
 export default {
   props: {
     isPrintAll: {
@@ -799,7 +798,6 @@ export default {
         }
       });
       oDateList.forEach((date) => {
-        // console.log(obj[date])
         if (obj[date].length > 0) {
           deliveryObj = obj[date].find((obj) => obj.value.includes("分娩"));
           for (let i = obj[date].length - 1; i >= 0; i--) {
@@ -959,6 +957,8 @@ export default {
           case "currentPage":
             if (e.data.value > 0) {
               this.currentPage = e.data.value;
+          sessionStorage.setItem('currentPage',e.data.value)
+              
               this.$refs.main.innerHTML = "";
               this.reset();
               this.handleData();
@@ -1030,12 +1030,9 @@ export default {
       }
       this.vitalSigns = vitalSigns;
       //保存数据到vueX给详细曲线使用
-            let vitalSignsData=vitalSigns.filter((item) => {
-            return ["1",'11','12'].includes(item.vital_code);
-          })
-         this.$store.commit("updateVitalSigns", vitalSignsData);        
-      // 计算最大标识时间
-        //  this.$store.commit("updateVitalSigns", vitalSignsData);        
+            let vitalSignsData=this.apiData
+         this.$store.commit("updateVitalSigns", vitalSignsData); 
+
       // 计算最大标识时间
       const maxTimeNum = Math.max.apply(
         null,
@@ -1555,6 +1552,14 @@ export default {
         domTips[0].setAttribute("style", `display:none`);
         el.animateTo(shapeOut, 100, 0);
       });
+       el.on('click',()=>{
+      let dateTime=config.tips.slice(0,20)
+        window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime },
+          '*'
+        )
+     
+    })
     },
     createBrokenLine({
       vitalCode,

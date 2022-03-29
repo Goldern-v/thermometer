@@ -52,7 +52,8 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/foShanShiYi/mockData.js";
-import moment from "moment"; //导入文件
+import { common } from "src/api/index.js";
+
 export default {
   props: {
     showItem: {
@@ -64,7 +65,7 @@ export default {
     const temperatureRange = [34, 43];
     const pulseRange = [0, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -73,6 +74,7 @@ export default {
       ySpace: 25, //  横向网格的间距
       leftWidth: 160, // 左侧内容宽度
       xRange: [1, 8],
+      patInfo: {},
       temperatureRange,
       currentPage: 1,
       pulseRange,
@@ -119,30 +121,38 @@ export default {
       },
     };
   },
-  created() {},
+  created() {
+    // 实现外部分页和打印
+    window.addEventListener("message", this.messageHandle, false);
+  },
+  beforeDestroy() {
+    window.removeEventListener("message", this.messageHandle, false);
+  },
   mounted() {
     if (this.useMockData) {
       this.apiData = mockData;
       this.$nextTick(() => {
         this.handleData();
       });
-    } 
-    // else {
-    //   let data = {
-    //     tradeCode: "nurse_getPatientVitalSigns",
-    //     PatientId: urlParams.PatientId,
-    //     VisitId: urlParams.VisitId,
-    //     StartTime: urlParams.StartTime,
-    //   };
-    //   common(data).then((res) => {
-    //     this.apiData = res.data;
-    //     this.$nextTick(() => {
-    //       // this.handleData()
-    //       this.handleData();
-    //     });
-    //   });
-    // }
-    this.init();
+    } else {
+      this.apiData = JSON.parse(sessionStorage.getItem("vitalSigns"));
+      this.$nextTick(() => {
+        this.handleData();
+      });
+      // const urlParams = this.urlParse();
+      // let data = {
+      //   tradeCode: "nurse_getPatientVitalSigns",
+      //   PatientId: urlParams.PatientId,
+      //   VisitId: urlParams.VisitId,
+      //   StartTime: urlParams.StartTime,
+      // };
+      // common(data).then((res) => {
+      //   this.apiData = res.data;
+      //   this.$nextTick(() => {
+      //     this.handleData();
+      //   });
+      // });
+    }
   },
   methods: {
     init() {
@@ -154,18 +164,27 @@ export default {
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
         this.yLine(); //生成Y轴坐标
-        Object.values(this.settingMap).forEach((x) => {
-          this.createBrokenLine({
-            vitalCode: x.vitalCode,
-            data: x.data,
-            yRange: x.range,
-            lineColor: x.lineColor || x.color,
-            label: x.label,
-            dotColor: x.color,
-            dotSolid: x.solid,
-            dotType: x.dotType,
+        let showVitalSign = this.showVitalSign;
+        Object.values(this.settingMap)
+          .filter((x) => {
+            return showVitalSign === "1"
+              ? x.label === "腋表"
+              : showVitalSign === "2"
+              ? x.label === "脉搏"
+              : x.label === "心率";
+          })
+          .forEach((x) => {
+            this.createBrokenLine({
+              vitalCode: x.vitalCode,
+              data: x.data,
+              yRange: x.range,
+              lineColor: x.lineColor || x.color,
+              label: x.label,
+              dotColor: x.color,
+              dotSolid: x.solid,
+              dotType: x.dotType,
+            });
           });
-        });
       });
     },
     createText({
@@ -334,18 +353,6 @@ export default {
           dotSolid,
         };
         switch (dotType) {
-          case "Text":
-            this.createText({
-              x: cx,
-              y: cy - 17,
-              value: "x",
-              color: dotColor,
-              fontSize: 24,
-              tips: `${x.time} ${label}：${x.value}`,
-              zlevel: 10,
-              fontWeight: "bold",
-            });
-            break;
           case "Circle":
             // 如果脉搏或心率和体温坐标重叠，改成在体温标识外面画红色的圆圈
             if (vitalCode === "11" || vitalCode === "12") {
@@ -381,18 +388,7 @@ export default {
             }
             this.createCircle(params);
             break;
-          case "Isogon":
-            this.createIsogon({
-              x: cx,
-              y: cy,
-              r: 5,
-              n: 3,
-              color: dotColor || "#000",
-              zlevel: 10,
-              tips: `${x.time} ${label}：${x.value}`,
-              dotSolid,
-            });
-            break;
+
           default:
             break;
         }
@@ -425,7 +421,6 @@ export default {
         this.createGroupRect(Rect);
         this.createText(Text);
       });
-      // 连线
       for (let i = 0; i < dots.length - 1; i++) {
         this.createLine({
           x1: dots[i].x,
@@ -437,6 +432,12 @@ export default {
           zlevel: 1,
         });
       }
+    },
+    reset() {
+      this.dateRangeList = [];
+      Object.keys(this.settingMap).forEach((x) => {
+        this.settingMap[x].data = [];
+      });
     },
     // 根据时分秒00:00:00计算总秒数
     getTotalSeconds(str) {
@@ -497,6 +498,23 @@ export default {
         obj[key] = val;
       });
       return obj;
+    },
+    // 事件处理
+    messageHandle(e) {
+      if (e && e.data) {
+        switch (e.data.type) {
+          case "currentPage":
+            if (e.data.value > 0) {
+              this.currentPage = e.data.value;
+              this.$refs.main.innerHTML = "";
+              this.reset();
+              this.handleData();
+            }
+            break;
+          default:
+            break;
+        }
+      }
     },
     // 根据时间点计算横坐标
     getXaxis(time) {
@@ -652,7 +670,6 @@ export default {
         ]);
       }
       this.dateRangeList = dateRangeList;
-      this.pageTotal = dateRangeList.length;
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       for (let i = 0; i < this.vitalSigns.length; i++) {
         if (
@@ -890,10 +907,6 @@ export default {
   },
 
   computed: {
-     vitalSigns(){
-      console.log(this.$store.state.vitalSigns,'vitalSigns')
-      return this.$store.state.vitalSigns
-     },
     dateRange() {
       return this.dateRangeList[this.currentPage - 1] || [];
     },
@@ -924,7 +937,6 @@ export default {
     dateTimeListSmall() {
       const list = [];
       const listLenght = this.dateTimeList.length;
-
       for (let i = listLenght * 5; i > 0; i--) {
         list.push(i);
       }
@@ -944,26 +956,16 @@ export default {
     },
     showVitalSign() {
       let type = this.urlParse().showVitalSign;
-      console.log(type === "1");
       return type;
     },
     vitalSigns() {
-      const vitalSigns = this.apiData.vitalSigns||[].sort(
-        
-        (a, b) => this.getTimeNum(a.time_point) - this.getTimeNum(b.time_point)
-      );
-      const showVitalSign = this.showVitalSign;
-      return showVitalSign === "1"
-        ? vitalSigns.filter((item) => {
-            return ["1"].includes(item.vital_code);
-          })
-        : showVitalSign === "2"
-        ? vitalSigns.filter((item) => {
-            return ["11"].includes(item.vital_code);
-          })
-        : vitalSigns.filter((item) => {
-            return ["12"].includes(item.vital_code);
-          });
+      const vitalSigns =
+        this.apiData.vitalSigns ||
+        [].sort(
+          (a, b) =>
+            this.getTimeNum(a.time_point) - this.getTimeNum(b.time_point)
+        );
+      return vitalSigns;
     },
     yRange() {
       const showVitalSign = this.showVitalSign;
@@ -998,7 +1000,6 @@ export default {
 </script>
 <style lang="scss">
 .main-context {
-  width: 200px;
   padding: 5px 0;
   margin: 0 auto;
   font-size: 21px;

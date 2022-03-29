@@ -375,8 +375,14 @@ export const mockData = {
     },
     {
       temperature_type: '体温',
-      value: '37',
+      value: '38.9',
       time_point: '2021-05-17 13:12:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
+      value: '38.9',
+      time_point: '2021-08-17 13:12:00',
       vital_code: '1'
     },
     {
@@ -447,7 +453,7 @@ export const mockData = {
     },
     {
       temperature_type: '脉搏',
-      value: '20',
+      value: '120',
       time_point: '2021-05-16 13:00:00',
       vital_code: '11'
     },

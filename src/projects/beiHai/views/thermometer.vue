@@ -3,6 +3,7 @@
     class="main-view"
     :style="{ width: `${leftWidth + areaWidth}px` }"
     v-if="apiData"
+    @dblclick="dblclick"
   >
     <div class="head-hos">北海市人民医院</div>
     <div class="head-hos">广西医科大学第九附属医院</div>
@@ -881,6 +882,11 @@ export default {
         "border-color": `${(index - 1) % 2 === 0 ? "transparent" : "#000"}`,
         transform: "translateX(1px)",
       };
+    },
+
+    dblclick() {
+      // 和iframe外部通信，传递双击事件
+      window.parent.postMessage({ type: "dblclick" }, "*");
     },
     messageHandle(e) {
       if (e && e.data) {

@@ -498,7 +498,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData:true,
+      useMockData:false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1789,6 +1789,14 @@ export default {
         domTips[0].setAttribute("style", `display:none`);
         el.animateTo(shapeOut, 100, 0);
       });
+             el.on('click',()=>{
+      let dateTime=config.tips.slice(0,20)
+        window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime },
+          '*'
+        )
+     
+    })
     },
     createBrokenLine({
       vitalCode,
