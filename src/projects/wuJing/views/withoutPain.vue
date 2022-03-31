@@ -330,7 +330,7 @@
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatList({ tList: shitList })"
+              v-for="(item, index) in getFormatShitList({ tList: shitList,coloclyster,afterColoclyster })"
               :key="index"
             >
               {{ item.value }}
@@ -582,6 +582,8 @@ export default {
       heightList: [], // 身高
       inputList: [], // 液体入量
       shitList: [], // 大便次数
+      coloclyster:[],//灌肠次数
+      afterColoclyster:[],//灌肠后大便次数
       entryList: [], // 输入液量
       peeList: [], //小便次数
       urineList: [], // 尿量
@@ -1001,6 +1003,8 @@ export default {
       this.outputList = [];
       this.coolList = [];
       this.dateRangeList = [];
+      this.afterColoclyster=[];
+      this.coloclyster=[];
       for (let i = 0; i < 6; i++) {
         this[`customList${i}`] = [];
       }
@@ -1182,9 +1186,12 @@ export default {
           case "14":
             this.shitList.push(item);
             break;
-          // case '13':
-          //   this.peeList.push(item)
-          //   break
+         case '26':
+            this.coloclyster.push(item)
+            break
+          case '27':
+            this.afterColoclyster.push(item)
+            break
           case "13":
             this.urineList.push(item);
             break;
@@ -1966,6 +1973,66 @@ export default {
             item.value = targetList[j].value;
             targetList.splice(j, 1);
             break;
+          }
+        }
+        list.push(item);
+      }
+      return list;
+    },
+        //大便次数有些科室要特殊显示，需要特殊处理
+    getFormatShitList({
+      tList,
+      timeInterval = 24 * 60 * 60 * 1000,
+      coloclyster,
+      afterColoclyster
+    }) {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const targetList = [...tList];
+      const coloclysterList = [...coloclyster];
+      const afterColoclysterList = [...afterColoclyster];
+      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+        const item = { timeNum: i, value: "" };
+        for (let j = targetList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(targetList[j].time);
+          if ((coloclysterList.length>0&&afterColoclysterList.length>0)) {
+            for (let k = 0; k < coloclysterList.length; k++) {
+              const timeNumColoclyster= this.getTimeNum(coloclysterList[k].time);
+              for(let h=0;h<afterColoclysterList.length;h++){
+                 const timeNumAfterColoclyster = this.getTimeNum(afterColoclysterList[h].time);
+              if (timeNum >= i && timeNum < i + timeInterval) {
+                item.value = `${targetList[j].value}`;
+              }
+              if (
+                (timeNum >= i &&
+                timeNum < i + timeInterval )&&
+                (timeNumColoclyster >= i &&
+                timeNumColoclyster < i + timeInterval)&&
+                (timeNumAfterColoclyster >= i &&
+                timeNumAfterColoclyster < i + timeInterval)
+              ) {
+                //小孩子的大便或者大人的大便存在灌肠或者失禁事件时，不用带////
+                item.value =
+                  // shitList[k].value.includes("E") ||
+                  // targetList[j].value.includes("E") ||
+                  // shitList[k].value.includes("※") ||
+                  Number(afterColoclysterList[h].value)>1
+                    ? `${targetList[j].value} ${coloclysterList[k].value}/${afterColoclysterList[h].value}E`
+                    : `${targetList[j].value} ${coloclysterList[k].value}/E`;
+                targetList.splice(j, 1);
+                afterColoclysterList.splice(h, 1);
+                coloclysterList.splice(k, 1);
+                break;
+              }
+              }
+
+            }
+          } else {
+            if (timeNum >= i && timeNum < i + timeInterval) {
+              item.value = `${targetList[j].value}`;
+              targetList.splice(j, 1);
+              break;
+            }
           }
         }
         list.push(item);

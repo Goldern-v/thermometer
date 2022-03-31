@@ -58,7 +58,7 @@
         <div
           class="row border-top-black-2"
           :style="{ height: `${trHeight}px` }"
-         >
+        >
           <div
             class="label"
             :style="{ width: `${leftWidth}px` }"
@@ -394,8 +394,8 @@
 
 <script>
 import zrender from "zrender";
-import { mockData,jsonMockData} from "src/projects/huaDu/mockData.js";
-import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
+import { mockData, jsonMockData } from "src/projects/huaDu/mockData.js";
+import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
 import moment from "moment"; //导入文件
 
 export default {
@@ -747,7 +747,7 @@ export default {
     },
     formatOperateDateList() {
       return this.dateList.map((x) => {
-         let tomorrow = moment(new Date()).add(1, "d").format("YYYY-MM-DD");
+        let tomorrow = moment(new Date()).add(1, "d").format("YYYY-MM-DD");
         let today = moment(new Date()).format("YYYY-MM-DD");
         this.topSheetNote.forEach((y) => {
           if (
@@ -757,12 +757,12 @@ export default {
             today = tomorrow;
           }
         });
-        //1.如果当前日期>出院日期，则停止计算 
+        //1.如果当前日期>出院日期，则停止计算
         //2.存在跨日期上班的护士，他是今年录入明天的出院数据的，所以存在这种数据就把当前日期+1,然后再计算出院的间隔
         // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
         //   return "";
         if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
-         if (this.dayInterval(x, today) > 0) return "";
+        if (this.dayInterval(x, today) > 0) return "";
         if (!this.operateDateList.length) return "";
         // 构造天数差数组，有相同天数差的说明在同一天x
         const days = this.operateDateList.map((y) => {
@@ -918,8 +918,8 @@ export default {
             break;
           case "printing":
             setTimeout(() => {
-          window.print()
-        }, 1000)
+              window.print();
+            }, 1000);
             break;
           default:
             break;
@@ -1004,15 +1004,15 @@ export default {
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
       const urlParams = this.urlParse();
-        let data={
-           startLogDateTime: this.timeRange[0],
-             endLogDateTime: this.timeRange[1],
-          visitId: urlParams.VisitId,
-          patientId: urlParams.PatientId,
-        }
+      let data = {
+        startLogDateTime: this.timeRange[0],
+        endLogDateTime: this.timeRange[1],
+        visitId: urlParams.VisitId,
+        patientId: urlParams.PatientId,
+      };
       getNurseExchangeInfoByTime(data).then((res) => {
-         this.adtLog = res.data.data.adtLog; // 转科
-              this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+        this.adtLog = res.data.data.adtLog; // 转科
+        this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
       });
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       for (let i = 0; i < vitalSigns.length; i++) {
@@ -1121,8 +1121,8 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        let ops={renderer:'svg'}
-        this.zr = zrender.init(this.$refs.main,ops);
+        let ops = { renderer: "svg" };
+        this.zr = zrender.init(this.$refs.main, ops);
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
@@ -1250,7 +1250,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: bottomValu.includes(value) ? y+1 : yNew+2,
+          y: bottomValu.includes(value) ? y + 1 : yNew + 2,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 2,
@@ -1857,34 +1857,44 @@ export default {
     }) {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
-      let special=['E','※']
+      let special = ["E", "※"];
       const targetList = [...tList];
       const shitList = [...childList];
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
-          if(shitList.length !== 0){
+          if (shitList.length !== 0) {
             for (let k = 0; k < shitList.length; k++) {
               const timeNumKid = this.getTimeNum(shitList[k].time);
               if (timeNum >= i && timeNum < i + timeInterval) {
-              item.value = `${targetList[j].value}`;
-          }
-           if((timeNum >= i && timeNum < i + timeInterval)&&(timeNumKid >= i && timeNumKid < i + timeInterval)){
-             //小孩子的大便或者大人的大便存在灌肠或者失禁事件时，不用带////
-              item.value =(shitList[k].value.includes('E')||targetList[j].value.includes('E'))||(shitList[k].value.includes('※')||targetList[j].value.includes('※'))? `${targetList[j].value} ${shitList[k].value}g`:`${targetList[j].value}/${shitList[k].value}g`;
-              targetList.splice(j, 1);
-              break;
-          }
-          }
-          }else{
+                item.value = `${targetList[j].value}`;
+              }
+              if (
+                timeNum >= i &&
+                timeNum < i + timeInterval &&
+                timeNumKid >= i &&
+                timeNumKid < i + timeInterval
+              ) {
+                //小孩子的大便或者大人的大便存在灌肠或者失禁事件时，不用带////
+                item.value =
+                  shitList[k].value.includes("E") ||
+                  targetList[j].value.includes("E") ||
+                  shitList[k].value.includes("※") ||
+                  targetList[j].value.includes("※")
+                    ? `${targetList[j].value} ${shitList[k].value}g`
+                    : `${targetList[j].value}/${shitList[k].value}g`;
+                targetList.splice(j, 1);
+                break;
+              }
+            }
+          } else {
             if (timeNum >= i && timeNum < i + timeInterval) {
-             item.value = `${targetList[j].value}`;
+              item.value = `${targetList[j].value}`;
               targetList.splice(j, 1);
               break;
             }
           }
-          
         }
         list.push(item);
       }
@@ -1996,12 +2006,12 @@ export default {
         this.handleData();
       });
     } else {
-      let data={
-          tradeCode: "nurse_getPatientVitalSigns",
-          PatientId: urlParams.PatientId,
-          VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime,
-        }
+      let data = {
+        tradeCode: "nurse_getPatientVitalSigns",
+        PatientId: urlParams.PatientId,
+        VisitId: urlParams.VisitId,
+        StartTime: urlParams.StartTime,
+      };
       common(data).then((res) => {
         this.apiData = res.data;
         this.$nextTick(() => {
@@ -2390,8 +2400,8 @@ export default {
 .font-18 {
   font-size: 18px;
 }
-.time-font{
-  font-size:16px ;
+.time-font {
+  font-size: 16px;
   font-weight: normal;
 }
 .font-17 {

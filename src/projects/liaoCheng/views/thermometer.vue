@@ -167,7 +167,7 @@
         ></div>
         <div
           class="row border-top-red-2"
-          :style="{ height: `${trHeight * 2 - 6}px` }"
+          :style="{ height: `${trHeight * 2 - 10}px` }"
         >
           <div class="label" :style="{ width: `${leftWidth}px` }">
             呼吸(次/分)
@@ -201,7 +201,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight+15}px` }">
+        <div class="row" :style="{ height: `${trHeight+13}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             血压(mmHg)
           </div>
@@ -1745,6 +1745,14 @@ export default {
         domTips[0].setAttribute('style', `display:none`)
         el.animateTo(shapeOut, 100, 0)
       })
+       el.on('click',()=>{
+      let dateTime=config.tips.slice(0,20)
+        window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime },
+          '*'
+        )
+     
+    })
     },
     createBrokenLine({
       vitalCode,
@@ -2293,7 +2301,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 8mm 8mm 5mm 8mm; // 页面的边距
+    margin: 5mm 8mm 5mm 8mm; // 页面的边距
   }
 }
 .main-view {

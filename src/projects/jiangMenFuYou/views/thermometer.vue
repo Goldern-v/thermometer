@@ -287,13 +287,14 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-              其他
+            <div class="label" :style="{ width: `${leftWidth-40}px` }">
+              {{ outCustomList.label || "其他" }}
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-13"
-                v-for="(item, index) in getFormatList({ tList: otherList })"
+                class="value-item font-14"
+                :style="{ 'font-size': scaleFont(item.value) }"
+                v-for="(item, index) in getFormatList({ tList: outCustomList })"
                 :key="index"
                 v-html="item.value"
               ></div>
@@ -323,12 +324,15 @@
               ></div>
             </div>
           </div>
-          <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">其他</div>
+         <div class="row " :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              {{ otherCustomList.label || "其他" }}
+            </div>
             <div class="value-item-box">
               <div
-                class="value-item font-13"
-                v-for="(item, index) in getFormatList({ tList: otherList2 })"
+                class="value-item font-14"
+                :style="{ 'font-size': scaleFont(item.value) }"
+                v-for="(item, index) in getFormatList({ tList: otherCustomList })"
                 :key="index"
                 v-html="item.value"
               ></div>
@@ -526,13 +530,10 @@ export default {
       physicsCoolList: [], // 物理降温
       onLineCoolList: [], // 线上降温
       feverList: [], // 发热体温
-      otherList: [],
-      otherList2: [],
+      outCustomList:[],
+      otherCustomList:[],
       skinTest: [],
-      // customList0: [], // 自定义1
-      // customList1: [], // 自定义2
-      // customList2: [], // 自定义3
-      // customList3: [], // 自定义4
+
       dateRangeList: [], // 数组长度决定页数
       patInfo: {
         patient_id: "",
@@ -928,9 +929,8 @@ export default {
       this.otherList = [];
       this.otherList2 = [];
       this.skinTest = [];
-      for (let i = 0; i < 4; i++) {
-        this[`customList${i}`] = [];
-      }
+      this.outCustomList=[]
+      this.otherCustomList=[]
     },
     toNext() {
       if (this.currentPage === this.pageTotal) return;
@@ -1007,6 +1007,29 @@ export default {
           // 超出时间范围的抛弃
           continue;
         }
+        
+                if (["50", "51"].includes(vitalSigns[i].vital_code)) {
+          const sign = vitalSigns[i].temperature_type;
+
+          switch (vitalSigns[i].vital_code) {
+            case "50":
+              this.outCustomList.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.outCustomList.label = sign;
+              break;
+            case "51":
+              this.otherCustomList.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.otherCustomList.label = sign;
+              break;
+            default:
+              break;
+          }
+        }
         /* 获取各个体征数组对象 */
         if (this.lineMap[vitalSigns[i].vital_code]) {
           this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
@@ -1061,12 +1084,6 @@ export default {
             break;
           case "30":
             this.skinTest.push(item);
-            break;
-          case "50":
-            this.otherList.push(item);
-            break;
-          case "51":
-            this.otherList2.push(item);
             break;
           default:
             break;
@@ -1452,6 +1469,13 @@ export default {
         domTips[0].setAttribute("style", `display:none`);
         el.animateTo(shapeOut, 100, 0);
       });
+      el.on('click',()=>{
+      let dateTime=config.tips.slice(0,20)
+        window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime },
+          '*'
+        )
+    })
     },
     createBrokenLine({
       vitalCode,

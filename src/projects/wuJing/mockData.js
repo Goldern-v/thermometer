@@ -129,9 +129,45 @@ export const mockData = {
     },
     {
       temperature_type: '大便次数',
+      value: '3',
+      time_point: '2019-05-19 03:12:00',
+      vital_code: '14'
+    },
+    {
+      temperature_type: '大便次数',
       value: '1',
       time_point: '2019-05-20 03:12:00',
       vital_code: '14'
+    },
+    {
+      temperature_type: '灌肠次数',
+      value: '1',
+      time_point: '2019-05-20 03:45:00',
+      vital_code: '26'
+    },
+    {
+      temperature_type: '灌肠后大便',
+      value: '2',
+      time_point: '2019-05-20 03:55:00',
+      vital_code: '27'
+    },
+    {
+      temperature_type: '大便次数',
+      value: '3',
+      time_point: '2019-05-21 03:12:00',
+      vital_code: '14'
+    },
+    {
+      temperature_type: '灌肠次数',
+      value: '2',
+      time_point: '2019-05-21 03:45:00',
+      vital_code: '26'
+    },
+    {
+      temperature_type: '灌肠后大便',
+      value: '2',
+      time_point: '2019-05-21 03:55:00',
+      vital_code: '27'
     },
     // {
     //   temperature_type: '发热体温',
