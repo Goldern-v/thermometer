@@ -425,13 +425,13 @@
           <div class="label" :style="{ width: `${leftWidth}px` }">
             术后天数
           </div>
-          <div class="value-item-box">
+          <div class="value-item-box" style="color: red">
             <div
               class="value-item"
               v-for="(item, index) in formatOperateDateList"
               :key="index"
             >
-              {{ item }}
+              {{ item==0?'':item }}
             </div>
           </div>
         </div>
@@ -753,75 +753,78 @@ export default {
       ];
     },
     operateDateList() {
-      return this.vitalSigns
-        .filter(
-          (x) =>
-            x.vital_code === "21" &&
+      /* 一天中:
+        1同时出现多次 分娩（包括手术分娩）时，计算为一次。
+        2出现多个分娩（包括手术分娩）+手术（包括入院手术）时，分娩算一次，手术出现几个算几次，再两个相加
+        3同时出现多个手术（包括手术入院）时，每一个手术算为一次
+      */
+      const list = this.vitalSigns.filter(
+        (x) =>
+          x.vital_code === "21" &&
           (x.value.includes("手术") ||
             x.value.includes("分娩|") ||
             x.value.includes("手术|") ||
             x.value.includes("分娩") ||
             x.value.includes("手术分娩|") ||
             x.value.includes("手术入院|"))
-        )
-        .map((x) => x.time_point);
+      );
+      const oDateList = list.map((x) => x.time_point.slice(0, 10));
+      const obj = {};
+      let deliveryObj = {};
+      /* 给每个日期定义对象obj存储当前日期的表顶注释列表数组 */
+      oDateList.forEach((x) => {
+        obj[x] = [];
+      });
+      /* 遍历表顶注释列表 */
+      list.forEach((x) => {
+        const date = x.time_point.slice(0, 10); // 只获取到日期
+        if (obj[date]) {
+          obj[date].push(
+            x
+          ); /* obj:{2019-05-20:[{},{},{}],2019-05-21:[{},{}],} */
+        }
+      });
+      oDateList.forEach((date) => {
+        if (obj[date].length > 0) {
+          deliveryObj = obj[date].find((obj) => obj.value.includes("分娩"));
+          for (let i = obj[date].length - 1; i >= 0; i--) {
+            if (obj[date][i].value.includes("分娩")) {
+              obj[date].splice(i, 1);
+            }
+          }
+          if (deliveryObj) {
+            obj[date].push(deliveryObj);
+          }
+        }
+      });
+      const listNew = [];
+      Object.values(obj).forEach((x) => {
+        listNew.push(...x);
+      });
+      return listNew.map((x) => x.time_point);
     },
     formatOperateDateList() {
       return this.dateList.map((x) => {
-        let tomorrow = moment(new Date()).add(1, "d").format("YYYY-MM-DD");
-        let today = moment(new Date()).format("YYYY-MM-DD");
-        this.topSheetNote.forEach((y) => {
-          if (
-            y.time.slice(0, 10) === tomorrow &&
-            (y.value.includes("出院") || y.value.includes("转出"))
-          ) {
-            today = tomorrow;
-          }
-        });
-        //1.如果当前日期>出院日期，则停止计算 
-        //2.存在跨日期上班的护士，他是今年录入明天的出院数据的，所以存在这种数据就把当前日期+1,然后再计算出院的间隔
-        // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
-        //   return "";
+        if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
+          return "";
         if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
-         if (this.dayInterval(x, today) > 0) return "";
-        // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
-        //   return "";
+        // if (this.dayInterval(x, outTime) > 0) return ''
         if (!this.operateDateList.length) return "";
-        // 构造天数差数组，有相同天数差的说明在同一天，所以要去重
-        const days = [
-          ...new Set(
-            this.operateDateList.map((y) => {
-              return this.dayInterval(x, y);
-            })
-          ),
-        ];
+        // 构造天数差数组，有相同天数差的说明在同一天x
+        const days = this.operateDateList.map((y) => {
+          return this.dayInterval(x, y);
+        });
         if (days.every((z) => z < 0)) return "";
-        // 找到前一次手术（最后一次天数差是正整数的地方）
         let index = 0;
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
-        let apart = []; // 存储当天和前面手术的天数间隔
-        for (let i = 0; i < index; i++) {
-          apart.unshift(days[i]);
-        }
-        // 间隔大于7天的手术，分子分母的写法要重置
-        if (apart.length) {
-          apart.unshift(days[index]);
-          for (let i = 1; i < apart.length; i++) {
-            if (apart[i] - apart[i - 1] > 7) {
-              apart = apart.slice(0, i);
-              break;
-            }
-          }
-          apart.splice(0, 1);
-        }
-        if (days[index] <= 7) {
-          return index === 0 || !apart.length
+        if (days[index] <= 14) {
+          //体温单手术超过15天归零显示
+          /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
+          return index === 0
             ? days[index]
-            : days[index] === 0
-            ? `${apart.join("/")}(${apart.length + 1})`
-            : `${days[index]}/${apart.join("/")}`;
+            : `${this.numToRome(index + 1)}-${days[index]}`;
         } else {
           return "";
         }
@@ -932,6 +935,25 @@ export default {
     dblclick() {
       // 和iframe外部通信，传递双击事件
       window.parent.postMessage({ type: "dblclick" }, "*");
+    },
+        // 数字转罗马字符
+    numToRome(num) {
+      let ans = "";
+      let k = Math.floor(num / 1000);
+      let h = Math.floor((num % 1000) / 100);
+      let t = Math.floor((num % 100) / 10);
+      let o = num % 10;
+      let one = ["I", "Ⅱ", "Ⅲ", "Ⅳ", "V", "Ⅵ", "Ⅶ", "Ⅷ", "Ⅸ"];
+      let ten = ["X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"];
+      let hundred = ["C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"];
+      let thousand = "M";
+      for (let i = 0; i < k; i++) {
+        ans += thousand;
+      }
+      if (h) ans += hundred[h - 1];
+      if (t) ans += ten[t - 1];
+      if (o) ans += one[o - 1];
+      return ans;
     },
     middleTdStyle(index) {
       return {
@@ -1986,6 +2008,7 @@ export default {
       coloclyster,
       afterColoclyster
     }) {
+      console.log(coloclyster,afterColoclyster,'asdasdas')
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
@@ -2016,9 +2039,9 @@ export default {
                   // shitList[k].value.includes("E") ||
                   // targetList[j].value.includes("E") ||
                   // shitList[k].value.includes("※") ||
-                  Number(afterColoclysterList[h].value)>1
-                    ? `${targetList[j].value} ${coloclysterList[k].value}/${afterColoclysterList[h].value}E`
-                    : `${targetList[j].value} ${coloclysterList[k].value}/E`;
+                  Number(coloclysterList[k].value)>1
+                    ? `${targetList[j].value} ${afterColoclysterList[h].value}/${coloclysterList[k].value}E`
+                    : `${targetList[j].value} ${afterColoclysterList[h].value}/E`;
                 targetList.splice(j, 1);
                 afterColoclysterList.splice(h, 1);
                 coloclysterList.splice(k, 1);

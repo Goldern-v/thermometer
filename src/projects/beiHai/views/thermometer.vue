@@ -454,6 +454,7 @@ import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
 
 
 export default {
+  
   props: {
     isPrintAll: {
       type: Boolean,
@@ -474,8 +475,9 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     // const painRange = [0, 10]
+
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1125,7 +1127,6 @@ export default {
         let centerText = this.centerSheetNote.map((x) => {
           return x.value;
         });
-        //  ['辅助呼吸', '体温不升', '△']
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
@@ -1947,6 +1948,7 @@ export default {
     },
   },
   mounted() {
+
     const urlParams = this.urlParse();
     this.showInnerPage = urlParams.showInnerPage === "1";
     if (this.isPrintAll) {

@@ -43,6 +43,18 @@ export const mockData = {
     {
       temperature_type: '疼痛',
       value: '1',
+      time_point: '2021-10-18 11:20:00',
+      vital_code: '092'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '3',
+      time_point: '2021-10-18 11:20:00',
+      vital_code: '092'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '1',
       time_point: '2021-10-18 11:00:00',
       vital_code: '092'
     },
@@ -129,6 +141,12 @@ export const mockData = {
       value: '1/E',
       time_point: '2021-10-19 15:00:00',
       vital_code: '061'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '6',
+      time_point: '2021-10-19 15:00:00',
+      vital_code: '092'
     },
     {
       temperature_type: '疼痛',
@@ -291,6 +309,18 @@ export const mockData = {
       value: '37.5',
       time_point: '2021-10-21 15:00:00',
       vital_code: '01'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '0',
+      time_point: '2021-10-21 15:00:00',
+      vital_code: '092'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '0',
+      time_point: '2021-10-21 15:00:00',
+      vital_code: '092'
     },
     {
       temperature_type: '疼痛',

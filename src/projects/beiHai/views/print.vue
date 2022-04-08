@@ -21,6 +21,12 @@ export default {
   components: {
     Thermometer,
   },
+
+  provide: function () {
+  return {
+    getMap: '父组件的值'
+  }
+},
   data() {
     return {
       useMockData: false,

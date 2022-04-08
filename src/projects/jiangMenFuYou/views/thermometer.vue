@@ -421,7 +421,8 @@
 import zrender from "zrender";
 import { mockData } from "src/projects/jiangMenFuYou/mockData.js";
 import moment from "moment"; //导入文件
-import { common , getNurseExchangeInfoByTime } from "src/api/index.js"
+import { common , getNurseExchangeInfoByTime } from "src/api/index.js";
+import vitalDic from 'src/projects/jiangMenFuYou/vitalDic.json'
 export default {
   props: {
     isPrintAll: {
@@ -443,7 +444,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -469,7 +470,7 @@ export default {
         },
         axillaryTemperature: {
           vitalCode: "01",
-          label: "腋表",
+          label: "体温",
           color: "blue",
           lineColor: "blue",
           dotType: "Text",
@@ -546,6 +547,7 @@ export default {
         age: "",
       },
       vitalSigns: [],
+      vitalCodeObj:[],
       typeMap: {
         5: "表顶注释", // 入院|,手术,分娩|,出院|,转入|,死亡|,排胎|,出生|,手术分娩|,手术入院|,转出|
         4: "表底注释", // 拒测,不在,外出,不升,请假,右PPD,左PPD,冰敷,退热贴,冷水枕,降温毯,温水浴,辅助呼吸,PDD停辅助呼吸
@@ -951,7 +953,8 @@ export default {
         this.patInfo = this.apiData.patientInfo.patInfo;
       const vitalSigns = this.apiData.vitalSigns.sort(
         (a, b) => this.getTimeNum(a.time_point) - this.getTimeNum(b.time_point)
-      );
+      ).filter((item)=>{
+        return !item.time_point.includes('00:00:00')})
       if (!vitalSigns.length) {
         vitalSigns.push({
           // 空数据加个占位，否则样式会错乱
@@ -962,6 +965,14 @@ export default {
         });
       }
       this.vitalSigns = vitalSigns;
+      console.log(this.vitalSigns)
+      this.vitalSigns.map((x)=>{
+        vitalDic.data.map((item)=>{
+          if(x.temperature_type===item.vitalSign){
+            x.vital_code=item.vitalCode
+          }
+        })
+      })
       // 计算最大标识时间
       const maxTimeNum = Math.max.apply(
         null,
