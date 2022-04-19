@@ -673,7 +673,7 @@ export default {
         const item = { timeNum: i, value: "" };
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum >= i && timeNum <i + 8 * 60 * 60 * 1000) {
+          if (timeNum > i && timeNum <=i + 10 * 60 * 60 * 1000) {
             item.value = pressureList[j].value;
             pressureList.splice(j, 1);
             break;
@@ -695,7 +695,7 @@ export default {
         const item = { timeNum: i, value: "" };
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum >= i+8* 60 * 60 * 1000 && timeNum < i + 16 * 60 * 60 * 1000) {
+          if (timeNum > i+10* 60 * 60 * 1000 && timeNum <= i + 14 * 60 * 60 * 1000) {
             item.value = pressureList[j].value;
             pressureList.splice(j, 1);
             break;
@@ -717,7 +717,7 @@ export default {
         const item = { timeNum: i, value: "" };
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum >=i + 16 * 60 * 60 * 1000 && timeNum < i + 24 * 60 * 60 * 1000) {
+          if (timeNum >i + 14 * 60 * 60 * 1000 && timeNum <= i + 24 * 60 * 60 * 1000) {
             item.value = pressureList[j].value;
             pressureList.splice(j, 1);
             break;
@@ -1555,6 +1555,13 @@ export default {
         domTips[0].setAttribute("style", `display:none`);
         el.animateTo(shapeOut, 100, 0);
       });
+       el.on('click',()=>{
+      let dateTime=config.tips.slice(0,20)
+        window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime },
+          '*'
+        )
+    })
     },
     createBrokenLine({
       vitalCode,

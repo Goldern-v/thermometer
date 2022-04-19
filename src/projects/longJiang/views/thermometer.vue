@@ -495,7 +495,7 @@ export default {
       settingMap: {
         oralTemperature: {
           vitalCode: "2",
-          label: "口表",
+          label: "口温",
           color: "blue",
           solid: true,
           dotType: "Circle",
@@ -506,7 +506,7 @@ export default {
         },
         axillaryTemperature: {
           vitalCode: "1",
-          label: "腋表",
+          label: "体温",
           color: "blue",
           lineColor: "blue",
           dotType: "Text",
@@ -517,7 +517,7 @@ export default {
         },
         analTemperature: {
           vitalCode: "19",
-          label: "肛表",
+          label: "肛温",
           color: "blue",
           range: yRange,
           dotType: "Circle",
@@ -712,20 +712,9 @@ export default {
     formatBreatheList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
-      const breatheList = [...this.breatheList];
-      // 根据医院要求，0-6点落在当天第一个格子，22-24点落在当天最后一个格子，所以特殊处理每天第一个格子和最后一个格子的落点
-      const timeNumList = this.dateList.map((x) => {
-        return {
-          start: this.getTimeNum(`${x} 00:00:00`),
-          end: this.getTimeNum(`${x} 24:00:00`),
-        };
-      });
+      const breatheList = [...this.breatheList];      
       const timeAdd = (i) => {
-        return timeNumList.some((x) => x.start === i)
-          ? 6 * 60 * 60 * 1000
-          : timeNumList.some((x) => x.end - 2 * 60 * 60 * 1000 === i)
-          ? 2 * 60 * 60 * 1000
-          : 4 * 60 * 60 * 1000;
+        return 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
@@ -1591,6 +1580,14 @@ export default {
         domTips[0].setAttribute("style", `display:none`);
         el.animateTo(shapeOut, 100, 0);
       });
+                   el.on('click',()=>{
+      let dateTime=config.tips.slice(0,20)
+        window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime },
+          '*'
+        )
+     
+    })
     },
     createBrokenLine({
       vitalCode,
@@ -1709,7 +1706,7 @@ export default {
                 color: "red",
                 zlevel: 10,
                 tips: `${item.time} 物理降温：${item.value}`,
-                dotSolid: true,
+                dotSolid: false,
               });
               this.createLine({
                 x1: cx,

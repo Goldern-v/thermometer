@@ -477,7 +477,7 @@
 
 <script>
 import zrender from "zrender";
-import { mockData } from "src/projects/zhongXi/mockData.js";
+import { mockData ,jsonMockData} from "src/projects/zhongXi/mockData.js";
 import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
 import moment from "moment"; //导入文件
 
@@ -503,7 +503,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1665,17 +1665,17 @@ export default {
           case "Isogon":
             if (vitalCode === "092") {
               const tList = [...this.settingMap.pain.data].map((x) => {
-                console.log(x);
                 return {
                   x: this.getXaxis(this.getLocationTime(x.time)),
                   y: this.getYaxis(this.painRange, x.value, "092"),
                 };
               });
               //如果疼痛重叠就右移一个空格，处理
-              this.handlePainsXaxis(tList).forEach((item) => {
-                let paramsIsogon = {
-                  x: item.x,
-                  y: item.y,
+              let paramsIsogon={}
+              // this.handlePainsXaxis(tList).forEach((item) => {
+                paramsIsogon = {
+                  x: this.handlePainsXaxis(tList)[index].x,
+                  y: cy,
                   r: 4,
                   n: 3,
                   color: dotColor || "#000",
@@ -1684,7 +1684,7 @@ export default {
                   dotSolid,
                 };
                 this.createIsogon(paramsIsogon);
-              });
+              // });
             }
 
             break;
@@ -2036,7 +2036,8 @@ export default {
       return;
     }
     if (this.useMockData) {
-      this.apiData = mockData;
+      // this.apiData = mockData;
+      this.apiData=jsonMockData
       this.$nextTick(() => {
         this.handleData();
       });

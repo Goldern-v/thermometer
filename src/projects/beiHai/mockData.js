@@ -18,28 +18,28 @@ export const mockData = {
   vitalSigns: [
     {
       temperature_type: '表顶注释',
-      value: '手术入院|',
+      value: '入院|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 13:10:00',
       vital_code: '5'
     },
+    // {
+    //   temperature_type: '表顶注释',
+    //   value: '手术|',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2019-05-18 13:10:00',
+    //   vital_code: '5'
+    // },
     {
       temperature_type: '表顶注释',
-      value: '手术入院|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 13:10:00',
-      vital_code: '5'
-    },
-    {
-      temperature_type: '表顶注释',
-      value: '手术入院|',
+      value: '手术',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 13:12:00',
       vital_code: '5'
     },
     {
       temperature_type: '表顶注释',
-      value: '手术入院|',
+      value: '分娩|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 13:19:00',
       vital_code: '5'

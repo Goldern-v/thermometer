@@ -1068,5 +1068,5 @@ export const mockData = {
     }
   ]
 }
-
+export const jsonMockData=require('../zhongXi/mockData.json')
 export default {}

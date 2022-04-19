@@ -142,7 +142,7 @@ module.exports = {
         target:(() => {
           switch (project) {
             case 'huaDu':
-              return 'http://120.238.239.27:9091'
+              return 'http://120.238.239.27:9094/'
             case 'liaoCheng':
               // return 'http://172.17.5.41:9091'
               return 'http://120.224.211.7:9091'
@@ -176,7 +176,7 @@ module.exports = {
             case 'wuHanYaXin':
               return 'http://218.107.37.134:9093/'
             case 'longJiang':
-              return 'http://218.107.37.134:9093/'
+              return 'http://218.13.34.230:9094/'
             case 'linYi':
               return 'http://218.107.37.134:9093/'
             case 'common':

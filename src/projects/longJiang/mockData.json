@@ -49,7 +49,7 @@
       {
           "temperature_type": "呼吸",
           "value": "11",
-          "time_point": "2022-03-08 14:00:00",
+          "time_point": "2022-03-08 13:15:00",
           "vital_code": "13"
       },
       {
@@ -121,8 +121,14 @@
       {
           "temperature_type": "体温",
           "value": "36",
-          "time_point": "2022-03-08 17:24:12",
+          "time_point": "2022-03-10 17:24:12",
           "vital_code": "1"
+      },
+      {
+          "temperature_type": "物理降温",
+          "value": "33",
+          "time_point": "2022-03-10 17:24:12",
+          "vital_code": "27"
       },
       {
           "temperature_type": "皮试",
@@ -183,7 +189,7 @@
       {
           "temperature_type": "呼吸",
           "value": "33",
-          "time_point": "2022-03-08 18:10:42",
+          "time_point": "2022-03-08 13:10:42",
           "vital_code": "13"
       },
       {

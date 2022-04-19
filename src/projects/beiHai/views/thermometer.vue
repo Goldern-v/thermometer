@@ -26,10 +26,10 @@
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item " style="flex: 1.7">
+      <div class="item" style="flex: 1.7">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" style="flex:1.5" >
+      <div class="item" style="flex: 1.5">
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
@@ -450,11 +450,9 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/beiHai/mockData.js";
-import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
-
+import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
 
 export default {
-  
   props: {
     isPrintAll: {
       type: Boolean,
@@ -477,7 +475,7 @@ export default {
     // const painRange = [0, 10]
 
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -746,13 +744,13 @@ export default {
       return this.vitalSigns
         .filter(
           (x) =>
-          x.vital_code === "5" &&
-          (x.value.includes("手术") ||
-            x.value.includes("分娩|") ||
-            x.value.includes("手术|") ||
-            x.value.includes("分娩") ||
-            x.value.includes("手术分娩|") ||
-            x.value.includes("手术入院|"))
+            x.vital_code === "5" &&
+            (x.value.includes("手术") ||
+              x.value.includes("分娩|") ||
+              x.value.includes("手术|") ||
+              x.value.includes("分娩") ||
+              x.value.includes("手术分娩|") ||
+              x.value.includes("手术入院|"))
         )
         .map((x) => x.time_point);
     },
@@ -903,8 +901,8 @@ export default {
             break;
           case "printing":
             setTimeout(() => {
-          window.print()
-        }, 1000)
+              window.print();
+            }, 1000);
           default:
             break;
         }
@@ -985,16 +983,16 @@ export default {
       }
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
-    const urlParams = this.urlParse();
-        let data={
-           startLogDateTime: this.timeRange[0],
-             endLogDateTime: this.timeRange[1],
-          visitId: urlParams.VisitId,
-          patientId: urlParams.PatientId,
-        }
+      const urlParams = this.urlParse();
+      let data = {
+        startLogDateTime: this.timeRange[0],
+        endLogDateTime: this.timeRange[1],
+        visitId: urlParams.VisitId,
+        patientId: urlParams.PatientId,
+      };
       getNurseExchangeInfoByTime(data).then((res) => {
-         this.adtLog = res.data.data.adtLog; // 转科
-              this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+        this.adtLog = res.data.data.adtLog; // 转科
+        this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
       });
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const customSigns = []; // 记录自定义字段的名字
@@ -1110,10 +1108,14 @@ export default {
     },
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
-      const xaxis = notes.map((x) =>
-        this.getXaxis(this.getLocationTime(x.time))
-      );
-      const xaxisNew = this.handleNoteXaxis(xaxis);
+      const xaxis = notes.map((item) => {
+        return {
+          x: this.getXaxis(this.getLocationTime(item.time)),
+          y,
+        };
+      });
+      const xaxisNew = this.handleNoteXaxis(xaxis,notes);
+
       notes.forEach((x, i) => {
         let value = x.value;
         if (x.value.endsWith("|")) {
@@ -1129,12 +1131,12 @@ export default {
         });
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-          x: xaxisNew[i],
+          x: xaxisNew[i].x,
           y: bottomText.includes(value)
             ? y - 7 * this.ySpace - 8
             : centerText.includes(value)
             ? y - 18 * this.ySpace - 4
-            : y - 2 * this.ySpace - 2,
+            : xaxisNew[i].y -2*this.ySpace-2,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1146,8 +1148,8 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-         let ops={renderer:'svg'}
-        this.zr = zrender.init(this.$refs.main,ops);
+        let ops = { renderer: "svg" };
+        this.zr = zrender.init(this.$refs.main, ops);
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
@@ -1508,14 +1510,13 @@ export default {
         domTips[0].setAttribute("style", `display:none`);
         el.animateTo(shapeOut, 100, 0);
       });
-          el.on('click',()=>{
-      let dateTime=config.tips.slice(0,20)
+      el.on("click", () => {
+        let dateTime = config.tips.slice(0, 20);
         window.parent.postMessage(
-          { type: 'clickDateTime', value: dateTime },
-          '*'
-        )
-     
-    })
+          { type: "clickDateTime", value: dateTime },
+          "*"
+        );
+      });
     },
     createBrokenLine({
       vitalCode,
@@ -1579,9 +1580,9 @@ export default {
                   r: 8,
                   color: "red",
                   zlevel: 9,
-                   dotSolid: true,
-                   dotType: "Circle",
-                   filter:"red",
+                  dotSolid: true,
+                  dotType: "Circle",
+                  filter: "red",
                   tips: `${x.time} ${label}：${x.value}`,
                 };
               }
@@ -1932,14 +1933,27 @@ export default {
       return overWan ? getWan(overWan) + "万" + getWan(noWan) : getWan(num);
     },
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
-    handleNoteXaxis(xaxisList) {
+    handleNoteXaxis(xaxisList,notes) {
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {
-        if (!xaxisNew.includes(xaxisList[i])) {
+        if (
+          JSON.stringify(xaxisNew).indexOf(JSON.stringify(xaxisList[i])) == -1
+        ) {
           xaxisNew.push(xaxisList[i]);
+          
         } else {
-          while (xaxisNew.includes(xaxisList[i])) {
-            xaxisList[i] += this.xSpace;
+             let noteTime = notes[i-1].value.endsWith("|")?`${notes[i-1].value}${this.toChinesNum(
+                new Date(notes[i-1].time).getHours()
+              )}时${this.toChinesNum(new Date(notes[i-1].time).getMinutes())}分`:notes[i-1].value;
+
+          while (
+            JSON.stringify(xaxisNew).indexOf(JSON.stringify(xaxisList[i])) != -1
+          ) {
+            if(notes[i].value==='手术'){
+               xaxisList[i].y += (noteTime.length +1) * this.ySpace+noteTime.length+2
+            }else{
+              xaxisList[i].x += this.xSpace;
+            }
           }
           xaxisNew.push(xaxisList[i]);
         }
@@ -1948,7 +1962,6 @@ export default {
     },
   },
   mounted() {
-
     const urlParams = this.urlParse();
     this.showInnerPage = urlParams.showInnerPage === "1";
     if (this.isPrintAll) {
@@ -1966,12 +1979,12 @@ export default {
         this.handleData();
       });
     } else {
-      let data={
-          tradeCode: "nurse_getPatientVitalSigns",
-          PatientId: urlParams.PatientId,
-          VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime,
-        }
+      let data = {
+        tradeCode: "nurse_getPatientVitalSigns",
+        PatientId: urlParams.PatientId,
+        VisitId: urlParams.VisitId,
+        StartTime: urlParams.StartTime,
+      };
       common(data).then((res) => {
         this.apiData = res.data;
         this.$nextTick(() => {

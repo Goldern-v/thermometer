@@ -819,7 +819,7 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
-        if (days[index] <= 14) {
+        if (days[index] <= 7) {
           //体温单手术超过15天归零显示
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
           return index === 0
@@ -2008,7 +2008,7 @@ export default {
       coloclyster,
       afterColoclyster
     }) {
-      console.log(coloclyster,afterColoclyster,'asdasdas')
+      console.log(tList,coloclyster,afterColoclyster,'asdasdas')
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
