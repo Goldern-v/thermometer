@@ -886,6 +886,9 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
+      currentPage(value) {
+      window.parent.postMessage({ type: "currentPage", value }, "*");
+    },
   },
   created() {
     // 实现外部分页和打印
@@ -955,6 +958,13 @@ export default {
       if (o) ans += one[o - 1];
       return ans;
     },
+    handleChangePage(value){
+      this.dateRangeList.forEach((item,index)=>{
+        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
+         this.currentPage=index+1
+        }
+      })
+    },
     middleTdStyle(index) {
       return {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 4 : 3)}px`,
@@ -993,6 +1003,9 @@ export default {
               this.handleData();
             }
             break;
+             case 'dateChangePage':
+              this.handleChangePage(e.data.value)
+              break;
           case "printing":
             window.print();
             break;

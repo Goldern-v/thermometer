@@ -924,7 +924,10 @@ export default {
     // 因为分页可能在体温单外面，所以给父页面传递pageTotal
     pageTotal(value) {
       window.parent.postMessage({ type: 'pageTotal', value }, '*')
-    }
+    },
+      currentPage(value) {
+      window.parent.postMessage({ type: "currentPage", value }, "*");
+    },
   },
   created() {
     // 实现外部分页和打印
@@ -983,6 +986,13 @@ export default {
       })
       return outTime
     },
+        handleChangePage(value){
+      this.dateRangeList.forEach((item,index)=>{
+        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
+         this.currentPage=index+1
+        }
+      })
+    },
     //找到表底存在不升的日期
     getNotTemTime() {
       let outTime = []
@@ -1017,6 +1027,9 @@ export default {
               this.bedExchangeLog = e.data.value.bedExchangeLog || '' // 转床
             }
             break
+            case 'dateChangePage':
+              this.handleChangePage(e.data.value)
+              break;
           default:
             break
         }
@@ -1751,6 +1764,13 @@ export default {
         domTips[0].setAttribute('style', `display:none`)
         el.animateTo(shapeOut, 100, 0)
       })
+        el.on('click',()=>{
+      let dateTime=config.tips.slice(0,20)
+        window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime },
+          '*'
+        )
+    })
     },
     createBrokenLine({
       vitalCode,

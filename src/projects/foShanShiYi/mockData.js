@@ -243,9 +243,15 @@ export const mockData = {
     },
     {
       temperature_type: '疼痛',
-      value: '2',
+      value: '5',
       time_point: '2021-05-19 23:12:00',
       vital_code: 'ttpf'
+    },
+    {
+      temperature_type: '疼痛干预',
+      value: '1',
+      time_point: '2021-05-19 23:12:00',
+      vital_code: 'ttgy'
     },
     {
       temperature_type: '疼痛',

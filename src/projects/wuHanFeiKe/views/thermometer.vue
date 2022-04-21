@@ -485,7 +485,7 @@ export default {
     const yRange = [34, 42];
     const pulseRange = [30, 180];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -925,6 +925,10 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
+    currentPage(value) {
+      window.parent.postMessage({ type: "currentPage", value }, "*");
+    },
+    
   },
   created() {
     // 实现外部分页和打印
@@ -983,6 +987,9 @@ export default {
               this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
             }
             break;
+            case 'dateChangePage':
+              this.handleChangePage(e.data.value)
+              break;
           default:
             break;
         }
@@ -991,6 +998,13 @@ export default {
     dblclick() {
       // 和iframe外部通信，传递双击事件
       window.parent.postMessage({ type: "dblclick" }, "*");
+    },
+    handleChangePage(value){
+      this.dateRangeList.forEach((item,index)=>{
+        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
+         this.currentPage=index+1
+        }
+      })
     },
     reset() {
       Object.keys(this.settingMap).forEach((x) => {
@@ -1067,7 +1081,6 @@ export default {
         ]);
       }
       this.dateRangeList = dateRangeList;
-
       this.pageTotal = dateRangeList.length;
       // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
       window.parent.postMessage(
@@ -1091,26 +1104,7 @@ export default {
           // 超出时间范围的抛弃
           continue;
         }
-        // if (!vitalSigns[i].vital_code || vitalSigns[i].vital_code === 'null') {
-        //   // 自定义字段填入
-        //   const sign = vitalSigns[i].temperature_type
-        //   const index = customSigns.indexOf(sign)
-        //   if (index < 0) {
-        //     customSigns.push(sign)
-        //     this[`customList${customSigns.length - 1}`].push({
-        //       time: vitalSigns[i].time_point,
-        //       value: vitalSigns[i].value
-        //     })
-        //     this[`customList${customSigns.length - 1}`].label = sign
-        //   } else {
-        //     this[`customList${index}`].push({
-        //       time: vitalSigns[i].time_point,
-        //       value: vitalSigns[i].value
-        //     })
-        //     this[`customList${index}`].label = sign
-        //   }
-        //   continue
-        // }
+       
         /* 获取各个体征数组对象 */
         if (this.lineMap[vitalSigns[i].vital_code]) {
           this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
@@ -1286,15 +1280,6 @@ export default {
         let bottomContextList = this.bottomSheetNote.map((x) => {
           return x.value;
         });
-        //[
-        //   '温水擦浴',
-        //   '不升',
-        //   '特殊物理降温',
-        //   '辅助呼吸',
-        //   '物理降温',
-        //   '回室',
-        //   '请假'
-        // ]
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
@@ -1694,14 +1679,6 @@ export default {
       });
       // 连线
       for (let i = 0; i < dots.length - 1; i++) {
-        // 医院那边要求连续，不能断所以注释这个体温曲线断点逻辑
-        // if (['1', '2', '19'].includes(vitalCode)) {
-        //   if (this.temperatureNoteList.some(x => {
-        //     return this.getTimeStamp(x.time) >= this.getTimeStamp(dots[i].time) && this.getTimeStamp(x.time) <= this.getTimeStamp(dots[i+1].time)
-        //   })) {
-        //     continue
-        //   }
-        // }
         this.createLine({
           x1: dots[i].x,
           y1: dots[i].y,

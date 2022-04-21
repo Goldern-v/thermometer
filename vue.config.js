@@ -168,9 +168,9 @@ module.exports = {
             case 'wuJing':
               return 'http://120.24.240.231:15091'
             case 'zhongXi':
-              return 'http://218.107.37.134:9093/'
+              return 'http://218.107.37.134:9093'
             case 'foShanShiYi':
-              return 'http://219.159.198.37:9094'
+              return 'https://cr.fsyyy.com:9094'
             case 'wuHanFeiKe':
               return 'http://218.107.37.134:9093/'
             case 'wuHanYaXin':
@@ -178,7 +178,7 @@ module.exports = {
             case 'longJiang':
               return 'http://218.13.34.230:9094/'
             case 'linYi':
-              return 'http://218.107.37.134:9093/'
+              return 'http://218.107.37.134:9093'
             case 'common':
               return 'http://172.17.5.41:9091'
             default:
@@ -222,9 +222,9 @@ module.exports = {
             case 'wuJing':
               return 'https://info.cr-health.com:20809'
             case 'zhongXi':
-              return 'http://218.107.37.134:9093/'
+              return 'http://218.107.37.134:9093'
             case 'foShanShiYi':
-              return 'https://cr.fsyyy.com:9094'
+              return 'http://219.159.198.37:9091/'
             case 'wuHanFeiKe':
               return 'http://218.107.37.134:9093'
             case 'wuHanYaXin':

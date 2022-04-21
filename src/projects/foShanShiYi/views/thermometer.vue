@@ -479,7 +479,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -582,6 +582,7 @@ export default {
       feverList: [], // 发热体温
       heightList: [], // 身高
       BMIList: [], // BMI
+      ttgyList: [], // 疼痛干预
       outCustomList: [], // 自定义1
       customList0: [], // 自定义2
       customList1: [], // 自定义3
@@ -897,6 +898,9 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
+          currentPage(value) {
+      window.parent.postMessage({ type: "currentPage", value }, "*");
+    },
   },
   created() {
     // 实现外部分页和打印
@@ -951,6 +955,13 @@ export default {
       });
       return outTime;
     },
+            handleChangePage(value){
+      this.dateRangeList.forEach((item,index)=>{
+        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
+         this.currentPage=index+1
+        }
+      })
+    },
     messageHandle(e) {
       if (e && e.data) {
         switch (e.data.type) {
@@ -958,7 +969,6 @@ export default {
             if (e.data.value > 0) {
               this.currentPage = e.data.value;
           sessionStorage.setItem('currentPage',e.data.value)
-              
               this.$refs.main.innerHTML = "";
               this.reset();
               this.handleData();
@@ -967,6 +977,9 @@ export default {
           case "printing":
             window.print();
             break;
+             case 'dateChangePage':
+              this.handleChangePage(e.data.value)
+              break;
           default:
             break;
         }
@@ -1172,6 +1185,9 @@ export default {
             break;
           case "36":
             this.BMIList.push(item);
+            break;
+          case "ttgy":
+            this.ttgyList.push(item);
             break;
           default:
             break;
@@ -1691,6 +1707,36 @@ export default {
                 lineDash: [3, 3],
               });
               this.physicsCoolList.splice(i, 1);
+            }
+          }
+        }else if (vitalCode === 'ttpf') {
+          // 画疼痛干预
+          for (let i = this.ttgyList.length - 1; i >= 0; i--) {
+            const item = this.ttgyList[i]
+            const ttgyX = this.getXaxis(this.getLocationTime(item.time))
+            const ttgyY = this.getYaxis(yRange, item.value, vitalCode)
+            if (ttgyX === cx) {
+              this.createIsogon({
+                x: ttgyX,
+                y: ttgyY,
+                r: 7,
+                n: 3,
+                color: 'red',
+                zlevel: 10,
+                tips: `${item.time} 疼痛干预：${item.value}`,
+                dotSolid: false
+              })
+              this.createLine({
+                x1: cx,
+                y1: cy,
+                x2: ttgyX,
+                y2: ttgyY,
+                lineWidth: 1,
+                color: 'red',
+                zlevel: 1,
+                lineDash: [3, 3]
+              })
+              this.ttgyList.splice(i, 1)
             }
           }
         }

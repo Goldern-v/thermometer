@@ -79,7 +79,7 @@
       {
           "temperature_type": "表顶注释",
           "value": "出院||十七时二十四分",
-          "time_point": "2022-03-08 17:24:12",
+          "time_point": "2022-03-08 20:00:00",
           "vital_code": "3"
       },
       {
@@ -190,6 +190,12 @@
           "temperature_type": "呼吸",
           "value": "33",
           "time_point": "2022-03-08 13:10:42",
+          "vital_code": "13"
+      },
+      {
+          "temperature_type": "呼吸",
+          "value": "33",
+          "time_point": "2022-03-14 20:00:00",
           "vital_code": "13"
       },
       {
