@@ -34,4 +34,29 @@ export const getNurseExchangeInfoBatch = (data) => {
   })
 }
 
+// 患者：按时间获取转科转床记录
+export const getNurseExchangeInfoByTime2 = (config) => {
+  return axios({
+    method: 'post',
+    url: `${apiPath}nurseLog/getNurseExchangeInfo`,
+    data:config.data,
+    headers: {
+      "App-Token-Nursing": appToken,
+      "Auth-Token-Nursing": config.authToken,
+    }
+  })
+}
+//获取所有转科转床记录的数据，用于批量打印时获取用户所有时间内的转科转床记录
+export const getNurseExchangeInfoBatch2 = (config) => {
+  return axios({
+    method: 'post',
+    url: `${apiPath}nurseLog/getNurseExchangeInfoBatch`,
+    data:config.data,
+    headers: {
+      "App-Token-Nursing": appToken,
+      "Auth-Token-Nursing": config.authToken,
+    }
+  })
+}
+
 

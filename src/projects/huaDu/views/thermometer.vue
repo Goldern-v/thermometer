@@ -395,7 +395,7 @@
 <script>
 import zrender from "zrender";
 import { mockData, jsonMockData } from "src/projects/huaDu/mockData.js";
-import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
+import { common, getNurseExchangeInfoByTime2 } from "src/api/index.js";
 import moment from "moment"; //导入文件
 
 export default {
@@ -1003,14 +1003,15 @@ export default {
       }
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
-      const urlParams = this.urlParse();
-      let data = {
+      let config={}
+      config.data = {
         startLogDateTime: this.timeRange[0],
         endLogDateTime: this.timeRange[1],
-        visitId: urlParams.VisitId,
-        patientId: urlParams.PatientId,
+        visitId: this.$route.query.VisitId,
+        patientId: this.$route.query.PatientId,
       };
-      getNurseExchangeInfoByTime(data).then((res) => {
+      config.authToken=this.$route.query.authTokenNursing
+      getNurseExchangeInfoByTime2(config).then((res) => {
         this.adtLog = res.data.data.adtLog; // 转科
         this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
       });
@@ -2008,10 +2009,11 @@ export default {
     } else {
       let data = {
         tradeCode: "nurse_getPatientVitalSigns",
-        PatientId: urlParams.PatientId,
-        VisitId: urlParams.VisitId,
-        StartTime: urlParams.StartTime,
+        PatientId: this.$route.query.PatientId,
+        VisitId: this.$route.query.VisitId,
+        StartTime: this.$route.query.StartTime,
       };
+
       common(data).then((res) => {
         this.apiData = res.data;
         this.$nextTick(() => {

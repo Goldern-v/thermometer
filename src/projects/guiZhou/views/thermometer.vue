@@ -2,7 +2,7 @@
   <div
     class="main-view"
     :style="{ width: `${leftWidth + areaWidth}px` }"
-    v-if="apiData"
+    v-if="apiData&&showFlage"
      @dblclick="dblclick"
   >
     <div class="head-hos">贵州省人民医院</div>
@@ -485,9 +485,10 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
+      showFlage:true,
       areaWidth: 0, // 网格区域的宽度
       areaHeight: 0, // 网格区域的高度
       xSpace: 18, // 纵向网格的间距
@@ -1004,6 +1005,11 @@ export default {
   created() {
     // 实现外部分页和打印
     window.addEventListener('message', this.messageHandle, false)
+    window.addEventListener('afterprint', ()=>{
+      console.log('打印处理中')
+     this.reset()
+      this.handleData()
+    })
   },
   beforeDestroy() {
     window.removeEventListener('message', this.messageHandle, false)
@@ -1053,7 +1059,6 @@ export default {
         switch (e.data.type) {
           case 'currentPage':
             if (e.data.value > 0) {
-              console.log('e.data', e.data, this.currentPage)
               this.currentPage = e.data.value
               this.$refs.main.innerHTML = ''
               this.reset()
@@ -1358,7 +1363,6 @@ export default {
       
     },
     init() {
-      
       this.getAreaHeight() // 遍历一遍获取高度
       this.getAreaWidth() // 遍历一遍获取宽度
       this.$nextTick(() => {
@@ -1387,17 +1391,6 @@ export default {
               }
             })
           }
-          // if (['pulse', 'heartRate'].includes(x.vitalCode)) {
-          //   // 心率或脉搏过快时，折线需要断开
-          //   data = [[]]
-          //   x.data.forEach((y) => {
-          //     if (y.value > this.pulseRange[1]) {
-          //       data.push([])
-          //     } else {
-          //       data[data.length - 1].push(y)
-          //     }
-          //   })
-          // }
           data.forEach((z) => {
             this.createBrokenLine({
               vitalCode: x.vitalCode,
@@ -1791,7 +1784,6 @@ export default {
             if (vitalCode === 'pulse' || vitalCode === 'heartRate') {
               // 如果脉搏或心率超限过快，则在最高的格子中间用实心红圈描点
               if (Number(x.value) > this.pulseRange[1]) {
-                console.log(x,this.pulseRange[1])
                 cy = this.getYaxis(yRange, yRange[1] - 2, vitalCode)
                 params = {
                   cx,

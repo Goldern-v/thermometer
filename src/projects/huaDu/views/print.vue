@@ -1,5 +1,5 @@
 <template>
-  <div v-if="printData">
+  <div v-if="printData" class="sheet-page-container">
     <Thermometer
       ref="thermometer"
       :printData="printData"
@@ -15,7 +15,7 @@
 <script>
 import Thermometer from "./thermometer.vue";
 import { mockData } from "src/projects/huaDu/mockData.js";
-import { common , getNurseExchangeInfoBatch } from "src/api/index.js"
+import { common , getNurseExchangeInfoBatch2 } from "src/api/index.js"
 
 export default {
   components: {
@@ -64,19 +64,18 @@ export default {
     window.addEventListener("message", this.messageHandle, false);
   },
   mounted() {
-    const urlParams = this.urlParse();
     if (this.useMockData) {
       this.printData = mockData;
       setTimeout(() => {
         this.pageTotal = this.$refs.thermometer[0].pageTotal;
       }, 0);
     } else {
-      let data={
-          tradeCode: "nurse_getPatientVitalSigns",
-          PatientId: urlParams.PatientId,
-          VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime,
-        }
+     let data = {
+        tradeCode: "nurse_getPatientVitalSigns",
+        PatientId: this.$route.query.PatientId,
+        VisitId: this.$route.query.VisitId,
+        StartTime: this.$route.query.StartTime,
+      };
       common(data).then((res) => {
         this.printData = res.data;
         setTimeout(() => {
@@ -85,10 +84,13 @@ export default {
         let exchangData={
           startLogDateTime:dataRangePrintAll[0][0] +' 00:00:00',
           endLogDateTime:dataRangePrintAll[dataRangePrintAll.length-1][1]+' 24:00:00',
-          visitId: urlParams.VisitId,
-          patientId: urlParams.PatientId,
+          visitId: this.$route.query.VisitId,
+          patientId: this.$route.query.PatientId,
         }
-      getNurseExchangeInfoBatch(exchangData).then((res)=>{
+        let config={}
+      config.data = exchangData;
+      config.authToken=this.$route.query.authTokenNursing
+      getNurseExchangeInfoBatch2(config).then((res)=>{
         let nurseExchangeInfo=res.data.data.exchangeInfos
          this.$nextTick(()=>{
           for(let i=0;i<this.$refs.thermometer.length;i++){

@@ -3,7 +3,7 @@
 function urlParse() {
   let obj = {};
   let reg = /[?&][^?&]+=[^?&%]+/g;
-  let url = window.location.hash;
+  let url = window.location.href;
   let arr = url.match(reg) || [];
   arr.forEach((item) => {
     let tempArr = item.substring(1).split("=");
@@ -14,7 +14,6 @@ function urlParse() {
   return obj;
 }
 var host = ''
-var domain = `${host}/crNursing/`
 var apiPath = `${host}/crNursing/api/`
 let source=urlParse().showInnerPage==='1'?"PDA":"CRWEB"
 let authToken=urlParse().authTokenNursing

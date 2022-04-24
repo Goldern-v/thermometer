@@ -318,7 +318,7 @@
           </div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-              {{ outCustomList.label || "其他" }}
+              {{ outCustomList.label&&!outCustomList.label.includes('自定义')? outCustomList.label:"其他" }}
             </div>
             <div class="value-item-box">
               <div
@@ -371,6 +371,17 @@
               <div
                 class="value-item font-14"
                 v-for="(item, index) in getFormatList({ tList: skinTest })"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">随机血糖(mmol/L)</div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                v-for="(item, index) in getFormatList({ tList: bloodSugar })"
                 :key="index"
                 v-html="item.value"
               ></div>
@@ -583,6 +594,7 @@ export default {
       feverList: [], // 发热体温
       heightList: [], // 身高
       BMIList: [], // BMI
+      bloodSugar:[],
       outCustomList: [], // 自定义1
       customList0: [], // 自定义2
       customList1: [], // 自定义3
@@ -622,10 +634,11 @@ export default {
         28: "呕吐量",
         29: "在线降温",
         ttpf: "疼痛评分",
-        4: "其他",
-        41: "自定义1",
-        42: "自定义2",
-        43: "自定义3",
+        sjxt:"随机血糖",
+        4: "自定义1",
+        41: "自定义2",
+        42: "自定义3",
+        43: "自定义4",
       }, // vital_code是null的时候，是自定义字段，显示在体温表后面
       lineMap: {
         2: "oralTemperature",
@@ -932,6 +945,12 @@ export default {
   created() {
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
+        window.addEventListener('afterprint', ()=>{
+      console.log('打印处理中')
+      console.log(12312312)
+     this.reset()
+      this.handleData()
+    })
   },
   beforeDestroy() {
     window.removeEventListener("message", this.messageHandle, false);
@@ -1200,6 +1219,9 @@ export default {
             break;
           case "36":
             this.BMIList.push(item);
+            break;
+          case "sjxt":
+            this.bloodSugar.push(item);
             break;
           default:
             break;

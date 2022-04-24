@@ -57,6 +57,7 @@ let environment="production";
 const today = new Date()
 const packageName = `${projectName}体温单_${today.getFullYear()}年${today.getMonth() +
   1}月${today.getDate()}日${today.getHours()}时${today.getMinutes()}分${today.getSeconds()}秒`
+  console.log(packageName)
 module.exports = {
   publicPath: './',
   outputDir:packageName,
@@ -142,7 +143,7 @@ module.exports = {
         target:(() => {
           switch (project) {
             case 'huaDu':
-              return 'http://120.238.239.27:9094/'
+              return 'http://120.238.239.27:9094'
             case 'liaoCheng':
               // return 'http://172.17.5.41:9091'
               return 'http://120.224.211.7:9091'
@@ -176,7 +177,7 @@ module.exports = {
             case 'wuHanYaXin':
               return 'http://218.107.37.134:9093/'
             case 'longJiang':
-              return 'http://218.13.34.230:9094/'
+              return 'http://218.13.34.230:9094'
             case 'linYi':
               return 'http://218.107.37.134:9093'
             case 'common':
@@ -192,7 +193,7 @@ module.exports = {
         }
       },
   
-      '/': {
+      '/crHesb/hospital/common': {
         target: (() => {
           switch (project) {
             case 'huaDu':
@@ -230,7 +231,7 @@ module.exports = {
             case 'wuHanYaXin':
               return 'http://218.107.37.134:9093'
             case 'longJiang':
-              return 'http://218.107.37.134:9093'
+              return 'http://218.13.34.230:9094'
             case 'linYi':
               return 'http://218.107.37.134:9093'
             case 'common':
@@ -241,8 +242,6 @@ module.exports = {
         })(),
         changeOrigin: true,
       },
-      
-      
     }
   }
 }
