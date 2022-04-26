@@ -53,13 +53,14 @@ const projectName = (() => {
 })()
 //配置代码运行的环境
 let environment="production";
-// let environment="test";
+// let environment="development";
+// let environment="none";
 const today = new Date()
 const packageName = `${projectName}体温单_${today.getFullYear()}年${today.getMonth() +
   1}月${today.getDate()}日${today.getHours()}时${today.getMinutes()}分${today.getSeconds()}秒`
   console.log(packageName)
 module.exports = {
-  publicPath: './',
+  publicPath: project==='huaDu'?'/temperature/':'./',
   outputDir:packageName,
   lintOnSave: false,
   configureWebpack: {

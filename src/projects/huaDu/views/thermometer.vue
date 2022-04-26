@@ -1991,7 +1991,7 @@ export default {
   },
   mounted() {
     const urlParams = this.urlParse();
-    this.showInnerPage = urlParams.showInnerPage === "1";
+    this.showInnerPage = this.$route.query.showInnerPage === "1";
     if (this.isPrintAll) {
       // 批量打印
       this.apiData = this.printData;

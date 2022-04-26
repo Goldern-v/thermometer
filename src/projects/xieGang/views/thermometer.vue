@@ -890,6 +890,9 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
+    currentPage(value) {
+      window.parent.postMessage({ type: "currentPage", value }, "*");
+    },
   },
   created() {
     // 实现外部分页和打印
@@ -909,6 +912,13 @@ export default {
         transform: "translateX(1.5px)",
         "font-family": "SimHei",
       };
+    },
+        handleChangePage(value){
+      this.dateRangeList.forEach((item,index)=>{
+        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
+        this.currentPage=index+1
+        }
+      })
     },
     bSort(arr) {
       var len = arr.length;
@@ -972,6 +982,9 @@ export default {
           case "printing":
             window.print();
             break;
+             case 'dateChangePage':
+              this.handleChangePage(e.data.value)
+              break;
           case "nurseExchangeInfo":
             if (e.data.value) {
               this.adtLog = e.data.value.adtLog || ""; // 转科

@@ -894,6 +894,9 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
+    currentPage(value) {
+      window.parent.postMessage({ type: "currentPage", value }, "*");
+    },
   },
   created() {
     // 实现外部分页和打印
@@ -931,6 +934,13 @@ export default {
         transform: "translateX(1px)",
       };
     },
+        handleChangePage(value){
+      this.dateRangeList.forEach((item,index)=>{
+        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
+        this.currentPage=index+1
+        }
+      })
+    },
     //找到存在出院或者转出的日期
     getLeaveTime() {
       let outTime = "";
@@ -956,6 +966,9 @@ export default {
               this.handleData();
             }
             break;
+             case 'dateChangePage':
+              this.handleChangePage(e.data.value)
+              break;
           case "printing":
             window.print();
             break;

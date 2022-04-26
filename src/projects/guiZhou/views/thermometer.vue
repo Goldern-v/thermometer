@@ -1,11 +1,12 @@
 <template>
   <div
     class="main-view"
+    id="test"
     :style="{ width: `${leftWidth + areaWidth}px` }"
     v-if="apiData&&showFlage"
      @dblclick="dblclick"
   >
-    <div class="head-hos">贵州省人民医院</div>
+    <div class="head-hos" @click="()=>{}">贵州省人民医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
       <div class="item">
@@ -462,6 +463,7 @@
 import zrender from 'zrender'
 import { mockData } from 'src/projects/guiZhou/mockData.js'
 import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
+import { printing } from 'src/utils/printing'
 
 export default {
   props: {
@@ -485,7 +487,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       showFlage:true,
@@ -1000,19 +1002,21 @@ export default {
     // 因为分页可能在体温单外面，所以给父页面传递pageTotal
     pageTotal(value) {
       window.parent.postMessage({ type: 'pageTotal', value }, '*')
-    }
+    },
+    currentPage(value) {
+      window.parent.postMessage({ type: "currentPage", value }, "*");
+    },
   },
   created() {
     // 实现外部分页和打印
     window.addEventListener('message', this.messageHandle, false)
-    window.addEventListener('afterprint', ()=>{
-      console.log('打印处理中')
-     this.reset()
-      this.handleData()
-    })
   },
   beforeDestroy() {
     window.removeEventListener('message', this.messageHandle, false)
+    window.removeEventListener('afterprint',()=>{
+      this.reset();
+      this.handleData();
+    },false)
   },
   methods: {
     smallTdStyle(index) {
@@ -1042,6 +1046,13 @@ export default {
         }
       }
     },
+        handleChangePage(value){
+      this.dateRangeList.forEach((item,index)=>{
+        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
+        this.currentPage=index+1
+        }
+      })
+    },
     middleTdStyle(index) {
       return {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 4 : 3)}px`,
@@ -1064,16 +1075,19 @@ export default {
               this.reset()
               this.handleData()
             }
-            break
+            break;
           case 'printing':
             window.print()
-            break
+            break;
           case 'nurseExchangeInfo':
             if (e.data.value) {
               this.adtLog = e.data.value.adtLog || '' // 转科
               this.bedExchangeLog = e.data.value.bedExchangeLog || '' // 转床
             }
-            break
+            break;
+             case 'dateChangePage':
+              this.handleChangePage(e.data.value)
+              break;
           default:
             break
         }
@@ -2314,6 +2328,24 @@ export default {
     }
   },
   mounted() {
+     if (window.matchMedia) {
+       let this2=this
+    var mediaQueryList = window.matchMedia("print");
+    //老版本浏览器
+    mediaQueryList.addListener(function({matches}) {
+      if (!matches) {
+      this2.showFlage=false
+        this2.showFlage=true
+        this2.reset()
+      this2.handleData()
+      } 
+    });
+    //新版本浏览器
+    window.addEventListener('afterprint', ()=>{
+        this.reset()
+        this.handleData()
+    });
+  }
     const urlParams = this.urlParse();
     this.showInnerPage = urlParams.showInnerPage === "1";
     if (this.isPrintAll) {

@@ -852,6 +852,13 @@ export default {
         "font-family": "SimHei",
       };
     },
+        handleChangePage(value){
+      this.dateRangeList.forEach((item,index)=>{
+        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
+        this.currentPage=index+1
+        }
+      })
+    },
     middleTdStyle(index, length) {
       return {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 7 : 6)}px`,
@@ -889,6 +896,9 @@ export default {
           case "printing":
             window.print();
             break;
+             case 'dateChangePage':
+              this.handleChangePage(e.data.value)
+              break;
           case "nurseExchangeInfo":
             if (e.data.value) {
               this.adtLog = e.data.value.adtLog || ""; // 转科

@@ -18,7 +18,7 @@ export const mockData = {
   vitalSigns: [
     { temperature_type: "呼吸", value: "26", time_point: "2021-12-08 12:00:00", vital_code: "04" },
 
-    { temperature_type: "其它", value: "SpO2:98%", time_point: "2021-12-08 12:00:00", vital_code: "51" },
+    { temperature_type: "SpO2", value: "98%", time_point: "2021-12-08 12:00:00", vital_code: "51" },
 
     { temperature_type: "身高", value: "120", time_point: "2021-12-08 12:00:00", vital_code: "094" },
 
