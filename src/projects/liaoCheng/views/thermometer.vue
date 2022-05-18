@@ -920,7 +920,10 @@ export default {
     // 因为分页可能在体温单外面，所以给父页面传递pageTotal
     pageTotal(value) {
       window.parent.postMessage({ type: 'pageTotal', value }, '*')
-    }
+    },
+    currentPage(value) {
+      window.parent.postMessage({ type: "currentPage", value }, "*");
+    },
   },
   created() {
     // 实现外部分页和打印
@@ -1003,6 +1006,9 @@ export default {
           case 'printing':
             window.print()
             break
+             case 'dateChangePage':
+              this.handleChangePage(e.data.value)
+              break;
           case 'nurseExchangeInfo':
             if (e.data.value) {
               this.adtLog = e.data.value.adtLog || '' // 转科
@@ -1050,6 +1056,13 @@ export default {
       this.$refs.main.innerHTML = ''
       this.reset()
       this.handleData()
+    },
+        handleChangePage(value){
+      this.dateRangeList.forEach((item,index)=>{
+        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
+        this.currentPage=index+1
+        }
+      })
     },
     handleData() {
       if (this.apiData.patientInfo)

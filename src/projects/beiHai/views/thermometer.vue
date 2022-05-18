@@ -475,7 +475,7 @@ export default {
     // const painRange = [0, 10]
 
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -886,12 +886,15 @@ export default {
         transform: "translateX(1px)",
       };
     },
-      handleChangePage(value){
-      this.dateRangeList.forEach((item,index)=>{
-        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
-        this.currentPage=index+1
+    handleChangePage(value) {
+      this.dateRangeList.forEach((item, index) => {
+        if (
+          this.getTimeNum(value) >= this.getTimeNum(item[0]) &&
+          this.getTimeNum(value) <= this.getTimeNum(item[1])
+        ) {
+          this.currentPage = index + 1;
         }
-      })
+      });
     },
     dblclick() {
       // 和iframe外部通信，传递双击事件
@@ -908,9 +911,9 @@ export default {
               this.handleData();
             }
             break;
-             case 'dateChangePage':
-              this.handleChangePage(e.data.value)
-              break;
+          case "dateChangePage":
+            this.handleChangePage(e.data.value);
+            break;
           case "printing":
             setTimeout(() => {
               window.print();
@@ -1126,7 +1129,7 @@ export default {
           y,
         };
       });
-      const xaxisNew = this.handleNoteXaxis(xaxis,notes);
+      const xaxisNew = this.handleNoteXaxis(xaxis, notes);
 
       notes.forEach((x, i) => {
         let value = x.value;
@@ -1148,7 +1151,7 @@ export default {
             ? y - 7 * this.ySpace - 8
             : centerText.includes(value)
             ? y - 18 * this.ySpace - 4
-            : xaxisNew[i].y -2*this.ySpace-2,
+            : xaxisNew[i].y - 2 * this.ySpace - 2,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1181,17 +1184,37 @@ export default {
               }
             });
           }
-          // if (['02', '20'].includes(x.vitalCode)) {
-          //   // 心率或脉搏过快时，折线需要断开
-          //   data = [[]]
-          //   x.data.forEach((y) => {
-          //     if (y.value > this.pulseRange[1]) {
-          //       data.push([])
-          //     } else {
-          //       data[data.length - 1].push(y)
-          //     }
-          //   })
-          // }
+          if (["20"].includes(x.vitalCode)) {
+            // 心率或脉搏过快时，折线需要断开
+            const sameTimeList = [
+              ...this.settingMap.pulse.data,
+            ].map((h) => {
+              return {
+                x: this.getXaxis(this.getLocationTime(h.time)),
+                y: this.getYaxis(this.pulseRange, h.value),
+              };
+            });
+            x.data.forEach((z) => {
+             let cx = this.getXaxis(this.getLocationTime(z.time))
+              let cy=this.getYaxis(this.pulseRange, z.value)
+            const sameItem=sameTimeList.find((y)=>
+                cx.toFixed(2) === y.x.toFixed(2) 
+              )
+                if (sameItem) {
+                //化纤
+                this.createLine({
+                  x1:cx,
+                  y1:cy+3,
+                  x2: sameItem.x,
+                  y2: sameItem.y,
+                  lineWidth: 2,
+                  color: "red",
+                  zlevel: 100,
+                  lineDash: [], //如果降温比体温高，也就是降温的y轴坐标小，则用实线
+                });
+              }
+            });
+          }
           data.forEach((z) => {
             this.createBrokenLine({
               vitalCode: x.vitalCode,
@@ -1496,6 +1519,7 @@ export default {
       return new Date(timeStr).getTime();
     },
     addHover(el, config, x, y, shapeOn, shapeOut) {
+      console.log(shapeOn,shapeOut)
       const domTips = document.getElementsByClassName("tips");
       el.on("mouseover", () => {
         domTips[0].innerHTML = config.tips;
@@ -1585,6 +1609,7 @@ export default {
                   x.x.toFixed(2) === cx.toFixed(2) &&
                   x.y.toFixed(2) === cy.toFixed(2)
               );
+
               if (sameAxisItem) {
                 params = {
                   cx,
@@ -1945,25 +1970,29 @@ export default {
       return overWan ? getWan(overWan) + "万" + getWan(noWan) : getWan(num);
     },
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
-    handleNoteXaxis(xaxisList,notes) {
+    handleNoteXaxis(xaxisList, notes) {
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {
         if (
           JSON.stringify(xaxisNew).indexOf(JSON.stringify(xaxisList[i])) == -1
         ) {
           xaxisNew.push(xaxisList[i]);
-          
         } else {
-             let noteTime = notes[i-1].value.endsWith("|")?`${notes[i-1].value}${this.toChinesNum(
-                new Date(notes[i-1].time).getHours()
-              )}时${this.toChinesNum(new Date(notes[i-1].time).getMinutes())}分`:notes[i-1].value;
+          let noteTime = notes[i - 1].value.endsWith("|")
+            ? `${notes[i - 1].value}${this.toChinesNum(
+                new Date(notes[i - 1].time).getHours()
+              )}时${this.toChinesNum(
+                new Date(notes[i - 1].time).getMinutes()
+              )}分`
+            : notes[i - 1].value;
 
           while (
             JSON.stringify(xaxisNew).indexOf(JSON.stringify(xaxisList[i])) != -1
           ) {
-            if(notes[i].value==='手术'){
-               xaxisList[i].y += (noteTime.length +1) * this.ySpace+noteTime.length+2
-            }else{
+            if (notes[i].value === "手术") {
+              xaxisList[i].y +=
+                (noteTime.length + 1) * this.ySpace + noteTime.length + 2;
+            } else {
               xaxisList[i].x += this.xSpace;
             }
           }
@@ -1974,6 +2003,7 @@ export default {
     },
   },
   mounted() {
+      document.title='北海市人民医院'
     const urlParams = this.urlParse();
     this.showInnerPage = urlParams.showInnerPage === "1";
     if (this.isPrintAll) {

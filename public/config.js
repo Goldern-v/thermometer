@@ -20,7 +20,7 @@ window.tableBottomList = [
   { vitalCode: '19', label: '总出量(ml)' },
   { vitalCode: '10', label: '引流量(ml)' },
   { vitalCode: '12', label: '尿量(ml)' },
-  { vitalCode: '32', label: '' },
+  { vitalCode: '32', label: '123' },
   { vitalCode: '33', label: '' },
   { vitalCode: '34', label: '' },
   { vitalCode: '35', label: '' }

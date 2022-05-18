@@ -29,6 +29,12 @@
           "vital_code": "12"
       },
       {
+          "temperature_type": "血压饱和度",
+          "value": "122",
+          "time_point": "2022-03-08 12:00:10",
+          "vital_code": "xybhd"
+      },
+      {
           "temperature_type": "体温",
           "value": "36.8",
           "time_point": "2022-03-08 14:00:00",
@@ -78,7 +84,7 @@
       },
       {
           "temperature_type": "随机血糖",
-          "value": "100",
+          "value": "22:00 100",
           "time_point": "2022-03-08 17:24:12",
           "vital_code": "sjxt"
       },
@@ -183,7 +189,7 @@
       {
           "temperature_type": "血压",
           "value": "120",
-          "time_point": "2022-03-08 17:24:12",
+          "time_point": "2022-03-08 12:00:00",
           "vital_code": "14"
       },
       {

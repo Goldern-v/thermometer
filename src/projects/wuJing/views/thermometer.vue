@@ -1064,7 +1064,7 @@ export default {
     getLeaveTime() {
       let outTime = "";
       this.topSheetNote.forEach((y) => {
-        if (y.value.includes("出院") || y.value.includes("转出")) {
+        if (y.value.includes("出院")) {
           outTime = y.time.slice(0, 10);
         }
       });
@@ -1415,6 +1415,7 @@ export default {
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
+        console.log(this.zr,'zr')
         this.yLine(); //生成Y轴坐标
         this.xLine(); //生成X轴坐标
         // 画折线
@@ -2260,22 +2261,23 @@ export default {
     }) {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
-      let special = ["E", "※"];
       const targetList = [...tList];
+      console.log(targetList)
       const coloclysterList = [...coloclyster];
       const afterColoclysterList = [...afterColoclyster];
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
+               if (timeNum >= i && timeNum < i + timeInterval) {
+                item.value = `${targetList[j].value}`;
+              }
           if ((coloclysterList.length>0&&afterColoclysterList.length>0)) {
             for (let k = 0; k < coloclysterList.length; k++) {
               const timeNumColoclyster= this.getTimeNum(coloclysterList[k].time);
               for(let h=0;h<afterColoclysterList.length;h++){
                  const timeNumAfterColoclyster = this.getTimeNum(afterColoclysterList[h].time);
-              if (timeNum >= i && timeNum < i + timeInterval) {
-                item.value = `${targetList[j].value}`;
-              }
+
               if (
                 (timeNum >= i &&
                 timeNum < i + timeInterval )&&
@@ -2376,6 +2378,7 @@ export default {
     },
   },
   mounted() {
+    document.title='武警广东省总队医院体温单'
     const urlParams = this.urlParse();
     this.showInnerPage = urlParams.showInnerPage === "1";
     if (this.isPrintAll) {

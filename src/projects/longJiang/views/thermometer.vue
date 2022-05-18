@@ -126,7 +126,7 @@
             :style="{ width: `${leftWidth}px` }"
             v-html="`时间`"
           ></div>
-          <div class="value-item-box" style="font-weight: 400;font-size:18px">
+          <div class="value-item-box" style="font-weight: 400; font-size: 18px">
             <div
               class="value-item"
               :style="smallTdStyle(index, timeTds.length)"
@@ -255,7 +255,7 @@
           <div class="value-item-box font-14" style="color: blue">
             <div
               class="value-item font-14"
-              :style="middleTdStyle(index, formatBreatheList.length)"
+              :style="middleTdStyle(index, formatPressureList.length)"
               v-for="(item, index) in formatPressureList"
               :key="index"
             >
@@ -263,6 +263,27 @@
             </div>
           </div>
         </div>
+        <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div
+              class="label"
+              :style="{
+                width: `${leftWidth}px`,
+                transform: 'translateX(2.5px)',
+              }"
+            >
+              血氧饱和度
+            </div>
+            <div class="value-item-box font-14" style="color: blue">
+              <div
+                class="value-item font-14"
+                :style="middleTdStyle(index, formatbloodOxygenList.length)"
+                v-for="(item, index) in formatbloodOxygenList"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
+            </div>
+          </div>
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">总输入量</div>
           <div class="value-item-box">
@@ -318,7 +339,11 @@
           </div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-              {{ outCustomList.label&&!outCustomList.label.includes('自定义')? outCustomList.label:"其他" }}
+              {{
+                outCustomList.label && !outCustomList.label.includes("自定义")
+                  ? outCustomList.label
+                  : "其他"
+              }}
             </div>
             <div class="value-item-box">
               <div
@@ -377,11 +402,13 @@
             </div>
           </div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">随机血糖(mmol/L)</div>
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              随机血糖(mmol/L)
+            </div>
             <div class="value-item-box">
               <div
                 class="value-item font-14"
-                v-for="(item, index) in getFormatList({ tList: bloodSugar })"
+                v-for="(item, index) in getFormatListTime({ tList: bloodSugar })"
                 :key="index"
                 v-html="item.value"
               ></div>
@@ -582,6 +609,7 @@ export default {
         // { time: '2019-05-18 03:12:00', value: '20' }
       ], // 呼吸
       pressureList: [], // 血压
+      bloodOxygenList: [], // 血氧
       weightList: [], // 体重
       inputList: [], // 液体入量
       shitList: [], // 大便次数
@@ -594,7 +622,7 @@ export default {
       feverList: [], // 发热体温
       heightList: [], // 身高
       BMIList: [], // BMI
-      bloodSugar:[],
+      bloodSugar: [],
       outCustomList: [], // 自定义1
       customList0: [], // 自定义2
       customList1: [], // 自定义3
@@ -634,7 +662,8 @@ export default {
         28: "呕吐量",
         29: "在线降温",
         ttpf: "疼痛评分",
-        sjxt:"随机血糖",
+        sjxt: "随机血糖",
+        xybhd: "血氧饱和度",
         4: "自定义1",
         41: "自定义2",
         42: "自定义3",
@@ -694,7 +723,7 @@ export default {
         const item = { timeNum: i, value: "" };
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum >= i && timeNum <= i + 3 * 4 * 60 * 60 * 1000) {
+          if (timeNum >= i && timeNum < i + 3 * 4 * 60 * 60 * 1000) {
             item.value = pressureList[j].value;
             pressureList.splice(j, 1);
             break;
@@ -722,10 +751,32 @@ export default {
         this.bottomAreaHeight
       );
     },
+    formatbloodOxygenList() {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const bloodOxygenList = [...this.bloodOxygenList];
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1];
+        i += 3 * 4 * 60 * 60 * 1000
+      ) {
+        const item = { timeNum: i, value: "" };
+        for (let j = bloodOxygenList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(bloodOxygenList[j].time);
+          if (timeNum >= i && timeNum < i + 3 * 4 * 60 * 60 * 1000) {
+            item.value = bloodOxygenList[j].value;
+            bloodOxygenList.splice(j, 1);
+            break;
+          }
+        }
+        list.push(item);
+      }
+      return list;
+    },
     formatBreatheList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
-      const breatheList = [...this.breatheList];      
+      const breatheList = [...this.breatheList];
       const timeAdd = (i) => {
         return 4 * 60 * 60 * 1000;
       };
@@ -941,16 +992,19 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
+    currentPage(value) {
+      window.parent.postMessage({ type: "currentPage", value }, "*");
+    },
   },
   created() {
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
-        window.addEventListener('afterprint', ()=>{
-      console.log('打印处理中')
-      console.log(12312312)
-     this.reset()
-      this.handleData()
-    })
+    // window.addEventListener("afterprint", () => {
+    //   console.log("打印处理中");
+    //   console.log(12312312);
+    //   this.reset();
+    //   this.handleData();
+    // });
   },
   beforeDestroy() {
     window.removeEventListener("message", this.messageHandle, false);
@@ -1001,6 +1055,17 @@ export default {
       });
       return outTime;
     },
+   async handleChangePage(value) {
+     this.dateRangeList.find((x,index)=>{
+        this.currentPage = index + 1;
+         return this.getTimeNum(x[0])<=this.getTimeNum(value) &&
+          this.getTimeNum(x[1])>=this.getTimeNum(value)
+     }  
+    )
+    this.$refs.main.innerHTML = ""
+    this.reset()
+    this.handleData()
+    },
     messageHandle(e) {
       if (e && e.data) {
         switch (e.data.type) {
@@ -1014,6 +1079,9 @@ export default {
             break;
           case "printing":
             window.print();
+            break;
+          case "dateChangePage":
+            this.handleChangePage(e.data.value);
             break;
           default:
             break;
@@ -1042,6 +1110,7 @@ export default {
       this.physicsCoolList = [];
       this.onLineCoolList = [];
       this.feverList = [];
+      this.bloodOxygenList = [];
       this.dateRangeList = [];
       for (let i = 0; i < 4; i++) {
         this[`customList${i}`] = [];
@@ -1222,6 +1291,9 @@ export default {
             break;
           case "sjxt":
             this.bloodSugar.push(item);
+            break;
+          case "xybhd":
+            this.bloodOxygenList.push(item);
             break;
           default:
             break;
@@ -1602,14 +1674,13 @@ export default {
         domTips[0].setAttribute("style", `display:none`);
         el.animateTo(shapeOut, 100, 0);
       });
-                   el.on('click',()=>{
-      let dateTime=config.tips.slice(0,20)
+      el.on("click", () => {
+        let dateTime = config.tips.slice(0, 20);
         window.parent.postMessage(
-          { type: 'clickDateTime', value: dateTime },
-          '*'
-        )
-     
-    })
+          { type: "clickDateTime", value: dateTime },
+          "*"
+        );
+      });
     },
     createBrokenLine({
       vitalCode,
@@ -1948,6 +2019,33 @@ export default {
       }
       return list;
     },
+    getFormatListTime({ tList, timeInterval = 24 * 60 * 60 * 1000 }) {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const targetList = [...tList];
+      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+        const item = { timeNum: i, value: "" };
+        for (let j = targetList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(targetList[j].time);
+          if (timeNum >= i && timeNum < i + timeInterval) {
+            if(targetList[j].value.indexOf(':')==-1){
+              item.value = `${targetList[j].time.slice(11,16)} ${targetList[j].value}`
+
+            targetList.splice(j, 1);
+            break;
+            }else{
+               item.value = targetList[j].value
+
+            targetList.splice(j, 1);
+            break;
+            }
+            
+          }
+        }
+        list.push(item);
+      }
+      return list;
+    },
     //大便次数有些科室要特殊显示，需要特殊处理
     getFormatShitList({
       tList,
@@ -2053,6 +2151,7 @@ export default {
     },
   },
   mounted() {
+      document.title='广东医科大学附属第三医院龙江医院体温单'
     const urlParams = this.urlParse();
     this.showInnerPage = urlParams.showInnerPage === "1";
     if (this.isPrintAll) {

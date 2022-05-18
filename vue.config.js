@@ -7,7 +7,7 @@ function resolve(dir) {
 }
 //打包配置自动忽略console.log等
 //配置体温单的打包路径和名字
-const projectName = (() => {
+ const projectName = (() => {
   switch (project) {
     case 'huaDu': // 花都人医
       return '花都人民医院'
@@ -232,7 +232,7 @@ module.exports = {
             case 'wuHanYaXin':
               return 'http://218.107.37.134:9093'
             case 'longJiang':
-              return 'http://218.13.34.230:9094'
+              return 'http://218.13.34.230:9091'
             case 'linYi':
               return 'http://218.107.37.134:9093'
             case 'common':

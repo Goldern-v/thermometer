@@ -426,7 +426,7 @@
             </div>
           </div>
         </div>
-        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList4.label || "" }}
           </div>
@@ -439,8 +439,8 @@
               {{ item.value }}
             </div>
           </div>
-        </div>-->
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        </div>
+        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList5.label || "" }}
           </div>
@@ -453,7 +453,7 @@
               {{ item.value }}
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="pagination" v-if="showInnerPage">
@@ -503,7 +503,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1082,33 +1082,76 @@ export default {
           // 超出时间范围的抛弃
           continue;
         }
-        if (
-          vitalSigns[i].vital_code === "32" ||
-          vitalSigns[i].vital_code === "33" ||
-          vitalSigns[i].vital_code === "34" ||
-          vitalSigns[i].vital_code === "35" ||
-          vitalSigns[i].vital_code === "36" ||
-          vitalSigns[i].vital_code === "37"
-        ) {
-          // 自定义字段填入
+                if (["32", "33", "34", "35",'36'].includes(vitalSigns[i].vital_code)) {
           const sign = vitalSigns[i].temperature_type;
-          const index = customSigns.indexOf(sign);
-          if (index < 0) {
-            customSigns.push(sign);
-            this[`customList${customSigns.length - 1}`].push({
-              time: vitalSigns[i].time_point,
-              value: vitalSigns[i].value,
-            });
-            this[`customList${customSigns.length - 1}`].label = sign;
-          } else {
-            this[`customList${index}`].push({
-              time: vitalSigns[i].time_point,
-              value: vitalSigns[i].value,
-            });
-            this[`customList${index}`].label = sign;
+
+          switch (vitalSigns[i].vital_code) {
+            case "32":
+              this.customList0.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList0.label = sign;
+              break;
+            case "33":
+              this.customList1.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList1.label = sign;
+              break;
+            case "34":
+              this.customList2.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList2.label = sign;
+              break;
+            case "35":
+              this.customList3.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList3.label = sign;
+              break;
+            case "36":
+              this.customList4.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList4.label = sign;
+              break;
+            default:
+              break;
           }
-          continue;
         }
+        // if (
+        //   vitalSigns[i].vital_code === "32" ||
+        //   vitalSigns[i].vital_code === "33" ||
+        //   vitalSigns[i].vital_code === "34" ||
+        //   vitalSigns[i].vital_code === "35" ||
+        //   vitalSigns[i].vital_code === "36" ||
+        //   vitalSigns[i].vital_code === "37"
+        // ) {
+        //   // 自定义字段填入
+        //   const sign = vitalSigns[i].temperature_type;
+        //   const index = customSigns.indexOf(sign);
+        //   if (index < 0) {
+        //     customSigns.push(sign);
+        //     this[`customList${customSigns.length - 1}`].push({
+        //       time: vitalSigns[i].time_point,
+        //       value: vitalSigns[i].value,
+        //     });
+        //     this[`customList${customSigns.length - 1}`].label = sign;
+        //   } else {
+        //     this[`customList${index}`].push({
+        //       time: vitalSigns[i].time_point,
+        //       value: vitalSigns[i].value,
+        //     });
+        //     this[`customList${index}`].label = sign;
+        //   }
+        //   continue;
+        // }
         if (this.lineMap[vitalSigns[i].vital_code]) {
           if (
             ["02", "20"].includes(vitalSigns[i].vital_code) &&
@@ -1261,6 +1304,7 @@ export default {
               dotType: x.dotType,
             });
           });
+          this.handleCustomList()
         });
         /*  画心率和脉搏的多边形，连线已经用折线画了，
             这里用多边形是为了生成阴影，多边形的边框颜色设为透明，
@@ -1290,6 +1334,17 @@ export default {
           "black"
         );
       });
+    },
+        //操作自定义的显示位置，存在空的自定义时 往上推不留空
+    handleCustomList() {
+      for (let k = 0; k < 5; k++) {
+        for (let j = k - 1; j >= 0; j--) {
+          if (this[`customList${j}`].length === 0) {
+            this[`customList${j}`] = this[`customList${k}`];
+            this[`customList${k}`] = [];
+          }
+        }
+      }
     },
     yLine() {
       const totalLine =
