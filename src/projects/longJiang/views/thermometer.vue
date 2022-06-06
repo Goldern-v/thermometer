@@ -5,7 +5,7 @@
     v-if="apiData"
     :style="{ width: `${leftWidth + areaWidth}px` }"
   >
-    <div class="head-hos">广东医科大学附属第三医院</div>
+    <div class="head-hos">广东医科大学附属第三医院佛山市顺德区龙江医院</div>
     <div class="head-title">体温单</div>
     <!-- <div class="head-info-1">
      
@@ -264,26 +264,26 @@
           </div>
         </div>
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div
+            class="label"
+            :style="{
+              width: `${leftWidth}px`,
+              transform: 'translateX(2.5px)',
+            }"
+          >
+            血氧饱和度
+          </div>
+          <div class="value-item-box font-14" style="color: blue">
             <div
-              class="label"
-              :style="{
-                width: `${leftWidth}px`,
-                transform: 'translateX(2.5px)',
-              }"
+              class="value-item font-14"
+              :style="middleTdStyle(index, formatbloodOxygenList.length)"
+              v-for="(item, index) in formatbloodOxygenList"
+              :key="index"
             >
-              血氧饱和度
-            </div>
-            <div class="value-item-box font-14" style="color: blue">
-              <div
-                class="value-item font-14"
-                :style="middleTdStyle(index, formatbloodOxygenList.length)"
-                v-for="(item, index) in formatbloodOxygenList"
-                :key="index"
-              >
-                {{ item.value }}
-              </div>
+              {{ item.value }}
             </div>
           </div>
+        </div>
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">总输入量</div>
           <div class="value-item-box">
@@ -408,7 +408,9 @@
             <div class="value-item-box">
               <div
                 class="value-item font-14"
-                v-for="(item, index) in getFormatListTime({ tList: bloodSugar })"
+                v-for="(item, index) in getFormatListTime({
+                  tList: bloodSugar,
+                })"
                 :key="index"
                 v-html="item.value"
               ></div>
@@ -1055,16 +1057,18 @@ export default {
       });
       return outTime;
     },
-   async handleChangePage(value) {
-     this.dateRangeList.find((x,index)=>{
-        this.currentPage = index + 1;
-         return this.getTimeNum(x[0])<=this.getTimeNum(value) &&
-          this.getTimeNum(x[1])>=this.getTimeNum(value)
-     }  
-    )
-    this.$refs.main.innerHTML = ""
-    this.reset()
-    this.handleData()
+    handleChangePage(value) {
+      this.dateRangeList.forEach((x, ind) => {
+        if (
+          this.getTimeNum(x[0]) <= this.getTimeNum(value) &&
+          this.getTimeNum(x[1]) >= this.getTimeNum(value)
+        ) {
+          this.currentPage = ind + 1;
+          this.$refs.main.innerHTML = "";
+          this.reset();
+          this.handleData();
+        }
+      });
     },
     messageHandle(e) {
       if (e && e.data) {
@@ -1301,6 +1305,16 @@ export default {
       }
       this.init();
     },
+        //找到表底存在不升的日期
+    getNotTemTime() {
+      let outTime = [];
+      this.topSheetNote.forEach((y) => {
+        if (y.value.includes("转入")||y.value.includes("转出")) {
+          outTime.push(y.time);
+        }
+      });
+      return outTime;
+    },
     init() {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
@@ -1312,17 +1326,81 @@ export default {
         this.$refs.main.appendChild(div);
         this.yLine(); //生成Y轴坐标
         this.xLine(); //生成X轴坐标
-        Object.values(this.settingMap).forEach((x) => {
-          this.createBrokenLine({
-            vitalCode: x.vitalCode,
-            data: x.data,
-            yRange: x.range,
-            lineColor: x.lineColor || x.color,
-            label: x.label,
-            dotColor: x.color,
-            dotSolid: x.solid,
-            dotType: x.dotType,
+                Object.values(this.settingMap).forEach((x) => {
+          let data = [x.data];
+          if ("2", "1", "19".includes(x.vitalCode)) {
+            // 体温为不升时，折线需要断开
+            data = [[]];
+            x.data.forEach((y, index) => {
+              if (y.value > 35) {
+                data[data.length - 1].push(y);
+              }
+              if (index < x.data.length - 1) {
+                //如果存在中间不升的情况，中间断开
+                if (this.getNotTemTime() !== []) {
+                  for (let item of this.getNotTemTime()) {
+                    if (
+                      this.getTimeNum(x.data[index + 1].time) >=
+                        this.getTimeNum(this.getLocationTime(item)) &&
+                      this.getTimeNum(y.time) <= this.getTimeNum(this.getLocationTime(item))
+                      // item.slice(0, 10) === y.time.slice(0, 10)
+                    ) {
+                      data.push([x.data[index + 1]]);
+                    }
+                  }
+                }
+              } else {
+                const list = data[data.length - 1];
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y);
+                }
+              }
+            });
+          }
+          if (["11", "12"].includes(x.vitalCode)) {
+            // 心率或脉搏过快时，折线需要断开
+            data = [[]];
+            x.data.forEach((y, index) => {
+              if (y.value <= this.pulseRange[1]) {
+                data[data.length - 1].push(y);
+              } else {
+                data.push([]);
+              }
+              if (index < x.data.length - 1) {
+                if (this.getNotTemTime() !== []) {
+                  for (let item of this.getNotTemTime()) {
+                    if (
+                      this.getTimeNum(x.data[index + 1].time) >=
+                        this.getTimeNum(item) &&
+                      this.getTimeNum(y.time) <= this.getTimeNum(item)
+                      // item.slice(0, 10) === y.time.slice(0, 10)
+                    ) {
+                      data.push([x.data[index + 1]]);
+                    }
+                  }
+                }
+
+              } else {
+                const list = data[data.length - 1];
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y);
+                }
+              }
+            });
+          }
+          data.forEach((z) => {
+            this.createBrokenLine({
+              vitalCode: x.vitalCode,
+              data: z,
+              yRange: x.range,
+              lineColor: x.lineColor || x.color,
+              label: x.label,
+              dotColor: x.color,
+              dotSolid: x.solid,
+              dotType: x.dotType,
+            });
           });
+          //每次遍历数据的时候，调整自定义的显示位置
           this.handleCustomList();
         });
         // 画线上降温，画红圈不用连线
@@ -2028,18 +2106,19 @@ export default {
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
           if (timeNum >= i && timeNum < i + timeInterval) {
-            if(targetList[j].value.indexOf(':')==-1){
-              item.value = `${targetList[j].time.slice(11,16)} ${targetList[j].value}`
+            if (targetList[j].value.indexOf(":") == -1) {
+              item.value = `${targetList[j].time.slice(11, 16)} ${
+                targetList[j].value
+              }`;
 
-            targetList.splice(j, 1);
-            break;
-            }else{
-               item.value = targetList[j].value
+              targetList.splice(j, 1);
+              break;
+            } else {
+              item.value = targetList[j].value;
 
-            targetList.splice(j, 1);
-            break;
+              targetList.splice(j, 1);
+              break;
             }
-            
           }
         }
         list.push(item);
@@ -2151,7 +2230,7 @@ export default {
     },
   },
   mounted() {
-      document.title='广东医科大学附属第三医院龙江医院体温单'
+    document.title = "广东医科大学附属第三医院龙江医院体温单";
     const urlParams = this.urlParse();
     this.showInnerPage = urlParams.showInnerPage === "1";
     if (this.isPrintAll) {
@@ -2164,7 +2243,7 @@ export default {
       return;
     }
     if (this.useMockData) {
-      this.apiData = jsonMockData;
+      this.apiData = mockData;
       this.$nextTick(() => {
         this.handleData();
       });

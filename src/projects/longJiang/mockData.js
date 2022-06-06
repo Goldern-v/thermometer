@@ -32,14 +32,21 @@ export const mockData = {
     },
     {
       temperature_type: '表顶注释',
-      value: '分娩|',
+      value: '转入|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2021-05-18 18:12:00',
       vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
-      value: '分娩|',
+      value: '转入|',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-18 23:12:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '转出|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2021-05-20 11:12:00',
       vital_code: '3'
@@ -309,6 +316,18 @@ export const mockData = {
     },
     {
       temperature_type: '体温',
+      value: '36.2',
+      time_point: '2021-05-15 01:12:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
+      value: '34.2',
+      time_point: '2021-05-16 01:12:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
       value: '35.2',
       time_point: '2021-05-18 01:12:00',
       vital_code: '1'
@@ -317,6 +336,12 @@ export const mockData = {
       temperature_type: '体温',
       value: '38',
       time_point: '2021-10-25 01:12:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
+      value: '38',
+      time_point: '2021-05-20 01:12:00',
       vital_code: '1'
     },
     // {

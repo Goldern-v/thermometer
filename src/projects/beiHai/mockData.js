@@ -175,6 +175,13 @@ export const mockData = {
     },
     {
       temperature_type: '肛温',
+      value: '35',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-21 03:12:00',
+      vital_code: '043'
+    },
+    {
+      temperature_type: '肛温',
       value: '38',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-21 03:12:00',
@@ -286,8 +293,8 @@ export const mockData = {
     },
     {
       temperature_type: '心率',
-      value: '120',
-      time_point: '2019-05-17 01:12:00',
+      value: '200',
+      time_point: '2019-05-16 01:12:00',
       vital_code: '20'
     },
     {
@@ -358,8 +365,14 @@ export const mockData = {
     },
     {
       temperature_type: '心率',
-      value: '181',
+      value: '230',
       time_point: '2019-05-17 13:12:00',
+      vital_code: '20'
+    },
+    {
+      temperature_type: '心率',
+      value: '180',
+      time_point: '2019-05-17 23:12:00',
       vital_code: '20'
     },
     {

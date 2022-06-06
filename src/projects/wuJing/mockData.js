@@ -354,15 +354,27 @@ export const mockData = {
     //   vital_code: '3'
     // },
     {
-      temperature_type: '自定义1',
+      temperature_type: '自定义11',
       value: '36.7',
       time_point: '2019-05-17 01:12:00',
       vital_code: '16'
     },
     {
-      temperature_type: '自定义1',
+      temperature_type: '自定义11',
       value: '36.7',
       time_point: '2019-05-18 01:12:00',
+      vital_code: '16'
+    },
+    {
+      temperature_type: '自定义12',
+      value: '36.7',
+      time_point: '2019-05-26 01:12:00',
+      vital_code: '16'
+    },
+    {
+      temperature_type: '自定义13',
+      value: '36.7',
+      time_point: '2019-06-15 01:12:00',
       vital_code: '16'
     },
     {
@@ -427,7 +439,7 @@ export const mockData = {
     },
     {
       temperature_type: '心率',
-      value: '100',
+      value: '200',
       time_point: '2019-05-20 10:12:00',
       vital_code: '4'
     },

@@ -8,7 +8,7 @@
     <div class="head-hos">南方医科大学中西医结合医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item" style="width: 100px; flex: none">
+      <div class="item" style="width: 130px; flex: none">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item" style="width: 80px; flex: none">
@@ -477,7 +477,7 @@
 
 <script>
 import zrender from "zrender";
-import { mockData ,jsonMockData} from "src/projects/zhongXi/mockData.js";
+import { mockData, jsonMockData } from "src/projects/zhongXi/mockData.js";
 import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
 import moment from "moment"; //导入文件
 
@@ -934,12 +934,18 @@ export default {
         transform: "translateX(1px)",
       };
     },
-        handleChangePage(value){
-      this.dateRangeList.forEach((item,index)=>{
-        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
-        this.currentPage=index+1
+    handleChangePage(value) {
+      this.dateRangeList.forEach((x, ind) => {
+        if (
+          this.getTimeNum(x[0]) <= this.getTimeNum(value) &&
+          this.getTimeNum(x[1]) >= this.getTimeNum(value)
+        ) {
+          this.currentPage = ind + 1;
+          this.$refs.main.innerHTML = "";
+          this.reset();
+          this.handleData();
         }
-      })
+      });
     },
     //找到存在出院或者转出的日期
     getLeaveTime() {
@@ -966,9 +972,9 @@ export default {
               this.handleData();
             }
             break;
-             case 'dateChangePage':
-              this.handleChangePage(e.data.value)
-              break;
+          case "dateChangePage":
+            this.handleChangePage(e.data.value);
+            break;
           case "printing":
             window.print();
             break;
@@ -1082,7 +1088,7 @@ export default {
           // 超出时间范围的抛弃
           continue;
         }
-                if (["32", "33", "34", "35",'36'].includes(vitalSigns[i].vital_code)) {
+        if (["32", "33", "34", "35", "36"].includes(vitalSigns[i].vital_code)) {
           const sign = vitalSigns[i].temperature_type;
 
           switch (vitalSigns[i].vital_code) {
@@ -1235,7 +1241,11 @@ export default {
       const xaxis = notes.map((x) =>
         this.getXaxis(this.getLocationTime(x.time))
       );
+      console.log(notes.map((x) =>
+        this.getLocationTime(x.time)
+      ))
       const xaxisNew = this.handleNoteXaxis(xaxis);
+      console.log(xaxisNew,'xaxisNew')
       notes.forEach((x, i) => {
         let value = x.value;
         if (x.value.endsWith("|")) {
@@ -1304,7 +1314,7 @@ export default {
               dotType: x.dotType,
             });
           });
-          this.handleCustomList()
+          this.handleCustomList();
         });
         /*  画心率和脉搏的多边形，连线已经用折线画了，
             这里用多边形是为了生成阴影，多边形的边框颜色设为透明，
@@ -1335,7 +1345,7 @@ export default {
         );
       });
     },
-        //操作自定义的显示位置，存在空的自定义时 往上推不留空
+    //操作自定义的显示位置，存在空的自定义时 往上推不留空
     handleCustomList() {
       for (let k = 0; k < 5; k++) {
         for (let j = k - 1; j >= 0; j--) {
@@ -1739,19 +1749,19 @@ export default {
                 };
               });
               //如果疼痛重叠就右移一个空格，处理
-              let paramsIsogon={}
+              let paramsIsogon = {};
               // this.handlePainsXaxis(tList).forEach((item) => {
-                paramsIsogon = {
-                  x: this.handlePainsXaxis(tList)[index].x,
-                  y: cy,
-                  r: 4,
-                  n: 3,
-                  color: dotColor || "#000",
-                  zlevel: 10,
-                  tips: `${x.time} ${label}：${x.value}`,
-                  dotSolid,
-                };
-                this.createIsogon(paramsIsogon);
+              paramsIsogon = {
+                x: this.handlePainsXaxis(tList)[index].x,
+                y: cy,
+                r: 4,
+                n: 3,
+                color: dotColor || "#000",
+                zlevel: 10,
+                tips: `${x.time} ${label}：${x.value}`,
+                dotSolid,
+              };
+              this.createIsogon(paramsIsogon);
               // });
             }
 
@@ -2060,8 +2070,10 @@ export default {
         if (!xaxisNew.includes(xaxisList[i])) {
           xaxisNew.push(xaxisList[i]);
         } else {
-          while (xaxisNew.includes(xaxisList[i])) {
+          for(let j=0;j<xaxisNew.length;j++){
+            if(xaxisNew[j]=xaxisList[i]) {
             xaxisList[i] += this.xSpace;
+          }
           }
           xaxisNew.push(xaxisList[i]);
         }
@@ -2105,7 +2117,7 @@ export default {
     }
     if (this.useMockData) {
       // this.apiData = mockData;
-      this.apiData=jsonMockData
+      this.apiData = jsonMockData;
       this.$nextTick(() => {
         this.handleData();
       });
@@ -2120,7 +2132,7 @@ export default {
         this.apiData = res.data;
         this.$nextTick(() => {
           //每次获取数据都要传一次页数
-          this.currentPage = this.pageTotal;
+          // this.currentPage = this.pageTotal;
           window.parent.postMessage(
             { type: "pageTotal", value: this.pageTotal },
 

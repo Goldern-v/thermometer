@@ -887,12 +887,15 @@ export default {
       };
     },
     handleChangePage(value) {
-      this.dateRangeList.forEach((item, index) => {
+      this.dateRangeList.forEach((x, ind) => {
         if (
-          this.getTimeNum(value) >= this.getTimeNum(item[0]) &&
-          this.getTimeNum(value) <= this.getTimeNum(item[1])
+          this.getTimeNum(x[0]) <= this.getTimeNum(value) &&
+          this.getTimeNum(x[1]) >= this.getTimeNum(value)
         ) {
-          this.currentPage = index + 1;
+          this.currentPage = ind + 1;
+          this.$refs.main.innerHTML = "";
+          this.reset();
+          this.handleData();
         }
       });
     },
@@ -1044,15 +1047,7 @@ export default {
           continue;
         }
         if (this.lineMap[vitalSigns[i].vital_code]) {
-          if (
-            ["02", "20"].includes(vitalSigns[i].vital_code) &&
-            Number(vitalSigns[i].value) > this.pulseRange[1]
-          ) {
-            // this.topPulseNote.push({
-            //   time: vitalSigns[i].time_point,
-            //   value: '过快'
-            // })
-          } else if (
+         if (
             ["041", "01", "043"].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) <= 33
           ) {
@@ -1184,27 +1179,25 @@ export default {
               }
             });
           }
-          if (["20"].includes(x.vitalCode)) {
-            // 心率或脉搏过快时，折线需要断开
-            const sameTimeList = [
-              ...this.settingMap.pulse.data,
-            ].map((h) => {
+          if (["20",'02'].includes(x.vitalCode)) {
+            
+            const sameTimeList = [...this.settingMap.pulse.data].map((h) => {
               return {
                 x: this.getXaxis(this.getLocationTime(h.time)),
                 y: this.getYaxis(this.pulseRange, h.value),
               };
             });
             x.data.forEach((z) => {
-             let cx = this.getXaxis(this.getLocationTime(z.time))
-              let cy=this.getYaxis(this.pulseRange, z.value)
-            const sameItem=sameTimeList.find((y)=>
-                cx.toFixed(2) === y.x.toFixed(2) 
-              )
-                if (sameItem) {
+              let cx = this.getXaxis(this.getLocationTime(z.time));
+              let cy = this.getYaxis(this.pulseRange, z.value<=this.pulseRange[1]?z.value:this.pulseRange[1]-1);
+              const sameItem = sameTimeList.find(
+                (y) => cx.toFixed(2) === y.x.toFixed(2)
+              );
+              if (sameItem) {
                 //化纤
                 this.createLine({
-                  x1:cx,
-                  y1:cy+3,
+                  x1: cx,
+                  y1: cy + 3,
                   x2: sameItem.x,
                   y2: sameItem.y,
                   lineWidth: 2,
@@ -1519,7 +1512,6 @@ export default {
       return new Date(timeStr).getTime();
     },
     addHover(el, config, x, y, shapeOn, shapeOut) {
-      console.log(shapeOn,shapeOut)
       const domTips = document.getElementsByClassName("tips");
       el.on("mouseover", () => {
         domTips[0].innerHTML = config.tips;
@@ -1566,9 +1558,9 @@ export default {
     }) {
       const dots = [];
       data.forEach((x, index) => {
-        const cx = this.getXaxis(this.getLocationTime(x.time));
-        const cy = this.getYaxis(yRange, x.value, vitalCode);
-        dots.push({ x: cx, y: cy });
+        let cx = this.getXaxis(this.getLocationTime(x.time));
+        let cy = this.getYaxis(yRange, x.value, vitalCode);
+        // dots.push({ x: cx, y: cy });
         let params = {
           cx,
           cy,
@@ -1609,7 +1601,18 @@ export default {
                   x.x.toFixed(2) === cx.toFixed(2) &&
                   x.y.toFixed(2) === cy.toFixed(2)
               );
-
+                if (Number(x.value) > this.pulseRange[1]) {
+              cy = this.getYaxis(yRange, yRange[1]-1, vitalCode)
+                params = {
+                  cx,
+                  cy:cy,
+                  r: 4,
+                  color: 'red',
+                  zlevel: 9,
+                  tips: `${x.time} ${label}：${x.value}`,
+                  dotSolid: x.vitalCode == "02"?true:false
+                }
+              }
               if (sameAxisItem) {
                 params = {
                   cx,
@@ -1623,6 +1626,7 @@ export default {
                   tips: `${x.time} ${label}：${x.value}`,
                 };
               }
+
             }
             this.createCircle(params);
             break;
@@ -1681,73 +1685,24 @@ export default {
                 dotSolid: false,
               });
             }
-            //  else if (
-            //   this.getTimeStamp(item.time) - this.getTimeStamp(x.time) >
-            //     30 * 60 * 1000 &&
-            //   this.getTimeStamp(item.time) - this.getTimeStamp(x.time) <=
-            //     2 * 60 * 60 * 1000
-            // ) {
-            //   //降温后30分钟到两个小时用红色圈表示，不画线连接
-            //   this.createCircle({
-            //     cx: coolX,
-            //     cy: coolY,
-            //     r: 4,
-            //     color: 'red',
-            //     zlevel: 10,
-            //     tips: `${item.time} 降温：${item.value}`,
-            //     dotSolid: false
-            //   })
-            // }
           }
-          // // 画复试
-          // const createRepeatTest = () => {
-          //   this.createText({
-          //     x: cx + 8,
-          //     y: cy - 25,
-          //     value: "v",
-          //     color: "red",
-          //     tips: "体温复试",
-          //     fontWeight: "bold",
-          //     zlevel: 10,
-          //     fontSize: 18,
-          //   });
-          // };
-          // if (index > 0) {
-          //   // 与上次记录的体温相比上升(1.5℃)或下降(2℃)
-          //   if (
-          //     x.value - data[index - 1].value >= 1.5 ||
-          //     x.value - data[index - 1].value <= -2
-          //   ) {
-          //     createRepeatTest();
-          //   }
-          // } else if (index === 0 && this.currentPage === 1) {
-          //   // 入院首次体温≥38℃
-          //   const list = [
-          //     {
-          //       vitalCode: "041",
-          //       ...this.settingMap.oralTemperature.data[0],
-          //     },
-          //     {
-          //       vitalCode: "042",
-          //       ...this.settingMap.axillaryTemperature.data[0],
-          //     },
-          //     {
-          //       vitalCode: "043",
-          //       ...this.settingMap.analTemperature.data[0],
-          //     },
-          //   ]
-          //     .filter((x) => Object.keys(x).length > 1)
-          //     .sort(
-          //       (a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time)
-          //     );
-          //   if (
-          //     vitalCode === list[0].vitalCode &&
-          //     Number(list[0].value) >= 38
-          //   ) {
-          //     createRepeatTest();
-          //   }
-          // }
         }
+        if (["20", "02"].includes(vitalCode)) {
+          // 画脉搏/心率超限过快
+          if (x.value > this.pulseRange[1]) {
+            this.createText({
+              x: cx - 1.2,
+              y: 80 - this.ySpace * 4,
+              value: x.value,
+              color: "blue",
+              tips: "",
+              fontWeight: "bold",
+              zlevel: 100,
+              fontSize: 12,
+            });
+          }
+        }
+        dots.push({ x: cx, y: cy, time: x.time });
       });
       //图标连接的折线路部分
       for (let i = 0; i < dots.length - 1; i++) {
@@ -2003,7 +1958,7 @@ export default {
     },
   },
   mounted() {
-      document.title='北海市人民医院'
+    document.title = "北海市人民医院";
     const urlParams = this.urlParse();
     this.showInnerPage = urlParams.showInnerPage === "1";
     if (this.isPrintAll) {

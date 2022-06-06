@@ -498,7 +498,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData:false,
+      useMockData:true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1089,12 +1089,18 @@ export default {
       let ciphertext = sm4.decrypt(val);
       return ciphertext;
     },
-    handleChangePage(value){
-      this.dateRangeList.forEach((item,index)=>{
-        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
-         this.currentPage=index+1
+    handleChangePage(value) {
+      this.dateRangeList.forEach((x, ind) => {
+        if (
+          this.getTimeNum(x[0]) <= this.getTimeNum(value) &&
+          this.getTimeNum(x[1]) >= this.getTimeNum(value)
+        ) {
+          this.currentPage = ind + 1;
+          this.$refs.main.innerHTML = "";
+          this.reset();
+          this.handleData();
         }
-      })
+      });
     },
     messageHandle(e) {
       if (e && e.data) {
@@ -1292,6 +1298,7 @@ export default {
           // }
           continue;
         }
+        console.log(this.customList1,this.customList2)
         if (this.lineMap[vitalSigns[i].vital_code]) {
          
           if (
@@ -1415,7 +1422,6 @@ export default {
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
-        console.log(this.zr,'zr')
         this.yLine(); //生成Y轴坐标
         this.xLine(); //生成X轴坐标
         // 画折线
@@ -1473,31 +1479,6 @@ export default {
               }
             });
           }
-          // if (["4", "5"].includes(x.vitalCode)) {
-          //   // 心率或脉搏过快时，折线需要断开
-          //   data = [[]];
-          //   x.data.forEach((y, index) => {
-          //     if (y.value <= this.pulseRange[1]) {
-          //       data[data.length - 1].push(y);
-          //     } else {
-          //       data.push([]);
-          //     }
-          //     if (index < x.data.length - 1) {
-          //       if (
-          //         this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
-          //           this.getTimeNum(y.time.slice(0, 10)) >=
-          //         24 * 60 * 60 * 1000 * 2
-          //       ) {
-          //         data.push([x.data[index + 1]]);
-          //       }
-          //     } else {
-          //       const list = data[data.length - 1];
-          //       if (!(list.length && list[list.length - 1].time === y.time)) {
-          //         data[data.length - 1].push(y);
-          //       }
-          //     }
-          //   });
-          // }
           data.forEach((z) => {
             this.createBrokenLine({
               vitalCode: x.vitalCode,
@@ -2262,7 +2243,6 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
-      console.log(targetList)
       const coloclysterList = [...coloclyster];
       const afterColoclysterList = [...afterColoclyster];
       for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {

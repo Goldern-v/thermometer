@@ -1354,7 +1354,6 @@ export default {
       return new Date(timeStr).getTime()
     },
     addHover(el, config, x, y, shapeOn, shapeOut) {
-      console.log(el, config, x, y, shapeOn, shapeOut,1232)
       const domTips = document.getElementsByClassName('tips')
       el.on('mouseover', () => {
         domTips[0].innerHTML = config.tips

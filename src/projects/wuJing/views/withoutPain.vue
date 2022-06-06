@@ -958,12 +958,18 @@ export default {
       if (o) ans += one[o - 1];
       return ans;
     },
-    handleChangePage(value){
-      this.dateRangeList.forEach((item,index)=>{
-        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
-         this.currentPage=index+1
+    handleChangePage(value) {
+      this.dateRangeList.forEach((x, ind) => {
+        if (
+          this.getTimeNum(x[0]) <= this.getTimeNum(value) &&
+          this.getTimeNum(x[1]) >= this.getTimeNum(value)
+        ) {
+          this.currentPage = ind + 1;
+          this.$refs.main.innerHTML = "";
+          this.reset();
+          this.handleData();
         }
-      })
+      });
     },
     middleTdStyle(index) {
       return {
@@ -1711,7 +1717,6 @@ export default {
                   tips: `${x.time} ${label}：${x.value}`,
                   dotSolid: true
                 }
-      let topText=['过快']
               }
               const sameAxisItem = tList.find(
                 (x) =>
@@ -2021,7 +2026,6 @@ export default {
       coloclyster,
       afterColoclyster
     }) {
-      console.log(tList,coloclyster,afterColoclyster,'asdasdas')
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
@@ -2047,11 +2051,7 @@ export default {
                 (timeNumAfterColoclyster >= i &&
                 timeNumAfterColoclyster < i + timeInterval)
               ) {
-                //小孩子的大便或者大人的大便存在灌肠或者失禁事件时，不用带////
                 item.value =
-                  // shitList[k].value.includes("E") ||
-                  // targetList[j].value.includes("E") ||
-                  // shitList[k].value.includes("※") ||
                   Number(coloclysterList[k].value)>1
                     ? `${targetList[j].value} ${afterColoclysterList[h].value}/${coloclysterList[k].value}E`
                     : `${targetList[j].value} ${afterColoclysterList[h].value}/E`;
@@ -2172,7 +2172,9 @@ export default {
         data: this.encryptFun(JSON.stringify(data)),
       }).then((res) => {
         this.apiData = JSON.parse(this.decryptFun(res.data));
-        
+        if(this.showInnerPage){
+          console.log('测试环境的接口信息======》》》》',this.apiData)
+        }
         this.$nextTick(() => {
           //每次获取数据都要传一次页数
           this.currentPage = this.pageTotal;

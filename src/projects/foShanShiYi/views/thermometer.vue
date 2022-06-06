@@ -955,12 +955,18 @@ export default {
       });
       return outTime;
     },
-            handleChangePage(value){
-      this.dateRangeList.forEach((item,index)=>{
-        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
-         this.currentPage=index+1
+    handleChangePage(value) {
+      this.dateRangeList.forEach((x, ind) => {
+        if (
+          this.getTimeNum(x[0]) <= this.getTimeNum(value) &&
+          this.getTimeNum(x[1]) >= this.getTimeNum(value)
+        ) {
+          this.currentPage = ind + 1;
+          this.$refs.main.innerHTML = "";
+          this.reset();
+          this.handleData();
         }
-      })
+      });
     },
     messageHandle(e) {
       if (e && e.data) {

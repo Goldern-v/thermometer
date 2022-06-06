@@ -7,7 +7,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('src/projects/beiHai/views/thermometer.vue')
+    component: () => import('src/projects/beiHai/views/thermometer.vue'),
   },
   {
     path: '/printAll',

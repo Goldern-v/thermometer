@@ -487,7 +487,7 @@ export default {
     const pulseRange = [20, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: '', // 接口数据
       zr: '',
       showFlage:true,
@@ -693,7 +693,7 @@ export default {
         const item = { timeNum: i, value: '' }
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time)
-          if (timeNum >= i && timeNum < i + 3 * 4 * 60 * 60 * 1000) {
+          if (timeNum >= i && timeNum <= i + 3 * 4 * 60 * 60 * 1000) {
             item.value = pressureList[j].value
             pressureList.splice(j, 1)
             break
@@ -725,7 +725,7 @@ export default {
         const item = { timeNum: i, value: '' }
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time)
-          if (timeNum >= i && timeNum < i + timeAdd(i)) {
+          if (timeNum >= i && timeNum <= i + timeAdd(i)) {
             typeof parseInt(breatheList[j].value) === 'number' &&
             !isNaN(breatheList[j].value)
               ? (item.value = breatheList[j].value)
@@ -1003,9 +1003,10 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: 'pageTotal', value }, '*')
     },
-    currentPage(value) {
-      window.parent.postMessage({ type: "currentPage", value }, "*");
-    },
+    // currentPage(value) {
+    //   console.log('数据监听中=======》',value)
+    //   window.parent.postMessage({ type: "currentPage", value }, "*");
+    // },
   },
   created() {
     // 实现外部分页和打印
@@ -1046,12 +1047,20 @@ export default {
         }
       }
     },
-        handleChangePage(value){
-      this.dateRangeList.forEach((item,index)=>{
-        if(this.getTimeNum(value)>=this.getTimeNum(item[0])&&this.getTimeNum(value)<=this.getTimeNum(item[1])){
-        this.currentPage=index+1
+    handleChangePage(value) {
+      this.dateRangeList.forEach((x, ind) => {
+        if (
+          this.getTimeNum(x[0]) <= this.getTimeNum(value) &&
+          this.getTimeNum(x[1]) >= this.getTimeNum(value)
+        ) {
+          this.currentPage = ind + 1;
+          console.log('页码========>',this.currentPage)
+          this.$refs.main.innerHTML = "";
+          this.reset();
+          this.handleData();
+          return ;
         }
-      })
+      });
     },
     middleTdStyle(index) {
       return {
@@ -1070,6 +1079,7 @@ export default {
         switch (e.data.type) {
           case 'currentPage':
             if (e.data.value > 0) {
+              console.log('换页事件监听中=======》',e.data.value)
               this.currentPage = e.data.value
               this.$refs.main.innerHTML = ''
               this.reset()
@@ -2174,7 +2184,7 @@ export default {
         const item = { timeNum: i, value: '' }
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time)
-          if (timeNum >= i && timeNum < i + timeInterval) {
+          if (timeNum >= i && timeNum <= i + timeInterval) {
             item.value = targetList[j].value
             targetList.splice(j, 1)
             break
@@ -2193,7 +2203,7 @@ export default {
         const item = { timeNum: i, value: '' }
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time)
-          if (timeNum >= i && timeNum < i + timeInterval) {
+          if (timeNum >= i && timeNum <= i + timeInterval) {
             targetList[j].value
             targetList[j].value = `${targetList[j].value.replace('失禁', '※')}`
             targetList[j].value = `${targetList[j].value.replace('灌肠', 'E')}`

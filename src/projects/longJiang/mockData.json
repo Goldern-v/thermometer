@@ -212,7 +212,7 @@
       },
       {
           "temperature_type": "体温",
-          "value": "23",
+          "value": "37",
           "time_point": "2022-03-08 18:10:42",
           "vital_code": "1"
       }

@@ -25,15 +25,15 @@ export const mockData = {
     },
     {
       temperature_type: '呼吸',
-      value: '20',
-      time_point: '2021-10-18 10:34:00',
+      value: '201',
+      time_point: '2021-10-18 21:00:00',
       vital_code: 'breathe',
       expand2: null
     },
     {
       temperature_type: '脉搏',
       value: '96',
-      time_point: '2021-10-18 10:34:00',
+      time_point: '2021-10-18 21:00:00',
       vital_code: 'pulse',
       expand2: null
     },
@@ -111,6 +111,13 @@ export const mockData = {
       temperature_type: '呼吸',
       value: '20',
       time_point: '2021-10-18 18:00:00',
+      vital_code: 'breathe',
+      expand2: null
+    },
+    {
+      temperature_type: '呼吸',
+      value: '56',
+      time_point: '2021-10-24 21:00:00',
       vital_code: 'breathe',
       expand2: null
     },
