@@ -20,7 +20,7 @@ export const mockData = {
       temperature_type: '表顶注释',
       value: '入院|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 13:10:00',
+      time_point: '2019-05-18 09:07:00',
       vital_code: '5'
     },
     // {
@@ -34,14 +34,14 @@ export const mockData = {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 13:12:00',
+      time_point: '2019-05-18 13:35:00',
       vital_code: '5'
     },
     {
       temperature_type: '表顶注释',
       value: '分娩|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 13:19:00',
+      time_point: '2019-05-18 13:11:00',
       vital_code: '5'
     },
     {
@@ -76,7 +76,7 @@ export const mockData = {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-06-12 16:12:00',
+      time_point: '2019-06-12 16:06:00',
       vital_code: '5'
     },
     // {
@@ -88,21 +88,21 @@ export const mockData = {
     // },
     {
       temperature_type: '表底注释',
-      value: '请假,测试,不升',
+      value: '拒测',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 03:12:00',
+      time_point: '2019-05-17 11:12:00',
       vital_code: '4'
     },
     {
       temperature_type: '表底注释',
-      value: '请假|',
+      value: '请假',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 03:12:00',
       vital_code: '4'
     },
     {
       temperature_type: '中间注释',
-      value: '辅助呼吸,测试,测试2',
+      value: '拒测',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 03:12:00',
       vital_code: '6'
@@ -203,7 +203,7 @@ export const mockData = {
     },
     {
       temperature_type: '呼吸',
-      value: '70',
+      value: 'r',
       time_point: '2019-05-19 23:12:00',
       vital_code: '04'
     },

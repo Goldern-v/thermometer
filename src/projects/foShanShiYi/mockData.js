@@ -52,6 +52,13 @@ export const mockData = {
       vital_code: '3'
     },
     {
+      temperature_type: '皮试',
+      value: '阿兰曼斯阴性',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-20 15:12:00',
+      vital_code: '30'
+    },
+    {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",

@@ -269,7 +269,7 @@ export default {
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
-          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]
+          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]-1
         ) {
           // 超出时间范围的抛弃
           continue;

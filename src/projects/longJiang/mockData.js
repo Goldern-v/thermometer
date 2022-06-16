@@ -4,10 +4,10 @@ export const mockData = {
   patientInfo: {
     patInfo: {
       patient_id: '590904',
-      name: '陈小倩',
+      name: '陈小倩婴儿名字',
       sex: '女',
       dept_name: '乳腺胸外科',
-      bed_label: '012',
+      bed_label: '012>10>77',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
       admission_date: '2021-05-15 08:12:30.0',
@@ -23,13 +23,7 @@ export const mockData = {
       time_point: '2021-05-15 13:00:00',
       vital_code: '3'
     },
-    {
-      temperature_type: '表顶注释',
-      value: '手术分娩|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-15 10:12:00',
-      vital_code: '3'
-    },
+    
     {
       temperature_type: '表顶注释',
       value: '转入|',
@@ -41,7 +35,7 @@ export const mockData = {
       temperature_type: '表顶注释',
       value: '转入|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-18 23:12:00',
+      time_point: '2021-05-21 18:12:00',
       vital_code: '3'
     },
     {
@@ -49,6 +43,13 @@ export const mockData = {
       value: '转出|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2021-05-20 11:12:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '转入|',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-15 11:12:00',
       vital_code: '3'
     },
     {
@@ -88,13 +89,6 @@ export const mockData = {
     },
     {
       temperature_type: '表顶注释',
-      value: '分娩',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-17 05:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
       value: '手术分娩',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2021-05-17 10:12:00',
@@ -107,13 +101,6 @@ export const mockData = {
       time_point: '2021-05-23 18:12:00',
       vital_code: '3'
     },
-    // {
-    //   "temperature_type": "表顶注释",
-    //   "value": "入院|",
-    //   // "time_point": "2020-12-15 03:12:00",
-    //   "time_point": "2021-05-18 03:12:00",
-    //   "vital_code": "3"
-    // },
     {
       temperature_type: '表底注释',
       value: '请假',
@@ -121,13 +108,13 @@ export const mockData = {
       time_point: '2021-05-18 03:12:00',
       vital_code: '31'
     },
-    // {
-    //   temperature_type: '表底注释',
-    //   value: '请假',
-    //   // "time_point": "2020-12-15 03:12:00",
-    //   time_point: '2021-05-18 03:12:00',
-    //   vital_code: '31'
-    // },
+    {
+      temperature_type: '表底注释',
+      value: '请假',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-22 00:00:00',
+      vital_code: '31'
+    },
     // {
     //   temperature_type: '表底注释',
     //   value: '请假',
@@ -207,6 +194,19 @@ export const mockData = {
       temperature_type: '身高',
       value: '190',
       time_point: '2021-05-19 03:12:00',
+      vital_code: '32'
+    },
+    {
+      temperature_type: '体重',
+      value: '平车',
+      time_point: '2021-05-20 03:12:00',
+      vital_code: '18'
+    },
+
+    {
+      temperature_type: '身高',
+      value: '178',
+      time_point: '2021-05-20 03:12:00',
       vital_code: '32'
     },
     {
@@ -298,8 +298,26 @@ export const mockData = {
     },
     {
       temperature_type: 'BMI',
-      value: '23',
+      value: '16(录入)',
+      time_point: '2021-05-16 20:12:00',
+      vital_code: '36'
+    },
+    {
+      temperature_type: 'BMI',
+      value: '18(录入)',
       time_point: '2021-05-18 20:12:00',
+      vital_code: '36'
+    },
+    {
+      temperature_type: 'BMI',
+      value: '19',
+      time_point: '2021-05-19 20:12:00',
+      vital_code: '36'
+    },
+    {
+      temperature_type: 'BMI',
+      value: '21(录入)',
+      time_point: '2021-05-21 20:12:00',
       vital_code: '36'
     },
     {
@@ -312,6 +330,30 @@ export const mockData = {
       temperature_type: '体重',
       value: '70',
       time_point: '2021-05-18 13:12:00',
+      vital_code: '18'
+    },
+    // {
+    //   temperature_type: '身高',
+    //   value: '175',
+    //   time_point: '2021-05-21 20:12:00',
+    //   vital_code: '32'
+    // },
+    {
+      temperature_type: '体重',
+      value: '70',
+      time_point: '2021-05-21 13:12:00',
+      vital_code: '18'
+    },
+    {
+      temperature_type: '身高',
+      value: '卧床',
+      time_point: '2021-05-16 20:12:00',
+      vital_code: '32'
+    },
+    {
+      temperature_type: '体重',
+      value: '70',
+      time_point: '2021-05-16 13:12:00',
       vital_code: '18'
     },
     {
@@ -334,6 +376,18 @@ export const mockData = {
     },
     {
       temperature_type: '体温',
+      value: '37.2',
+      time_point: '2021-05-18 14:12:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
+      value: '36.2',
+      time_point: '2021-05-18 18:10:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
       value: '38',
       time_point: '2021-10-25 01:12:00',
       vital_code: '1'
@@ -342,6 +396,12 @@ export const mockData = {
       temperature_type: '体温',
       value: '38',
       time_point: '2021-05-20 01:12:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
+      value: '38',
+      time_point: '2021-05-21 01:12:00',
       vital_code: '1'
     },
     // {

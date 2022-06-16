@@ -420,7 +420,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -603,7 +603,7 @@ export default {
       const pressureList = [...this.pressureList];
       for (
         let i = timeNumRange[0];
-        i < timeNumRange[1];
+        i < timeNumRange[1]-1;
         i += 3 * 4 * 60 * 60 * 1000
       ) {
         const item = { timeNum: i, value: "" };
@@ -655,7 +655,7 @@ export default {
           ? 2 * 60 * 60 * 1000
           : 4 * 60 * 60 * 1000;
       };
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeAdd(i)) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
@@ -707,6 +707,7 @@ export default {
           x.vital_code === "3" &&
           (x.value.includes("手术") ||
             x.value.includes("分娩|") ||
+            x.value.includes("剖宫取胎|") ||
             x.value.includes("手术分娩|") ||
             x.value.includes("手术入院|"))
       );
@@ -728,9 +729,9 @@ export default {
       });
       oDateList.forEach((date) => {
         if (obj[date].length > 0) {
-          deliveryObj = obj[date].find((obj) => obj.value.includes("分娩"));
+          deliveryObj = obj[date].find((obj) => obj.value.includes("分娩")||obj.value.includes("剖宫取胎"));
           for (let i = obj[date].length - 1; i >= 0; i--) {
-            if (obj[date][i].value.includes("分娩")) {
+            if (obj[date][i].value.includes("分娩")||obj[date][i].value.includes("剖宫取胎")) {
               obj[date].splice(i, 1);
             }
           }
@@ -1019,7 +1020,7 @@ export default {
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
-          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]
+          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]-1
         ) {
           // 超出时间范围的抛弃
           continue;
@@ -1237,7 +1238,7 @@ export default {
               let noteTime = `${notes[j].value}${this.toChinesNum(
                 new Date(notes[j].time).getHours()
               )}时${this.toChinesNum(new Date(notes[j].time).getMinutes())}分`;
-              yNew += (noteTime.length + 3) * this.ySpace - 8;
+              yNew += (noteTime.length + 3) * this.ySpace - 11;
             } else {
               yNew += (notes[j].value.length + 1) * this.ySpace + 6;
             }
@@ -1249,7 +1250,6 @@ export default {
           return x.value;
         });
         this.createText({
-          // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
           y: bottomValu.includes(value) ? y + 1 : yNew + 2,
           value: this.addn(value),
@@ -1832,7 +1832,7 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
@@ -1861,7 +1861,7 @@ export default {
       let special = ["E", "※"];
       const targetList = [...tList];
       const shitList = [...childList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
@@ -1948,17 +1948,16 @@ export default {
       //定义一个数组，为全部最后一格的数据，如果与最后一格重叠，就往底下移动
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {
-        let lastXaxis = this.getLastXasis(xaxisList[i]);
-        if (!xaxisNew.includes(Math.floor(xaxisList[i]))) {
+        let lastXaxis = Math.floor(this.getLastXasis(xaxisList[i]));
+        if (!xaxisNew.includes(Math.floor(xaxisList[i]))&&xaxisNew.includes(Math.floor(xaxisList[i])-1)&&xaxisNew.includes(Math.floor(xaxisList[i])+1)) {
           xaxisNew.push(Math.floor(xaxisList[i]));
         } else {
           while (
-            xaxisNew.includes(Math.floor(xaxisList[i])) &&
+            (xaxisNew.includes(Math.floor(xaxisList[i]))||xaxisNew.includes(Math.floor(xaxisList[i])-1)||xaxisNew.includes(Math.floor(xaxisList[i])+1)) &&
             xaxisList[i] < lastXaxis
           ) {
             xaxisList[i] += this.xSpace + 2;
           }
-
           xaxisNew.push(Math.floor(xaxisList[i]));
         }
       }
@@ -1967,20 +1966,20 @@ export default {
     //根据传过来的X轴地址获取到该区间的最后一格，如果小于最后一格，就右移动，到了最后一格就左移
     getLastXasis(xaxis) {
       if (xaxis > 0 && xaxis <= 117) {
-        return this.getXaxis(this.getTimeNum(this.dateList[0] + " 20:00:00"));
+        return this.getXaxis(this.dateList[0] + " 20:00:00");
       } else if (xaxis > 117 && xaxis <= 245) {
-        return this.getXaxis(this.getTimeNum(this.dateList[1] + " 20:00:00"));
+        return this.getXaxis(this.dateList[1] + " 20:00:00");
       }
-      if (xaxis > 245 && xaxis <= 372) {
-        return this.getXaxis(this.getTimeNum(this.dateList[2] + " 20:00:00"));
+      if (xaxis > 247 && xaxis <= 352) {
+        return this.getXaxis(this.dateList[2] + " 20:00:00");
       } else if (xaxis > 372 && xaxis <= 509) {
-        return this.getXaxis(this.getTimeNum(this.dateList[3] + " 20:00:00"));
+        return this.getXaxis(this.dateList[3] + " 20:00:00");
       } else if (xaxis > 509 && xaxis <= 636) {
-        return this.getXaxis(this.getTimeNum(this.dateList[4] + " 20:00:00"));
+        return this.getXaxis(this.dateList[4] + " 20:00:00");
       } else if (xaxis > 636 && xaxis <= 763) {
-        return this.getXaxis(this.getTimeNum(this.dateList[5] + " 20:00:00"));
+        return this.getXaxis(this.dateList[5] + " 20:00:00");
       } else if (xaxis > 763 && xaxis <= 891) {
-        return this.getXaxis(this.getTimeNum(this.dateList[6] + " 20:00:00"));
+        return this.getXaxis(this.dateList[6] + " 20:00:00");
       }
     },
     scaleFont(val) {

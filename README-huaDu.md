@@ -122,7 +122,7 @@ getFormatList({ tList, timeInterval = 24 * 60 * 60 * 1000 }) {
   const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
   const list = []
   const targetList = [...tList]
-  for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+  for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
     const item = { timeNum: i, value: '' }
     for (let j = targetList.length - 1; j >= 0; j--) {
       const timeNum = this.getTimeNum(targetList[j].time)

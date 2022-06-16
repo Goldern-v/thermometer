@@ -11,7 +11,7 @@
      
     </div> -->
     <div class="head-info">
-      <div class="item">
+      <div class="item" style="flex: none">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item">
@@ -21,10 +21,10 @@
             : patInfo.age
         }}</span>
       </div>
-      <div class="item" style="flex: 0.8">
+      <div class="item" style="flex: none">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="flex: 1.7">
+      <div class="item" style="flex: none">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
@@ -32,12 +32,12 @@
       <div class="item" style="flex: 1.5">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item">
+      <div class="item" style="flex: 1.5">
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="text-align: right; flex: 1.5">
+      <div class="item" style="text-align: right; flex: none">
         住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
     </div>
@@ -384,7 +384,7 @@
             <div class="value-item-box">
               <div
                 class="value-item font-14"
-                v-for="(item, index) in getFormatList({ tList: BMIList })"
+                v-for="(item, index) in getFormatListBmi({ tList: BMIList })"
                 :key="index"
                 v-html="item.value"
               ></div>
@@ -417,7 +417,6 @@
             </div>
           </div>
         </div>
-
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList0.label || "" }}
@@ -695,14 +694,6 @@ export default {
       }
       return tds;
     },
-    // maTds() {
-    //   const list = ["上午", "下午"];
-    //   const tds = [];
-    //   for (let i = 0; i < 7; i++) {
-    //     tds.push(...list);
-    //   }
-    //   return tds;
-    // },
     painList() {
       const list = [];
       for (let i = this.painRange[1]; i > this.painRange[0]; i -= 2) {
@@ -719,7 +710,7 @@ export default {
       const pressureList = [...this.pressureList];
       for (
         let i = timeNumRange[0];
-        i < timeNumRange[1];
+        i < timeNumRange[1] - 1;
         i += 3 * 4 * 60 * 60 * 1000
       ) {
         const item = { timeNum: i, value: "" };
@@ -759,7 +750,7 @@ export default {
       const bloodOxygenList = [...this.bloodOxygenList];
       for (
         let i = timeNumRange[0];
-        i < timeNumRange[1];
+        i < timeNumRange[1] - 1;
         i += 3 * 4 * 60 * 60 * 1000
       ) {
         const item = { timeNum: i, value: "" };
@@ -782,7 +773,7 @@ export default {
       const timeAdd = (i) => {
         return 4 * 60 * 60 * 1000;
       };
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeAdd(i)) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
@@ -813,7 +804,7 @@ export default {
       const timeAdd = () => {
         return 24 * 60 * 60 * 1000;
       };
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeAdd(i)) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
         const item2 = { timeNum: i, value: "" };
         for (let j = weightList.length - 1; j >= 0; j--) {
@@ -1030,7 +1021,7 @@ export default {
         "border-right-style": "solid",
         "border-width": `${(index - 1) % 2 === 0 ? 3 : 2}px`,
         "border-color": `${
-          (index - 1) % 2 === 0 && index < length - 1 ? "transparent" : "#000"
+          (index - 1) % 2 === 0 ? "transparent" : "#000"
         }`,
         transform: "translateX(1.5px)",
         "font-family": "SimHei",
@@ -1056,6 +1047,36 @@ export default {
         }
       });
       return outTime;
+    },
+    getBreakPoint(data) {
+      let breakList = [];
+      data.forEach((y, index) => {
+        if (index > 0 && index < data.length - 1) {
+          if (this.getNotTemTime().length) {
+            for (let item of this.getNotTemTime()) {
+              if (
+                this.getTimeNum(this.getLocationTime(data[index + 1].time)) >
+                  this.getTimeNum(this.getLocationTime(item)) &&
+                this.getTimeNum(this.getLocationTime(y.time)) <=
+                  this.getTimeNum(this.getLocationTime(item))
+              ) {
+                breakList.push(index - 1);
+              }
+            }
+          }
+        }
+        if (index > 0 && index == data.length - 1) {
+          for (let item of this.getNotTemTime()) {
+            if (
+              this.getTimeNum(this.getLocationTime(data[index].time)) <
+              this.getTimeNum(this.getLocationTime(item))
+            ) {
+              breakList.push(index - 1);
+            }
+          }
+        }
+      });
+      return breakList;
     },
     handleChangePage(value) {
       this.dateRangeList.forEach((x, ind) => {
@@ -1190,15 +1211,13 @@ export default {
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
-          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]
+          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1] - 1 - 1
         ) {
           // 超出时间范围的抛弃
           continue;
         }
-
         if (["4", "41", "42", "43"].includes(vitalSigns[i].vital_code)) {
           const sign = vitalSigns[i].temperature_type;
-
           switch (vitalSigns[i].vital_code) {
             case "4":
               this.outCustomList.push({
@@ -1305,11 +1324,11 @@ export default {
       }
       this.init();
     },
-        //找到表底存在不升的日期
+    //找到表底存在不升的日期
     getNotTemTime() {
       let outTime = [];
       this.topSheetNote.forEach((y) => {
-        if (y.value.includes("转入")||y.value.includes("转出")) {
+        if (y.value.includes("转入")) {
           outTime.push(y.time);
         }
       });
@@ -1326,37 +1345,20 @@ export default {
         this.$refs.main.appendChild(div);
         this.yLine(); //生成Y轴坐标
         this.xLine(); //生成X轴坐标
-                Object.values(this.settingMap).forEach((x) => {
+        Object.values(this.settingMap).forEach((x) => {
           let data = [x.data];
-          if ("2", "1", "19".includes(x.vitalCode)) {
-            // 体温为不升时，折线需要断开
+          if (["2", "1", "19"].includes(x.vitalCode)) {
             data = [[]];
             x.data.forEach((y, index) => {
-              if (y.value > 35) {
+              if (y.value > 34) {
                 data[data.length - 1].push(y);
               }
-              if (index < x.data.length - 1) {
-                //如果存在中间不升的情况，中间断开
-                if (this.getNotTemTime() !== []) {
-                  for (let item of this.getNotTemTime()) {
-                    if (
-                      this.getTimeNum(x.data[index + 1].time) >=
-                        this.getTimeNum(this.getLocationTime(item)) &&
-                      this.getTimeNum(y.time) <= this.getTimeNum(this.getLocationTime(item))
-                      // item.slice(0, 10) === y.time.slice(0, 10)
-                    ) {
-                      data.push([x.data[index + 1]]);
-                    }
-                  }
-                }
-              } else {
-                const list = data[data.length - 1];
-                if (!(list.length && list[list.length - 1].time === y.time)) {
-                  data[data.length - 1].push(y);
-                }
+              if (this.getBreakPoint(x.data).includes(index)) {
+                data.push([]);
               }
             });
           }
+
           if (["11", "12"].includes(x.vitalCode)) {
             // 心率或脉搏过快时，折线需要断开
             data = [[]];
@@ -1366,25 +1368,23 @@ export default {
               } else {
                 data.push([]);
               }
-              if (index < x.data.length - 1) {
-                if (this.getNotTemTime() !== []) {
-                  for (let item of this.getNotTemTime()) {
-                    if (
-                      this.getTimeNum(x.data[index + 1].time) >=
-                        this.getTimeNum(item) &&
-                      this.getTimeNum(y.time) <= this.getTimeNum(item)
-                      // item.slice(0, 10) === y.time.slice(0, 10)
-                    ) {
-                      data.push([x.data[index + 1]]);
-                    }
-                  }
-                }
-
+              if (this.getBreakPoint(x.data).includes(index)) {
+                data.push([]);
+              }
+            });
+          }
+          if (["ttpf"].includes(x.vitalCode)) {
+            // 心率或脉搏过快时，折线需要断开
+            data = [[]];
+            x.data.forEach((y, index) => {
+              if (y.value <= 10) {
+                data[data.length - 1].push(y);
               } else {
-                const list = data[data.length - 1];
-                if (!(list.length && list[list.length - 1].time === y.time)) {
-                  data[data.length - 1].push(y);
-                }
+                data.push([]);
+              }
+
+              if (this.getBreakPoint(x.data).includes(index)) {
+                data.push([]);
               }
             });
           }
@@ -1831,8 +1831,10 @@ export default {
               });
               const sameAxisItem = tList.find(
                 (x) =>
-                  x.x.toFixed(2) === cx.toFixed(2) &&
-                  x.y.toFixed(2) === cy.toFixed(2)
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 4 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 4
               );
               if (sameAxisItem) {
                 params = {
@@ -2079,7 +2081,11 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1] - 1;
+        i += timeInterval
+      ) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
@@ -2097,11 +2103,68 @@ export default {
       }
       return list;
     },
+    getFormatListBmi({ tList, timeInterval = 24 * 60 * 60 * 1000 }) {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const targetList = [...tList];
+      const heightList = [...this.heightList];
+      const weightList = [...this.weightList];
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1] - 1;
+        i += timeInterval
+      ) {
+        const item = { timeNum: i, value: "" };
+        //循环进来  先计算是否有接口的BMI数据  先渲染
+        for (let j = targetList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(targetList[j].time);
+          if (timeNum >= i && timeNum < i + timeInterval) {
+            item.value = `${targetList[j].value}`;
+            
+          }
+          //如果有身高和体重的数据 我们进入遍历循环  计算
+          if (heightList.length > 0 && weightList.length > 0) {
+            for (let k = 0; k < heightList.length; k++) {
+              if(!Number(heightList[k].value)) continue
+              const timeNumHeight = this.getTimeNum(heightList[k].time);
+              for (let h = 0; h < weightList.length; h++) {
+                if(!Number(weightList[h].value)) continue
+                const timeNumWeight = this.getTimeNum(weightList[h].time);
+                if (
+                  timeNumHeight >= i &&
+                  timeNumHeight < i + timeInterval &&
+                  timeNumWeight >= i &&
+                  timeNumWeight < i + timeInterval
+
+                ) {
+                if (
+                  (Number(weightList[h].value) &&
+                  Number(heightList[k].value))
+                ) {
+                     let value =
+                    (Number(weightList[h].value) * 10000) /
+                    (Number(heightList[k].value) * Number(heightList[k].value));
+                  item.value = value.toFixed(2);
+                }
+                }
+
+              }
+            }
+          }
+        }
+        list.push(item);
+      }
+      return list;
+    },
     getFormatListTime({ tList, timeInterval = 24 * 60 * 60 * 1000 }) {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1] - 1;
+        i += timeInterval
+      ) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
@@ -2135,7 +2198,11 @@ export default {
       const list = [];
       const targetList = [...tList];
       const shitList = [...childList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1] - 1;
+        i += timeInterval
+      ) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           if (shitList.length !== 0) {

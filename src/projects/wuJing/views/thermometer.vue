@@ -8,13 +8,13 @@
     <div class="head-hos">武警广东省总队医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item" style="width: 105px; flex: none">
+      <div class="item" style="width: 135px; flex: none">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item" style="width: 80px; flex: none">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="width: 100px; flex: none">
+      <div class="item" style="width: 80px; flex: none">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
       <div class="item" >
@@ -498,7 +498,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData:true,
+      useMockData:false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -697,7 +697,7 @@ export default {
       const pressureList = [...this.pressureList];
       for (
         let i = timeNumRange[0];
-        i < timeNumRange[1];
+        i < timeNumRange[1]-1;
         i += 3 * 4 * 60 * 60 * 1000
       ) {
         const item = { timeNum: i, value: "" };
@@ -727,7 +727,7 @@ export default {
       const timeAdd = () => {
         return 4 * 60 * 60 * 1000
       }
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeAdd()) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeAdd()) {
         const item = { timeNum: i, value: '' }
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time)
@@ -763,6 +763,8 @@ export default {
       return this.dateRangeList[this.currentPage - 1] || [];
     },
     timeRange() {
+      //这里24小时：00:00转换时间戳会变成第二天
+      //所以为了不跟第二天00:00:00重叠  用时间戳的时候  就-1  误差就小很多了
       return [
         `${this.dateList[0]} 00:00:00`,
         `${this.dateList[this.dateList.length - 1]} 24:00:00`,
@@ -1224,11 +1226,12 @@ export default {
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
-          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]
+          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]-1
         ) {
           // 超出时间范围的抛弃
           continue;
         }
+        console.log(vitalSigns[i].time_point,'vitalSigns[i].time_point')
         if (
           ["16", "17", "18", "19", "20", "37"].includes(
             vitalSigns[i].vital_code
@@ -1298,7 +1301,6 @@ export default {
           // }
           continue;
         }
-        console.log(this.customList1,this.customList2)
         if (this.lineMap[vitalSigns[i].vital_code]) {
          
           if (
@@ -2219,7 +2221,7 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
@@ -2245,7 +2247,7 @@ export default {
       const targetList = [...tList];
       const coloclysterList = [...coloclyster];
       const afterColoclysterList = [...afterColoclyster];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);

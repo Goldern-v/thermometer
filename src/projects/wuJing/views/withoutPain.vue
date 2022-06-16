@@ -8,13 +8,13 @@
     <div class="head-hos">武警广东省总队医院</div>
     <div class="head-title">体温单</div>
    <div class="head-info">
-      <div class="item" style="width: 105px; flex: none">
+      <div class="item" style="width: 135px; flex: none">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item" style="width: 80px; flex: none">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="width: 100px; flex: none">
+      <div class="item" style="width: 80px; flex: none">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
       <div class="item" >
@@ -681,7 +681,7 @@ export default {
       const pressureList = [...this.pressureList];
       for (
         let i = timeNumRange[0];
-        i < timeNumRange[1];
+        i < timeNumRange[1]-1;
         i += 3 * 4 * 60 * 60 * 1000
       ) {
         const item = { timeNum: i, value: "" };
@@ -705,13 +705,13 @@ export default {
       const timeNumList = this.dateList.map((x) => {
         return {
           start: this.getTimeNum(`${x} 00:00:00`),
-          end: this.getTimeNum(`${x} 24:00:00`),
+          end: this.getTimeNum(`${x} 23:59:59`),
         };
       });
       const timeAdd = () => {
         return 4 * 60 * 60 * 1000
       }
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeAdd()) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeAdd()) {
         const item = { timeNum: i, value: '' }
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time)
@@ -749,7 +749,7 @@ export default {
     timeRange() {
       return [
         `${this.dateList[0]} 00:00:00`,
-        `${this.dateList[this.dateList.length - 1]} 24:00:00`,
+        `${this.dateList[this.dateList.length - 1]} 23:59:59`,
       ];
     },
     operateDateList() {
@@ -1120,7 +1120,7 @@ export default {
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
-          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]
+          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]-1
         ) {
           // 超出时间范围的抛弃
           continue;
@@ -2005,7 +2005,7 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
@@ -2031,7 +2031,7 @@ export default {
       const targetList = [...tList];
       const coloclysterList = [...coloclyster];
       const afterColoclysterList = [...afterColoclyster];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]; i += timeInterval) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);

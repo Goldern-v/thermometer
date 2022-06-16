@@ -674,7 +674,7 @@ export default {
       for (let i = 0; i < this.vitalSigns.length; i++) {
         if (
           this.getTimeNum(this.vitalSigns[i].time_point) < timeNumRange[0] ||
-          this.getTimeNum(this.vitalSigns[i].time_point) > timeNumRange[1]
+          this.getTimeNum(this.vitalSigns[i].time_point) > timeNumRange[1]-1
         ) {
           // 超出时间范围的抛弃
           continue;
