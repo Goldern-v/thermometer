@@ -926,7 +926,9 @@ export default {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
     currentPage(value) {
+      if(!this.isPrintAll){
       window.parent.postMessage({ type: "currentPage", value }, "*");
+        }
     },
     
   },

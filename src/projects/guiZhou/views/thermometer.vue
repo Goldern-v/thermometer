@@ -1003,10 +1003,11 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: 'pageTotal', value }, '*')
     },
-    // currentPage(value) {
-    //   console.log('数据监听中=======》',value)
-    //   window.parent.postMessage({ type: "currentPage", value }, "*");
-    // },
+    currentPage(value) {
+    if(!this.isPrintAll){
+      window.parent.postMessage({ type: "currentPage", value }, "*");
+        }
+    },
   },
   created() {
     // 实现外部分页和打印

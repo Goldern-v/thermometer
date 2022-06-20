@@ -986,7 +986,9 @@ export default {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
     currentPage(value) {
+     if(!this.isPrintAll){
       window.parent.postMessage({ type: "currentPage", value }, "*");
+        }
     },
   },
   created() {
@@ -1020,9 +1022,7 @@ export default {
         flex: "auto",
         "border-right-style": "solid",
         "border-width": `${(index - 1) % 2 === 0 ? 3 : 2}px`,
-        "border-color": `${
-          (index - 1) % 2 === 0 ? "transparent" : "#000"
-        }`,
+        "border-color": `${(index - 1) % 2 === 0 ? "transparent" : "#000"}`,
         transform: "translateX(1.5px)",
         "font-family": "SimHei",
       };
@@ -2116,42 +2116,73 @@ export default {
       ) {
         const item = { timeNum: i, value: "" };
         //循环进来  先计算是否有接口的BMI数据  先渲染
-        for (let j = targetList.length - 1; j >= 0; j--) {
-          const timeNum = this.getTimeNum(targetList[j].time);
-          if (timeNum >= i && timeNum < i + timeInterval) {
-            item.value = `${targetList[j].value}`;
-            
-          }
-          //如果有身高和体重的数据 我们进入遍历循环  计算
-          if (heightList.length > 0 && weightList.length > 0) {
-            for (let k = 0; k < heightList.length; k++) {
-              if(!Number(heightList[k].value)) continue
-              const timeNumHeight = this.getTimeNum(heightList[k].time);
-              for (let h = 0; h < weightList.length; h++) {
-                if(!Number(weightList[h].value)) continue
-                const timeNumWeight = this.getTimeNum(weightList[h].time);
-                if (
-                  timeNumHeight >= i &&
-                  timeNumHeight < i + timeInterval &&
-                  timeNumWeight >= i &&
-                  timeNumWeight < i + timeInterval
-
-                ) {
-                if (
-                  (Number(weightList[h].value) &&
-                  Number(heightList[k].value))
-                ) {
-                     let value =
-                    (Number(weightList[h].value) * 10000) /
-                    (Number(heightList[k].value) * Number(heightList[k].value));
-                  item.value = value.toFixed(2);
+        if (targetList.length>0) {
+          for (let j = targetList.length - 1; j >= 0; j--) {
+            const timeNum = this.getTimeNum(targetList[j].time);
+            if (timeNum >= i && timeNum < i + timeInterval) {
+              item.value = `${targetList[j].value}`;
+            }
+            //如果有身高和体重的数据 我们进入遍历循环  计算
+            if (heightList.length > 0 && weightList.length > 0) {
+              for (let k = 0; k < heightList.length; k++) {
+                if (!Number(heightList[k].value)) continue;
+                const timeNumHeight = this.getTimeNum(heightList[k].time);
+                for (let h = 0; h < weightList.length; h++) {
+                  if (!Number(weightList[h].value)) continue;
+                  const timeNumWeight = this.getTimeNum(weightList[h].time);
+                  if (
+                    timeNumHeight >= i &&
+                    timeNumHeight < i + timeInterval &&
+                    timeNumWeight >= i &&
+                    timeNumWeight < i + timeInterval
+                  ) {
+                    if (
+                      Number(weightList[h].value) &&
+                      Number(heightList[k].value)
+                    ) {
+                      let value =
+                        (Number(weightList[h].value) * 10000) /
+                        (Number(heightList[k].value) *
+                          Number(heightList[k].value));
+                      item.value = value.toFixed(2);
+                    }
+                  }
                 }
-                }
-
               }
             }
           }
+        } 
+        //如果没有BMI  直接判断是否有身高体重  然后把计算后的值渲染
+        else {
+          if (heightList.length > 0 && weightList.length > 0) {
+              for (let k = 0; k < heightList.length; k++) {
+                if (!Number(heightList[k].value)) continue;
+                const timeNumHeight = this.getTimeNum(heightList[k].time);
+                for (let h = 0; h < weightList.length; h++) {
+                  if (!Number(weightList[h].value)) continue;
+                  const timeNumWeight = this.getTimeNum(weightList[h].time);
+                  if (
+                    timeNumHeight >= i &&
+                    timeNumHeight < i + timeInterval &&
+                    timeNumWeight >= i &&
+                    timeNumWeight < i + timeInterval
+                  ) {
+                    if (
+                      Number(weightList[h].value) &&
+                      Number(heightList[k].value)
+                    ) {
+                      let value =
+                        (Number(weightList[h].value) * 10000) /
+                        (Number(heightList[k].value) *
+                          Number(heightList[k].value));
+                      item.value = value.toFixed(2);
+                    }
+                  }
+                }
+              }
+            }
         }
+
         list.push(item);
       }
       return list;

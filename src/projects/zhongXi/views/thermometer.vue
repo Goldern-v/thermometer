@@ -895,7 +895,9 @@ export default {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
     currentPage(value) {
+      if(!this.isPrintAll){
       window.parent.postMessage({ type: "currentPage", value }, "*");
+        }
     },
   },
   created() {
@@ -1241,11 +1243,7 @@ export default {
       const xaxis = notes.map((x) =>
         this.getXaxis(this.getLocationTime(x.time))
       );
-      console.log(notes.map((x) =>
-        this.getLocationTime(x.time)
-      ))
       const xaxisNew = this.handleNoteXaxis(xaxis);
-      console.log(xaxisNew,'xaxisNew')
       notes.forEach((x, i) => {
         let value = x.value;
         if (x.value.endsWith("|")) {

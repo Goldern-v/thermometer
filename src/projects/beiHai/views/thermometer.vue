@@ -851,7 +851,9 @@ export default {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
     currentPage(value) {
+     if(!this.isPrintAll){
       window.parent.postMessage({ type: "currentPage", value }, "*");
+        }
     },
   },
   created() {
@@ -1973,7 +1975,6 @@ export default {
     },
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
     handleNoteXaxis(xaxisList, notes) {
-      console.log(notes);
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {
         if (
@@ -2015,6 +2016,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.isPrintAll,'ssss')
     document.title = "北海市人民医院";
     const urlParams = this.urlParse();
     this.showInnerPage = urlParams.showInnerPage === "1";

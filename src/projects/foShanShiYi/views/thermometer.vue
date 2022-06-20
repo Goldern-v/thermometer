@@ -479,7 +479,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -900,7 +900,9 @@ export default {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
           currentPage(value) {
+      if(!this.isPrintAll){
       window.parent.postMessage({ type: "currentPage", value }, "*");
+        }
     },
   },
   created() {

@@ -357,6 +357,18 @@ export const mockData = {
       vital_code: '18'
     },
     {
+      temperature_type: '身高',
+      value: '170',
+      time_point: '2021-05-15 20:12:00',
+      vital_code: '32'
+    },
+    {
+      temperature_type: '体重',
+      value: '70',
+      time_point: '2021-05-15 13:12:00',
+      vital_code: '18'
+    },
+    {
       temperature_type: '体温',
       value: '36.2',
       time_point: '2021-05-15 01:12:00',

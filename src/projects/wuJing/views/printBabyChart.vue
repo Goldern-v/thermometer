@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Thermometer from './thermometer.vue'
+import Thermometer from './babyChart.vue'
 import { mockData } from 'src/projects/wuJing/mockData.js'
 const SM4 = require('gm-crypt').sm4
 export default {

@@ -6,33 +6,35 @@
     @dblclick="dblclick"
   >
     <div class="head-hos">武警广东省总队医院</div>
-    <div class="head-title">体温单</div>
+    <div class="head-title">婴儿体温单</div>
    <div class="head-info">
-      <div class="item" style="width: 135px; flex: none">
+      <div class="item" >
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item" style="width: 80px; flex: none">
-        性别：<span class="value">{{ patInfo.sex }}</span>
-      </div>
-      <div class="item" style="width: 80px; flex: none">
-        年龄：<span class="value">{{ patInfo.age }}</span>
-      </div>
-      <div class="item" >
-        入院日期：<span class="value">{{
-          patInfo.admission_date.slice(0, 10)
-        }}</span>
-      </div>
-      <div class="item" >
-        住院号：<span class="value">{{ patInfo.inp_no }}</span>
-      </div>
-      <div class="item" style="flex:1.2">
+       <div class="item" >
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <!-- <div class="item" style="width: 80px; flex: none">
+       <div class="item" >
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
+      </div>
+      <!-- <div class="item" style="width: 80px; flex: none">
+        性别：<span class="value">{{ patInfo.sex }}</span>
       </div> -->
+      <!-- <div class="item" style="width: 80px; flex: none">
+        年龄：<span class="value">{{ patInfo.age }}</span>
+      </div> -->
+      <!-- <div class="item" >
+        入院日期：<span class="value">{{
+          patInfo.admission_date.slice(0, 10)
+        }}</span>
+      </div> -->
+      <div class="item" >
+        住院号：<span class="value">{{ patInfo.inp_no }}</span>
+      </div>
+     
+     
     </div>
     <!-- <div class="head-info-1">
       
@@ -223,100 +225,13 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            血压
-          </div>
-          <div class="value-item-box">
-            <!-- <div
-              class="value-item"
-              :style="middleTdStyle(index)"
-              v-for="(item, index) in formatPressureList"
-              :key="index"
-            >
-              {{ item.value }}
-            </div> -->
-             <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: pressureList })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
+        
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">体重</div>
           <div class="value-item-box">
             <div
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: weightList })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">身高</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: heightList })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            总入量
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: inputList })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            输入液量
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: entryList })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            总出量
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: outputList })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">尿量</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: urineList })"
               :key="index"
             >
               {{ item.value }}
@@ -407,7 +322,7 @@
             </div>
           </div>
         </div>
-        <!--  <div class="row" :style="{ height: `${trHeight}px` }">
+         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList5.label || "" }}
           </div>
@@ -420,21 +335,8 @@
               {{ item.value }}
             </div>
           </div>
-        </div> -->
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            术后天数
-          </div>
-          <div class="value-item-box" style="color: red">
-            <div
-              class="value-item"
-              v-for="(item, index) in formatOperateDateList"
-              :key="index"
-            >
-              {{ item==0?'':item }}
-            </div>
-          </div>
         </div>
+        
       </div>
     </div>
     <div class="pagination" v-if="showInnerPage">
