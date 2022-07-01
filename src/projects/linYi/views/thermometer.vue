@@ -1095,6 +1095,7 @@ export default {
         });
       }
       this.vitalSigns = vitalSigns;
+      console.log(vitalSigns)
       // 计算最大标识时间
       const maxTimeNum = Math.max.apply(
         null,
@@ -1129,7 +1130,6 @@ export default {
         },
         "*"
       );
-
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       // const customSigns = [] // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
@@ -1234,6 +1234,15 @@ export default {
               time: vitalSigns[i].time_point,
               value: Number(vitalSigns[i].value),
             });
+            this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.forEach((y,index)=>{
+              if(index>=1&&this.getLocationTime(y.time)==this.getLocationTime(this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data[index-1].time)){
+                if(y.value>this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data[index-1].value){
+                this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.splice(index-1,1)
+                }else{
+                  this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.splice(index,1)
+                }
+              }
+            })
           }
 
           continue;
@@ -1315,8 +1324,9 @@ export default {
           y: value !== "过快" ? y + 2 : y - this.ySpace - 1,
           value: this.addn(value),
           color,
-          textLineHeight: this.ySpace + 1,
+          textLineHeight:this.ySpace + 1,
           fontWeight: "bold",
+          textHeight:30
         });
       });
     },
@@ -1583,6 +1593,8 @@ export default {
       zlevel = 0,
       fontWeight = "normal",
       textLineHeight,
+      textHeight
+
     }) {
       const text = new zrender.Text({
         zlevel,
@@ -1595,6 +1607,7 @@ export default {
           textAlign: "center",
           fontWeight,
           textLineHeight,
+          textHeight,
         },
       });
       this.zr.add(text);
@@ -2047,10 +2060,11 @@ export default {
         return str;
       } else {
         for (let i = 0; i < str.length; i++) {
+          const reg=
           formatStr +=
-            isNaN(str[i]) || (!isNaN(str[i]) && isNaN(str[i + 1]))
-              ? `${str[i]}\n`
-              : str[i];
+            isNaN(str[i]) || (!isNaN(str[i]) && isNaN(str[i + 1]))&&str[i]!=="|"
+              ? `${str[i]}\n` : str[i]=="|" ? `${str[i]}\n\n`
+              : str[i]
         }
       }
       return formatStr;
@@ -2120,12 +2134,10 @@ export default {
       } else {
         if (typeof time === "string") {
           if (/^[0-9]+$/.test(time)) {
-            // support '1548221490638'
             time = parseInt(time);
           } else {
-            // support safari
-            // https://stackoverflow.com/questions/4310953/invalid-date-in-safari
             time = time.replace(new RegExp(/-/gm), "/");
+            console.log(time,'time')
           }
         }
 

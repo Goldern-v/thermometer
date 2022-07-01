@@ -49,7 +49,7 @@ export const mockData = {
       temperature_type: '表顶注释',
       value: '转入|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-15 11:12:00',
+      time_point: '2021-05-15 01:12:00',
       vital_code: '3'
     },
     {

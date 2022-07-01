@@ -24,6 +24,20 @@ export const mockData = {
       expand2: '2021-10-18 10:34:00'
     },
     {
+      temperature_type: '病人事件',
+      value: '分娩|',
+      time_point: '2021-10-20 10:34:00',
+      vital_code: 'nurseEvents',
+      expand2: '2021-10-18 10:34:00'
+    },
+    {
+      temperature_type: '病人事件',
+      value: '分娩|',
+      time_point: '2021-10-23 10:34:00',
+      vital_code: 'nurseEvents',
+      expand2: '2021-10-18 10:34:00'
+    },
+    {
       temperature_type: '呼吸',
       value: '201',
       time_point: '2021-10-18 21:00:00',
