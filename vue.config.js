@@ -186,14 +186,14 @@ module.exports = {
             default:
               break
           }
-        })(), 
+        })(),
         changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
         ws: true,
         pathRewrite: {
             '^/crNursing/api': '/crNursing/api'
         }
       },
-  
+
       '/crHesb/hospital/common': {
         target: (() => {
           switch (project) {
@@ -234,7 +234,7 @@ module.exports = {
             case 'longJiang':
               return 'http://218.13.34.230:9091'
             case 'linYi':
-              return 'http://218.107.37.134:9093'
+              return 'http://218.107.37.134:9093' //无可用外网
             case 'common':
               return 'http://172.17.5.41:9091'
             default:

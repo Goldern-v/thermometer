@@ -46,7 +46,7 @@
       </div>
     </div>
     <!-- <div class="head-info-1">
-      
+
     </div> -->
     <div class="table-area">
       <div
@@ -64,7 +64,7 @@
           top: '1px',
           bottom: '0',
           right: '0',
-          transform: 'translateY(-0.5px)',
+          transform: 'translateY(-0.5px)'
         }"
       ></div>
       <div class="table-box" style="transform: translateY(0.5px)">
@@ -365,7 +365,7 @@
             </div>
           </div>
         </div>
-       
+
         <!-- <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList3.label || "" }}
@@ -1095,7 +1095,11 @@ export default {
         });
       }
       this.vitalSigns = vitalSigns;
-      console.log(vitalSigns)
+
+      //保存数据到vueX给详细曲线使用
+      let vitalSignsData = this.apiData
+      this.$store.commit("updateVitalSigns", vitalSignsData);
+
       // 计算最大标识时间
       const maxTimeNum = Math.max.apply(
         null,
