@@ -1057,10 +1057,13 @@ export default {
             ["041", "01", "043"].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) <= 33
           ) {
+
             this.bottomSheetNote.push({
               time: vitalSigns[i].time_point,
               value: "不升",
             });
+
+
           } else {
             this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
               time: vitalSigns[i].time_point,
@@ -1743,7 +1746,19 @@ export default {
               tips: "",
               fontWeight: "bold",
               zlevel: 100,
-              fontSize: 12,
+              fontSize: 14,
+            });
+          }
+          if (x.value ==0) {
+            this.createText({
+              x: cx ,
+              y: this.getYaxis(this.pulseRange, x.value)-20,
+              value: x.value,
+              color: "red",
+              tips: "",
+              fontWeight: "bold",
+              zlevel: 100,
+              fontSize: 14,
             });
           }
         }

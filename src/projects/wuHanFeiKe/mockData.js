@@ -21,7 +21,7 @@ export const mockData = {
 
     { temperature_type: "其它", value: "SpO2:98%", time_point: "2022-04-08 14:00:00", vital_code: "51" },
 
-    { temperature_type: "身高", value: "120", time_point: "2022-04-08 12:00:00", vital_code: "094" },
+    { temperature_type: "身高", value: "120", time_point: "2022-04-08 12:00:00", vital_code: "034" },
 
     { temperature_type: "体温", value: "40", time_point: "2022-04-08 14:00:00", vital_code: "01" },
 

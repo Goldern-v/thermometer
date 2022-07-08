@@ -1068,7 +1068,7 @@ export default {
         if (index > 0 && index == data.length - 1) {
           for (let item of this.getNotTemTime()) {
             if (
-              this.getTimeNum(this.getLocationTime(data[index].time)) <
+              this.getTimeNum(this.getLocationTime(data[index].time)) <=
               this.getTimeNum(this.getLocationTime(item))
             ) {
               breakList.push(index - 1);

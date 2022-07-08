@@ -16,7 +16,15 @@ export const mockData = {
     }
   },
   vitalSigns: [
-    { temperature_type: "呼吸", value: "26", time_point: "2021-12-08 12:00:00", vital_code: "04" },
+    { temperature_type: "体温", value: "38.7", time_point: "2021-12-08 05:59:00", vital_code: "01" },
+    { temperature_type: "体温", value: "38.7", time_point: "2021-12-09 06:00:00", vital_code: "01" },
+    { temperature_type: "体温", value: "38.7", time_point: "2021-12-09 09:59:00", vital_code: "01" },
+    { temperature_type: "体温", value: "38.7", time_point: "2021-12-10 14:00:00", vital_code: "01" },
+    { temperature_type: "体温", value: "38.7", time_point: "2021-12-11 22:00:00", vital_code: "01" },
+    { temperature_type: "体温", value: "38.7", time_point: "2021-12-12 22:00:00", vital_code: "01" },
+    { temperature_type: "体温", value: "38.7", time_point: "2021-12-13 22:00:00", vital_code: "01" },
+    { temperature_type: "体温", value: "38.7", time_point: "2021-12-14 22:00:00", vital_code: "01" },
+    { temperature_type: "呼吸", value: "261", time_point: "2021-12-12 22:00:00", vital_code: "04" },
 
     { temperature_type: "其它", value: "SpO2:98%", time_point: "2021-12-08 12:00:00", vital_code: "51" },
 

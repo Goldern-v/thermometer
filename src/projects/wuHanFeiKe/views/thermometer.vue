@@ -26,7 +26,7 @@
       <div class="item" style="flex:0.5">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-       <div class="item" style="flex:2.3">
+       <div class="item" style="flex:2.2">
         科别：<span class="value" > {{ adtLog || patInfo.dept_name }}</span>
       </div>
       <div class="item" style="flex:0.5">
@@ -34,7 +34,7 @@
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="flex:1.2">
+      <div class="item" style="flex:1.3">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
@@ -285,7 +285,19 @@
           </div>
         </div>
         </div>
-        
+        <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              身高(m)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-21"
+                v-for="(item, index) in getFormatList({ tList: heightList })"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
               体重(kg)
@@ -485,7 +497,7 @@ export default {
     const yRange = [34, 42];
     const pulseRange = [30, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -565,6 +577,7 @@ export default {
       ], // 呼吸
       pressureList: [], // 血压
       weightList: [], // 体重
+      heightList: [], // 体重
       inputList: [], // 液体入量
       shitList: [], // 大便次数
       urineList: [], // 尿量
@@ -650,7 +663,7 @@ export default {
       return tds;
     },
     trHeight() {
-      return this.ySpace * 2;
+      return this.ySpace * 2-1;
     },
 
     maTds() {
@@ -1023,6 +1036,7 @@ export default {
       this.breatheList = [];
       this.pressureList = [];
       this.weightList = [];
+      this.heightList=[]
       this.inputList = [];
       this.shitList = [];
       this.contractList = [];
@@ -1140,6 +1154,9 @@ export default {
             break;
           case "033":
             this.weightList.push(item);
+            break;
+          case "034":
+            this.heightList.push(item);
             break;
           case "091":
             this.inputList.push(item);
