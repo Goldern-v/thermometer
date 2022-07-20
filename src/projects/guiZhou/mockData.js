@@ -53,7 +53,7 @@ export const mockData = {
     },
     {
       temperature_type: '心率',
-      value: '110',
+      value: '310',
       time_point: '2021-10-18 10:34:00',
       vital_code: 'heartRate',
       expand2: null

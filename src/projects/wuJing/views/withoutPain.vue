@@ -7,7 +7,7 @@
   >
     <div class="head-hos">武警广东省总队医院</div>
     <div class="head-title">体温单</div>
-   <div class="head-info">
+    <div class="head-info">
       <div class="item" style="width: 135px; flex: none">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
@@ -17,15 +17,15 @@
       <div class="item" style="width: 80px; flex: none">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
-      <div class="item" >
+      <div class="item">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item" >
+      <div class="item">
         住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
-      <div class="item" style="flex:1.2">
+      <div class="item" style="flex: 1.2">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
       <!-- <div class="item" style="width: 80px; flex: none">
@@ -59,7 +59,7 @@
       <div class="table-box" style="transform: translateY(0.5px)">
         <div
           class="vtline"
-          :style="{ left: `${leftWidth + item * (6 * xSpace + 4.5) -1}px` }"
+          :style="{ left: `${leftWidth + item * (6 * xSpace + 4.5) - 1}px` }"
           v-for="item in 6"
           :key="item"
         ></div>
@@ -67,10 +67,9 @@
           class="row border-top-black-2 border-bottom-black-2"
           :style="{ height: `${trHeight}px` }"
         >
-          <div
-            class="label"
-            :style="{ width: `${leftWidth}px` }"
-          >日期 <span class="col2"></span></div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            日期 <span class="col2"></span>
+          </div>
           <div class="value-item-box">
             <div
               class="value-item"
@@ -85,7 +84,7 @@
         <div
           class="row border-bottom-black-2"
           :style="{ height: `${trHeight}px` }"
-         >
+        >
           <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
           <div class="value-item-box">
             <div
@@ -203,9 +202,12 @@
         ></div>
         <div
           class="row border-top-red-2"
-          :style="{ height: `${trHeight * 2-7}px` }"
+          :style="{ height: `${trHeight * 2 - 7}px` }"
+        >
+          <div
+            class="label"
+            :style="{ width: `${leftWidth}px`, paddingTop: `${6}px` }"
           >
-          <div class="label" :style="{ width: `${leftWidth}px`,paddingTop:`${6}px`}" >
             呼吸
           </div>
           <div class="value-item-box font-12">
@@ -224,9 +226,7 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            血压
-          </div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">血压</div>
           <div class="value-item-box">
             <!-- <div
               class="value-item"
@@ -236,7 +236,7 @@
             >
               {{ item.value }}
             </div> -->
-             <div
+            <div
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: pressureList })"
               :key="index"
@@ -270,9 +270,7 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            总入量
-          </div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">总入量</div>
           <div class="value-item-box">
             <div
               class="value-item"
@@ -284,9 +282,7 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            输入液量
-          </div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">输入液量</div>
           <div class="value-item-box">
             <div
               class="value-item"
@@ -298,9 +294,7 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            总出量
-          </div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">总出量</div>
           <div class="value-item-box">
             <div
               class="value-item"
@@ -324,13 +318,15 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            大便
-          </div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">大便</div>
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatShitList({ tList: shitList,coloclyster,afterColoclyster })"
+              v-for="(item, index) in getFormatShitList({
+                tList: shitList,
+                coloclyster,
+                afterColoclyster,
+              })"
               :key="index"
             >
               {{ item.value }}
@@ -422,16 +418,14 @@
           </div>
         </div> -->
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            术后天数
-          </div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">术后天数</div>
           <div class="value-item-box" style="color: red">
             <div
               class="value-item"
               v-for="(item, index) in formatOperateDateList"
               :key="index"
             >
-              {{ item==0?'':item }}
+              {{ item == 0 ? "" : item }}
             </div>
           </div>
         </div>
@@ -582,8 +576,8 @@ export default {
       heightList: [], // 身高
       inputList: [], // 液体入量
       shitList: [], // 大便次数
-      coloclyster:[],//灌肠次数
-      afterColoclyster:[],//灌肠后大便次数
+      coloclyster: [], //灌肠次数
+      afterColoclyster: [], //灌肠后大便次数
       entryList: [], // 输入液量
       peeList: [], //小便次数
       urineList: [], // 尿量
@@ -673,7 +667,7 @@ export default {
       return tds;
     },
     trHeight() {
-      return this.ySpace+4;
+      return this.ySpace + 4;
     },
     formatPressureList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
@@ -681,7 +675,7 @@ export default {
       const pressureList = [...this.pressureList];
       for (
         let i = timeNumRange[0];
-        i < timeNumRange[1]-1;
+        i < timeNumRange[1] - 1;
         i += 3 * 4 * 60 * 60 * 1000
       ) {
         const item = { timeNum: i, value: "" };
@@ -709,19 +703,19 @@ export default {
         };
       });
       const timeAdd = () => {
-        return 4 * 60 * 60 * 1000
-      }
-      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeAdd()) {
-        const item = { timeNum: i, value: '' }
+        return 4 * 60 * 60 * 1000;
+      };
+      for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd()) {
+        const item = { timeNum: i, value: "" };
         for (let j = breatheList.length - 1; j >= 0; j--) {
-          const timeNum = this.getTimeNum(breatheList[j].time)
+          const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd()) {
-            item.value = breatheList[j].value
-            breatheList.splice(j, 1)
-            break
+            item.value = breatheList[j].value;
+            breatheList.splice(j, 1);
+            break;
           }
         }
-        list.push(item)
+        list.push(item);
       }
       list
         .filter((x) => x.value !== "")
@@ -849,12 +843,14 @@ export default {
     },
     formatDateList() {
       return this.dateList.map((x, i) => {
-        if (i === 0 ) {
-          return x
-        } else if(i>0){
-          return this.dateList[i - 1].slice(0, 7) !== x.slice(0, 7) ? x : x.slice(8,10)
+        if (i === 0) {
+          return x;
+        } else if (i > 0) {
+          return this.dateList[i - 1].slice(0, 7) !== x.slice(0, 7)
+            ? x
+            : x.slice(8, 10);
         }
-      })
+      });
     },
     temperaturelist() {
       const list = [];
@@ -886,10 +882,10 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
-      currentPage(value) {
-      if(!this.isPrintAll){
-      window.parent.postMessage({ type: "currentPage", value }, "*");
-        }
+    currentPage(value) {
+      if (!this.isPrintAll) {
+        window.parent.postMessage({ type: "currentPage", value }, "*");
+      }
     },
   },
   created() {
@@ -927,11 +923,11 @@ export default {
         }
       }
     },
-     //找到存在出院或者转出的日期
+    //找到存在出院或者转出的日期
     getLeaveTime() {
       let outTime = "";
       this.topSheetNote.forEach((y) => {
-        if (y.value.includes("出院") ) {
+        if (y.value.includes("出院")) {
           outTime = y.time.slice(0, 10);
         }
       });
@@ -941,7 +937,7 @@ export default {
       // 和iframe外部通信，传递双击事件
       window.parent.postMessage({ type: "dblclick" }, "*");
     },
-        // 数字转罗马字符
+    // 数字转罗马字符
     numToRome(num) {
       let ans = "";
       let k = Math.floor(num / 1000);
@@ -1011,9 +1007,9 @@ export default {
               this.handleData();
             }
             break;
-             case 'dateChangePage':
-              this.handleChangePage(e.data.value)
-              break;
+          case "dateChangePage":
+            this.handleChangePage(e.data.value);
+            break;
           case "printing":
             window.print();
             break;
@@ -1046,8 +1042,8 @@ export default {
       this.outputList = [];
       this.coolList = [];
       this.dateRangeList = [];
-      this.afterColoclyster=[];
-      this.coloclyster=[];
+      this.afterColoclyster = [];
+      this.coloclyster = [];
       for (let i = 0; i < 6; i++) {
         this[`customList${i}`] = [];
       }
@@ -1065,6 +1061,23 @@ export default {
       this.$refs.main.innerHTML = "";
       this.reset();
       this.handleData();
+    },
+
+    unusualLager(val) {
+      const value = Number(val);
+      return value >= 60;
+    },
+    getBeHospitalized() {
+      let inTime = [];
+      this.vitalSigns
+        .filter((x) => x.vital_code == 21 && x.value.includes("入院"))
+        .forEach((y, index) => {
+          console.log("值", y);
+          if (y.value.includes("入院")) {
+            inTime.push(this.getLocationTime(y.time_point));
+          }
+        });
+      return inTime;
     },
     handleData() {
       if (this.apiData.patientInfo)
@@ -1122,7 +1135,7 @@ export default {
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
-          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]-1
+          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1] - 1
         ) {
           // 超出时间范围的抛弃
           continue;
@@ -1187,7 +1200,7 @@ export default {
           //     time: vitalSigns[i].time_point,
           //     value: "过快",
           //   });
-          // } else 
+          // } else
           if (
             ["7", "2", "8"].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) <= 35
@@ -1200,6 +1213,34 @@ export default {
           this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
             time: vitalSigns[i].time_point,
             value: Number(vitalSigns[i].value),
+          });
+          let dataArray =
+            this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data;
+          const inTime = this.getBeHospitalized();
+          dataArray.forEach((y, index) => {
+            if (
+              !inTime.includes(this.getLocationTime(y.time)) &&
+              index >= 1 &&
+              this.getLocationTime(y.time) ==
+                this.getLocationTime(dataArray[index - 1].time)
+            ) {
+              if (this.unusualLager(y.value)) {
+                if (y.value > dataArray[index - 1].value) {
+                  dataArray.splice(index - 1, 1);
+                } else {
+                  dataArray.splice(index, 1);
+                }
+              } else {
+                if (
+                  y.value < dataArray[index - 1].value &&
+                  dataArray[index - 1].value < 60
+                ) {
+                  dataArray.splice(index - 1, 1);
+                } else {
+                  dataArray.splice(index, 1);
+                }
+              }
+            }
           });
           continue;
         }
@@ -1229,12 +1270,12 @@ export default {
           case "14":
             this.shitList.push(item);
             break;
-         case '26':
-            this.coloclyster.push(item)
-            break
-          case '27':
-            this.afterColoclyster.push(item)
-            break
+          case "26":
+            this.coloclyster.push(item);
+            break;
+          case "27":
+            this.afterColoclyster.push(item);
+            break;
           case "13":
             this.urineList.push(item);
             break;
@@ -1280,9 +1321,9 @@ export default {
           y: topText.includes(value)
             ? y - this.ySpace - 1
             : bottomText.includes(value)
-            ? y - 2 * this.ySpace +1
-            : y+3*this.ySpace,
-          value: this.addn(value,bottomText),
+            ? y - 2 * this.ySpace + 1
+            : y + 3 * this.ySpace,
+          value: this.addn(value, bottomText),
           color,
           textLineHeight: this.ySpace + 1,
           fontWeight: "nomal",
@@ -1293,8 +1334,8 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        let ops={renderer:'svg'}
-        this.zr = zrender.init(this.$refs.main,ops);
+        let ops = { renderer: "svg" };
+        this.zr = zrender.init(this.$refs.main, ops);
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
@@ -1425,9 +1466,7 @@ export default {
 
     getAreaHeight() {
       const totalLine =
-        this.yRange[1] -
-        this.yRange[0] +
-        (this.yRange[1] - this.yRange[0]) * 4 ;
+        this.yRange[1] - this.yRange[0] + (this.yRange[1] - this.yRange[0]) * 4;
       let preSpace = 0;
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1;
@@ -1438,9 +1477,7 @@ export default {
     },
     getAreaWidth() {
       const totalLine =
-        this.xRange[1] -
-        this.xRange[0] +
-        (this.xRange[1] - this.xRange[0]) * 5;
+        this.xRange[1] - this.xRange[0] + (this.xRange[1] - this.xRange[0]) * 5;
       let preSpace = 0;
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 6 === 0 && i > 0 && i < totalLine - 1;
@@ -1648,14 +1685,13 @@ export default {
         domTips[0].setAttribute("style", `display:none`);
         el.animateTo(shapeOut, 100, 0);
       });
-             el.on('click',()=>{
-      let dateTime=config.tips.slice(0,20)
+      el.on("click", () => {
+        let dateTime = config.tips.slice(0, 20);
         window.parent.postMessage(
-          { type: 'clickDateTime', value: dateTime },
-          '*'
-        )
-     
-    })
+          { type: "clickDateTime", value: dateTime },
+          "*"
+        );
+      });
     },
     createBrokenLine({
       vitalCode,
@@ -1709,16 +1745,16 @@ export default {
               });
               // 如果脉搏或心率超限过快，则在最高的格子中间用实心红圈描点
               if (Number(x.value) > this.pulseRange[1]) {
-                cy = this.getYaxis(yRange, yRange[1]-2, vitalCode)
+                cy = this.getYaxis(yRange, yRange[1] - 2, vitalCode);
                 params = {
                   cx,
                   cy,
                   r: 4,
-                  color: 'red',
+                  color: "red",
                   zlevel: 9,
                   tips: `${x.time} ${label}：${x.value}`,
-                  dotSolid: true
-                }
+                  dotSolid: true,
+                };
               }
               const sameAxisItem = tList.find(
                 (x) =>
@@ -1863,21 +1899,25 @@ export default {
       return xAxis;
     },
     // 增加字符（过快，不升，请假等字符的换行）换行符
-    addn(str,bottomText) {
+    addn(str, bottomText) {
       let formatStr = "";
-      let formatTopValu=""
-      let topText=['过快']
-      if (str.length <=2&&!bottomText.includes(str)&&!topText.includes(str)) {
-          for (let i = 0; i < str.length; i++) {
-           formatTopValu+=
+      let formatTopValu = "";
+      let topText = ["过快"];
+      if (
+        str.length <= 2 &&
+        !bottomText.includes(str) &&
+        !topText.includes(str)
+      ) {
+        for (let i = 0; i < str.length; i++) {
+          formatTopValu +=
             isNaN(str[i]) || (!isNaN(str[i]) && isNaN(str[i + 1]))
               ? `${str[i]}\n\n\n\n`
               : str[i];
         }
-          return formatTopValu
-       
-      // 
-      } else { 
+        return formatTopValu;
+
+        //
+      } else {
         for (let i = 0; i < str.length; i++) {
           formatStr +=
             isNaN(str[i]) || (!isNaN(str[i]) && isNaN(str[i + 1]))
@@ -1901,7 +1941,7 @@ export default {
     getLocationTime(time) {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
-       const timeAreasMap = {
+      const timeAreasMap = {
         "02:00:00": ["00:00:00", "03:59:59"],
         "06:00:00": ["04:00:00", "07:59:59"],
         "10:00:00": ["8:00:00", "11:59:59"],
@@ -2007,7 +2047,11 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1] - 1;
+        i += timeInterval
+      ) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
@@ -2021,49 +2065,56 @@ export default {
       }
       return list;
     },
-        //大便次数有些科室要特殊显示，需要特殊处理
+    //大便次数有些科室要特殊显示，需要特殊处理
     getFormatShitList({
       tList,
       timeInterval = 24 * 60 * 60 * 1000,
       coloclyster,
-      afterColoclyster
+      afterColoclyster,
     }) {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
       const coloclysterList = [...coloclyster];
       const afterColoclysterList = [...afterColoclyster];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1] - 1;
+        i += timeInterval
+      ) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
-              if (timeNum >= i && timeNum < i + timeInterval) {
-                item.value = `${targetList[j].value}`;
-              }
-          if ((coloclysterList.length>0&&afterColoclysterList.length>0)) {
+          if (timeNum >= i && timeNum < i + timeInterval) {
+            item.value = `${targetList[j].value}`;
+          }
+          if (coloclysterList.length > 0 && afterColoclysterList.length > 0) {
             for (let k = 0; k < coloclysterList.length; k++) {
-              const timeNumColoclyster= this.getTimeNum(coloclysterList[k].time);
-              for(let h=0;h<afterColoclysterList.length;h++){
-                 const timeNumAfterColoclyster = this.getTimeNum(afterColoclysterList[h].time);
-              if (
-                (timeNum >= i &&
-                timeNum < i + timeInterval )&&
-                (timeNumColoclyster >= i &&
-                timeNumColoclyster < i + timeInterval)&&
-                (timeNumAfterColoclyster >= i &&
-                timeNumAfterColoclyster < i + timeInterval)
-              ) {
-                item.value =
-                  Number(coloclysterList[k].value)>1
-                    ? `${targetList[j].value} ${afterColoclysterList[h].value}/${coloclysterList[k].value}E`
-                    : `${targetList[j].value} ${afterColoclysterList[h].value}/E`;
-                targetList.splice(j, 1);
-                afterColoclysterList.splice(h, 1);
-                coloclysterList.splice(k, 1);
-                break;
+              const timeNumColoclyster = this.getTimeNum(
+                coloclysterList[k].time
+              );
+              for (let h = 0; h < afterColoclysterList.length; h++) {
+                const timeNumAfterColoclyster = this.getTimeNum(
+                  afterColoclysterList[h].time
+                );
+                if (
+                  timeNum >= i &&
+                  timeNum < i + timeInterval &&
+                  timeNumColoclyster >= i &&
+                  timeNumColoclyster < i + timeInterval &&
+                  timeNumAfterColoclyster >= i &&
+                  timeNumAfterColoclyster < i + timeInterval
+                ) {
+                  item.value =
+                    Number(coloclysterList[k].value) > 1
+                      ? `${targetList[j].value} ${afterColoclysterList[h].value}/${coloclysterList[k].value}E`
+                      : `${targetList[j].value} ${afterColoclysterList[h].value}/E`;
+                  targetList.splice(j, 1);
+                  afterColoclysterList.splice(h, 1);
+                  coloclysterList.splice(k, 1);
+                  break;
+                }
               }
-              }
-
             }
           } else {
             if (timeNum >= i && timeNum < i + timeInterval) {
@@ -2136,7 +2187,7 @@ export default {
     },
   },
   mounted() {
-      document.title='武警广东省总队医院体温单'
+    document.title = "武警广东省总队医院体温单";
     const urlParams = this.urlParse();
     this.showInnerPage = urlParams.showInnerPage === "1";
     if (this.isPrintAll) {
@@ -2174,8 +2225,8 @@ export default {
         data: this.encryptFun(JSON.stringify(data)),
       }).then((res) => {
         this.apiData = JSON.parse(this.decryptFun(res.data));
-        if(this.showInnerPage){
-          console.log('测试环境的接口信息======》》》》',this.apiData)
+        if (this.showInnerPage) {
+          console.log("测试环境的接口信息======》》》》", this.apiData);
         }
         this.$nextTick(() => {
           //每次获取数据都要传一次页数
@@ -2209,7 +2260,7 @@ export default {
   font-family: Simsun;
   .head-hos {
     padding-top: 10px;
-        font-size: 38px;
+    font-size: 38px;
     font-weight: bold;
   }
   .head-title {
@@ -2276,16 +2327,16 @@ export default {
     .label {
       align-items: center;
       height: 100%;
-           padding:2px 8px 0px 8px;
+      padding: 2px 8px 0px 8px;
       text-align: justify !important;
-       text-align-last: justify;
+      text-align-last: justify;
       font-size: 14px;
       border-right: 1px solid #000;
       transform: translateX(1.5px);
       flex-shrink: 0;
     }
     .custom-label {
-       display: flex;
+      display: flex;
       align-items: center;
       justify-content: space-around;
       height: 100%;
@@ -2293,9 +2344,8 @@ export default {
       border-right: 1px solid #000;
       transform: translateX(1.5px);
       flex-shrink: 0;
-      
     }
-     
+
     .value-item-box {
       flex: 1;
       height: 100%;

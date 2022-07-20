@@ -455,7 +455,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -931,6 +931,7 @@ export default {
     },
   },
   created() {
+    document.title='临邑县人民医院体温单'
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
   },

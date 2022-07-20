@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      useMockData: true,
+      useMockData: false,
       printData: null,
       isPrintAll: true,
       pageTotal: 1,

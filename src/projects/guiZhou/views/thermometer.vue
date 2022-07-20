@@ -14,7 +14,7 @@
       </div>
       <div class="item" style="width: 210px; flex: none">
         科别<span class="value"
-          >&emsp;{{ adtLog || patInfo.dept_name }}&emsp;</span
+          >&emsp;{{ adtLogWardName || patInfo.dept_name }}&emsp;</span
         >
       </div>
       <div class="item">
@@ -644,6 +644,7 @@ export default {
       currentPage: 1,
       showInnerPage: false, // 是否显示内部分页
       adtLog: "", // 转科
+      adtLogWardName: "", // 护理单元
       bedExchangeLog: "", // 转床
     };
   },
@@ -1083,6 +1084,7 @@ export default {
           case "nurseExchangeInfo":
             if (e.data.value) {
               this.adtLog = e.data.value.adtLog || ""; // 转科
+              this.adtLogWardName = e.data.value.adtLogWardName || ""; // 转科
               this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
             }
             break;

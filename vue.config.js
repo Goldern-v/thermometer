@@ -45,6 +45,8 @@ function resolve(dir) {
       return '广东医科大学附属第三医院(顺德龙江医院)'
     case 'linYi': // 广东医科大学附属第三医院(顺德龙江医院)
       return '临邑县人民医院'
+    case 'yiZhou': // 广东医科大学附属第三医院(顺德龙江医院)
+      return '临沂沂州医院'
     case 'common': // 可配置的通用版本
       return '配置通用版本'
     default:
@@ -125,6 +127,8 @@ module.exports = {
           return './src/projects/longJiang/main.js'
         case 'linYi': // 临邑县人民医院
           return './src/projects/linYi/main.js'
+        case 'yiZhou': // 临邑县人民医院
+          return './src/projects/yiZhou/main.js'
         case 'common': // 可配置的通用版本
           return './src/projects/common/main.js'
         default:
@@ -158,7 +162,7 @@ module.exports = {
             case 'guiZhou':
               return 'http://10.207.40.22:9091'
             case 'xieGang':
-              return 'http://183.124.1.124:9091'
+              return 'http://183.234.1.124:9093'
             case 'xingTan':
               return 'http://218.13.87.27:9091'
             case 'beiHai':
@@ -180,6 +184,8 @@ module.exports = {
             case 'longJiang':
               return 'http://218.13.34.230:9094'
             case 'linYi':
+              return 'http://218.107.37.134:9093'
+            case 'yiZhou':
               return 'http://218.107.37.134:9093'
             case 'common':
               return 'http://172.17.5.41:9091'
@@ -212,7 +218,7 @@ module.exports = {
             case 'guiZhou':
               return 'http://10.207.40.22:9091'
             case 'xieGang':
-              return 'http://183.124.1.124:9091'
+              return 'http://183.234.1.124:9091'
             case 'xingTan':
               return 'http://218.13.87.27:9092'
             case 'beiHai':
@@ -234,6 +240,8 @@ module.exports = {
             case 'longJiang':
               return 'http://218.13.34.230:9091'
             case 'linYi':
+              return 'http://218.107.37.134:9093' //无可用外网
+            case 'yiZhou':
               return 'http://218.107.37.134:9093' //无可用外网
             case 'common':
               return 'http://172.17.5.41:9091'
