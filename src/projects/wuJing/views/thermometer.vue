@@ -493,7 +493,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1172,17 +1172,11 @@ export default {
       this.reset();
       this.handleData();
     },
-    unusualLager(val) {
-      const value = Number(val);
-      return value >= 60;
-    },
     getBeHospitalized() {
       let inTime = [];
-      console.log(this.vitalSigns.filter((x) => x.vital_code == 21));
       this.vitalSigns
         .filter((x) => x.vital_code == 21 && x.value.includes("入院"))
         .forEach((y, index) => {
-          console.log("值", y);
           if (y.value.includes("入院")) {
             inTime.push(this.getLocationTime(y.time_point));
           }
@@ -1302,20 +1296,6 @@ export default {
             default:
               break;
           }
-          // if (index < 0) {
-          //   customSigns.push(sign);
-          //   this[`customList${customSigns.length - 1}`].push({
-          //     time: vitalSigns[i].time_point,
-          //     value: vitalSigns[i].value,
-          //   });
-          //   this[`customList${customSigns.length - 1}`].label = sign;
-          // } else {
-          //   this[`customList${index}`].push({
-          //     time: vitalSigns[i].time_point,
-          //     value: vitalSigns[i].value,
-          //   });
-          //   this[`customList${index}`].label = sign;
-          // }
           continue;
         }
         if (this.lineMap[vitalSigns[i].vital_code]) {
@@ -1323,35 +1303,66 @@ export default {
             ["1", "2", "3"].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) <= 35
           ) {
-            this.bottomSheetNote.push({
-              time: vitalSigns[i].time_point,
-              value: "不升",
-            });
+            // this.bottomSheetNote.push({
+            //   time: vitalSigns[i].time_point,
+            //   value: "不升",
+            // });
           } else {
+
             this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
               time: vitalSigns[i].time_point,
               value: Number(vitalSigns[i].value),
             });
           }
           let dataArray =this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data;
+          let vitalCode = vitalSigns[i].vital_code
           const inTime = this.getBeHospitalized();
           dataArray.forEach((y, index) => {
             if (
-              !inTime.includes(this.getLocationTime(y.time)) &&
               index >= 1 &&
               this.getLocationTime(y.time) ==
                 this.getLocationTime(dataArray[index - 1].time)
             ) {
-              if (this.unusualLager(y.value)) {
-                if (y.value > dataArray[index - 1].value) {
-                  dataArray.splice(index - 1, 1);
+              if (!inTime.includes(this.getLocationTime(y.time))) {
+                if(['1','2','3'].includes(vitalCode)){
+                                  if (y.value >= 35) {
+                  if (y.value > dataArray[index - 1].value) {
+                    dataArray.splice(index - 1, 1);
+                  } else {
+                    dataArray.splice(index, 1);
+                  }
                 } else {
-                  dataArray.splice(index, 1);
+                  if (
+                    y.value < dataArray[index - 1].value &&
+                    dataArray[index - 1].value < 35
+                  ) {
+                    dataArray.splice(index - 1, 1);
+                  } else {
+                    dataArray.splice(index, 1);
+                  }
+                }
+                }else{
+                    if (y.value >= 60) {
+                  if (y.value > dataArray[index - 1].value) {
+                    dataArray.splice(index - 1, 1);
+                  } else {
+                    dataArray.splice(index, 1);
+                  }
+                } else {
+                  if (
+                    y.value < dataArray[index - 1].value &&
+                    dataArray[index - 1].value < 60
+                  ) {
+                    dataArray.splice(index - 1, 1);
+                  } else {
+                    dataArray.splice(index, 1);
+                  }
+                }
                 }
               } else {
                 if (
-                  y.value < dataArray[index - 1].value &&
-                  dataArray[index - 1].value < 60
+                  this.getTimeNum(y.time) <
+                  this.getTimeNum(dataArray[index - 1].time)
                 ) {
                   dataArray.splice(index - 1, 1);
                 } else {
@@ -1923,8 +1934,11 @@ export default {
               }
               const sameAxisItem = tList.find(
                 (x) =>
-                  x.x.toFixed(2) === cx.toFixed(2) &&
-                  x.y.toFixed(2) === cy.toFixed(2)
+                  //由于有些微小的偏差，比如存在一px左右的数据偏差，就写个区间
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 4 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 4
               );
               if (sameAxisItem) {
                 params = {
@@ -2438,20 +2452,11 @@ export default {
           "Content-Type": "text/plain",
         },
         data: this.encryptFun(JSON.stringify(data)),
-        //  encodeURI(
-        //   sm4.encrypt_ecb(JSON.stringify(data)),
-        //   '839Z3Hh9vb45r26C'
-        // )
-        // this.encryptFun(
-        //   JSON.stringify({
-        //     PatientId: urlParams.PatientId,
-        //     VisitId: urlParams.VisitId,
-        //     StartTime: urlParams.StartTime,
-        //     tradeCode: 'nurse_getPatientVitalSigns'
-        //   })
-        // )
       }).then((res) => {
         this.apiData = JSON.parse(this.decryptFun(res.data));
+                if (this.showInnerPage) {
+          console.log("测试环境的接口信息======》》》》", this.apiData);
+        }
         this.$nextTick(() => {
           //每次获取数据都要传一次页数
           this.currentPage = this.pageTotal;

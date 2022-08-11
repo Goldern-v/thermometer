@@ -62,7 +62,7 @@ const packageName = `${projectName}体温单_${today.getFullYear()}年${today.ge
   1}月${today.getDate()}日${today.getHours()}时${today.getMinutes()}分${today.getSeconds()}秒`
   console.log(packageName)
 module.exports = {
-  publicPath: project==='huaDu'?'/temperature/':'./',
+  publicPath: ['huaDu','linYi'].includes(project)?'/temperature/':'./',
   outputDir:packageName,
   lintOnSave: false,
   configureWebpack: {
@@ -129,6 +129,8 @@ module.exports = {
           return './src/projects/linYi/main.js'
         case 'yiZhou': // 临邑县人民医院
           return './src/projects/yiZhou/main.js'
+        case 'yiZhou': // 临邑县人民医院
+          return './src/projects/yiZhou/main.js'
         case 'common': // 可配置的通用版本
           return './src/projects/common/main.js'
         default:
@@ -150,10 +152,8 @@ module.exports = {
             case 'huaDu':
               return 'http://120.238.239.27:9094'
             case 'liaoCheng':
-              // return 'http://172.17.5.41:9091'
-              return 'http://120.224.211.7:9091'
+              return 'http://120.224.211.7:61025/'
             case 'liaoChengNewBorn':
-              // return 'http://120.224.211.7:9091'
               return 'http://172.17.5.41:9091'
             case 'jiangMenFuYou':
               return 'http://218.14.180.38:9091'
@@ -199,7 +199,6 @@ module.exports = {
             '^/crNursing/api': '/crNursing/api'
         }
       },
-
       '/crHesb/hospital/common': {
         target: (() => {
           switch (project) {
@@ -207,7 +206,7 @@ module.exports = {
               return 'http://120.238.239.27:9091'
             case 'liaoCheng':
               // return 'http://172.17.5.41:9091'
-              return 'http://120.224.211.7:9091'
+              return 'http://120.224.211.7:61025/'
             case 'liaoChengNewBorn':
               // return 'http://120.224.211.7:9091'
               return 'http://172.17.5.41:9091'

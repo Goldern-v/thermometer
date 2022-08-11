@@ -455,7 +455,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -671,7 +671,7 @@ export default {
       });
       const timeAdd = (i) => {
         return timeNumList.some((x) => x.start === i)
-          ? 5 * 60 * 60 * 1000
+          ? 4 * 60 * 60 * 1000
           : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
           ? 3 * 60 * 60 * 1000
           : 4 * 60 * 60 * 1000;
@@ -2089,12 +2089,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "05:00:59"],
-        "06:00:00": ["05:01:00", "9:00:59"],
-        "10:00:00": ["9:01:00", "13:00:59"],
-        "14:00:00": ["13:01:00", "17:00:59"],
-        "18:00:00": ["17:01:00", "21:00:59"],
-        "22:00:00": ["21:01:00", "23:59:59"],
+        "02:00:00": ["00:00:00", "03:59:59"],
+        "06:00:00": ["04:00:00", "07:59:59"],
+        "10:00:00": ["8:00:00", "11:59:59"],
+        "14:00:00": ["12:00:00", "15:59:59"],
+        "18:00:00": ["16:00:00", "19:59:59"],
+        "22:00:00": ["20:00:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -2298,8 +2298,9 @@ export default {
     },
   },
   mounted() {
-    const urlParams = this.urlParse();
-    this.showInnerPage = urlParams.showInnerPage === "1";
+    // const urlParams = this.urlParse();
+    const patientInfo = this.$route.query
+    this.showInnerPage = patientInfo.showInnerPage === "1";
     if (this.isPrintAll) {
       // 批量打印
       this.apiData = this.printData;
@@ -2324,9 +2325,9 @@ export default {
         url: "/crHesb/hospital/common",
         data: {
           tradeCode: "nurse_getPatientVitalSigns",
-          PatientId: urlParams.PatientId,
-          VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime,
+          PatientId: patientInfo.PatientId,
+          VisitId: patientInfo.VisitId,
+          StartTime: patientInfo.StartTime,
         },
       }).then((res) => {
         this.apiData = res.data;

@@ -40,26 +40,13 @@ export default {
         }
       }
     },
-    urlParse() {
-      let obj = {};
-      let reg = /[?&][^?&]+=[^?&%]+/g;
-      let url = window.location.hash;
-      let arr = url.match(reg) || [];
-      arr.forEach((item) => {
-        let tempArr = item.substring(1).split("=");
-        let key = decodeURIComponent(tempArr[0]);
-        let val = decodeURIComponent(tempArr[1]);
-        obj[key] = val;
-      });
-      return obj;
-    },
   },
   created() {
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
   },
   mounted() {
-    const urlParams = this.urlParse();
+    const patientInfo = this.$route.query;
     if (this.useMockData) {
       this.printData = mockData;
       setTimeout(() => {
@@ -74,9 +61,9 @@ export default {
         url: "/crHesb/hospital/common",
         data: {
           tradeCode: "nurse_getPatientVitalSigns",
-          PatientId: urlParams.PatientId,
-          VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime,
+          PatientId: patientInfo.PatientId,
+          VisitId: patientInfo.VisitId,
+          StartTime: patientInfo.StartTime,
         },
       }).then((res) => {
         this.printData = res.data;

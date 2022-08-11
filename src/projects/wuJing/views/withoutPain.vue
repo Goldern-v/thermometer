@@ -1062,17 +1062,11 @@ export default {
       this.reset();
       this.handleData();
     },
-
-    unusualLager(val) {
-      const value = Number(val);
-      return value >= 60;
-    },
     getBeHospitalized() {
       let inTime = [];
       this.vitalSigns
         .filter((x) => x.vital_code == 21 && x.value.includes("入院"))
         .forEach((y, index) => {
-          console.log("值", y);
           if (y.value.includes("入院")) {
             inTime.push(this.getLocationTime(y.time_point));
           }
@@ -1132,6 +1126,7 @@ export default {
 
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const customSigns = []; // 记录自定义字段的名字
+      
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
@@ -1192,23 +1187,14 @@ export default {
           continue;
         }
         if (this.lineMap[vitalSigns[i].vital_code]) {
-          // if (
-          //   ["5", "4"].includes(vitalSigns[i].vital_code) &&
-          //   Number(vitalSigns[i].value) > this.pulseRange[1]-20
-          // ) {
-          //   this.topPulseNote.push({
-          //     time: vitalSigns[i].time_point,
-          //     value: "过快",
-          //   });
-          // } else
           if (
             ["7", "2", "8"].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) <= 35
           ) {
-            this.bottomSheetNote.push({
-              time: vitalSigns[i].time_point,
-              value: "不升",
-            });
+            // this.bottomSheetNote.push({
+            //   time: vitalSigns[i].time_point,
+            //   value: "不升",
+            // });
           }
           this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
             time: vitalSigns[i].time_point,
@@ -1216,24 +1202,54 @@ export default {
           });
           let dataArray =
             this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data;
+            let vitalCode = vitalSigns[i].vital_code
           const inTime = this.getBeHospitalized();
           dataArray.forEach((y, index) => {
             if (
-              !inTime.includes(this.getLocationTime(y.time)) &&
               index >= 1 &&
               this.getLocationTime(y.time) ==
                 this.getLocationTime(dataArray[index - 1].time)
             ) {
-              if (this.unusualLager(y.value)) {
-                if (y.value > dataArray[index - 1].value) {
-                  dataArray.splice(index - 1, 1);
+              if (!inTime.includes(this.getLocationTime(y.time))) {
+                if(['1','2','3'].includes(vitalCode)){
+                                  if (y.value >= 35) {
+                  if (y.value > dataArray[index - 1].value) {
+                    dataArray.splice(index - 1, 1);
+                  } else {
+                    dataArray.splice(index, 1);
+                  }
                 } else {
-                  dataArray.splice(index, 1);
+                  if (
+                    y.value < dataArray[index - 1].value &&
+                    dataArray[index - 1].value < 35
+                  ) {
+                    dataArray.splice(index - 1, 1);
+                  } else {
+                    dataArray.splice(index, 1);
+                  }
+                }
+                }else{
+                    if (y.value >= 60) {
+                  if (y.value > dataArray[index - 1].value) {
+                    dataArray.splice(index - 1, 1);
+                  } else {
+                    dataArray.splice(index, 1);
+                  }
+                } else {
+                  if (
+                    y.value < dataArray[index - 1].value &&
+                    dataArray[index - 1].value < 60
+                  ) {
+                    dataArray.splice(index - 1, 1);
+                  } else {
+                    dataArray.splice(index, 1);
+                  }
+                }
                 }
               } else {
                 if (
-                  y.value < dataArray[index - 1].value &&
-                  dataArray[index - 1].value < 60
+                  this.getTimeNum(y.time) <
+                  this.getTimeNum(dataArray[index - 1].time)
                 ) {
                   dataArray.splice(index - 1, 1);
                 } else {
@@ -1758,8 +1774,11 @@ export default {
               }
               const sameAxisItem = tList.find(
                 (x) =>
-                  x.x.toFixed(2) === cx.toFixed(2) &&
-                  x.y.toFixed(2) === cy.toFixed(2)
+                  //由于有些微小的偏差，比如存在一px左右的数据偏差，就写个区间
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 4 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 4
               );
               if (sameAxisItem) {
                 params = {

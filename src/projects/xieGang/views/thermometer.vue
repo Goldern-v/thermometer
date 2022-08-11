@@ -11,17 +11,17 @@
       <div class="item">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item" style="flex: 0.5">
+      <div class="item" >
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="flex: 0.7">
+      <div class="item" >
         年龄：<span class="value">{{
           typeof parseInt(patInfo.age) === "number" && !isNaN(patInfo.age)
             ? patInfo.age + "岁"
             : patInfo.age
         }}</span>
       </div>
-      <div class="item" style="flex: 1.4">
+      <div class="item" >
         病区：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
       <div class="item">
@@ -29,12 +29,12 @@
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="flex: 1.3">
+      <div class="item" >
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item" style="text-align: right;flex: 1.3" >
+      <div class="item" style="text-align: right;" >
         住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
     </div>
@@ -1045,7 +1045,7 @@ export default {
       this.handleData();
     },
     handleData() {
-      console.log(this.apiData.patientInfo.patInfo);
+      console.log(this.apiData.patientInfo.patInfo,8888888,'测试更新');
       if (this.apiData.patientInfo)
         this.patInfo = this.apiData.patientInfo.patInfo;
       const vitalSigns = this.apiData.vitalSigns.sort(
@@ -2207,7 +2207,7 @@ export default {
     display: flex;
     font-size: 16px;
     .item {
-      flex: 1;
+      margin: auto;
       text-align: left;
       padding: 0 5px 5px 5px;
       .value {

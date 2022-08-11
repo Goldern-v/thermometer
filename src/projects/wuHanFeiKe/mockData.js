@@ -20,6 +20,10 @@ export const mockData = {
     { temperature_type: "呼吸", value: "26", time_point: "2022-04-08 14:00:00", vital_code: "04" },
 
     { temperature_type: "其它", value: "SpO2:98%", time_point: "2022-04-08 14:00:00", vital_code: "51" },
+    { temperature_type: "疼痛评分", value: "4", time_point: "2022-04-08 14:00:00", vital_code: "ttpf" },
+    { temperature_type: "疼痛评分", value: "6", time_point: "2022-04-10 14:00:00", vital_code: "ttpf" },
+    { temperature_type: "疼痛评分", value: "7", time_point: "2022-04-09 14:00:00", vital_code: "ttpf" },
+    { temperature_type: "疼痛评分", value: "4", time_point: "2022-04-09 14:00:00", vital_code: "ttgy" },
 
     { temperature_type: "身高", value: "120", time_point: "2022-04-08 12:00:00", vital_code: "034" },
 

@@ -15,7 +15,7 @@ function urlParse() {
 }
 var host = ''
 var apiPath = `${host}/crNursing/api/`
-let source=urlParse().showInnerPage==='1'?"PDA":"CRWEB"
+let source=urlParse().showInnerPage==1?"PDA":"CRWEB"
 let authToken=urlParse().authTokenNursing
 let appToken=source==="PDA"?"f6ed3fc1-ebb9-4c77-a822-fe09d89c060f":"51e827c9-d80e-40a1-a95a-1edc257596e7"
 

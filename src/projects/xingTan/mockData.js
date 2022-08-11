@@ -34,7 +34,8 @@ export const mockData = {
 
     { temperature_type: "体重", value: "22", time_point: "2021-12-08 12:00:00", vital_code: "033" },
 
-    { temperature_type: "血压", value: "115/78", time_point: "2021-12-08 12:00:00", vital_code: "062" },
+    { temperature_type: "血压", value: "115/78", time_point: "2021-12-08 04:00:00", vital_code: "062" },
+    { temperature_type: "血压", value: "200/78", time_point: "2021-12-08 04:00:00", vital_code: "062" },
 
     { temperature_type: "心率", value: "115", time_point: "2021-12-08 12:00:00", vital_code: "20" },
 

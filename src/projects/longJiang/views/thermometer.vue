@@ -864,10 +864,8 @@ export default {
       const list = this.vitalSigns.filter(
         (x) =>
           x.vital_code === "3" &&
-          (x.value === "手术" ||
-            x.value === "分娩|" ||
-            x.value === "手术分娩|" ||
-            x.value === "手术入院|")
+          (x.value.includes("术") ||
+            x.value.includes("分娩"))
       );
       const oDateList = list.map((x) => x.time_point.slice(0, 10));
       const obj = {};
@@ -908,23 +906,43 @@ export default {
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
           return "";
-        //获取出院日期，如果出院了就结束运算
         if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
         if (!this.operateDateList.length) return "";
-        // 构造天数差数组，有相同天数差的说明在同一天x
-        const days = this.operateDateList.map((y) => {
-          return this.dayInterval(x, y);
-        });
+        const days = [
+          ...this.operateDateList.map((y) => {
+            return this.dayInterval(x, y);
+          }),
+        ];
         if (days.every((z) => z < 0)) return "";
+        // 找到前一次手术（最后一次天数差是正整数或者0的地方）
         let index = 0;
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
-        if (days[index] <= 10) {
-          /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
-          return index === 0
+        let apart = []; // 存储当天和前面手术的天数间隔
+        for (let i = 0; i < index; i++) {
+          apart.unshift(days[i]);
+        }
+        const operationNum = apart.length; // 记录此日之前所有的手术次数，不考虑间隔大于7天
+        // 间隔大于7天的手术，分子分母的写法要重置
+        if (apart.length) {
+          apart.unshift(days[index]);
+          for (let i = 1; i < apart.length; i++) {
+            if (apart[i] - apart[i - 1] > 14) {
+              apart = apart.slice(0, i); // 将间隔大于天的之前的所有手术切割
+              break;
+            }
+          }
+          apart.splice(0, 1);
+        }
+        if (days[index] <= 14) {
+          return index === 0 || !apart.length
+            ? days[index] === 0 && operationNum
+              ? `(${operationNum + 1})`
+              : days[index]
+            :apart[0] == days[index]
             ? days[index]
-            : `${this.numToRome(index + 1)}-${days[index]}`;
+            : `${days[index]}/${apart.join("/")}`;
         } else {
           return "";
         }
@@ -1260,7 +1278,7 @@ export default {
           continue;
         }
         const item = {
-          time: vitalSigns[i].time_point,
+          time: vitalSigns[i].vital_code==3&&vitalSigns[i].expand2?vitalSigns[i].expand2:vitalSigns[i].time_point,
           value: vitalSigns[i].value,
         };
         switch (vitalSigns[i].vital_code) {
@@ -1329,6 +1347,11 @@ export default {
       let outTime = [];
       this.topSheetNote.forEach((y) => {
         if (y.value.includes("转入")) {
+          outTime.push(y.time);
+        }
+      });
+      this.bottomSheetNote.forEach((y) => {
+        if (y.value.includes("外出")) {
           outTime.push(y.time);
         }
       });

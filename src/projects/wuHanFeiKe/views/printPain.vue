@@ -3,9 +3,9 @@
     <Thermometer
       ref="thermometer"
       :printData="printData"
-      :printPage="index + 1"
       isPrintAll
       v-for="(item, index) in pageTotal"
+      :printPage="index + 1"
       :key="index"
       :class="index + 1 <= pageTotal ? 'printBreak' : ''"
     />
@@ -13,8 +13,9 @@
 </template>
 
 <script>
-import Thermometer from './thermometer.vue'
-import { mockData } from 'src/projects/linYi/mockData.js'
+import Thermometer from './thermometerPain.vue'
+import { mockData } from 'src/projects/wuHanFeiKe/mockData.js'
+import { common , getNurseExchangeInfoBatch } from "src/api/index.js"
 
 export default {
   components: {
@@ -24,7 +25,9 @@ export default {
     return {
       useMockData: true,
       printData: null,
-      pageTotal: 1
+      pageTotal: 1,
+      isPrintAll: true,
+      exchangeInfoAll:[]
     }
   },
   methods: {
@@ -35,11 +38,27 @@ export default {
           case 'printingAll':
             window.print()
             break
+            case "nurseExchangeInfoAll":
+            if(e.data.value.length!==0){
+                 this.exchangeInfoAll=e.data.value
+              this.nurseExchangeInfoAll()
+            }
+            break;
           default:
             break
         }
       }
     },
+     nurseExchangeInfoAll(){
+     let nurseExchangeInfo=this.exchangeInfoAll//所有的批量转床转科记录
+   this.$nextTick(()=>{
+          for(let i=0;i<this.$refs.thermometer.length;i++){
+            this.$refs.thermometer[i].adtLog=nurseExchangeInfo[i].adtLog
+            this.$refs.thermometer[i].bedExchangeLog=nurseExchangeInfo[i].bedExchangeLog
+          }
+          })
+ },
+
     urlParse() {
       let obj = {}
       let reg = /[?&][^?&]+=[^?&%]+/g
@@ -59,35 +78,37 @@ export default {
     window.addEventListener('message', this.messageHandle, false)
   },
   mounted() {
-    // const patientInfo = this.urlParse()
-    const patientInfo = this.$route.query
+    const urlParams = this.urlParse()
     if (this.useMockData) {
       this.printData = mockData
       setTimeout(() => {
         this.pageTotal = this.$refs.thermometer[0].pageTotal
-          console.log(this.$refs.thermometer,'this.$refs.thermometer')
-
         // setTimeout(() => {
         //   window.print()
         // }, 1000)
       }, 0)
     } else {
-      this.$http({
-        method: 'post',
-        url: '/crHesb/hospital/common',
-        data: {
-          tradeCode: 'nurse_getPatientVitalSigns',
-          PatientId: patientInfo.PatientId,
-          VisitId: patientInfo.VisitId,
-          StartTime: patientInfo.StartTime
+      let data={
+          tradeCode: "nurse_getPatientVitalSigns",
+          PatientId: urlParams.PatientId,
+          VisitId: urlParams.VisitId,
+          StartTime: urlParams.StartTime,
         }
-      }).then((res) => {
+      common(data).then((res) => {
         this.printData = res.data
         setTimeout(() => {
           this.pageTotal = this.$refs.thermometer[0].pageTotal
-          // setTimeout(() => {
-          //   window.print()
-          // }, 1500)
+          let dataRangePrintAll=this.$refs.thermometer[0].dateRangeList
+        let value= {startLogDateTime:dataRangePrintAll[0][0] +' 00:00:00',endLogDateTime:dataRangePrintAll[dataRangePrintAll.length-1][1]+' 24:00:00'}
+          // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
+      window.parent.postMessage(
+        {
+          type: "getNurseExchangeInfoAll",
+          value
+        },
+        "*"
+      );
+
         }, 0)
       })
     }

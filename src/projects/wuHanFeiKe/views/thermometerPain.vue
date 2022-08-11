@@ -9,7 +9,6 @@
       <img :src="logoUrl" class="logo">
       武汉市肺科医院(武汉市结核病防治所)</div>
     <div class="head-title">体温单</div>
-   
     <div class="head-info">
       <div class="item"  style="flex:none">
         姓名：<span class="value">{{ patInfo.name }}</span>
@@ -26,7 +25,7 @@
       <div class="item" style="flex:0.5">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-       <div class="item" style="flex:2.2">
+      <div class="item" style="flex:2.2">
         科别：<span class="value" > {{ adtLog || patInfo.dept_name }}</span>
       </div>
       <div class="item" style="flex:0.5">
@@ -150,7 +149,12 @@
           class="index-box"
           :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
         >
-       
+        <i
+            class="split-line"
+            :style="{
+              bottom: `${painAreaHeight + bottomAreaHeight + ySpace}px`,
+            }"
+          ></i>
           <!-- <div class="notes">
             <div
               v-for="(value, key) in settingMap"
@@ -186,12 +190,18 @@
                       >脉搏</div>
               <div style="font-size:14px;font-weight:normal;text-align:center">(次/分)</div>
            <div class="text" style="height:46px">
-
             </div>
             </div>
             <div class="index" v-for="item in pulseList" :key="item">
               <span>{{ item }}</span>
             </div>
+            <div class="pain-area" :style="`height: ${painAreaHeight}px`" style="transform: translate(0px, -10px)">
+              疼<br />痛<br />评<br />分
+            </div>
+             <div
+              class="bottom-area"
+              :style="`height: ${bottomAreaHeight}px`"
+            ></div>
           </div>
           <div class="item times color-blue">
             <div class="text">
@@ -201,6 +211,15 @@
             <div class="index " v-for="item in temperaturelist" :key="item">
               <span class="color-blue">{{ item }}</span>
             </div>
+             <div class="pain-area" :style="`height: ${painAreaHeight}px`">
+              <div class="pain-index">
+              </div>
+              <div class="s-index"></div>
+            </div>
+             <div
+              class="bottom-area"
+              :style="`height: ${bottomAreaHeight}px`"
+            ></div>
           </div>
           <div class="item times color-green" >
             <div class="text">
@@ -210,6 +229,16 @@
             <div class="index" v-for="item in temperaturelist" :key="item">
               <span class="color-green">{{ item }}</span>
             </div>
+             <div class="pain-area" :style="`height: ${painAreaHeight}px`">
+              <div class="pain-index" v-for="item in painList" :key="item">
+                <span>{{ item }}</span>
+              </div>
+              <div class="s-index"><span>0</span></div>
+            </div>
+             <div
+              class="bottom-area"
+              :style="`height: ${bottomAreaHeight}px`"
+            ></div>
           </div>
         </div>
         <div
@@ -476,6 +505,7 @@ import zrender from "zrender";
 import { mockData } from "src/projects/wuHanFeiKe/mockData.js";
 import { common , getNurseExchangeInfoByTime} from "src/api/index.js"
 import moment from "moment"; //导入文件
+import { isPatternLike } from "@babel/types";
 export default {
   props: {
     isPrintAll: {
@@ -496,6 +526,7 @@ export default {
   data() {
     const yRange = [34, 42];
     const pulseRange = [30, 180];
+    const painRange = [0, 10];
     return {
       useMockData: true,
       apiData: "", // 接口数据
@@ -508,6 +539,7 @@ export default {
       xRange: [1, 8],
       yRange,
       PatientId: "",
+      painRange,
       pulseRange,
       settingMap: {
         oralTemperature: {
@@ -563,6 +595,17 @@ export default {
             // { time: '2019-05-15 07:10:00', value: 140},
           ],
         },
+        pain: {
+          vitalCode: "ttpf",
+          label: "疼痛评分",
+          color: "red",
+          solid: true,
+          dotType: "Text",
+          range: painRange,
+          data: [
+            // { time: '2019-05-15 07:10:00', value: 2},
+          ],
+        },
       }, // 折线部分
       topSheetNote: [
         // { time: '2019-05-15 07:10:00', value: '入院|' },
@@ -587,6 +630,7 @@ export default {
       feverList: [], // 发热体温
       contractList: [],
       skinTest: [],
+      ttgyList: [], // 疼痛干预
       // customList0: [], // 自定义1
       // customList1: [], // 自定义2
       // customList2: [], // 自定义3
@@ -643,6 +687,7 @@ export default {
         "043": "analTemperature",
         20: "heart",
         "02": "pulse",
+        ttpf: "pain",
       },
       pageTotal: 1,
       currentPage: 1,
@@ -662,8 +707,25 @@ export default {
       }
       return tds;
     },
+    bottomAreaHeight() {
+      return this.ySpace * 1 + 1;
+    },
     trHeight() {
       return this.ySpace * 2-4;
+    },
+    painAreaHeight() {
+      return this.ySpace * 5 +7;
+    },
+        middleAreaHeight() {
+      return this.ySpace * 1;
+    },
+
+    painList() {
+      const list = [];
+      for (let i = this.painRange[1]; i > this.painRange[0]; i -= 2) {
+        list.push(i);
+      }
+      return list;
     },
 
     maTds() {
@@ -696,7 +758,7 @@ export default {
       }
       return list;
     },
-     formatPressureList2() {
+    formatPressureList2() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const pressureList = [...this.pressureList];
@@ -741,7 +803,12 @@ export default {
       return list;
     },
     timesTempAreaHeight() {
-      return this.areaHeight;
+      return (
+        this.areaHeight -
+        this.middleAreaHeight -
+        this.painAreaHeight -
+        this.bottomAreaHeight
+      );
     },
     formatBreatheList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
@@ -1182,6 +1249,9 @@ export default {
           case "21":
             this.feverList.push(item);
             break;
+           case "ttgy":
+            this.ttgyList.push(item);
+            break;
           case "50":
           default:
             break;
@@ -1321,14 +1391,15 @@ export default {
       const totalLine =
         this.yRange[1] -
         this.yRange[0] +
-        (this.yRange[1] - this.yRange[0]) * 5-1
+        (this.yRange[1] - this.yRange[0]) * 5
         ;
       let preSpace = 0;
       for (let i = 0; i < totalLine; i++) {
         const isBreak =
           (i % 5 === 0 && i > 0 && i < totalLine - 1 && i !== 45) || i === 48;
-        const isboundary = i === 0 || i === totalLine - 1;
-        const lineWidth = isBreak ? 2 : 1;
+        const isboundary = i === 0 || i == totalLine - 1;
+        const isPainBreak = i===44
+        const lineWidth = isBreak||isPainBreak? 2 : 1;
         const params = {
           x1: 0,
           y1: preSpace,
@@ -1336,7 +1407,7 @@ export default {
           y2: preSpace,
           lineWidth,
           // lineDash: isBreak ? [] : [1, 1],
-          color: isBreak ? "#000" : isboundary ? "transparent" : "#000",
+          color: isBreak ? "#000" : isboundary ? "transparent" :isPainBreak? 'red':"#000",
         };
         preSpace += lineWidth + this.ySpace;
         this.createLine(params);
@@ -1370,7 +1441,7 @@ export default {
       const totalLine =
         this.yRange[1] -
         this.yRange[0]-1 +
-        (this.yRange[1] - this.yRange[0]-1) * 4 +
+        (this.yRange[1] - this.yRange[0]-1) * 5 +
         6;
       let preSpace = 0;
       for (let i = 0; i < totalLine; i++) {
@@ -1636,7 +1707,6 @@ export default {
               });
               const sameAxisItem = tList.find(
                 (x) =>
-                  // console.log(x.y,cy)
                   Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
                   Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 3 &&
                   Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
@@ -1700,6 +1770,37 @@ export default {
               this.physicsCoolList.splice(i, 1);
             }
           }
+        }else if (vitalCode == "ttpf") {
+          console.log()
+          // 画疼痛干预
+          for (let i = this.ttgyList.length - 1; i >= 0; i--) {
+            const item = this.ttgyList[i];
+            const ttgyX = this.getXaxis(this.getLocationTime(item.time));
+            const ttgyY = this.getYaxis(yRange, item.value, vitalCode);
+            if (ttgyX === cx) {
+               this.createCircle({
+                cx: ttgyX,
+                cy: ttgyY,
+                r: 5,
+                n: 3,
+                color: "red",
+                zlevel: 10,
+                tips: `${item.time} 疼痛干预：${item.value}`,
+                dotSolid: false,
+              });
+              this.createLine({
+                x1: cx,
+                y1: cy,
+                x2: ttgyX,
+                y2: ttgyY,
+                lineWidth: 1,
+                color: "red",
+                zlevel: 1,
+                lineDash: [3, 3],
+              });
+              this.ttgyList.splice(i, 1);
+            }
+          }
         }
       });
       // 连线
@@ -1725,13 +1826,19 @@ export default {
       );
     },
     // 根据值计算纵坐标, vitalCode会传过来判断数据类型 
-    getYaxis(yRange, value,vitalCode) {
-   return ['20','02'].includes(vitalCode)
-        ? ((this.pulseRange[1]+10 - value) / (this.pulseRange[1]+10 - this.pulseRange[0])) *
-            this.timesTempAreaHeight+3+2.5*this.ySpace
-        : ((yRange[1]+1 - value) /
-            (yRange[1]+1 - yRange[0]-1)) *
-            this.timesTempAreaHeight 
+    getYaxis(yRange, value, vitalCode) {
+      return vitalCode=='ttpf'?
+      ((yRange[1]  - value) /
+          (yRange[1]  - yRange[0])) *
+                    this.painAreaHeight +
+            this.middleAreaHeight +
+            this.timesTempAreaHeight+3
+      :['20', '02'].includes(vitalCode)
+        ? ((this.pulseRange[1] + 10 - value) / (this.pulseRange[1] + 10 - this.pulseRange[0])) *
+        this.timesTempAreaHeight + 3 + 2.5 * this.ySpace
+        : ((yRange[1] + 1 - value) /
+          (yRange[1] + 1 - yRange[0] - 1)) *
+        this.timesTempAreaHeight
     },
     // 增加换行符
     addn(str) {
@@ -2012,7 +2119,7 @@ export default {
 
   }
   .main-view {
-    transform: scaleY(1.1);
+    transform: scaleY(1);
   }
 }
 .main-view {
@@ -2085,17 +2192,6 @@ export default {
   }
   
 }
-
-// .white_line {
-//   background-color: rgb(255, 255, 255);
-//   width: 160px;
-//   height: 7px;
-//   position: absolute;
-//   top: -4px;
-//   z-index: 99;
-//   left: 0;
-//   border: none;
-// }
 #main {
   flex-shrink: 0;
   position: relative;
@@ -2264,133 +2360,109 @@ background-color: rgb(2, 2, 2);}
     }
     .temp {
       .text {
-        height: 87.7px;
-       
-      }
-       span{
+          height: 87.7px;
+      
+        }
+      
+        span {
           // margin-top: 25px;
         }
-    }
-    
-    
-    .times :nth-child(3) > span {
-      margin-top:8px;
-    }
-    .times :nth-child(4) > span {
-      margin-top: 21px;
-    }
-    .times :nth-child(5) > span {
-      margin-top: 30px;
-    }
-    .times :nth-child(6) > span {
-      margin-top: 40px;
-    }
-    .times :nth-child(7) > span {
-      margin-top: 50px;
-    }
-    .times :nth-child(8) > span {
-      margin-top: 65px;
-    }
-    .times :nth-child(9) > span {
-      margin-top: 63px;
-    }
-    .temp :nth-child(5) > span {
-margin-top:5px;
-   }
-    .temp :nth-child(6) > span {
-margin-top:5px;
-   }
-    .temp :nth-child(7) > span {
-margin-top:10px;
-   }
-    .temp :nth-child(8) > span {
-margin-top:10px;
-   }
-    .temp :nth-child(9) > span {
-margin-top:15px;
-   }
-    .temp :nth-child(10) > span {
-margin-top:13px;
-   }
-    .temp :nth-child(11) > span {
-margin-top:20px;
-   }
-    .temp :nth-child(12) > span {
-margin-top:17px;
-   }
-    .temp :nth-child(13) > span {
-margin-top:23px;
-   }
-    .temp :nth-child(14) > span {
-margin-top:25px;
-
-   }
-    .temp :nth-child(15)  {
-margin-top:-10px;
-   }
-    .temp :nth-child(15) > span {
-margin-top:23px;
-
-   }
-    .temp :nth-child(16) > span {
-margin-top:22px;
-padding-top: 2px;
-   }
-   
-    .pain-area {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      .pain-index {
-        height: 81.7px;
-        > span {
-          display: block;
-          margin-top: -10px;
+      }
+        .times :nth-child(3)>span {
+          margin-top: 8px;
         }
-      }
-      .s-index {
-        position: absolute;
-        bottom: -12px;
-        left: 50%;
-        -webkit-transform: translate(-50%);
-        -moz-transform: translate(-50%);
-        transform: translate(-50%);
-        text-align: center;
-      }
-    }
-    .notes {
-      font-size: 18px;
-      position: absolute;
-      left: 10px;
-      bottom: 10px;
-      .note-item {
-        position: relative;
-        margin-bottom: 22px;
-      }
-      .note-icon {
-        display: inline-block;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        border-width: 2px;
-        border-style: solid;
-        border-color: #fff;
-        transform: translate(-4px, 2px);
-      }
-      .axillary {
-        font-family: SimHei;
-        position: absolute;
-        right: 6px;
-        top: -5px;
-        display: inline-block;
-        z-index: 2;
-        color: blue;
-        font-size: 28px;
-        line-height: 1;
-        font-weight: bold;
-      }
+    
+        .times :nth-child(4)>span {
+          margin-top: 15px;
+        }
+    
+        .times :nth-child(5)>span {
+          margin-top: 25px;
+        }
+    
+        .times :nth-child(6)>span {
+          margin-top: 35px;
+        }
+    
+        .times :nth-child(7)>span {
+          margin-top: 45px;
+        }
+    
+        .times :nth-child(8)>span {
+          margin-top: 55px;
+        }
+    
+        .times :nth-child(9)>span {
+          margin-top: 55px;
+        }
+        .temp :nth-child(15) {
+          margin-bottom: -10px;
+        }
+    
+    
+        .pain-area {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          color: #000;
+          margin-top: 11px;
+          .pain-index {
+            height: 71.7px;
+    
+            >span {
+              display: block;
+              margin-top: -10px;
+            }
+          }
+    
+          .s-index {
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            color: #000;
+            -webkit-transform: translate(-50%);
+            -moz-transform: translate(-50%);
+            transform: translate(-50%);
+            text-align: center;
+          }
+        }
+    
+        .notes {
+          font-size: 18px;
+          position: absolute;
+          left: 10px;
+          bottom: 10px;
+    
+          .note-item {
+            position: relative;
+            margin-bottom: 22px;
+          }
+    
+          .note-icon {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border-width: 2px;
+            border-style: solid;
+            border-color: #fff;
+            transform: translate(-4px, 2px);
+          }
+    
+          .axillary {
+            font-family: SimHei;
+            position: absolute;
+            right: 6px;
+            top: -5px;
+            display: inline-block;
+            z-index: 2;
+            color: blue;
+            font-size: 28px;
+            line-height: 1;
+            font-weight: bold;
+          }
       .pain-icon {
         position: absolute;
         right: 3px;

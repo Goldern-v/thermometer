@@ -474,19 +474,6 @@ export default {
     getTimeStamp(timeStr) {
       return new Date(timeStr).getTime();
     },
-    urlParse() {
-      let obj = {};
-      let reg = /[?&][^?&]+=[^?&%]+/g;
-      let url = window.location.hash;
-      let arr = url.match(reg) || [];
-      arr.forEach((item) => {
-        let tempArr = item.substring(1).split("=");
-        let key = decodeURIComponent(tempArr[0]);
-        let val = decodeURIComponent(tempArr[1]);
-        obj[key] = val;
-      });
-      return obj;
-    },
     // 事件处理
     messageHandle(e) {
       if (e && e.data) {
@@ -944,7 +931,8 @@ export default {
       return list;
     },
     showVitalSign() {
-      let type = this.urlParse().showVitalSign;
+      const patientInfo = this.$route.query
+      let type = patientInfo.showVitalSign;
       return type;
     },
     vitalSigns() {
