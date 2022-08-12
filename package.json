@@ -41,6 +41,8 @@
     "build:longJiang": "vue-cli-service build --project=longJiang",
     "dev:linYi": "vue-cli-service serve --project=linYi",
     "build:linYi": "vue-cli-service build --project=linYi",
+    "dev:weihai": "vue-cli-service serve --project=weihai",
+    "build:weihai": "vue-cli-service build --project=weihai",
     "dev:yiZhou": "vue-cli-service serve --project=yiZhou",
     "build:yiZhou": "vue-cli-service build --project=yiZhou",
     "test:unit": "vue-cli-service test:unit",
