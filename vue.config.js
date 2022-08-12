@@ -47,6 +47,8 @@ function resolve(dir) {
       return '临邑县人民医院'
     case 'yiZhou': // 广东医科大学附属第三医院(顺德龙江医院)
       return '临沂沂州医院'
+      case 'weihai': // 威海市立医院
+      return '威海市立医院'
     case 'common': // 可配置的通用版本
       return '配置通用版本'
     default:
@@ -129,8 +131,13 @@ module.exports = {
           return './src/projects/linYi/main.js'
         case 'yiZhou': // 临邑县人民医院
           return './src/projects/yiZhou/main.js'
+<<<<<<< Updated upstream
         case 'yiZhou': // 临邑县人民医院
           return './src/projects/yiZhou/main.js'
+=======
+          case 'weihai': // 威海市立医院
+          return './src/projects/weihai/main.js'
+>>>>>>> Stashed changes
         case 'common': // 可配置的通用版本
           return './src/projects/common/main.js'
         default:
@@ -187,6 +194,8 @@ module.exports = {
               return 'http://218.107.37.134:9093'
             case 'yiZhou':
               return 'http://218.107.37.134:9093'
+              case 'weihai':
+              return 'http://218.107.37.134:9093'
             case 'common':
               return 'http://172.17.5.41:9091'
             default:
@@ -242,6 +251,8 @@ module.exports = {
               return 'http://218.107.37.134:9093' //无可用外网
             case 'yiZhou':
               return 'http://218.107.37.134:9093' //无可用外网
+              case 'weihai':
+              return 'http://218.107.37.134:9093'
             case 'common':
               return 'http://172.17.5.41:9091'
             default:
