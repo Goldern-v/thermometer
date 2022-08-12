@@ -1069,30 +1069,30 @@ export default {
     getBreakPoint(data) {
       let breakList = [];
       data.forEach((y, index) => {
-        if (index > 0 && index < data.length - 1) {
+        if (index < data.length - 1) {
           if (this.getNotTemTime().length) {
             for (let item of this.getNotTemTime()) {
               if (
                 this.getTimeNum(this.getLocationTime(data[index + 1].time)) >
-                  this.getTimeNum(this.getLocationTime(item)) &&
+                this.getTimeNum(this.getLocationTime(item)) &&
                 this.getTimeNum(this.getLocationTime(y.time)) <=
-                  this.getTimeNum(this.getLocationTime(item))
+                this.getTimeNum(this.getLocationTime(item))
               ) {
-                breakList.push(index - 1);
+                breakList.push(index);
               }
             }
           }
         }
-        if (index > 0 && index == data.length - 1) {
-          for (let item of this.getNotTemTime()) {
-            if (
-              this.getTimeNum(this.getLocationTime(data[index].time)) <=
-              this.getTimeNum(this.getLocationTime(item))
-            ) {
-              breakList.push(index - 1);
-            }
-          }
-        }
+        // if (index == data.length - 1) {
+        //   for (let item of this.getNotTemTime()) {
+        //     if (
+        //       this.getTimeNum(this.getLocationTime(data[index].time)) >=
+        //       this.getTimeNum(this.getLocationTime(item))
+        //     ) {
+        //       breakList.push(index - 1);
+        //     }
+        //   }
+        // }
       });
       return breakList;
     },
@@ -1275,6 +1275,16 @@ export default {
             time: vitalSigns[i].time_point,
             value: Number(vitalSigns[i].value),
           });
+          let dataArray = this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data;
+          dataArray.forEach((y, index) => {
+            if (index >= 1 && this.getLocationTime(y.time) == this.getLocationTime(dataArray[index - 1].time)) {
+              if (this.getTimeNum(y.time) > this.getTimeNum(dataArray[index - 1].time)) {
+                dataArray.splice(index - 1, 1)
+              } else {
+                dataArray.splice(index, 1)
+              }
+            }
+          })
           continue;
         }
         const item = {

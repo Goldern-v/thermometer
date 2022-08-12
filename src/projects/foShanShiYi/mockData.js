@@ -297,6 +297,42 @@ export const mockData = {
       vital_code: '18'
     },
     {
+      temperature_type: '身高',
+      value: '175',
+      time_point: '2021-05-15 20:12:00',
+      vital_code: '32'
+    },
+    {
+      temperature_type: '体重',
+      value: '70',
+      time_point: '2021-05-15 13:12:00',
+      vital_code: '18'
+    },
+    {
+      temperature_type: '身高',
+      value: '轮椅',
+      time_point: '2021-05-16 20:12:00',
+      vital_code: '32'
+    },
+    {
+      temperature_type: '体重',
+      value: '70',
+      time_point: '2021-05-16 13:12:00',
+      vital_code: '18'
+    },
+    {
+      temperature_type: '身高',
+      value: '172',
+      time_point: '2021-05-17 20:12:00',
+      vital_code: '32'
+    },
+    {
+      temperature_type: '体重',
+      value: '卧床',
+      time_point: '2021-05-17 13:12:00',
+      vital_code: '18'
+    },
+    {
       temperature_type: '体温',
       value: '39.1',
       time_point: '2021-05-18 12:00:00',
