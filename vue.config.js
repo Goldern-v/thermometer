@@ -131,13 +131,10 @@ module.exports = {
           return './src/projects/linYi/main.js'
         case 'yiZhou': // 临邑县人民医院
           return './src/projects/yiZhou/main.js'
-<<<<<<< Updated upstream
         case 'yiZhou': // 临邑县人民医院
           return './src/projects/yiZhou/main.js'
-=======
           case 'weihai': // 威海市立医院
           return './src/projects/weihai/main.js'
->>>>>>> Stashed changes
         case 'common': // 可配置的通用版本
           return './src/projects/common/main.js'
         default:
