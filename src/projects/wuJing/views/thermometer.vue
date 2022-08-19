@@ -1303,12 +1303,7 @@ export default {
             ["1", "2", "3"].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) <= 35
           ) {
-            // this.bottomSheetNote.push({
-            //   time: vitalSigns[i].time_point,
-            //   value: "不升",
-            // });
           } else {
-
             this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
               time: vitalSigns[i].time_point,
               value: Number(vitalSigns[i].value),
@@ -1932,6 +1927,18 @@ export default {
                   dotSolid: true,
                 };
               }
+              if (Number(x.value) < this.pulseRange[0]) {
+                cy = this.getYaxis(yRange, yRange[0] + 2, vitalCode);
+                params = {
+                  cx,
+                  cy:cy-4,
+                  r: 4,
+                  color: "red",
+                  zlevel: 9,
+                  tips: `${x.time} ${label}：${x.value}`,
+                  dotSolid: true,
+                };
+              }
               const sameAxisItem = tList.find(
                 (x) =>
                   //由于有些微小的偏差，比如存在一px左右的数据偏差，就写个区间
@@ -2077,7 +2084,7 @@ export default {
             }
           }
         } else if (["4", "5"].includes(vitalCode)) {
-          // 画脉搏/心率超限过快
+          // 画脉搏/心率超限过快，在顶部画点并且标明数值
           if (x.value > this.pulseRange[1] - 30) {
             this.createText({
               x: cx - 1.2,
@@ -2087,6 +2094,19 @@ export default {
               tips: "",
               fontWeight: "bold",
               zlevel: 10,
+              fontSize: 12,
+            });
+          }
+                    
+          if (x.value < this.pulseRange[0]) {
+            this.createText({
+              x: cx ,
+              y: cy  ,
+              value: x.value,
+              color: "red",
+              tips: "",
+              fontWeight: "bold",
+              zlevel: 100,
               fontSize: 12,
             });
           }
@@ -2125,7 +2145,7 @@ export default {
         ((this.getTimeStamp(time) - this.getTimeStamp(this.timeRange[0])) /
           (this.getTimeStamp(this.timeRange[1]) -
             this.getTimeStamp(this.timeRange[0]))) *
-        this.areaWidth;
+        this.areaWidth-1;
       return xAxis;
     },
     // 增加字符（过快，不升，请假等字符的换行）换行符

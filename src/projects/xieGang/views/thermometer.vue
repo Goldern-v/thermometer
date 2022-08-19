@@ -472,7 +472,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData:false,
+      useMockData:true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1045,7 +1045,6 @@ export default {
       this.handleData();
     },
     handleData() {
-      console.log(this.apiData.patientInfo.patInfo,8888888,'测试更新');
       if (this.apiData.patientInfo)
         this.patInfo = this.apiData.patientInfo.patInfo;
       const vitalSigns = this.apiData.vitalSigns.sort(
@@ -1252,15 +1251,16 @@ export default {
 
         // 画线上降温，画红圈不用连线
         this.onLineCoolList.forEach((x) => {
-          this.createCircle({
-            cx: this.getXaxis(this.getLocationTime(x.time)),
-            cy: this.getYaxis(this.yRange, x.value, "22"),
-            r: 7,
-            color: "red",
-            zlevel: 10,
-            tips: `${x.time} 线上降温：${x.value}`,
-            dotSolid: false,
-          });
+          this.createText({
+              x: this.getXaxis(this.getLocationTime(x.time))+10,
+              y: this.getYaxis(this.yRange, x.value, "1"),
+              value: "x",
+              color: 'blue',
+              fontSize: 28,
+              tips:  `${x.time} 线上降温：${x.value}`,
+              zlevel: 10,
+              fontWeight: "bold",
+            });
         });
         // 画发热体温，画篮圈和上一次最近的体温用蓝虚线相连
         const list = [

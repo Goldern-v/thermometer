@@ -519,7 +519,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1073,9 +1073,9 @@ export default {
           if (this.getNotTemTime().length) {
             for (let item of this.getNotTemTime()) {
               if (
-                this.getTimeNum(this.getLocationTime(data[index + 1].time)) >
+                this.getTimeNum(this.getLocationTime(data[index + 1].time)) >=
                 this.getTimeNum(this.getLocationTime(item)) &&
-                this.getTimeNum(this.getLocationTime(y.time)) <=
+                this.getTimeNum(this.getLocationTime(y.time)) <
                 this.getTimeNum(this.getLocationTime(item))
               ) {
                 breakList.push(index);
@@ -1083,16 +1083,6 @@ export default {
             }
           }
         }
-        // if (index == data.length - 1) {
-        //   for (let item of this.getNotTemTime()) {
-        //     if (
-        //       this.getTimeNum(this.getLocationTime(data[index].time)) >=
-        //       this.getTimeNum(this.getLocationTime(item))
-        //     ) {
-        //       breakList.push(index - 1);
-        //     }
-        //   }
-        // }
       });
       return breakList;
     },
@@ -1211,12 +1201,13 @@ export default {
       }
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
-      const urlParams = this.urlParse();
+      // const urlParams = this.urlParse();
+      const patientInfo = this.$route.query;
       let data = {
         startLogDateTime: this.timeRange[0],
         endLogDateTime: this.timeRange[1],
-        visitId: urlParams.VisitId,
-        patientId: urlParams.PatientId,
+        visitId: patientInfo.VisitId,
+        patientId: patientInfo.PatientId,
       };
       if (!this.useMockData && !this.isPrintAll) {
         getNurseExchangeInfoByTime(data).then((res) => {
@@ -2362,8 +2353,9 @@ export default {
   },
   mounted() {
     document.title = "广东医科大学附属第三医院龙江医院体温单";
-    const urlParams = this.urlParse();
-    this.showInnerPage = urlParams.showInnerPage === "1";
+    // const urlParams = this.urlParse();
+    const patientInfo = this.$route.query;
+    this.showInnerPage = patientInfo.showInnerPage === "1";
     if (this.isPrintAll) {
       // 批量打印
       this.apiData = this.printData;
@@ -2381,9 +2373,9 @@ export default {
     } else {
       let data = {
         tradeCode: "nurse_getPatientVitalSigns",
-        PatientId: urlParams.PatientId,
-        VisitId: urlParams.VisitId,
-        StartTime: urlParams.StartTime,
+        PatientId: patientInfo.PatientId,
+        VisitId: patientInfo.VisitId,
+        StartTime: patientInfo.StartTime,
       };
       common(data).then((res) => {
         this.apiData = res.data;

@@ -478,7 +478,7 @@ export default {
     const pulseRange = [20, 200];
     // const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1371,17 +1371,6 @@ export default {
               }
             });
           }
-          // if (["4", "5"].includes(x.vitalCode)) {
-          //   // 心率或脉搏过快时，折线需要断开
-          //   data = [[]];
-          //   x.data.forEach((y) => {
-          //     // if (y.value > this.pulseRange[1]-20) {
-          //     //   data.push([]);
-          //     // } else {
-          //     //   data[data.length - 1].push(y);
-          //     // }
-          //   });
-          // }
           data.forEach((z) => {
             this.createBrokenLine({
               vitalCode: x.vitalCode,
@@ -1723,7 +1712,7 @@ export default {
       data.forEach((x, index) => {
         const cx = this.getXaxis(this.getLocationTime(x.time));
         let cy = this.getYaxis(yRange, x.value, vitalCode);
-        dots.push({ x: cx, y: cy });
+        // dots.push({ x: cx, y: cy });
         let params = {
           cx,
           cy,
@@ -1735,6 +1724,7 @@ export default {
         };
         switch (dotType) {
           case "Text":
+            
             this.createText({
               x: cx,
               y: cy - 10.5,
@@ -1745,6 +1735,32 @@ export default {
               zlevel: 10,
               fontWeight: "bold",
             });
+              //             if (Number(x.value) > this.yRange[1]) {
+              //   cy = this.getYaxis(yRange, yRange[1]-0.1, vitalCode);
+              //   params = {
+              //     x:cx,
+              //     y:cy,
+              //     color: "blue",
+              //     value: "x",
+              //     zlevel: 10,
+              //     fontSize: 18,
+              //     tips: `${x.time} ${label}：${x.value}`,
+              //     dotSolid: true,
+              //   };
+              // }
+              // if (Number(x.value) < this.yRange[0]) {
+              //   cy = this.getYaxis(yRange, yRange[0] + 3, vitalCode);
+              //   params = {
+              //     x:cx,
+              //     y:cy-4,
+              //     color: "blue",
+              //     value: "x",
+              //     zlevel: 10,
+              //     fontSize: 18,
+              //     tips: `${x.time} ${label}：${x.value}`,
+              //     dotSolid: true,
+              //   };
+              // }
             break;
           case "Circle":
             // 如果脉搏或心率和体温坐标重叠，改成在体温标识外面画红色的圆圈
@@ -1759,12 +1775,24 @@ export default {
                   y: this.getYaxis(this.yRange, x.value),
                 };
               });
-              // 如果脉搏或心率超限过快，则在最高的格子中间用实心红圈描点
+               // 如果脉搏或心率超限过快，则在最高的格子中间用实心红圈描点
               if (Number(x.value) > this.pulseRange[1]) {
-                cy = this.getYaxis(yRange, yRange[1] - 2, vitalCode);
+                cy = this.getYaxis(yRange, yRange[1] - 4, vitalCode);
                 params = {
                   cx,
                   cy,
+                  r: 4,
+                  color: "red",
+                  zlevel: 9,
+                  tips: `${x.time} ${label}：${x.value}`,
+                  dotSolid: true,
+                };
+              }
+              if (Number(x.value) < this.pulseRange[0]) {
+                cy = this.getYaxis(yRange, yRange[0] + 3, vitalCode);
+                params = {
+                  cx,
+                  cy:cy-4,
                   r: 4,
                   color: "red",
                   zlevel: 9,
@@ -1886,7 +1914,60 @@ export default {
               createRepeatTest();
             }
           }
+               if (x.value > this.yRange[1]) {
+            this.createText({
+              x: cx ,
+              y: 0 ,
+              value: x.value,
+              color: "red",
+              tips: "",
+              fontWeight: "bold",
+              zlevel: 10,
+              fontSize: 12,
+            });
+          }
+                    
+          if (x.value < this.yRange[0]) {
+            this.createText({
+              x: cx ,
+              y: cy  ,
+              value: x.value,
+              color: "red",
+              tips: "",
+              fontWeight: "bold",
+              zlevel: 100,
+              fontSize: 12,
+            });
+          }
+        }else if (["4", "5"].includes(vitalCode)) {
+          // 画脉搏/心率超限过快，在顶部画点并且标明数值
+          if (x.value > this.pulseRange[1]) {
+            this.createText({
+              x: cx - 1.2,
+              y: cy - this.ySpace ,
+              value: x.value,
+              color: "red",
+              tips: "",
+              fontWeight: "bold",
+              zlevel: 10,
+              fontSize: 12,
+            });
+          }
+                    
+          if (x.value < this.pulseRange[0]) {
+            this.createText({
+              x: cx ,
+              y: cy  ,
+              value: x.value,
+              color: "red",
+              tips: "",
+              fontWeight: "bold",
+              zlevel: 100,
+              fontSize: 12,
+            });
+          }
         }
+          dots.push({ x: cx, y: cy, time: x.time });
       });
       //图标连接的折线路部分
       for (let i = 0; i < dots.length - 1; i++) {

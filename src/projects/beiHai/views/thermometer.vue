@@ -693,11 +693,7 @@ export default {
         };
       });
       const timeAdd = (i) => {
-        return timeNumList.some((x) => x.start === i)
-          ? 5 * 60 * 60 * 1000
-          : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
-          ? 3 * 60 * 60 * 1000
-          : 4 * 60 * 60 * 1000;
+        return 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
@@ -705,8 +701,8 @@ export default {
           const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
             item.value =
-              breatheList[j].value.includes("R") ||
-              breatheList[j].value.includes("r")
+              breatheList[j].value&&(breatheList[j].value.includes("R") ||
+              breatheList[j].value.includes("r"))
                 ? breatheList[j].value.replace(/r/i, "Ⓡ")
                 : breatheList[j].value;
             breatheList.splice(j, 1);

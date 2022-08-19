@@ -64,7 +64,8 @@ export default {
     window.addEventListener("message", this.messageHandle, false);
   },
   mounted() {
-    const urlParams = this.urlParse();
+    // const urlParams = this.urlParse();
+    const patientInfo = this.$route.query;
     if (this.useMockData) {
       this.printData = mockData;
       setTimeout(() => {
@@ -73,9 +74,9 @@ export default {
     } else {
       let data={
           tradeCode: "nurse_getPatientVitalSigns",
-          PatientId: urlParams.PatientId,
-          VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime,
+          PatientId: patientInfo.PatientId,
+          VisitId: patientInfo.VisitId,
+          StartTime: patientInfo.StartTime,
         }
       common(data).then((res) => {
         this.printData = res.data;
@@ -85,8 +86,8 @@ export default {
         let exchangData={
           startLogDateTime:dataRangePrintAll[0][0] +' 00:00:00',
           endLogDateTime:dataRangePrintAll[dataRangePrintAll.length-1][1]+' 24:00:00',
-          visitId: urlParams.VisitId,
-          patientId: urlParams.PatientId,
+          visitId: patientInfo.VisitId,
+          patientId: patientInfo.PatientId,
         }
       getNurseExchangeInfoBatch(exchangData).then((res)=>{
         let nurseExchangeInfo=res.data.data.exchangeInfos
