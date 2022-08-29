@@ -296,6 +296,18 @@ export const mockData = {
       time_point: '2021-10-25 01:12:00',
       vital_code: '1'
     },
+    {
+      temperature_type: '体温',
+      value: '40',
+      time_point: '2021-10-15 01:12:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
+      value: '38',
+      time_point: '2021-10-15 02:12:00',
+      vital_code: '1'
+    },
     // {
     //   "temperature_type": "呼吸机R",
     //   "value": "3",

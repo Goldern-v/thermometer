@@ -23,6 +23,18 @@ export const mockData = {
       time_point: '2019-05-18 09:07:00',
       vital_code: '5'
     },
+        {
+      temperature_type: '腋温',
+      value: '35.2',
+      time_point: '2019-05-18 23:12:00',
+      vital_code: '042'
+    },
+        {
+      temperature_type: '呼吸',
+      value: 'r',
+      time_point: '2019-05-18 23:12:00',
+      vital_code: '04'
+    },
     // {
     //   temperature_type: '表顶注释',
     //   value: '手术|',
@@ -43,6 +55,24 @@ export const mockData = {
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2019-05-18 13:11:00',
       vital_code: '5'
+    },
+    {
+      temperature_type: '血压',
+      value: '138/87',
+      time_point: '2019-05-18 12:00:00',
+      vital_code: '062'
+    },
+    {
+      temperature_type: '血压',
+      value: '138/879',
+      time_point: '2019-05-18 13:00:00',
+      vital_code: '062'
+    },
+    {
+      temperature_type: '血压',
+      value: '138/872',
+      time_point: '2019-05-19 01:10:00',
+      vital_code: '062'
     },
     {
       temperature_type: '表顶注释',

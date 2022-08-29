@@ -472,7 +472,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData:true,
+      useMockData:false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1141,23 +1141,6 @@ export default {
             default:
               break;
           }
-          // const index = customSigns.indexOf(sign)
-          // if (index < 0) {
-          //   customSigns.push(sign)
-          //   // console.log(this[`customList${customSigns.length - 1}`])
-          //   this[`customList${customSigns.length - 1}`].push({
-          //     time: vitalSigns[i].time_point,
-          //     value: vitalSigns[i].value
-          //   })
-          //   this[`customList${customSigns.length - 1}`].label = sign
-          // } else {
-          //   this[`customList${index}`].push({
-          //     time: vitalSigns[i].time_point,
-          //     value: vitalSigns[i].value
-          //   })
-          //   this[`customList${index}`].label = sign
-          // }
-          // continue
         }
         /* 获取各个体征数组对象 */
         if (this.lineMap[vitalSigns[i].vital_code]) {
@@ -1165,6 +1148,16 @@ export default {
             time: vitalSigns[i].time_point,
             value: Number(vitalSigns[i].value),
           });
+          let dataArray = this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data;
+          dataArray.forEach((y, index) => {
+            if (index >= 1 && this.getLocationTime(y.time) == this.getLocationTime(dataArray[index - 1].time)) {
+              if (this.getTimeNum(y.time) < this.getTimeNum(dataArray[index - 1].time)) {
+                dataArray.splice(index - 1, 1)
+              } else {
+                dataArray.splice(index, 1)
+              }
+            }
+          })
           continue;
         }
         const item = {
@@ -1831,11 +1824,11 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "04:00:59"],
-        "06:00:00": ["04:01:00", "8:00:59"],
-        "10:00:00": ["08:01:00", "12:00:59"],
-        "14:00:00": ["12:01:00", "16:00:59"],
-        "18:00:00": ["16:01:00", "20:00:59"],
+        "02:00:00": ["00:00:00", "03:59:59"],
+        "06:00:00": ["04:00:00", "07:59:59"],
+        "10:00:00": ["08:00:00", "11:59:59"],
+        "14:00:00": ["12:00:00", "15:59:59"],
+        "18:00:00": ["16:00:00", "19:59:59"],
         "22:00:00": ["20:01:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {

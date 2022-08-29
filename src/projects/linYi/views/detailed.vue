@@ -65,7 +65,7 @@ export default {
     const temperatureRange = [34, 43];
     const pulseRange = [0, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -81,7 +81,7 @@ export default {
       dateRangeList: [], // 数组长度决定页数
       settingMap: {
         axillaryTemperature: {
-          vitalCode: "1",
+          vitalCode: "01",
           label: "腋表",
           color: "blue",
           lineColor: "blue",
@@ -93,7 +93,7 @@ export default {
         },
 
         pulse: {
-          vitalCode: "11",
+          vitalCode: "02",
           label: "脉搏",
           color: "red",
           solid: true,
@@ -104,7 +104,7 @@ export default {
           ],
         },
         heart: {
-          vitalCode: "12",
+          vitalCode: "20",
           label: "心率",
           color: "red",
           dotType: "Circle",
@@ -115,9 +115,9 @@ export default {
         },
       },
       lineMap: {
-        1: "axillaryTemperature",
-        12: "heart",
-        11: "pulse",
+        "01": "axillaryTemperature",
+        "02": "heart",
+        "20": "pulse",
       },
     };
   },
@@ -136,7 +136,6 @@ export default {
       });
     } else {
       this.apiData = JSON.parse(sessionStorage.getItem("vitalSigns"));
-      console.log('cmd this.apiData', this.apiData)
       this.$nextTick(() => {
         this.handleData();
       });
@@ -156,10 +155,10 @@ export default {
         Object.values(this.settingMap)
           .filter((x) => {
             return showVitalSign === "1"
-              ? x.label === "腋表"
+              ? x.vitalCode === "01"
               : showVitalSign === "2"
-              ? x.label === "脉搏"
-              : x.label === "心率";
+              ? x.vitalCode === "02"
+              : x.vitalCode === "20";
           })
           .forEach((x) => {
             this.createBrokenLine({
@@ -663,6 +662,7 @@ export default {
             time: this.vitalSigns[i].time_point,
             value: Number(this.vitalSigns[i].value),
           });
+          console.log(112121,this.settingMap)
           continue;
         }
       }

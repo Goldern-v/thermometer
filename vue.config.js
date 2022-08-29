@@ -188,7 +188,7 @@ module.exports = {
             case 'longJiang':
               return 'http://218.13.34.230:9094'
             case 'linYi':
-              return 'http://218.107.37.134:9093'
+              return 'http://222.133.53.230:9091/'
             case 'yiZhou':
               return 'http://218.107.37.134:9093'
               case 'weihai':
@@ -245,7 +245,7 @@ module.exports = {
             case 'longJiang':
               return 'http://218.13.34.230:9091'
             case 'linYi':
-              return 'http://218.107.37.134:9093' //无可用外网
+              return 'http://222.133.53.230:9091' //无可用外网
             case 'yiZhou':
               return 'http://218.107.37.134:9093' //无可用外网
               case 'weihai':

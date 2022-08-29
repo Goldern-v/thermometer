@@ -17,23 +17,137 @@ export const mockData = {
   },
   vitalSigns: [
     // {
-    //   temperature_type: '身高',
-    //   value: '165',
-    //   time_point: '2021-11-03 07:00:00',
-    //   vital_code: '094'
+    //   temperature_type: '脉搏',
+    //   value: '84',
+    //   time_point: '2021-11-04 03:00:00',
+    //   vital_code: '02'
     // },
-    // {
-    //   temperature_type: '呼吸',
-    //   value: '18',
-    //   time_point: '2021-11-03 07:00:00',
-    //   vital_code: '04'
-    // },
-    // {
-    //   temperature_type: '疼痛',
-    //   value: '2',
-    //   time_point: '2021-11-03 07:00:00',
-    //   vital_code: '092'
-    // },
+    {
+      temperature_type: '脉搏',
+      value: '84',
+      time_point: '2021-11-03 03:00:00',
+      vital_code: '02'
+    },
+        {
+      temperature_type: '心率',
+      value: '75',
+      time_point: '2021-11-03 03:00:00',
+      vital_code: '20'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '84',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '84',
+      time_point: '2021-11-04 07:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '84',
+      time_point: '2021-11-04 17:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '75',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '20'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '84',
+      time_point: '2021-11-05 07:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '75',
+      time_point: '2021-11-05 07:00:00',
+      vital_code: '20'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '84',
+      time_point: '2021-11-05 23:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '75',
+      time_point: '2021-11-05 23:00:00',
+      vital_code: '20'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '84',
+      time_point: '2021-11-07 23:00:00',
+      vital_code: '02'
+    },
+        {
+      temperature_type: '心率',
+      value: '75',
+      time_point: '2021-11-07 23:00:00',
+      vital_code: '20'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '84',
+      time_point: '2021-11-08 23:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '84',
+      time_point: '2021-11-08 23:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '84',
+      time_point: '2021-11-06 13:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '84',
+      time_point: '2021-11-06 23:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '74',
+      time_point: '2021-11-08 23:00:00',
+      vital_code: '20'
+    },
+        {
+      temperature_type: '心率',
+      value: '75',
+      time_point: '2021-11-07 17:00:00',
+      vital_code: '20'
+    },
+    {
+      temperature_type: '身高',
+      value: '165',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '094'
+    },
+    {
+      temperature_type: '呼吸',
+      value: '18',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '04'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '2',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '092'
+    },
     {
       temperature_type: '体温',
       value: '39',

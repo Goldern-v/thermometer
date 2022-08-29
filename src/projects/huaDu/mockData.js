@@ -53,7 +53,7 @@ export const mockData = {
     },
     {
       temperature_type: '表顶注释',
-      value: '手术',
+      value: '手术|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2021-11-06 15:12:00',
       vital_code: '3'
@@ -88,14 +88,14 @@ export const mockData = {
     },
     {
       temperature_type: '表顶注释',
-      value: '手术',
+      value: '手术|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2021-10-15 10:12:00',
       vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
-      value: '手术',
+      value: '手术|',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2021-10-15 10:12:00',
       vital_code: '3'
@@ -117,6 +117,48 @@ export const mockData = {
     {
       temperature_type: '表底注释',
       value: '请假',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-18 03:12:00',
+      vital_code: '31'
+    },
+    {
+      temperature_type: '表底注释',
+      value: '请假',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-18 03:12:00',
+      vital_code: '31'
+    },
+    {
+      temperature_type: '表底注释',
+      value: '请假',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-18 03:12:00',
+      vital_code: '31'
+    },
+    {
+      temperature_type: '表底注释',
+      value: '请假',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-18 03:12:00',
+      vital_code: '31'
+    },
+    {
+      temperature_type: '表底注释',
+      value: '请假',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-18 03:12:00',
+      vital_code: '31'
+    },
+    {
+      temperature_type: '表底注释',
+      value: '持续冰敷',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-10-18 03:12:00',
+      vital_code: '31'
+    },
+    {
+      temperature_type: '表底注释',
+      value: '停冰敷',
       // "time_point": "2020-12-15 03:12:00",
       time_point: '2021-10-18 03:12:00',
       vital_code: '31'

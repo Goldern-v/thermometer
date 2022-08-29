@@ -1276,7 +1276,7 @@ export default {
               }
             }
           })
-          continue;
+          
         }
         const item = {
           time: vitalSigns[i].vital_code==3&&vitalSigns[i].expand2?vitalSigns[i].expand2:vitalSigns[i].time_point,

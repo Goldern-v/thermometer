@@ -671,7 +671,8 @@ export default {
         const item = { timeNum: i, value: "" };
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum >= i && timeNum < i + 3 * 4 * 60 * 60 * 1000) {
+          //护士要求  早上下午的区分 多半个小时
+          if (timeNum >= i && timeNum < i + 3 * 4 * 60 * 60 * 1000 + 30 * 60 * 1000) {
             item.value = pressureList[j].value;
             pressureList.splice(j, 1);
             break;
@@ -693,7 +694,11 @@ export default {
         };
       });
       const timeAdd = (i) => {
-        return 4 * 60 * 60 * 1000;
+        return timeNumList.some((x) => x.start === i)
+          ? 5 * 60 * 60 * 1000
+          : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
+          ? 3 * 60 * 60 * 1000
+          : 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };

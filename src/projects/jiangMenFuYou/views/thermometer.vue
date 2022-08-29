@@ -1039,7 +1039,7 @@ export default {
           continue;
         }
         
-                if (["50", "51"].includes(vitalSigns[i].vital_code)) {
+        if (["50", "51"].includes(vitalSigns[i].vital_code)) {
           const sign = vitalSigns[i].temperature_type;
 
           switch (vitalSigns[i].vital_code) {
@@ -1519,7 +1519,7 @@ export default {
       dotType,
     }) {
       const dots = [];
-      data.forEach((x) => {
+      data.forEach((x,index) => {
         const cx = this.getXaxis(this.getLocationTime(x.time));
         const cy = this.getYaxis(yRange, x.value, vitalCode);
         dots.push({ x: cx, y: cy, time: x.time });
@@ -1637,6 +1637,38 @@ export default {
           }
         }
       });
+
+      if (["01"].includes(vitalCode) ) {
+        //连线的第一个和最后一个 定点的位置
+        const tem_DataList = data.filter((item,index) => {
+          return index == 0 || index == data.length - 1
+        })
+        let list = this.settingMap.analTemperature.data.filter((x, index) => {
+          return index == 0 || index == this.settingMap.analTemperature.data.length - 1
+        })
+        tem_DataList.forEach((item,ind)=>{
+         const axiosX = this.getXaxis(this.getLocationTime(item.time));
+        const axiosY = this.getYaxis(yRange, item.value, vitalCode); 
+
+        list.forEach((item, i) => {
+          if (i == ind ) {
+            const axiosX2 = this.getXaxis(this.getLocationTime(item.time));
+            const axiosY2 = this.getYaxis(yRange, item.value, vitalCode);
+            this.createLine({
+              x1: axiosX,
+              y1: axiosY,
+              x2: axiosX2,
+              y2: axiosY2,
+              lineWidth: 2,
+              color: "blue",
+              zlevel: 1,
+            });
+          }
+        })
+        })
+
+
+      }
       // 连线
       for (let i = 0; i < dots.length - 1; i++) {
         // 医院那边要求连续，不能断所以注释这个体温曲线断点逻辑

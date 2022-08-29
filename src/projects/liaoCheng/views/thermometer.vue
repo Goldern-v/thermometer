@@ -570,6 +570,7 @@ export default {
       customList4: [], // 自定义5
       customList5: [], // 自定义6
       coolList: [], // 降温
+      heartRateBreaken:[],
       ttgyList: [], // 疼痛干预
       dateRangeList: [], // 数组长度决定页数
       patInfo: {
@@ -1290,6 +1291,23 @@ export default {
         }
       }
 
+      //先计算是否存在相同的时间的脉搏心率，如果存在 就说明画了房颤
+      //接着  计算脉搏心率相同的数组 筛选出跟录入心率相同的数组
+      // 如果 数组的下标index 是123456 这种 就说明  连续的录入脉搏心率 如果中间断开 就说明录入了脉搏 没录入心率
+      // 那么这时候时间想等的点 就跟下一个点断开
+      let sameList=[]
+      this.settingMap.heart.data.map((item)=>{
+              this.settingMap.pulse.data.forEach((icon, index_pluse) => {
+        if (icon.time == item.time) {
+          sameList.push({ ...icon, index_pluse })
+        }
+      })
+      this.heartRateBreaken = sameList.filter((h, ind) => {
+        if (ind < sameList.length - 1) {
+          return sameList[ind + 1].index_pluse - h.index_pluse != 1
+        }
+      }).map((j) => j.time)
+      })
       this.init();
     },
     createNote(notes, y, color) {
@@ -1381,7 +1399,6 @@ export default {
             x.data.forEach((y, index) => {
               data[data.length - 1].push(y);
               if (index < x.data.length - 1) {
-               
               } else {
                 const list = data[data.length - 1];
                 if (!(list.length && list[list.length - 1].time === y.time)) {
@@ -1390,7 +1407,7 @@ export default {
               }
             });
           }
-          if (["02", "20"].includes(x.vitalCode)) {
+          if (["02"].includes(x.vitalCode)) {
             // 心率或脉搏过快时，折线需要断开
             data = [[]];
             x.data.forEach((y, index) => {
@@ -1414,15 +1431,41 @@ export default {
                 }
               }
             });
-            // x.data.forEach((y, index) => {
-            //   if (y.value > this.pulseRange[1]) {
-            //     data.push([])
-            //   } else {
-            //     data[data.length - 1].push(y)
-            //   }
-            // })
           }
-          data.forEach((z) => {
+          if (["20"].includes(x.vitalCode)) {
+            // 心率或脉搏过快时，折线需要断开
+            data = [[]];
+            x.data.forEach((y, index) => {
+              if (y.value <= this.pulseRange[1]) {
+                data[data.length - 1].push(y);
+              } else {
+                data.push([]);
+              }
+              //先计算是否存在相同的时间的脉搏心率，如果存在 就说明画了房颤
+              //接着  计算脉搏心率相同的数组 筛选出跟录入心率相同的数组 
+              // 如果 数组的下标index 是123456 这种 就说明  连续的录入脉搏心率 如果中间断开 就说明录入了脉搏 没录入心率  
+              // 那么这时候时间想等的点 就跟下一个点断开
+              if(this.heartRateBreaken.includes(y.time)){
+                data.push([x.data[index + 1]]);
+              }
+              if (index < x.data.length - 1) {
+                if (
+                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                  this.getTimeNum(y.time.slice(0, 10)) >=
+                  24 * 60 * 60 * 1000 * 2
+                ) {
+                  data.push([x.data[index + 1]]);
+                }
+              } else {
+                const list = data[data.length - 1];
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y);
+                }
+              }
+            });
+
+          }
+          data.forEach((z, index) => {
             this.createBrokenLine({
               vitalCode: x.vitalCode,
               data: z,
@@ -1464,6 +1507,7 @@ export default {
             5 * (this.ySpace + 1),
           "black"
         );
+
       });
     },
     yLine() {

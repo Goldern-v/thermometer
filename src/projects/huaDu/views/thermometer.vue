@@ -395,7 +395,7 @@
 <script>
 import zrender from "zrender";
 import { mockData, jsonMockData } from "src/projects/huaDu/mockData.js";
-import { common, getNurseExchangeInfoByTime2 } from "src/api/index.js";
+import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
 import moment from "moment"; //导入文件
 
 export default {
@@ -420,7 +420,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1004,15 +1004,13 @@ export default {
       }
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
-      let config={}
-      config.data = {
+      let data = {
         startLogDateTime: this.timeRange[0],
         endLogDateTime: this.timeRange[1],
         visitId: this.$route.query.VisitId,
         patientId: this.$route.query.PatientId,
       };
-      config.authToken=this.$route.query.authTokenNursing
-      getNurseExchangeInfoByTime2(config).then((res) => {
+      getNurseExchangeInfoByTime(data).then((res) => {
         this.adtLog = res.data.data.adtLog; // 转科
         this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
       });
@@ -1240,7 +1238,8 @@ export default {
               )}时${this.toChinesNum(new Date(notes[j].time).getMinutes())}分`;
               yNew += (noteTime.length + 3) * this.ySpace - 11;
             } else {
-              yNew += (notes[j].value.length + 1) * this.ySpace + 6;
+              yNew += (notes[j].value.length + 1) * this.ySpace + (notes[j].value.length+1)*2+1;
+              
             }
           } else {
             break;
@@ -1251,7 +1250,7 @@ export default {
         });
         this.createText({
           x: xaxisNew[i],
-          y: bottomValu.includes(value) ? y + 1 : yNew + 2,
+          y: bottomValu.includes(value) ? y + 1+yNew : yNew + 2,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 2,
@@ -1991,6 +1990,7 @@ export default {
   mounted() {
     const urlParams = this.urlParse();
     this.showInnerPage = this.$route.query.showInnerPage === "1";
+    console.log(this.showInnerPage,'this.showInnerPage')
     if (this.isPrintAll) {
       // 批量打印
       this.apiData = this.printData;
