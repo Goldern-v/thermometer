@@ -2266,8 +2266,9 @@ export default {
     },
   },
   mounted() {
-    const urlParams = this.urlParse();
-    this.showInnerPage = urlParams.showInnerPage === "1";
+    // const urlParams = this.urlParse();
+    const patientInfo = this.$route.query
+    this.showInnerPage = patientInfo.showInnerPage === "1";
     if (this.isPrintAll) {
       // 批量打印
       this.apiData = this.printData;
@@ -2292,9 +2293,9 @@ export default {
         url: "/crHesb/hospital/common",
         data: {
           tradeCode: "nurse_getPatientVitalSigns",
-          PatientId: urlParams.PatientId,
-          VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime,
+          PatientId: patientInfo.PatientId,
+          VisitId: patientInfo.VisitId,
+          StartTime: patientInfo.StartTime,
         },
       }).then((res) => {
         this.apiData = res.data;

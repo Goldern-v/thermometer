@@ -45,6 +45,8 @@
     "build:weihai": "vue-cli-service build --project=weihai",
     "dev:yiZhou": "vue-cli-service serve --project=yiZhou",
     "build:yiZhou": "vue-cli-service build --project=yiZhou",
+    "dev:zhzxy": "vue-cli-service serve --project=zhzxy",
+    "build:zhzxy": "vue-cli-service build --project=zhzxy",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },

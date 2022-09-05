@@ -59,7 +59,8 @@ export default {
     window.addEventListener('message', this.messageHandle, false)
   },
   mounted() {
-    const urlParams = this.urlParse()
+    // const urlParams = this.urlParse()
+    const patientInfo = this.$route.query
     if (this.useMockData) {
       this.printData = mockData
       setTimeout(() => {
@@ -74,9 +75,9 @@ export default {
         url: '/crHesb/hospital/common',
         data: {
           tradeCode: 'nurse_getPatientVitalSigns',
-          PatientId: urlParams.PatientId,
-          VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime
+          PatientId: patientInfo .PatientId,
+          VisitId: patientInfo .VisitId,
+          StartTime: patientInfo .StartTime
         }
       }).then((res) => {
         this.printData = res.data
