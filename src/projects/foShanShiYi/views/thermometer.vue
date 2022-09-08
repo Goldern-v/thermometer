@@ -369,7 +369,7 @@
             <div class="label" :style="{ width: `${leftWidth}px` }">皮试</div>
             <div class="value-item-box">
               <div
-                class="value-item font-14"
+                class="value-item font-12"
                 v-for="(item, index) in getFormatList({ tList: skinTest })"
                 :key="index"
                 v-html="item.value"
@@ -479,7 +479,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1017,6 +1017,7 @@ export default {
       this.onLineCoolList = [];
       this.feverList = [];
       this.dateRangeList = [];
+      this.outCustomList = []
       for (let i = 0; i < 4; i++) {
         this[`customList${i}`] = [];
       }
@@ -2567,7 +2568,7 @@ export default {
 .font-14 {
   font-size: 14px;
 }
-.font-14 {
+.font-16 {
   font-size: 16px;
 }
 .font-18 {

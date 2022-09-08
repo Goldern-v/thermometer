@@ -32,16 +32,16 @@
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item" style="width: 150px; flex: none">
-        病案号：<span class="value">{{ patInfo.patient_id }}</span>
-      </div>
-      <div class="item">
-        科别：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
-      </div>
       <div class="item" style="width: 80px; flex: none">
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
+      </div>
+      <div class="item">
+        科别：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
+      </div>
+      <div class="item" style="width: 150px; flex: none">
+        病案号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
     </div>
     <div class="table-area">
@@ -1956,14 +1956,14 @@ export default {
             ) {
               createRepeatTest();
             }
-            if (
-              //首次入院的体温高于38度，用温度列表里面第一个时间跟时间想且当前页面为1等判断为第一天
-              x.time.slice(0, 10) === list[0].time.slice(0, 10) &&
-              Number(list[0].value) >= 38 &&
-              this.currentPage === 1
-            ) {
-              createRepeatTest();
-            }
+            // if (
+            //   //首次入院的体温高于38度，用温度列表里面第一个时间跟时间想且当前页面为1等判断为第一天
+            //   x.time.slice(0, 10) === list[0].time.slice(0, 10) &&
+            //   Number(list[0].value) >= 38 &&
+            //   this.currentPage === 1
+            // ) {
+            //   createRepeatTest();
+            // }
           }
         } else if (vitalCode === "092") {
           // 画疼痛干预

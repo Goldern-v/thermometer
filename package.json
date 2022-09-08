@@ -47,6 +47,10 @@
     "build:yiZhou": "vue-cli-service build --project=yiZhou",
     "dev:zhzxy": "vue-cli-service serve --project=zhzxy",
     "build:zhzxy": "vue-cli-service build --project=zhzxy",
+    "dev:tongJiang": "vue-cli-service serve --project=tongJiang",
+    "build:tongJiang": "vue-cli-service build --project=tongJiang",
+    "dev:qhwy": "vue-cli-service serve --project=qhwy",
+    "build:qhwy": "vue-cli-service build --project=qhwy",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },

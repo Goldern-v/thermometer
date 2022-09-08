@@ -51,6 +51,10 @@ const projectName = (() => {
       return "威海市立医院";
     case "zhzxy": // 威海市立医院
       return "珠海市中西医结合医院";
+    case "tongJiang": // 威海市立医院
+      return "广东同江医院";
+    case "qhwy": // 威海市立医院
+      return "青海省第五人民医院";
     case "common": // 可配置的通用版本
       return "配置通用版本";
     default:
@@ -138,8 +142,12 @@ module.exports = {
           return "./src/projects/yiZhou/main.js";
         case "weihai": // 威海市立医院
           return "./src/projects/weihai/main.js";
-        case "zhzxy": // 威海市立医院
+        case "zhzxy": // 珠海中西医
           return "./src/projects/zhzxy/main.js";
+        case "tongJiang": // 广东同江医院
+          return "./src/projects/tongJiang/main.js";
+        case "qhwy": // 广东同江医院
+          return "./src/projects/qhwy/main.js";
         case "common": // 可配置的通用版本
           return "./src/projects/common/main.js";
         default:
@@ -200,6 +208,10 @@ module.exports = {
               return "http://218.107.37.134:9093";
             case "zhzxy":
               return "http://218.107.37.134:9093";
+            case "tongJiang":
+              return "http://218.107.37.134:9093";
+            case "qhwy":
+              return "http://218.107.37.134:9093";
             case "common":
               return "http://172.17.5.41:9091";
             default:
@@ -258,6 +270,10 @@ module.exports = {
             case "weihai":
               return "http://218.107.37.134:9093";
             case "zhzxy":
+              return "http://218.107.37.134:9093";
+            case "tongJiang":
+              return "http://218.107.37.134:9093";
+            case "qhwy":
               return "http://218.107.37.134:9093";
             case "common":
               return "http://172.17.5.41:9091";

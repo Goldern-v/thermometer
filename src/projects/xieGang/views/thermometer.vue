@@ -11,17 +11,17 @@
       <div class="item">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item" >
+      <div class="item">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" >
+      <div class="item">
         年龄：<span class="value">{{
           typeof parseInt(patInfo.age) === "number" && !isNaN(patInfo.age)
             ? patInfo.age + "岁"
             : patInfo.age
         }}</span>
       </div>
-      <div class="item" >
+      <div class="item">
         病区：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
       <div class="item">
@@ -29,12 +29,12 @@
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" >
+      <div class="item">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item" style="text-align: right;" >
+      <div class="item" style="text-align: right;">
         住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
     </div>
@@ -258,7 +258,11 @@
               v-for="(item, index) in formatBreatheList"
               :key="index"
             >
-              {{ item.value.includes('R')||item.value.includes('r')?'®':item.value}}
+              {{
+                item.value.includes("R") || item.value.includes("r")
+                  ? "®"
+                  : item.value
+              }}
             </div>
           </div>
         </div>
@@ -472,7 +476,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData:false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -603,7 +607,7 @@ export default {
         18: "体重",
         19: "肛温",
         2: "口温",
-        26:"皮试",
+        26: "皮试",
         21: "发热体温",
         22: "线上降温",
         23: "呼吸机R",
@@ -666,7 +670,7 @@ export default {
       const pressureList = [...this.pressureList];
       for (
         let i = timeNumRange[0];
-        i < timeNumRange[1]-1;
+        i < timeNumRange[1] - 1;
         i += 3 * 4 * 60 * 60 * 1000
       ) {
         const item = { timeNum: i, value: "" };
@@ -680,6 +684,7 @@ export default {
         }
         list.push(item);
       }
+      console.log("数据======》", list);
       return list;
     },
 
@@ -714,7 +719,7 @@ export default {
       const timeAdd = () => {
         return 4 * 60 * 60 * 1000;
       };
-      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeAdd(i)) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
@@ -827,7 +832,7 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
-        if (days[index] <= 10) {
+        if (days[index] <= 14) {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
           return index === 0
             ? days[index]
@@ -839,7 +844,9 @@ export default {
     },
     formatStayDayList() {
       return this.dateList.map((x) => {
-        let tomorrow = moment(new Date()).add(1, "d").format("YYYY-MM-DD");
+        let tomorrow = moment(new Date())
+          .add(1, "d")
+          .format("YYYY-MM-DD");
         let today = moment(new Date()).format("YYYY-MM-DD");
         this.topSheetNote.forEach((y) => {
           if (
@@ -892,9 +899,9 @@ export default {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
     currentPage(value) {
-     if(!this.isPrintAll){
-      window.parent.postMessage({ type: "currentPage", value }, "*");
-        }
+      if (!this.isPrintAll) {
+        window.parent.postMessage({ type: "currentPage", value }, "*");
+      }
     },
   },
   created() {
@@ -991,9 +998,9 @@ export default {
           case "printing":
             window.print();
             break;
-             case 'dateChangePage':
-              this.handleChangePage(e.data.value)
-              break;
+          case "dateChangePage":
+            this.handleChangePage(e.data.value);
+            break;
           case "nurseExchangeInfo":
             if (e.data.value) {
               this.adtLog = e.data.value.adtLog || ""; // 转科
@@ -1069,7 +1076,7 @@ export default {
       const admissionDateNum = new Date(
         `${this.patInfo.admission_date.slice(0, 10)} 00:00:00`
       ).getTime();
-      let test=`${this.patInfo.admission_date.slice(0, 10)} 00:00:00`
+      let test = `${this.patInfo.admission_date.slice(0, 10)} 00:00:00`;
       // 根据入院时间和最大标识时间计算出页数和每页的时间范围
       const dateRangeList = [];
       for (
@@ -1086,23 +1093,23 @@ export default {
       this.pageTotal = dateRangeList.length;
 
       // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
-      if(this.timeRangeExchange[0].includes(''))
-      window.parent.postMessage(
-        {
-          type: "getNurseExchangeInfo",
-          value: {
-            startLogDateTime: this.timeRangeExchange[0],
-            endLogDateTime: this.timeRangeExchange[1],
+      if (this.timeRangeExchange[0].includes(""))
+        window.parent.postMessage(
+          {
+            type: "getNurseExchangeInfo",
+            value: {
+              startLogDateTime: this.timeRangeExchange[0],
+              endLogDateTime: this.timeRangeExchange[1],
+            },
           },
-        },
-        "*"
-      );
+          "*"
+        );
 
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
-          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]-1
+          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1] - 1
         ) {
           // 超出时间范围的抛弃
           continue;
@@ -1148,25 +1155,34 @@ export default {
           this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
             time: vitalSigns[i].time_point,
             value: Number(vitalSigns[i].value),
-            type:vitalSigns[i].vital_code
+            type: vitalSigns[i].vital_code,
           });
 
-          let dataArray = this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data;
+          let dataArray = this.settingMap[
+            this.lineMap[vitalSigns[i].vital_code]
+          ].data;
           dataArray.forEach((y, index) => {
-            if (index >= 1 && this.getLocationTime(y.time) == this.getLocationTime(dataArray[index - 1].time)) {
-              if (this.getTimeNum(y.time) < this.getTimeNum(dataArray[index - 1].time)) {
-                dataArray.splice(index - 1, 1)
+            if (
+              index >= 1 &&
+              this.getLocationTime(y.time) ==
+                this.getLocationTime(dataArray[index - 1].time)
+            ) {
+              if (
+                this.getTimeNum(y.time) <
+                this.getTimeNum(dataArray[index - 1].time)
+              ) {
+                dataArray.splice(index - 1, 1);
               } else {
-                dataArray.splice(index, 1)
+                dataArray.splice(index, 1);
               }
             }
-          })
+          });
           continue;
         }
         const item = {
           time: vitalSigns[i].time_point,
           value: vitalSigns[i].value,
-          type:vitalSigns[i].vital_code
+          type: vitalSigns[i].vital_code,
         };
         switch (vitalSigns[i].vital_code) {
           case "3":
@@ -1220,27 +1236,25 @@ export default {
           default:
             break;
         }
-       
       }
       this.init();
     },
     init() {
-
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        let ops={renderer:'svg'}
-        this.zr = zrender.init(this.$refs.main,ops);
+        let ops = { renderer: "svg" };
+        this.zr = zrender.init(this.$refs.main, ops);
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
         this.yLine(); //生成Y轴坐标
         this.xLine(); //生成X轴坐标
         //线上体温跟体温合并，然后根据type来做判断，计算显示位置
-        this.settingMap.axillaryTemperature.data.push(...this.onLineTemperList)
-        this.settingMap.axillaryTemperature.data.sort((a,b)=>{
-          return this.getTimeNum(a.time)-this.getTimeNum(b.time)
-        })
+        this.settingMap.axillaryTemperature.data.push(...this.onLineTemperList);
+        this.settingMap.axillaryTemperature.data.sort((a, b) => {
+          return this.getTimeNum(a.time) - this.getTimeNum(b.time);
+        });
         Object.values(this.settingMap).forEach((x) => {
           this.createBrokenLine({
             vitalCode: x.vitalCode,
@@ -1350,7 +1364,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: bottomValu.includes(value) ? y : yNew+2,
+          y: bottomValu.includes(value) ? y : yNew + 2,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 2,
@@ -1591,7 +1605,7 @@ export default {
     },
     addHover(el, config, x, y, shapeOn, shapeOut) {
       const domTips = document.getElementsByClassName("tips");
-      el.on("mouseover", function () {
+      el.on("mouseover", function() {
         domTips[0].innerHTML = config.tips;
 
         let textWidth = config.tips.length * 8;
@@ -1611,11 +1625,11 @@ export default {
           text-align:center`
         );
         el.animateTo(shapeOn, 100, 0);
-      }).on("mouseout", function () {
+      }).on("mouseout", function() {
         domTips[0].setAttribute("style", `display:none`);
         el.animateTo(shapeOut, 100, 0);
       });
-            el.on("click", () => {
+      el.on("click", () => {
         let dateTime = config.tips.slice(0, 20);
         window.parent.postMessage(
           { type: "clickDateTime", value: dateTime },
@@ -1634,11 +1648,17 @@ export default {
       dotType,
     }) {
       const dots = [];
-      const onLineItem=['22']
+      const onLineItem = ["22"];
       data.forEach((x) => {
-        const cxXixax=this.getXaxis(this.getLocationTime(x.time))
-        let itemLabel=onLineItem.includes(x.type)?`线上${label}`:label
-        const cx = onLineItem.includes(x.type)?cxXixax+10:cxXixax;
+        const cxXixax = this.getXaxis(this.getLocationTime(x.time));
+        let itemLabel = onLineItem.includes(x.type) ? `线上${label}` : label;
+        const LocationTime = this.getLocationTime(x.time);
+        let cx = cxXixax;
+        if (onLineItem.includes(x.type)) {
+          cx = moment(x.time).isAfter(moment(LocationTime))
+            ? cxXixax + 20
+            : cxXixax - 11;
+        }
         const cy = this.getYaxis(yRange, x.value, vitalCode);
         dots.push({ x: cx, y: cy, time: x.time });
         let params = {
@@ -1737,7 +1757,7 @@ export default {
         if (["1"].includes(vitalCode)) {
           for (let i = this.onLineCoolList.length - 1; i >= 0; i--) {
             const item = this.onLineCoolList[i];
-            const coolX = this.getXaxis(this.getLocationTime(item.time))+10;
+            const coolX = this.getXaxis(this.getLocationTime(item.time)) + 10;
             const coolY = this.getYaxis(yRange, item.value, vitalCode);
             if (coolX === cx) {
               this.createCircle({
@@ -1821,7 +1841,8 @@ export default {
         ((this.getTimeStamp(time) - this.getTimeStamp(this.timeRange[0])) /
           (this.getTimeStamp(this.timeRange[1]) -
             this.getTimeStamp(this.timeRange[0]))) *
-        this.areaWidth
+          this.areaWidth -
+        5
       );
     },
     // 根据值计算纵坐标
@@ -1855,12 +1876,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "03:59:59"],
-        "06:00:00": ["04:00:00", "07:59:59"],
-        "10:00:00": ["08:00:00", "11:59:59"],
-        "14:00:00": ["12:00:00", "15:59:59"],
-        "18:00:00": ["16:00:00", "19:59:59"],
-        "22:00:00": ["20:01:00", "23:59:59"],
+        "03:00:00": ["00:00:00", "03:59:59"],
+        "07:00:00": ["04:00:00", "07:59:59"],
+        "11:00:00": ["08:00:00", "11:59:59"],
+        "15:00:00": ["12:00:00", "15:59:59"],
+        "19:00:00": ["16:00:00", "19:59:59"],
+        "23:00:00": ["20:01:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -1979,7 +2000,11 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1] - 1;
+        i += timeInterval
+      ) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
@@ -2007,7 +2032,11 @@ export default {
       const list = [];
       const targetList = [...tList];
       const shitList = [...childList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1] - 1;
+        i += timeInterval
+      ) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
@@ -2054,7 +2083,10 @@ export default {
       num = parseInt(num);
       if (!num) return "零";
       let getWan = (temp) => {
-        let strArr = temp.toString().split("").reverse();
+        let strArr = temp
+          .toString()
+          .split("")
+          .reverse();
         let newNum = "";
         for (let i = 0; i < strArr.length; i++) {
           newNum =
