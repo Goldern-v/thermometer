@@ -476,7 +476,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -576,6 +576,7 @@ export default {
       physicsCoolList: [], // 物理降温
       onLineCoolList: [], // 线上降温
       onLineTemperList: [], // 线上体温降温
+      onLinePluseList: [], // 线上体温降温
       feverList: [], // 发热体温
       customList0: [], // 自定义1
       customList1: [], // 自定义2
@@ -684,7 +685,6 @@ export default {
         }
         list.push(item);
       }
-      console.log("数据======》", list);
       return list;
     },
 
@@ -1031,6 +1031,7 @@ export default {
       this.outputList = [];
       this.physicsCoolList = [];
       this.onLineTemperList = [];
+      this.onLinePluseList = [];
       this.feverList = [];
       this.skinTest = [];
       this.dateRangeList = [];
@@ -1227,6 +1228,9 @@ export default {
           case "23":
             this.onLineCoolList.push(item);
             break;
+          case "25":
+            this.onLinePluseList.push(item);
+            break;
           case "30":
             this.skinTest.push(item);
             break;
@@ -1251,8 +1255,17 @@ export default {
         this.yLine(); //生成Y轴坐标
         this.xLine(); //生成X轴坐标
         //线上体温跟体温合并，然后根据type来做判断，计算显示位置
-        this.settingMap.axillaryTemperature.data.push(...this.onLineTemperList);
+        /**并且 去除掉 整点的线上体温或者心率*/
+        this.settingMap.axillaryTemperature.data.push(...this.onLineTemperList.filter((item)=>{
+          return item.time!==this.getLocationTime(item.time)
+        }));
         this.settingMap.axillaryTemperature.data.sort((a, b) => {
+          return this.getTimeNum(a.time) - this.getTimeNum(b.time);
+        });
+        this.settingMap.pulse.data.push(...this.onLinePluseList.filter((item)=>{
+          return item.time!==this.getLocationTime(item.time)
+        }));
+        this.settingMap.pulse.data.sort((a, b) => {
           return this.getTimeNum(a.time) - this.getTimeNum(b.time);
         });
         Object.values(this.settingMap).forEach((x) => {
@@ -1648,7 +1661,7 @@ export default {
       dotType,
     }) {
       const dots = [];
-      const onLineItem = ["22"];
+      const onLineItem = ["22",'25'];
       data.forEach((x) => {
         const cxXixax = this.getXaxis(this.getLocationTime(x.time));
         let itemLabel = onLineItem.includes(x.type) ? `线上${label}` : label;
@@ -1656,7 +1669,7 @@ export default {
         let cx = cxXixax;
         if (onLineItem.includes(x.type)) {
           cx = moment(x.time).isAfter(moment(LocationTime))
-            ? cxXixax + 20
+            ? cxXixax + 10
             : cxXixax - 11;
         }
         const cy = this.getYaxis(yRange, x.value, vitalCode);
@@ -1816,14 +1829,6 @@ export default {
       });
       // 连线
       for (let i = 0; i < dots.length - 1; i++) {
-        // 医院那边要求连续，不能断所以注释这个体温曲线断点逻辑
-        // if (['1', '2', '19'].includes(vitalCode)) {
-        //   if (this.temperatureNoteList.some(x => {
-        //     return this.getTimeStamp(x.time) >= this.getTimeStamp(dots[i].time) && this.getTimeStamp(x.time) <= this.getTimeStamp(dots[i+1].time)
-        //   })) {
-        //     continue
-        //   }
-        // }
         this.createLine({
           x1: dots[i].x,
           y1: dots[i].y,
@@ -1881,7 +1886,7 @@ export default {
         "11:00:00": ["08:00:00", "11:59:59"],
         "15:00:00": ["12:00:00", "15:59:59"],
         "19:00:00": ["16:00:00", "19:59:59"],
-        "23:00:00": ["20:01:00", "23:59:59"],
+        "23:00:00": ["20:00:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -2142,39 +2147,11 @@ export default {
           xaxisNew.push(Math.floor(xaxisList[i]));
         }
       }
-      //存在数值误差，修复数值
-      // console.log(
-      //   '边缘区域1',
-      //   this.getXaxis(this.getTimeNum(this.dateList[6] + ' 23:59:00'))
-      // )
-      // const map1 = xaxisNew.map((x) => {
-      //   if (x == 4) {
-      //     return x * 2
-      //   }
-      //   return x
-      // })
-      // // xaxisNew.map((x) => (x = 0))
-      // console.log('传出去的', JSON.parse(JSON.stringify(xaxisNew)))
       return xaxisNew;
     },
     //根据传过来的X轴地址获取到该区间的最后一格，如果小于最后一格，就右移动，到了最后一格就左移
     getLastXasis(xaxis) {
-      if (xaxis > 0 && xaxis <= 117) {
-        return this.getXaxis(this.getTimeNum(this.dateList[0] + " 20:00:00"));
-      } else if (xaxis > 117 && xaxis <= 245) {
-        return this.getXaxis(this.getTimeNum(this.dateList[1] + " 20:00:00"));
-      }
-      if (xaxis > 245 && xaxis <= 372) {
-        return this.getXaxis(this.getTimeNum(this.dateList[2] + " 20:00:00"));
-      } else if (xaxis > 372 && xaxis <= 509) {
-        return this.getXaxis(this.getTimeNum(this.dateList[3] + " 20:00:00"));
-      } else if (xaxis > 509 && xaxis <= 636) {
-        return this.getXaxis(this.getTimeNum(this.dateList[4] + " 20:00:00"));
-      } else if (xaxis > 636 && xaxis <= 763) {
-        return this.getXaxis(this.getTimeNum(this.dateList[5] + " 20:00:00"));
-      } else if (xaxis > 763 && xaxis <= 891) {
         return this.getXaxis(this.getTimeNum(this.dateList[6] + " 20:00:00"));
-      }
     },
     scaleFont(val) {
       if (val.length > 5) {

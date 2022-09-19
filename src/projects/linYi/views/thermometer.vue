@@ -455,7 +455,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1974,21 +1974,21 @@ export default {
             ) {
               createRepeatTest();
             }
-            if (
-              //断开的时候，体温单复测
-              vitalCode === list[0].vitalCode && //体温为第一个，就判断为断开
-              x.time !== list[0].time //排查第一个温度的情况
-            ) {
-              createRepeatTest();
-            }
-            if (
-              //首次入院的体温高于38度，用温度列表里面第一个时间跟时间想且当前页面为1等判断为第一天
-              x.time.slice(0, 10) === list[0].time.slice(0, 10) &&
-              Number(list[0].value) >= 38 &&
-              this.currentPage === 1
-            ) {
-              createRepeatTest();
-            }
+            // if (
+            //   //断开的时候，体温单复测
+            //   vitalCode === list[0].vitalCode && //体温为第一个，就判断为断开
+            //   x.time !== list[0].time //排查第一个温度的情况
+            // ) {
+            //   createRepeatTest();
+            // }
+            // if (
+            //   //首次入院的体温高于38度，用温度列表里面第一个时间跟时间想且当前页面为1等判断为第一天
+            //   x.time.slice(0, 10) === list[0].time.slice(0, 10) &&
+            //   Number(list[0].value) >= 38 &&
+            //   this.currentPage === 1
+            // ) {
+            //   createRepeatTest();
+            // }
           }
         } else if (vitalCode === "092") {
           // 画疼痛干预
@@ -2281,17 +2281,19 @@ export default {
       }
       return overWan ? getWan(overWan) + "万" + getWan(noWan) : getWan(num);
     },
-    // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
     handleNoteXaxis(xaxisList) {
+      //定义一个数组，为全部最后一格的数据，如果与最后一格重叠，就往底下移动
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {
-        if (!xaxisNew.includes(xaxisList[i])) {
-          xaxisNew.push(xaxisList[i]);
+        if (!xaxisNew.includes(Math.floor(xaxisList[i]))&&xaxisNew.includes(Math.floor(xaxisList[i])-1)&&xaxisNew.includes(Math.floor(xaxisList[i])+1)) {
+          xaxisNew.push(Math.floor(xaxisList[i]));
         } else {
-          while (xaxisNew.includes(xaxisList[i])) {
-            xaxisList[i] += this.xSpace;
+          while (
+            (xaxisNew.includes(Math.floor(xaxisList[i]))||xaxisNew.includes(Math.floor(xaxisList[i])-1)||xaxisNew.includes(Math.floor(xaxisList[i])+1)) 
+          ) {
+            xaxisList[i] += this.xSpace + 2;
           }
-          xaxisNew.push(xaxisList[i]);
+          xaxisNew.push(Math.floor(xaxisList[i]));
         }
       }
       return xaxisNew;

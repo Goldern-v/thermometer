@@ -1,5 +1,5 @@
 <template>
-  <div v-if="printData">
+  <div v-if="printData" class="sheet-page-container">
     <Thermometer
       ref="thermometer"
       :printData="printData"

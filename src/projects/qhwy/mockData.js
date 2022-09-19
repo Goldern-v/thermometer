@@ -23,6 +23,12 @@ export const mockData = {
       vital_code: '01'
     },
     {
+      temperature_type: '引流量',
+      value: '3600',
+      time_point: '2022-06-06 08:00:00',
+      vital_code: '10'
+    },
+    {
       temperature_type: '体温',
       value: '38.6',
       time_point: '2022-06-06 08:00:00',

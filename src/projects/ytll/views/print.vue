@@ -14,7 +14,7 @@
 
 <script>
 import Thermometer from "./thermometer.vue";
-import { mockData } from "src/projects/guiZhou/mockData.js";
+import { mockData } from "src/projects/ytll/mockData.js";
 import { common , getNurseExchangeInfoBatch } from "src/api/index.js"
 
 export default {

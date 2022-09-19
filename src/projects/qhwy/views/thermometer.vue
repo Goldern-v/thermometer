@@ -13,13 +13,13 @@
       <div class="item" style="flex: 0.7">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
-      <div class="item" style="flex: 0.5">
+      <div class="item" style="flex: 0.7">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="flex: 1">
+      <div class="item" style="flex: 1.7">
         科别:<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" style="flex: 1">
+      <div class="item" style="flex: 0.7">
         床号:<span class="value">{{
           bedExchangeLog || patInfo.bed_label
           }}</span>
@@ -29,7 +29,7 @@
           patInfo.admission_date.slice(0, 10)
           }}</span>
       </div>
-      <div class="item" style="flex: 1">
+      <div class="item" style="flex: 1.7">
         住院号:<span class="value">{{ patInfo.patient_id }}</span>
       </div>
     </div>
@@ -267,6 +267,14 @@
             </div>
           </div>
         </div>
+        <div class="row" :style="{ height: `${bottomTrHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">引流量</div>
+          <div class="value-item-box">
+            <div class="value-item" v-for="(item, index) in getFormatList({ tList: yinliuList })" :key="index">
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
         <div class="row" :style="{ height: `${trHeight + 7}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList0.label || "" }}
@@ -307,7 +315,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${bottomTrHeight}px` }">
+        <!-- <div class="row" :style="{ height: `${bottomTrHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList4.label || "" }}
           </div>
@@ -316,8 +324,8 @@
               {{ item.value }}
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${bottomTrHeight}px` }">
+        </div> -->
+        <!-- <div class="row" :style="{ height: `${bottomTrHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList5.label || "" }}
           </div>
@@ -326,7 +334,7 @@
               {{ item.value }}
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -373,7 +381,7 @@ export default {
     const FahrenheitListRange = [95, 108];
     const FahrenheitRange = [0, 65];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -444,9 +452,9 @@ export default {
         pain: {
           vitalCode: "092",
           label: "疼痛评分",
-          color: "red",
+          color: "blue",
           solid: true,
-          dotType: "Isogon",
+          dotType: "Circle",
           range: painRange,
           data: [
             // { time: '2019-05-15 07:10:00', value: 2},
@@ -1216,7 +1224,7 @@ export default {
           }
           continue;
         }
-        if (["32", "33", "34", "35", "36"].includes(vitalSigns[i].vital_code)) {
+        if (["32", "33", "34", "35", "36",'37'].includes(vitalSigns[i].vital_code)) {
           const sign = vitalSigns[i].temperature_type;
           switch (vitalSigns[i].vital_code) {
             case "32":
@@ -1253,6 +1261,13 @@ export default {
                 value: vitalSigns[i].value,
               });
               this.customList4.label = sign;
+              break;
+            case "37":
+              this.customList5.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList5.label = sign;
               break;
             default:
               break;
@@ -1773,6 +1788,10 @@ export default {
                   dotSolid: false,
                 };
               }
+            }
+            if(vitalCode=='092') {
+              params.dotSolid = false
+              
             }
             this.createCircle(params);
             break;

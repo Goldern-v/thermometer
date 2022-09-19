@@ -2334,6 +2334,7 @@ export default {
     },
   },
   mounted() {
+    document.title = '贵州省人医体温单'
     if (window.matchMedia) {
       let this2 = this;
       var mediaQueryList = window.matchMedia("print");

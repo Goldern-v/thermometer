@@ -84,9 +84,15 @@ export const mockData = {
     },
     {
       temperature_type: "腋温",
-      value: "36.2",
+      value: "39.2",
       time_point: "2022-08-30 14:00:00",
       vital_code: "1"
+    },
+    {
+      temperature_type: "物理降温",
+      value: "41",
+      time_point: "2022-08-30 14:00:00",
+      vital_code: "27"
     },
     {
       temperature_type: "脉搏",

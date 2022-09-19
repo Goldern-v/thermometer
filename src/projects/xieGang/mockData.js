@@ -18,16 +18,15 @@ export const mockData = {
   vitalSigns: [
     {
       temperature_type: '表顶注释',
-      value: '手术入院|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-10-15 13:00:00',
+      value: '入院33|',
+      time_point: '2021-10-15 20:00:00',
       vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
       value: '手术分娩|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-10-15 10:12:00',
+      time_point: '2021-10-21 10:12:00',
       vital_code: '3'
     },
     {
@@ -41,7 +40,7 @@ export const mockData = {
       temperature_type: '表顶注释',
       value: '分娩|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-10-20 11:12:00',
+      time_point: '2021-10-20 20:00:00',
       vital_code: '3'
     },
     {
@@ -76,35 +75,35 @@ export const mockData = {
       temperature_type: '表顶注释',
       value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-10-15 10:12:00',
+      time_point: '2021-10-21 10:12:00',
       vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
       value: '分娩',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-10-15 10:12:00',
+      time_point: '2021-10-21 10:12:00',
       vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-10-15 10:12:00',
+      time_point: '2021-10-21 10:12:00',
       vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-10-15 10:12:00',
+      time_point: '2021-10-21 10:12:00',
       vital_code: '3'
     },
     {
       temperature_type: '表顶注释',
       value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-10-23 18:12:00',
+      time_point: '2021-10-21 18:12:00',
       vital_code: '3'
     },
     // {
@@ -455,17 +454,31 @@ export const mockData = {
       vital_code: '22'
     },
     {
-      temperature_type: '线上降温',
+      temperature_type: '线上体温',
       value: '37',
-      time_point: '2021-10-21 15:00:00',
+      time_point: '2021-10-21 15:20:00',
       vital_code: '22'
+    },
+    {
+      temperature_type: '线上降温',
+      value: '35',
+      time_point: '2021-10-21 15:20:00',
+      vital_code: '23'
     },
     {
       temperature_type: '尿量',
       value: '1470',
       time_point: '2020-12-15 03:12:00',
       vital_code: '15'
-    }
+    },
+    {
+      temperature_type: '线上脉搏',
+      value: '100',
+      time_point: '2021-10-21 12:20:00',
+      vital_code: '25'
+    },
+
+
     // {
     //   "temperature_type": "呕吐量",
     //   "value": "0",

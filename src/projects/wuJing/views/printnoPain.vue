@@ -15,6 +15,7 @@
 <script>
 import Thermometer from './withoutPain.vue'
 import { mockData } from 'src/projects/wuJing/mockData.js'
+import { getNurseExchangeInfoBatch } from "src/api/index.js"
 const SM4 = require('gm-crypt').sm4
 
 export default {
@@ -55,12 +56,6 @@ export default {
     },
     urlencode(str) {
       return encodeURIComponent(str)
-      // .replace(/!/g, '%21')
-      // .replace(/'/g, '%27')
-      // .replace(/\(/g, '%28')
-      // .replace(/\)/g, '%29')
-      // .replace(/\*/g, '%2A')
-      // .replace(/%20/g, '+')
     },
     //SM4加密与SM4解密
     //加密
@@ -101,9 +96,6 @@ export default {
       this.printData = mockData
       setTimeout(() => {
         this.pageTotal = this.$refs.thermometer[0].pageTotal
-        // setTimeout(() => {
-        //   window.print()
-        // }, 1000)
       }, 0)
     } else {
       let data = {
@@ -119,15 +111,28 @@ export default {
           'Content-Type': 'text/plain'
         },
         data: this.encryptFun(JSON.stringify(data))
-        // : this.urlencode(this.encryptFun(JSON.stringify(data)))
       }).then((res) => {
         this.printData = JSON.parse(this.decryptFun(res.data))
-        // JSON.parse(this.decryptFun(res)).data
         setTimeout(() => {
           this.pageTotal = this.$refs.thermometer[0].pageTotal
-          // setTimeout(() => {
-          //   window.print()
-          // }, 1500)
+          let dataRangePrintAll = this.$refs.thermometer[0].dateRangeList;
+        let exchangData = {
+            startLogDateTime: dataRangePrintAll[0][0] + " 00:00:00",
+            endLogDateTime:
+              dataRangePrintAll[dataRangePrintAll.length - 1][1] + " 24:00:00",
+            visitId: urlParams.VisitId,
+            patientId: urlParams.PatientId,
+          };
+          getNurseExchangeInfoBatch(exchangData).then((reset) => {
+            let nurseExchangeInfo = reset.data.data.exchangeInfos;
+            this.$nextTick(() => {
+              for (let i = 0; i < this.$refs.thermometer.length; i++) {
+                this.$refs.thermometer[i].adtLog = nurseExchangeInfo[i].adtLog;
+                this.$refs.thermometer[i].bedExchangeLog =
+                  nurseExchangeInfo[i].bedExchangeLog;
+              }
+            });
+          });
         }, 0)
       })
     }

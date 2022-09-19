@@ -13,81 +13,82 @@
 </template>
 
 <script>
-import Thermometer from './thermometer.vue'
-import { mockData } from 'src/projects/wuJing/mockData.js'
-const SM4 = require('gm-crypt').sm4
+import Thermometer from "./thermometer.vue";
+import { mockData } from "src/projects/wuJing/mockData.js";
+import { getNurseExchangeInfoBatch } from "src/api/index.js";
+const SM4 = require("gm-crypt").sm4;
 export default {
   components: {
-    Thermometer
+    Thermometer,
   },
   data() {
     return {
       useMockData: false,
       printData: null,
       pageTotal: 1,
-      exchangeInfoAll:[],
+      exchangeInfoAll: [],
       //SM4解密加密配置
       sm4Config: {
         // 解密加密的秘钥
-        key: '839Z3Hh9vb45r26C',
+        key: "839Z3Hh9vb45r26C",
 
         // iv是initialization vector的意思，就是加密的初始话矢量，
         //初始化加密函数的变量，也叫初始向量。
         //（本来应该动态生成的，由于项目没有严格的加密要求，直接写死一个）
-        mode: 'ecb', // default 可以是 'cbc' or 'ecb'
+        mode: "ecb", // default 可以是 'cbc' or 'ecb'
         // 转换后加密的格式，可以是 'base64' 或者 'text'
-        cipherType: 'base64' // 秘钥生成的数据
-      }
-    }
+        cipherType: "base64", // 秘钥生成的数据
+      },
+    };
   },
   methods: {
     //外部打印事件
     messageHandle(e) {
       if (e && e.data) {
         switch (e.data.type) {
-          case 'printingAll':
-            window.print()
-            break
+          case "printingAll":
+            window.print();
+            break;
           default:
-            break
+            break;
         }
       }
     },
     urlencode(str) {
-      return encodeURIComponent(str)
+      return encodeURIComponent(str);
     },
     //SM4加密与SM4解密
     //加密
     encryptFun(val) {
-      let sm4Config = this.sm4Config
-      let sm4 = new SM4(sm4Config)
-      let ciphertext = sm4.encrypt(val)
-      return ciphertext
+      let sm4Config = this.sm4Config;
+      let sm4 = new SM4(sm4Config);
+      let ciphertext = sm4.encrypt(val);
+      return ciphertext;
     },
     //解密
     decryptFun(val) {
-      let sm4Config = this.sm4Config
-      let sm4 = new SM4(sm4Config)
-      let ciphertext = sm4.decrypt(val)
-      return ciphertext
+      let sm4Config = this.sm4Config;
+      let sm4 = new SM4(sm4Config);
+      let ciphertext = sm4.decrypt(val);
+      return ciphertext;
     },
     urlParse() {
-      let obj = {}
-      let reg = /[?&][^?&]+=[^?&%]+/g
-      let url = window.location.hash
-      let arr = url.match(reg) || []
+      let obj = {};
+      let reg = /[?&][^?&]+=[^?&%]+/g;
+      let url = window.location.hash;
+      let arr = url.match(reg) || [];
       arr.forEach((item) => {
-        let tempArr = item.substring(1).split('=')
-        let key = decodeURIComponent(tempArr[0])
-        let val = decodeURIComponent(tempArr[1])
-        obj[key] = val
-      })
-      return obj
-    }
+        let tempArr = item.substring(1).split("=");
+        let key = decodeURIComponent(tempArr[0]);
+        let val = decodeURIComponent(tempArr[1]);
+        obj[key] = val;
+      });
+      return obj;
+    },
   },
   created() {
     // 实现外部分页和打印
-    window.addEventListener('message', this.messageHandle, false)
+    window.addEventListener("message", this.messageHandle, false);
   },
   mounted() {
     const urlParams = this.urlParse()
@@ -95,9 +96,6 @@ export default {
       this.printData = mockData
       setTimeout(() => {
         this.pageTotal = this.$refs.thermometer[0].pageTotal
-        // setTimeout(() => {
-        //   window.print()
-        // }, 1000)
       }, 0)
     } else {
       let data = {
@@ -109,15 +107,32 @@ export default {
       this.$http({
         method: 'post',
         url: '/crHesb/hospital/common',
+        headers: {
+          'Content-Type': 'text/plain'
+        },
         data: this.encryptFun(JSON.stringify(data))
-        // : this.urlencode(this.encryptFun(JSON.stringify(data)))
       }).then((res) => {
         this.printData = JSON.parse(this.decryptFun(res.data))
         setTimeout(() => {
           this.pageTotal = this.$refs.thermometer[0].pageTotal
-          // setTimeout(() => {
-          //   window.print()
-          // }, 1500)
+          let dataRangePrintAll = this.$refs.thermometer[0].dateRangeList;
+        let exchangData = {
+            startLogDateTime: dataRangePrintAll[0][0] + " 00:00:00",
+            endLogDateTime:
+              dataRangePrintAll[dataRangePrintAll.length - 1][1] + " 24:00:00",
+            visitId: urlParams.VisitId,
+            patientId: urlParams.PatientId,
+          };
+          getNurseExchangeInfoBatch(exchangData).then((reset) => {
+            let nurseExchangeInfo = reset.data.data.exchangeInfos;
+            this.$nextTick(() => {
+              for (let i = 0; i < this.$refs.thermometer.length; i++) {
+                this.$refs.thermometer[i].adtLog = nurseExchangeInfo[i].adtLog;
+                this.$refs.thermometer[i].bedExchangeLog =
+                  nurseExchangeInfo[i].bedExchangeLog;
+              }
+            });
+          });
         }, 0)
       })
     }
@@ -129,9 +144,9 @@ export default {
     // }
   },
   beforeDestroy() {
-    window.removeEventListener('message', this.messageHandle, false)
-  }
-}
+    window.removeEventListener("message", this.messageHandle, false);
+  },
+};
 </script>
 
 <style>

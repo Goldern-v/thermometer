@@ -51,6 +51,8 @@
     "build:tongJiang": "vue-cli-service build --project=tongJiang",
     "dev:qhwy": "vue-cli-service serve --project=qhwy",
     "build:qhwy": "vue-cli-service build --project=qhwy",
+    "dev:ytll": "vue-cli-service serve --project=ytll",
+    "build:ytll": "vue-cli-service build --project=ytll",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },

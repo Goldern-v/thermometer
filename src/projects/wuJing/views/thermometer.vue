@@ -467,6 +467,7 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/wuJing/mockData.js";
+import {getNurseExchangeInfoByTime } from "src/api/index.js";
 import moment from "moment"; //导入文件
 // import { sm4 } from '../assets/js/SM4Encode'
 const SM4 = require("gm-crypt").sm4;
@@ -1221,18 +1222,17 @@ export default {
       }
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
+      let data = {
+        startLogDateTime: this.timeRange[0],
+        endLogDateTime: this.timeRange[1],
+        visitId: this.$route.query.VisitId,
+        patientId: this.$route.query.PatientId,
+      };
+      getNurseExchangeInfoByTime(data).then((res) => {
+        this.adtLog = res.data.data.adtLog; // 转科
+        this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+      });
 
-      // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
-      window.parent.postMessage(
-        {
-          type: "getNurseExchangeInfo",
-          value: {
-            startLogDateTime: this.timeRange[0],
-            endLogDateTime: this.timeRange[1],
-          },
-        },
-        "*"
-      );
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const customSigns = []; // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
