@@ -1,5 +1,5 @@
 <template>
-  <div v-if="printData" class="sheet-page-container">
+  <div v-if="printData" class="printAll">
     <Thermometer
       ref="thermometer"
       :printData="printData"
@@ -24,7 +24,8 @@ export default {
     return {
       useMockData: false,
       printData: null,
-      pageTotal: 1
+      pageTotal: 1,
+      loadDone:false,
     }
   },
   methods: {
@@ -64,13 +65,28 @@ export default {
     if (this.useMockData) {
       this.printData = mockData
       setTimeout(() => {
-        this.pageTotal = this.$refs.thermometer[0].pageTotal
-          console.log(this.$refs.thermometer,'this.$refs.thermometer')
-
-        // setTimeout(() => {
-        //   window.print()
-        // }, 1000)
-      }, 0)
+          this.pageTotal = this.$refs.thermometer[0].pageTotal
+        }, 0)
+      // let timer = setInterval(()=>{
+      // this.$nextTick(() => {
+      //     const el = Array.from(this.$refs.thermometer).map(e=>!e.zr)
+      //     if(!el.includes(true)){
+      //       this.loadDone = true
+      //       timer = null
+      //     }
+      //   })
+      //   },1000)
+        // setTimeout(()=>{
+        //   this.$nextTick(() => {
+        //   const el = Array.from(this.$refs.thermometer).map(e=>e.zr)
+        //   console.log(el)
+        // })
+        // },1500)
+      // this.$nextTick(() => {
+      //   this.pageTotal = this.$refs.thermometer[0].pageTotal
+      //   const el = Array.from(this.$refs.thermometer)
+      //   console.log(this.$refs.thermometer,el)
+      // })
     } else {
       this.$http({
         method: 'post',
@@ -85,18 +101,18 @@ export default {
         this.printData = res.data
         setTimeout(() => {
           this.pageTotal = this.$refs.thermometer[0].pageTotal
-          // setTimeout(() => {
-          //   window.print()
-          // }, 1500)
         }, 0)
       })
     }
   },
   watch: {
-    // 因为分页可能在体温单外面，所以给父页面传递pageTotal
-    // pageTotal(value) {
-    //   window.parent.postMessage({ type: 'pageTotal', value }, '*')
-    // }
+    pageTotal: {
+      handler(val) {
+
+      }
+    },
+    immediate: true,
+    deep: true
   },
   beforeDestroy() {
     window.removeEventListener('message', this.messageHandle, false)

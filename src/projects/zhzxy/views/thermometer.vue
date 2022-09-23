@@ -43,7 +43,7 @@
     <div class="table-area">
       <div class="vline" :style="{ left: '-0.5px' }"></div>
       <div class="vline" :style="{ left: `${leftWidth}px` }"></div>
-      <div class="vline" :style="{ right: '1px' }"></div>
+      <div class="vline" :style="{ right: '1px' , borderLeft:'2px solid #000'}"></div>
       <div class="table-box" style="transform: translateY(0.5px)">
         <div
           class="vtline"
@@ -328,6 +328,7 @@
               ></div>
             </div>
           </div>
+          <div class="clear"></div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
               体重(Kg)
@@ -645,7 +646,7 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [2, 6, 10, 2, 6, 10];
+      const list = [3, 7, 11, 3, 7, 11];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
@@ -929,7 +930,7 @@ export default {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 7 : 6)}px`,
         flex: "auto",
         "border-right-style": "solid",
-        "border-width": `${(index - 1) % 2 === 0 ? 3 : 2}px`,
+        "border-width": `${(index - 1) % 2 === 0 ? 0 : 2}px`,
         "border-color": `${
           (index - 1) % 2 === 0 && index < length - 1 ? "transparent" : "#000"
         }`,
@@ -2605,5 +2606,8 @@ export default {
 .pageInput {
   width: 30px;
   border: 0px;
+}
+.clear {
+  clear: both;
 }
 </style>

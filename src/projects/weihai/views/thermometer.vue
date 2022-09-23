@@ -455,7 +455,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -2065,11 +2065,10 @@ export default {
         return str;
       } else {
         for (let i = 0; i < str.length; i++) {
-          const reg=
           formatStr +=
-            isNaN(str[i]) || (!isNaN(str[i]) && isNaN(str[i + 1]))&&str[i]!=="|"
-              ? `${str[i]}\n` : str[i]=="|" ? `${str[i]}\n\n`
-              : str[i]
+            isNaN(str[i]) || (!isNaN(str[i]) && isNaN(str[i + 1]))
+              ? `${str[i]}\n`
+              : str[i];
         }
       }
       return formatStr;

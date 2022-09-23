@@ -1,6 +1,6 @@
 <template>
   <div class="main-view" :style="{ width: `${leftWidth + areaWidth}px` }" v-if="apiData" @dblclick="dblclick">
-    <div class="head-hos" :style="{ width: `${leftWidth + areaWidth + 60}px` }">
+    <div class="head-hos" :style="{ width: `${leftWidth + areaWidth + 60}px`,color:'red' }">
       青海省第五人民医院(青海省肿瘤医院)
     </div>
     <div class="head-title" :style="{ width: `${leftWidth + areaWidth + 60}px` }">
@@ -206,7 +206,11 @@
             血压(mmHg)
           </div>
           <div class="value-item-box">
-            <div class="value-item" v-for="(item, index) in formatPressureList" :key="index">
+            <div class="value-item" 
+            v-for="(item, index) in formatPressureList"
+            :style="middleTdStyle(index, formatBreatheList.length)"
+            :key="index"
+            >
               {{ item.value }}
             </div>
           </div>
@@ -594,13 +598,13 @@ export default {
       const pressureList = [...this.pressureList];
       for (
         let i = timeNumRange[0];
-        i < timeNumRange[1] - 1;
-        i += 3 * 8 * 60 * 60 * 1000
+        i < timeNumRange[1]-1;
+        i += 3 * 4 * 60 * 60 * 1000
       ) {
         const item = { timeNum: i, value: "" };
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum >= i && timeNum < i + 3 * 8 * 60 * 60 * 1000) {
+          if (timeNum >= i && timeNum <= i + 3 * 4 * 60 * 60 * 1000) {
             item.value = pressureList[j].value;
             pressureList.splice(j, 1);
             break;
@@ -776,6 +780,8 @@ export default {
           x.vital_code === "5" &&
           (x.value.includes("手术") ||
             x.value.includes("分娩|") ||
+            x.value.includes("手术|") ||
+            x.value.includes("分娩") ||
             x.value.includes("手术分娩|") ||
             x.value.includes("手术入院|"))
       );
@@ -846,14 +852,15 @@ export default {
         }
         if (days[index] <= 14) {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
-          return index === 0
-            ? ""
+          return index === 0&&days[index]===0
+            ? '术日':index===0?days[index]
             : `${this.numToRome(index + 1)}-${days[index]}`;
         } else {
           return "";
         }
       });
     },
+    
     formatStayDayList() {
       /* 住院天数 */
       return this.dateList.map((x) => {
@@ -1103,7 +1110,6 @@ export default {
               window.print();
             }, 1000);
             break;
-            break;
         }
       }
     },
@@ -1197,7 +1203,7 @@ export default {
       }
 
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
-      const customSigns = []; // 记录自定义字段的名字
+      // const customSigns = []; // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||

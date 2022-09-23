@@ -1,5 +1,6 @@
 <template>
-  <div
+  <div v-if="!showChildrenPage">
+    <div
     class="main-view"
     :style="{ width: `${leftWidth + areaWidth}px` }"
     v-if="apiData"
@@ -164,6 +165,7 @@
         </div>
         <div
           ref="main"
+          id="main1"
           :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
         ></div>
       </div>
@@ -365,49 +367,6 @@
             </div>
           </div>
         </div>
-
-        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList3.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: customList3 })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div> -->
-        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList4.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: customList4 })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div> -->
-        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList5.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: customList5 })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div> -->
       </div>
     </div>
     <div class="pagination" v-if="showInnerPage">
@@ -423,17 +382,25 @@
       >
         下一页
       </button>
-      <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
     </div>
     <div class="pagination" v-else>第{{ currentPage }}页</div>
   </div>
+  </div>
+  <div v-else>
+    <childrenChart  v-if="apiData.patientInfo" :apiData="apiData"  />
+  </div>
+ 
 </template>
 
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/linYi/mockData.js";
+import childrenChart from "./childrenChart.vue";
 
 export default {
+  components:{
+    childrenChart
+  },
   props: {
     isPrintAll: {
       type: Boolean,
@@ -467,6 +434,7 @@ export default {
       yRange,
       pulseRange,
       painRange,
+      isdone:false,
       settingMap: {
         oralTemperature: {
           vitalCode: "041",
@@ -620,6 +588,7 @@ export default {
       pageTotal: 1,
       currentPage: 1,
       showInnerPage: false, // 是否显示内部分页
+      showChildrenPage:false,
       adtLog: "", // 转科
       bedExchangeLog: "", // 转床
     };
@@ -933,7 +902,46 @@ export default {
   created() {
     document.title='临邑县人民医院体温单'
     // 实现外部分页和打印
-    window.addEventListener("message", this.messageHandle, false);
+    const patientInfo = this.$route.query
+    this.showInnerPage = patientInfo.showInnerPage === "1";
+    if (this.isPrintAll) {
+      // 批量打印
+      this.apiData = this.printData;
+      this.currentPage = this.printPage;
+      this.$nextTick(() => {
+        this.handleData();
+      });
+      return;
+    }
+    if (this.useMockData) {
+      this.apiData = mockData;
+      this.$nextTick(() => {
+        this.handleData();
+      });
+    } else {
+      this.$http({
+        method: "post",
+        url: "/crHesb/hospital/common",
+        data: {
+          tradeCode: "nurse_getPatientVitalSigns",
+          PatientId: patientInfo.PatientId,
+          VisitId: patientInfo.VisitId,
+          StartTime: patientInfo.StartTime,
+        },
+      }).then((res) => {
+        this.apiData = res.data;
+    this.showChildrenPage = patientInfo.PatientId&&patientInfo.PatientId.includes('_')
+        this.$nextTick(() => {
+          //每次获取数据都要传一次页数
+          this.currentPage = this.pageTotal;
+          window.parent.postMessage(
+            { type: "pageTotal", value: this.pageTotal },
+            "*"
+          );
+          this.handleData();
+        });
+      });
+    }
   },
   beforeDestroy() {
     window.removeEventListener("message", this.messageHandle, false);
@@ -1095,7 +1103,7 @@ export default {
           vital_code: "19",
         });
       }
-      this.vitalSigns = vitalSigns;
+      // this.vitalSigns = vitalSigns;
 
       //保存数据到vueX给详细曲线使用
       let vitalSignsData = this.apiData
@@ -1300,8 +1308,10 @@ export default {
             break;
         }
       }
-
-      this.init();
+      //如果是新生儿  就去新生儿界面Init生成列表
+      if(!this.showChildrenPage){
+        this.init();
+      }
     },
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
@@ -1339,7 +1349,8 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(this.$refs.main);
+       let ops = { renderer: "canvas" };
+        this.zr = zrender.init(this.$refs.main, ops);
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
@@ -1638,6 +1649,7 @@ export default {
     //先在外层画一个多边形，然后根据多边形画虚线连接，有心率和脉搏就画虚线区域
     createPolygon({ points, lineWidth, color, zlevel = 0 }) {
       const canvas = document.createElement("canvas");
+      const img = document.createElement('img')
       canvas.width = 10;
       canvas.height = 10;
       const ctx = canvas.getContext("2d");
@@ -1646,6 +1658,7 @@ export default {
       ctx.lineWidth = 1;
       ctx.strokeStyle = "red";
       ctx.stroke();
+      img.setAttribute('src', canvas.toDataURL())
       const polygon = new zrender.Polygon({
         zlevel,
         shape: {
@@ -1657,12 +1670,24 @@ export default {
           lineWidth,
           stroke: color,
           fill: {
-            image: canvas,
+            image:canvas
           },
         },
       });
-
-      this.zr.add(polygon);
+      const imageContext = new zrender.Image({
+        style:{
+          x: 300,
+          y:400,
+          width:10,
+          height:10,
+          color:'red',
+          image:canvas.toDataURL()
+        }
+      })
+      const groud =new zrender.Group()
+      groud.add(polygon)
+      groud.add(imageContext)
+      this.zr.add(groud);
     },
     createLine({
       x1,
@@ -2301,50 +2326,8 @@ export default {
   },
   mounted() {
     // const urlParams = this.urlParse();
-    const patientInfo = this.$route.query
-    this.showInnerPage = patientInfo.showInnerPage === "1";
-    if (this.isPrintAll) {
-      // 批量打印
-      this.apiData = this.printData;
-      this.currentPage = this.printPage;
-      this.$nextTick(() => {
-        this.handleData();
-        // window.parent.postMessage(
-        //   { type: 'pageTotal', value: this.pageTotal },
-        //   '*'
-        // )
-      });
-      return;
-    }
-    if (this.useMockData) {
-      this.apiData = mockData;
-      this.$nextTick(() => {
-        this.handleData();
-      });
-    } else {
-      this.$http({
-        method: "post",
-        url: "/crHesb/hospital/common",
-        data: {
-          tradeCode: "nurse_getPatientVitalSigns",
-          PatientId: patientInfo.PatientId,
-          VisitId: patientInfo.VisitId,
-          StartTime: patientInfo.StartTime,
-        },
-      }).then((res) => {
-        this.apiData = res.data;
-        this.$nextTick(() => {
-          //每次获取数据都要传一次页数
-          this.currentPage = this.pageTotal;
-          window.parent.postMessage(
-            { type: "pageTotal", value: this.pageTotal },
-
-            "*"
-          );
-          this.handleData();
-        });
-      });
-    }
+    window.addEventListener("message", this.messageHandle, false);
+   
   },
 };
 </script>

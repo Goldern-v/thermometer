@@ -261,7 +261,7 @@
             <div class="value-item-box">
               <div
                 class="value-item font-14"
-                v-for="(item, index) in getFormatList({ tList: shitList })"
+                v-for="(item, index) in getFormatList({ tList: phlegmList })"
                 :key="index"
               >
                 {{ item.value }}
@@ -275,7 +275,7 @@
             <div class="value-item-box">
               <div
                 class="value-item font-14"
-                v-for="(item, index) in getFormatList({ tList: shitList })"
+                v-for="(item, index) in getFormatList({ tList: yinliuList })"
                 :key="index"
               >
                 {{ item.value }}
@@ -289,7 +289,7 @@
             <div class="value-item-box">
               <div
                 class="value-item font-14"
-                v-for="(item, index) in getFormatList({ tList: urineList })"
+                v-for="(item, index) in getFormatList({ tList: vomitList })"
                 :key="index"
                 v-html="item.value"
               ></div>
@@ -302,7 +302,7 @@
             <div class="value-item-box">
               <div
                 class="value-item font-14"
-                v-for="(item, index) in getFormatList({ tList: urineList })"
+                v-for="(item, index) in getFormatList({ tList: outputList })"
                 :key="index"
                 v-html="item.value"
               ></div>
@@ -458,7 +458,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -554,7 +554,10 @@ export default {
       shitList: [], // 大便次数
       childShitList: [], // 大便次数
       urineList: [], // 尿量
+      vomitList: [], // 呕吐量
       outputList: [], // 出量
+      phlegmList: [], // 出量
+      yinliuList: [], // 出量
       skinTest: [], //皮试
       physicsCoolList: [], // 物理降温
       onLineCoolList: [], // 线上降温
@@ -625,7 +628,7 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [2, 6, 10, 2, 6, 10];
+      const list = [3, 7, 11, 15, 19, 23];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
@@ -992,6 +995,9 @@ export default {
       this.inputList = [];
       this.shitList = [];
       this.urineList = [];
+      this.yinliuList = [];
+      this.phlegmList = [];
+      this.vomitList = [];
       this.outputList = [];
       this.heightList = [];
       this.BMIList = [];
@@ -1000,9 +1006,9 @@ export default {
       this.feverList = [];
       this.dateRangeList = [];
       this.outCustomList = [];
-      for (let i = 0; i < 4; i++) {
-        this[`customList${i}`] = [];
-      }
+      // for (let i = 0; i < 4; i++) {
+      //   this[`customList${i}`] = [];
+      // }
     },
     toNext() {
       if (this.currentPage === this.pageTotal) return;
@@ -1074,7 +1080,7 @@ export default {
         });
       }
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
-      const customSigns = []; // 记录自定义字段的名字
+      // const customSigns = []; // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
@@ -1086,7 +1092,6 @@ export default {
 
         if (["4", "41", "42", "43"].includes(vitalSigns[i].vital_code)) {
           const sign = vitalSigns[i].temperature_type;
-
           switch (vitalSigns[i].vital_code) {
             case "4":
               this.outCustomList.push({
@@ -1142,6 +1147,9 @@ export default {
           case "13":
             this.breatheList.push(item);
             break;
+          case "10":
+            this.yinliuList.push(item);
+            break;
           case "14":
             this.pressureList.push(item);
             break;
@@ -1159,6 +1167,12 @@ export default {
             break;
           case "15":
             this.urineList.push(item);
+            break;
+          case "16":
+            this.vomitList.push(item);
+            break;
+          case "17":
+            this.phlegmList.push(item);
             break;
           case "34":
             this.outputList.push(item);

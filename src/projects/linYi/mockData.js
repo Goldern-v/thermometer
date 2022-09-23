@@ -1,4 +1,5 @@
-export const mockData = {
+export const mockData = 
+{
   ErrorCode: '1',
   ErrorMsg: '查询成功',
   patientInfo: {
@@ -16,24 +17,24 @@ export const mockData = {
     }
   },
   vitalSigns: [
-    // {
-    //   temperature_type: '身高',
-    //   value: '165',
-    //   time_point: '2021-11-03 07:00:00',
-    //   vital_code: '094'
-    // },
-    // {
-    //   temperature_type: '呼吸',
-    //   value: '18',
-    //   time_point: '2021-11-03 07:00:00',
-    //   vital_code: '04'
-    // },
-    // {
-    //   temperature_type: '疼痛',
-    //   value: '2',
-    //   time_point: '2021-11-03 07:00:00',
-    //   vital_code: '092'
-    // },
+    {
+      temperature_type: '身高',
+      value: '165',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '094'
+    },
+    {
+      temperature_type: '呼吸',
+      value: '18',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '04'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '2',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '092'
+    },
     {
       temperature_type: '体温',
       value: '39',
@@ -46,24 +47,24 @@ export const mockData = {
       time_point: '2021-11-03 03:00:00',
       vital_code: '01'
     },
-    // {
-    //   temperature_type: '自定义1',
-    //   value: '自定义1',
-    //   time_point: '2021-11-03 03:00:00',
-    //   vital_code: '32'
-    // },
-    // {
-    //   temperature_type: '自定义1',
-    //   value: '自定义1',
-    //   time_point: '2021-11-05 03:00:00',
-    //   vital_code: '32'
-    // },
-    // {
-    //   temperature_type: '自定义1',
-    //   value: '自定义1',
-    //   time_point: '2021-11-04 03:00:00',
-    //   vital_code: '32'
-    // },
+    {
+      temperature_type: '自定义1',
+      value: '自定义1',
+      time_point: '2021-11-03 03:00:00',
+      vital_code: '32'
+    },
+    {
+      temperature_type: '自定义1',
+      value: '自定义1',
+      time_point: '2021-11-05 03:00:00',
+      vital_code: '32'
+    },
+    {
+      temperature_type: '自定义1',
+      value: '自定义1',
+      time_point: '2021-11-04 03:00:00',
+      vital_code: '32'
+    },
     {
       temperature_type: '自定义2',
       value: '自定义2',
@@ -160,24 +161,54 @@ export const mockData = {
     //   time_point: '2021-11-03 15:00:00',
     //   vital_code: '04'
     // },
-    // {
-    //   temperature_type: '大便次数',
-    //   value: '1',
-    //   time_point: '2021-11-03 15:00:00',
-    //   vital_code: '061'
-    // },
+    {
+      temperature_type: '母乳',
+      value: '2',
+      time_point: '2021-11-03 10:00:00',
+      vital_code: 'breast'
+    },
+    {
+      temperature_type: '牛乳',
+      value: '2',
+      time_point: '2021-11-03 10:00:00',
+      vital_code: 'milk'
+    },
+    {
+      temperature_type: '黄疸',
+      value: '2',
+      time_point: '2021-11-03 10:00:00',
+      vital_code: 'aurigo'
+    },
+    {
+      temperature_type: '脐带',
+      value: '2000',
+      time_point: '2021-11-03 10:00:00',
+      vital_code: 'funicle'
+    },
+    {
+      temperature_type: '大便次数',
+      value: '1',
+      time_point: '2021-11-03 10:00:00',
+      vital_code: '061'
+    },
+    {
+      temperature_type: '大便次数',
+      value: '1',
+      time_point: '2021-11-03 15:00:00',
+      vital_code: '061'
+    },
     // {
     //   temperature_type: '脉搏',
     //   value: '72',
     //   time_point: '2021-11-03 15:00:00',
     //   vital_code: '02'
     // },
-    // {
-    //   temperature_type: '血压',
-    //   value: '115/70',
-    //   time_point: '2021-11-03 15:00:00',
-    //   vital_code: '062'
-    // },
+    {
+      temperature_type: '血压',
+      value: '115/70',
+      time_point: '2022-9-19 15:00:00',
+      vital_code: '062'
+    },
     {
       temperature_type: '体温',
       value: '36',
@@ -234,14 +265,38 @@ export const mockData = {
     },
     {
       temperature_type: '脉搏',
-      value: '100',
-      time_point: '2021-11-05 15:00:00',
+      value: '110',
+      time_point: '2021-11-04 10:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '50',
+      time_point: '2021-11-04 10:00:00',
+      vital_code: '20'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '120',
+      time_point: '2021-11-05 19:00:00',
       vital_code: '02'
     },
     {
       temperature_type: '心率',
       value: '80',
-      time_point: '2021-11-05 15:00:00',
+      time_point: '2021-11-05 19:00:00',
+      vital_code: '20'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '109',
+      time_point: '2021-11-06 15:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '80',
+      time_point: '2021-11-06 15:00:00',
       vital_code: '20'
     },
     {
@@ -695,10 +750,52 @@ export const mockData = {
       vital_code: '033'
     },
     {
+      temperature_type: '体重',
+      value: '67',
+      time_point: '2021-11-6 07:00:00',
+      vital_code: '033'
+    },
+    {
       temperature_type: '呼吸',
       value: '18',
       time_point: '2021-11-10 15:00:00',
       vital_code: '04'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '110',
+      time_point: '2021-11-04 10:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '50',
+      time_point: '2021-11-10 10:00:00',
+      vital_code: '20'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '120',
+      time_point: '2021-11-10 19:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '80',
+      time_point: '2021-11-10 19:00:00',
+      vital_code: '20'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '109',
+      time_point: '2021-11-10 15:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '80',
+      time_point: '2021-11-10 15:00:00',
+      vital_code: '20'
     },
     {
       temperature_type: '大便次数',
@@ -739,7 +836,7 @@ export const mockData = {
     {
       temperature_type: '表顶注释',
       value: '出院||十一时七分',
-      time_point: '2021-11-11 11:07:04',
+      time_point: '2022-01-11 11:07:04',
       vital_code: '5'
     }
   ]

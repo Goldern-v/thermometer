@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
-
 const routes = [
   {
     path: '/',
@@ -18,9 +17,13 @@ const routes = [
     path: '/printAll',
     name: 'Print',
     component: () => import('src/projects/linYi/views/print.vue')
+  },
+  {
+    path: '/toPdf',
+    name: 'ToPdf',
+    component: () => import('src/projects/linYi/views/toPdf.vue')
   }
 ]
-
 const router = new VueRouter({
   mode: 'history',
   base:"/temperature",

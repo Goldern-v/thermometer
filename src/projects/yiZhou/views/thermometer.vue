@@ -1381,8 +1381,8 @@ export default {
             data = [[]];
             x.data.forEach((y, index) => {
               data[data.length - 1].push(y);
+              // eslint-disable-next-line no-empty
               if (index < x.data.length - 1) {
-               
               } else {
                 const list = data[data.length - 1];
                 if (!(list.length && list[list.length - 1].time === y.time)) {

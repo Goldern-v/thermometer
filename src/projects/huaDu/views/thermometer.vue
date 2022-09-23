@@ -1010,10 +1010,13 @@ export default {
         visitId: this.$route.query.VisitId,
         patientId: this.$route.query.PatientId,
       };
-      getNurseExchangeInfoByTime(data).then((res) => {
+      console.log(this.isPrintAll)
+      if(!this.isPrintAll){
+        getNurseExchangeInfoByTime(data).then((res) => {
         this.adtLog = res.data.data.adtLog; // 转科
         this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
       });
+      }
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       for (let i = 0; i < vitalSigns.length; i++) {
         if (

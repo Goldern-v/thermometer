@@ -267,9 +267,9 @@ module.exports = {
             case "wuHanYaXin":
               return "http://218.107.37.134:9093";
             case "longJiang":
-              return "http://218.13.34.230:9091";
+              return "http://120.224.211.7:61025";
             case "linYi":
-              return "http://222.133.53.230:9091"; //无可用外网
+              return "http://120.224.211.7:61025"; //无可用外网
             case "yiZhou":
               return "http://218.107.37.134:9093"; //无可用外网
             case "weihai":
