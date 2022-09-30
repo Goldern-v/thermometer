@@ -8,7 +8,7 @@
     <div class="head-hos">广东同江医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item" style="flex: 1.2">
+      <div class="item" style="flex: 1.3">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item" style="flex: 0.8" >
@@ -23,7 +23,7 @@
       <div class="item" style="flex: 0.7">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="flex: 1.4">
+      <div class="item" style="flex: 1.5">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
@@ -31,12 +31,12 @@
       <div class="item" style="flex: 1.3">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" >
+      <div class="item" style="flex: 0.8">
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="text-align: right;flex:1.5">
+      <div class="item" style="flex:1.5">
         住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
     </div>
@@ -201,7 +201,7 @@
         ></div>
       </div>
       <div class="table-box" style="transform: translateY(-0.5px)">
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight + 6}px` }">
           <div
             class="label"
             :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
@@ -255,7 +255,7 @@
         </div>
 
         <div>
-          <div class="left_box" :style="{ height: `${trHeight * 3}px` }">
+          <div class="left_box" :style="{ height: `${74.8}px` }">
             排<br />出<br />量
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
@@ -299,13 +299,35 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">体重</div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-13"
+                v-for="(item, index) in getFormatList({ tList: weightList })"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
-              体重(kg)
+              身高(cm)
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-16"
-                v-for="(item, index) in getFormatList({ tList: weightList })"
+                class="value-item font-14"
+                v-for="(item, index) in getFormatList({ tList: heightList })"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">BMI</div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                v-for="(item, index) in getFormatListBmi({ tList: BMIList })"
                 :key="index"
                 v-html="item.value"
               ></div>
@@ -322,17 +344,20 @@
               ></div>
             </div>
           </div>
-          <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">其他</div>
-            <div class="value-item-box">
-              <div
-                class="value-item font-13"
-                v-for="(item, index) in getFormatList({ tList: otherList2 })"
-                :key="index"
-                v-html="item.value"
-              ></div>
-            </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            {{ customList0.label || "" }}
           </div>
+          <div class="value-item-box">
+            <div
+              class="value-item font-14"
+              :style="{ 'font-size': scaleFont(item.value) }"
+              v-for="(item, index) in getFormatList({ tList: customList0 })"
+              :key="index"
+              v-html="item.value"
+            ></div>
+          </div>
+        </div>
         </div>
 
         <!-- <div class="row" :style="{ height: `${trHeight}px` }">
@@ -437,13 +462,13 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: false,
+      useMockData:false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
       areaHeight: 0, // 网格区域的高度
-      xSpace: 18, // 纵向网格的间距
-      ySpace: 17, //  横向网格的间距
+      xSpace: 16, // 纵向网格的间距
+      ySpace: 15, //  横向网格的间距
       leftWidth: 145, // 左侧内容宽度
       xRange: [1, 8],
       yRange,
@@ -517,6 +542,8 @@ export default {
       ], // 呼吸
       pressureList: [], // 血压
       weightList: [], // 体重
+      heightList: [], // 身高
+      BMIList: [], // BMI
       inputList: [], // 液体入量
       shitList: [], // 大便次数
       urineList: [], // 尿量
@@ -527,10 +554,11 @@ export default {
       otherList: [],
       otherList2: [],
       skinTest: [],
-      // customList0: [], // 自定义1
-      // customList1: [], // 自定义2
-      // customList2: [], // 自定义3
-      // customList3: [], // 自定义4
+      outCustomList:[],
+      customList0: [], // 自定义1
+      customList1: [], // 自定义2
+      customList2: [], // 自定义3
+      customList3: [], // 自定义4
       dateRangeList: [], // 数组长度决定页数
       patInfo: {
         patient_id: "",
@@ -601,7 +629,7 @@ export default {
       return tds;
     },
     trHeight() {
-      return this.ySpace * 2;
+      return this.ySpace +10;
     },
 
     maTds() {
@@ -875,7 +903,7 @@ export default {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 7 : 6)}px`,
         flex: "auto",
         "border-right-style": "solid",
-        "border-width": `${(index - 1) % 2 === 0 ? 3 : 2}px`,
+        "border-width": `${(index - 1) % 2 === 0 ? 0 : 2}px`,
         "border-color": `${
           (index - 1) % 2 === 0 && index < length - 1 ? "transparent" : "#000"
         }`,
@@ -934,6 +962,8 @@ export default {
       this.breatheList = [];
       this.pressureList = [];
       this.weightList = [];
+      this.heightList = [];
+      this.BMIList = [];
       this.inputList = [];
       this.shitList = [];
       this.urineList = [];
@@ -945,6 +975,7 @@ export default {
       this.otherList = [];
       this.otherList2 = [];
       this.skinTest = [];
+      this.outCustomList = []
       for (let i = 0; i < 4; i++) {
         this[`customList${i}`] = [];
       }
@@ -1024,27 +1055,41 @@ export default {
           // 超出时间范围的抛弃
           continue;
         }
-        // if (!vitalSigns[i].vital_code || vitalSigns[i].vital_code === 'null') {
-        //   // 自定义字段填入
-        //   const sign = vitalSigns[i].temperature_type
-        //   const index = customSigns.indexOf(sign)
-        //   if (index < 0) {
-        //     customSigns.push(sign)
-        //     this[`customList${customSigns.length - 1}`].push({
-        //       time: vitalSigns[i].time_point,
-        //       value: vitalSigns[i].value
-        //     })
-        //     this[`customList${customSigns.length - 1}`].label = sign
-        //   } else {
-        //     this[`customList${index}`].push({
-        //       time: vitalSigns[i].time_point,
-        //       value: vitalSigns[i].value
-        //     })
-        //     this[`customList${index}`].label = sign
-        //   }
-        //   continue
-        // }
-        /* 获取各个体征数组对象 */
+        if (["4", "41", "42", "43"].includes(vitalSigns[i].vital_code)) {
+          const sign = vitalSigns[i].temperature_type;
+          switch (vitalSigns[i].vital_code) {
+            case "4":
+              this.outCustomList.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.outCustomList.label = sign;
+              break;
+            case "41":
+              this.customList0.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList0.label = sign;
+              break;
+            case "42":
+              this.customList1.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList1.label = sign;
+              break;
+            case "43":
+              this.customList2.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList2.label = sign;
+              break;
+            default:
+              break;
+          }
+        }
         if (this.lineMap[vitalSigns[i].vital_code]) {
           this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
             time: vitalSigns[i].time_point,
@@ -1086,6 +1131,12 @@ export default {
             break;
           case "34":
             this.outputList.push(item);
+            break;
+            case "32":
+            this.heightList.push(item);
+            break;
+            case "36":
+            this.BMIList.push(item);
             break;
           case "27":
             this.physicsCoolList.push(item);
@@ -1204,6 +1255,90 @@ export default {
           "black"
         );
       });
+    },
+    getFormatListBmi({ tList, timeInterval = 24 * 60 * 60 * 1000 }) {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const targetList = [...tList];
+      const heightList = [...this.heightList];
+      const weightList = [...this.weightList];
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1] - 1;
+        i += timeInterval
+      ) {
+        const item = { timeNum: i, value: "" };
+        //循环进来  先计算是否有接口的BMI数据  先渲染
+        if (targetList.length>0) {
+          for (let j = targetList.length - 1; j >= 0; j--) {
+            const timeNum = this.getTimeNum(targetList[j].time);
+            if (timeNum >= i && timeNum < i + timeInterval) {
+              item.value = `${targetList[j].value}`;
+            }
+            //如果有身高和体重的数据 我们进入遍历循环  计算
+            if (heightList.length > 0 && weightList.length > 0) {
+              for (let k = 0; k < heightList.length; k++) {
+                if (!Number(heightList[k].value)) continue;
+                const timeNumHeight = this.getTimeNum(heightList[k].time);
+                for (let h = 0; h < weightList.length; h++) {
+                  if (!Number(weightList[h].value)) continue;
+                  const timeNumWeight = this.getTimeNum(weightList[h].time);
+                  if (
+                    timeNumHeight >= i &&
+                    timeNumHeight < i + timeInterval &&
+                    timeNumWeight >= i &&
+                    timeNumWeight < i + timeInterval
+                  ) {
+                    if (
+                      Number(weightList[h].value) &&
+                      Number(heightList[k].value)
+                    ) {
+                      let value =
+                        (Number(weightList[h].value) * 10000) /
+                        (Number(heightList[k].value) *
+                          Number(heightList[k].value));
+                      item.value = value.toFixed(2);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        } 
+        //如果没有BMI  直接判断是否有身高体重  然后把计算后的值渲染
+        else {
+          if (heightList.length > 0 && weightList.length > 0) {
+              for (let k = 0; k < heightList.length; k++) {
+                if (!Number(heightList[k].value)) continue;
+                const timeNumHeight = this.getTimeNum(heightList[k].time);
+                for (let h = 0; h < weightList.length; h++) {
+                  if (!Number(weightList[h].value)) continue;
+                  const timeNumWeight = this.getTimeNum(weightList[h].time);
+                  if (
+                    timeNumHeight >= i &&
+                    timeNumHeight < i + timeInterval &&
+                    timeNumWeight >= i &&
+                    timeNumWeight < i + timeInterval
+                  ) {
+                    if (
+                      Number(weightList[h].value) &&
+                      Number(heightList[k].value)
+                    ) {
+                      let value =
+                        (Number(weightList[h].value) * 10000) /
+                        (Number(heightList[k].value) *
+                          Number(heightList[k].value));
+                      item.value = value.toFixed(2);
+                    }
+                  }
+                }
+              }
+            }
+        }
+
+        list.push(item);
+      }
+      return list;
     },
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
@@ -1966,10 +2101,10 @@ export default {
   }
   .head-info {
     display: flex;
-    font-size: 18px;
+    font-size: 15px;
     .item {
       flex: 1;
-      font-size: 16px;
+      font-size: 15px;
       text-align: left;
       padding-left: 5px;
       .value {
@@ -1980,7 +2115,7 @@ export default {
   }
   .head-info-1 {
     display: flex;
-    font-size: 18px;
+    font-size: 16px;
     .item {
       text-align: left;
       padding: 0 5px 5px 5px;
@@ -2021,7 +2156,7 @@ export default {
     font-size: 18px;
     border-bottom: 2px solid black;
     border-top: none;
-    padding-top: 15px;
+    padding-top: 8px;
   }
   .row {
     display: flex;
@@ -2127,52 +2262,40 @@ export default {
       }
     }
     .temp :nth-child(2) > span {
-      margin-top: -4px;
-    }
-    .temp :nth-child(3) > span {
-      margin-top: 7px;
-    }
-    .temp :nth-child(4) > span {
-      margin-top: 15px;
+      margin-top: -7px;
     }
     .temp :nth-child(5) > span {
-      margin-top: 25px;
+      margin-top: 5px;
     }
     .temp :nth-child(6) > span {
-      margin-top: 33px;
+      margin-top: 13px;
     }
     .temp :nth-child(7) > span {
-      margin-top: 40px;
-    }
-    .temp :nth-child(8) > span {
-      margin-top: 53px;
-    }
-    .temp :nth-child(9) > span {
-      margin-top: 63px;
-    }
-    .times :nth-child(2) > span {
-      margin-top: -4px;
-    }
-    .times :nth-child(3) > span {
-      margin-top: 7px;
-    }
-    .times :nth-child(4) > span {
       margin-top: 15px;
     }
+    .temp :nth-child(8) > span {
+      margin-top: 18px;
+    }
+    .temp :nth-child(9) > span {
+      margin-top: 23px;
+    }
+    .times :nth-child(2) > span {
+      margin-top: -7px;
+    }
     .times :nth-child(5) > span {
-      margin-top: 25px;
+      margin-top: 5px;
     }
     .times :nth-child(6) > span {
-      margin-top: 33px;
+      margin-top: 13px;
     }
     .times :nth-child(7) > span {
-      margin-top: 40px;
+      margin-top: 16px;
     }
     .times :nth-child(8) > span {
-      margin-top: 53px;
+      margin-top: 18px;
     }
     .times :nth-child(9) > span {
-      margin-top: 63px;
+      margin-top: 23px;
     }
     .pain-area {
       position: relative;

@@ -57,6 +57,8 @@ const projectName = (() => {
       return "青海省第五人民医院";
     case "ytll": // 
       return "烟台玲珑英诚医院";
+    case "925": // 
+      return "中国人民解放军联勤保障部队第九二五医院";
     case "common": // 可配置的通用版本
       return "配置通用版本";
     default:
@@ -152,6 +154,8 @@ module.exports = {
           return "./src/projects/qhwy/main.js";
         case "ytll": // 烟台玲珑英诚医院
           return "./src/projects/ytll/main.js";
+        case "925": // 烟台玲珑英诚医院
+          return "./src/projects/925/main.js";
         case "common": // 可配置的通用版本
           return "./src/projects/common/main.js";
         default:

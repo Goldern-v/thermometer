@@ -328,6 +328,7 @@
               ></div>
             </div>
           </div>
+          <div class="clear"></div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
               体重(Kg)
@@ -354,7 +355,7 @@
               ></div>
             </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div class="row font-14" :style="{ height: `${trHeight}px` }" v-if="!isNaN(patInfo.age)&&Number(patInfo.age)>=14">
             <div class="label" :style="{ width: `${leftWidth}px` }">BMI</div>
             <div class="value-item-box">
               <div
@@ -479,7 +480,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -722,11 +723,7 @@ export default {
         };
       });
       const timeAdd = (i) => {
-        return timeNumList.some((x) => x.start === i)
-          ? 6 * 60 * 60 * 1000
-          : timeNumList.some((x) => x.end - 2 * 60 * 60 * 1000 === i)
-          ? 2 * 60 * 60 * 1000
-          : 4 * 60 * 60 * 1000;
+        return 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
@@ -1104,7 +1101,6 @@ export default {
 
         if (["4", "41", "42", "43"].includes(vitalSigns[i].vital_code)) {
           const sign = vitalSigns[i].temperature_type;
-
           switch (vitalSigns[i].vital_code) {
             case "4":
               this.outCustomList.push({
@@ -2600,6 +2596,9 @@ export default {
 .simhei {
   font-family: SimHei;
 }
+.clear {
+    clear: both;
+  }
 .pageInput {
   width: 30px;
   border: 0px;

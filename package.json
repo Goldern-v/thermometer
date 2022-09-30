@@ -53,6 +53,8 @@
     "build:qhwy": "vue-cli-service build --project=qhwy",
     "dev:ytll": "vue-cli-service serve --project=ytll",
     "build:ytll": "vue-cli-service build --project=ytll",
+    "dev:925": "vue-cli-service serve --project=925",
+    "build:925": "vue-cli-service build --project=925",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },

@@ -168,7 +168,7 @@
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            粪便
+            大便次数
           </div>
           <div class="value-item-box">
             <div
@@ -181,6 +181,16 @@
             </div>
           </div>
         </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              小便次数
+            </div>
+            <div class="value-item-box">
+              <div class="value-item" v-for="(item, index) in getFormatList({ tList: urineList })" :key="index">
+                {{ item.value }}
+              </div>
+            </div>
+          </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">脐带</div>
           <div class="value-item-box">
@@ -312,6 +322,7 @@ export default {
       milkList: [], //牛乳
       aurigoList: [], //黄疸
       funicleList: [], //脐带
+      urineList: [], // 尿量
       dateRangeList: [], // 数组长度决定页数
       patInfo: {
         patient_id: "",
@@ -499,7 +510,6 @@ export default {
     },
     apiData:{
       handler(val){
-        console.log('watch',val)
       },
       deep:true,
       immediate:true,
@@ -621,6 +631,7 @@ export default {
       this.milkList = []; //牛乳
       this.aurigoList = []; //黄疸
       this.funicleList = []; //脐带
+      this.urineList = [];
     },
     toNext() {
       if (this.currentPage === this.pageTotal) return;
@@ -637,7 +648,6 @@ export default {
       this.handleData();
     },
     handleData() {
-      console.log('handleData===>',this.apiData)
       if (this.apiData.patientInfo){
         this.patInfo = this.apiData.patientInfo.patInfo;
       const vitalSigns = this.apiData.vitalSigns.sort(
@@ -766,6 +776,9 @@ export default {
             break;
           case "milk":
             this.milkList.push(item);
+            break;
+            case "12":
+            this.urineList.push(item);
             break;
           case "aurigo":
             this.aurigoList.push(item);
@@ -1493,7 +1506,6 @@ export default {
             time = parseInt(time);
           } else {
             time = time.replace(new RegExp(/-/gm), "/");
-            console.log(time, "time");
           }
         }
 
@@ -1646,7 +1658,6 @@ export default {
     } else {
       this.$nextTick(() => {
         //每次获取数据都要传一次页数
-        console.log('=====>',this.apiData)
         window.parent.postMessage(
           { type: "pageTotal", value: this.pageTotal },
 

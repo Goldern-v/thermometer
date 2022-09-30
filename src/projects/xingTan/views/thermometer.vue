@@ -1,23 +1,18 @@
 <template>
-  <div
-    @dblclick="dblclick"
-    class="main-view"
-    v-if="apiData"
-    :style="{ width: `${leftWidth + areaWidth}px` }"
-  >
+  <div @dblclick="dblclick" class="main-view" v-if="apiData" :style="{ width: `${leftWidth + areaWidth}px` }">
     <div class="head-hos">南方医科大学顺德医院附属杏坛医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
       <div class="item" style="flex: 1.2">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item" style="flex: 0.8" >
+      <div class="item" style="flex: 0.8">
         年龄：<span class="value">{{
-          PatientId.endsWith("_1")
-            ? "0岁"
-            : typeof parseInt(patInfo.age) === "number" && !isNaN(patInfo.age)
-            ? patInfo.age + "岁"
-            : patInfo.age
+        PatientId.endsWith("_1")
+        ? "0岁"
+        : typeof parseInt(patInfo.age) === "number" && !isNaN(patInfo.age)
+        ? patInfo.age + "岁"
+        : patInfo.age
         }}</span>
       </div>
       <div class="item" style="flex: 0.7">
@@ -25,15 +20,15 @@
       </div>
       <div class="item" style="flex: 1.4">
         入院日期：<span class="value">{{
-          patInfo.admission_date.slice(0, 10)
+        patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
       <div class="item" style="flex: 1.3">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" >
+      <div class="item">
         床号：<span class="value">{{
-          bedExchangeLog || patInfo.bed_label
+        bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
       <div class="item" style="text-align: right;flex:1.5">
@@ -46,32 +41,16 @@
       <div class="vline" :style="{ left: `${leftWidth}px` }"></div>
       <div class="vline" :style="{ right: '1px' }"></div>
       <div class="table-box" style="transform: translateY(0.5px)">
-        <div
-          class="vtline"
-          :style="{
-            left: `${leftWidth + item * (6 * xSpace + 13)}px`,
-            transform: 'translateX(-1.5px)',
-            'border-color': '#000',
-          }"
-          v-for="item in 6"
-          :key="item"
-        ></div>
-        <div
-          class="row border-top-black-2"
-          :style="{ height: `${trHeight}px` }"
-        >
-          <div
-            class="label"
-            :style="{ width: `${leftWidth}px` }"
-            v-html="`日&emsp;&emsp;期`"
-          ></div>
+        <div class="vtline" :style="{
+          left: `${leftWidth + item * (6 * xSpace + 13)}px`,
+          transform: 'translateX(-1.5px)',
+          'border-color': '#000',
+        }" v-for="item in 6" :key="item"></div>
+        <div class="row border-top-black-2" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }" v-html="`日&emsp;&emsp;期`"></div>
 
           <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in formatDateList"
-              :key="index"
-            >
+            <div class="value-item" v-for="(item, index) in formatDateList" :key="index">
               {{ item }}
             </div>
           </div>
@@ -79,11 +58,7 @@
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">住院日数</div>
           <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in formatStayDayList"
-              :key="index"
-            >
+            <div class="value-item" v-for="(item, index) in formatStayDayList" :key="index">
               {{ item }}
             </div>
           </div>
@@ -94,65 +69,38 @@
             手术或产后日数
           </div>
           <div class="value-item-box" style="color: red">
-            <div
-              class="value-item"
-              v-for="(item, index) in formatOperateDateList"
-              :key="index"
-            >
+            <div class="value-item" v-for="(item, index) in formatOperateDateList" :key="index">
               {{ item }}
             </div>
           </div>
         </div>
-        <div
-          class="row border-bottom-black-2"
-          :style="{ height: `${trHeight}px` }"
-        >
+        <div class="row border-bottom-black-2" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }"></div>
           <div class="value-item-box">
-            <div
-              class="value-item"
-              :style="middleTdStyle(index)"
-              v-for="(item, index) in maTds"
-              :key="index"
-            >
+            <div class="value-item" :style="middleTdStyle(index)" v-for="(item, index) in maTds" :key="index">
               {{ item }}
             </div>
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight - 10}px` }">
           <div class="white_line"></div>
-          <div
-            class="label"
-            :style="{
-              width: `${leftWidth}px`,
-              transform: 'translateX(3px)',
-              transform: 'translateY(-13px)',
-            }"
-            v-html="`时&emsp;&emsp;间`"
-          ></div>
+          <div class="label" :style="{
+            width: `${leftWidth}px`,
+            transform: 'translateX(3px)',
+            transform: 'translateY(-13px)',
+          }" v-html="`时&emsp;&emsp;间`"></div>
           <div class="value-item-box font-18">
-            <div
-              class="value-item font-time"
-              :style="smallTdStyle(index, timeTds.length)"
-              v-for="(item, index) in timeTds"
-              :key="index"
-            >
+            <div class="value-item font-time" :style="smallTdStyle(index, timeTds.length)"
+              v-for="(item, index) in timeTds" :key="index">
               {{ item }}
             </div>
           </div>
         </div>
       </div>
       <div class="info-box">
-        <div
-          class="index-box"
-          :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
-        >
+        <div class="index-box" :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }">
           <div class="notes">
-            <div
-              v-for="(value, key) in settingMap"
-              :key="key"
-              class="note-item"
-            >
+            <div v-for="(value, key) in settingMap" :key="key" class="note-item">
               {{ value.label }}
               <template v-if="key === 'axillaryTemperature'">
                 <span class="axillary">x</span>
@@ -166,14 +114,10 @@
                 <span class="pulse-icon"></span>
                 <i class="note-icon"></i>
               </template>
-              <i
-                v-else
-                class="note-icon"
-                :style="{
-                  'border-color': value.color,
-                  background: value.solid ? value.color : '#fff',
-                }"
-              ></i>
+              <i v-else class="note-icon" :style="{
+                'border-color': value.color,
+                background: value.solid ? value.color : '#fff',
+              }"></i>
             </div>
           </div>
           <div class="item times">
@@ -195,47 +139,29 @@
             </div>
           </div>
         </div>
-        <div
-          ref="main"
-          :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
-        ></div>
+        <div ref="main" :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"></div>
       </div>
       <div class="table-box" style="transform: translateY(-0.5px)">
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div
-            class="label"
-            :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
-          >
+          <div class="label" :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }">
             呼吸(次/分)
           </div>
           <div class="value-item-box font-14">
-            <div
-              class="value-item"
-              :style="{
-                ...smallTdStyle(index, formatBreatheList.length),
-                ...item.style,
-              }"
-              v-for="(item, index) in formatBreatheList"
-              :key="index"
-            >
+            <div class="value-item" :style="{
+              ...smallTdStyle(index, formatBreatheList.length),
+              ...item.style,
+            }" v-for="(item, index) in formatBreatheList" :key="index">
               {{ item.value }}
             </div>
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div
-            class="label"
-            :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
-          >
+          <div class="label" :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }">
             血压(mmHg)
           </div>
           <div class="value-item-box font-14" style="color: blue">
-            <div
-              class="value-item"
-              :style="middleTdStyle(index, formatBreatheList.length)"
-              v-for="(item, index) in formatPressureList"
-              :key="index"
-            >
+            <div class="value-item" :style="middleTdStyle(index, formatBreatheList.length)"
+              v-for="(item, index) in formatPressureList" :key="index">
               {{ item.value }}
             </div>
           </div>
@@ -245,12 +171,8 @@
             总入量(ml)
           </div>
           <div class="value-item-box">
-            <div
-              class="value-item font-16"
-              v-for="(item, index) in getFormatList({ tList: inputList })"
-              :key="index"
-              v-html="item.value"
-            ></div>
+            <div class="value-item font-16" v-for="(item, index) in getFormatList({ tList: inputList })" :key="index"
+              v-html="item.value"></div>
           </div>
         </div>
 
@@ -263,11 +185,7 @@
               大便(次)
             </div>
             <div class="value-item-box">
-              <div
-                class="value-item font-16"
-                v-for="(item, index) in getFormatList({ tList: shitList })"
-                :key="index"
-              >
+              <div class="value-item font-16" v-for="(item, index) in getFormatList({ tList: shitList })" :key="index">
                 {{ item.value }}
               </div>
             </div>
@@ -277,12 +195,8 @@
               尿量(ml)
             </div>
             <div class="value-item-box">
-              <div
-                class="value-item font-16"
-                v-for="(item, index) in getFormatList({ tList: urineList })"
-                :key="index"
-                v-html="item.value"
-              ></div>
+              <div class="value-item font-16" v-for="(item, index) in getFormatList({ tList: urineList })" :key="index"
+                v-html="item.value"></div>
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
@@ -290,12 +204,8 @@
               其他(ml)
             </div>
             <div class="value-item-box">
-              <div
-                class="value-item font-13"
-                v-for="(item, index) in getFormatList({ tList: otherList })"
-                :key="index"
-                v-html="item.value"
-              ></div>
+              <div class="value-item font-13" v-for="(item, index) in getFormatList({ tList: otherList })" :key="index"
+                v-html="item.value"></div>
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
@@ -303,34 +213,22 @@
               体重(kg)
             </div>
             <div class="value-item-box">
-              <div
-                class="value-item font-16"
-                v-for="(item, index) in getFormatList({ tList: weightList })"
-                :key="index"
-                v-html="item.value"
-              ></div>
+              <div class="value-item font-16" v-for="(item, index) in getFormatList({ tList: weightList })" :key="index"
+                v-html="item.value"></div>
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">皮试</div>
             <div class="value-item-box">
-              <div
-                class="value-item font-13"
-                v-for="(item, index) in getFormatList({ tList: skinTest })"
-                :key="index"
-                v-html="item.value"
-              ></div>
+              <div class="value-item font-13" v-for="(item, index) in getFormatList({ tList: skinTest })" :key="index"
+                v-html="item.value"></div>
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">其他</div>
             <div class="value-item-box">
-              <div
-                class="value-item font-13"
-                v-for="(item, index) in getFormatList({ tList: otherList2 })"
-                :key="index"
-                v-html="item.value"
-              ></div>
+              <div class="value-item font-13" v-for="(item, index) in getFormatList({ tList: otherList2 })" :key="index"
+                v-html="item.value"></div>
             </div>
           </div>
         </div>
@@ -380,16 +278,11 @@
             ></div>
           </div>
         </div> -->
-        <div
-          class="vtline"
-          :style="{
-            left: `${leftWidth + item * (6 * xSpace + 13)}px`,
-            transform: 'translateX(-1.5px)',
-            'border-color': '#000',
-          }"
-          v-for="item in 6"
-          :key="item"
-        ></div>
+        <div class="vtline" :style="{
+          left: `${leftWidth + item * (6 * xSpace + 13)}px`,
+          transform: 'translateX(-1.5px)',
+          'border-color': '#000',
+        }" v-for="item in 6" :key="item"></div>
       </div>
     </div>
     <!-- <div class="pagination"> -->
@@ -399,11 +292,7 @@
         上一页
       </button>
       <span>第{{ currentPage }}页/共{{ pageTotal }}页</span>
-      <button
-        :disabled="currentPage === pageTotal"
-        @click="toNext"
-        class="next-btn"
-      >
+      <button :disabled="currentPage === pageTotal" @click="toNext" class="next-btn">
         下一页
       </button>
       <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
@@ -437,7 +326,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -618,7 +507,7 @@ export default {
       const pressureList = [...this.pressureList];
       for (
         let i = timeNumRange[0];
-        i < timeNumRange[1]-1;
+        i < timeNumRange[1] - 1;
         i += 3 * 4 * 60 * 60 * 1000
       ) {
         const item = { timeNum: i, value: "" };
@@ -651,15 +540,15 @@ export default {
       const timeAdd = (i) => {
         return timeNumList.some((x) => x.start === i)
           ? 6 * 60 * 60 * 1000
-          : timeNumList.some((x) => x.end - 2 * 60 * 60 * 1000==i)
-          ? 2 * 60 * 60 * 1000 
-          : 4 * 60 * 60 * 1000;
+          : timeNumList.some((x) => x.end - 2 * 60 * 60 * 1000 == i)
+            ? 2 * 60 * 60 * 1000
+            : 4 * 60 * 60 * 1000;
       };
-      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeAdd(i)) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
-          if (timeNum >=i && timeNum <= i + (timeAdd(i) - 60 * 1000)) {
+          if (timeNum >= i && timeNum <= i + (timeAdd(i) - 60 * 1000)) {
             item.value = breatheList[j].value;
             breatheList.splice(j, 1);
             break;
@@ -671,10 +560,10 @@ export default {
         .filter((x) => x.value !== "")
         .forEach(
           (x, i) =>
-            (x.style =
-              i % 2 === 0
-                ? { "align-items": "flex-start" }
-                : { "align-items": "flex-end" })
+          (x.style =
+            i % 2 === 0
+              ? { "align-items": "flex-start" }
+              : { "align-items": "flex-end" })
         );
       return list;
     },
@@ -836,10 +725,10 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
-        currentPage(value) {
-     if(!this.isPrintAll){
-      window.parent.postMessage({ type: "currentPage", value }, "*");
-        }
+    currentPage(value) {
+      if (!this.isPrintAll) {
+        window.parent.postMessage({ type: "currentPage", value }, "*");
+      }
     },
   },
   created() {
@@ -880,9 +769,8 @@ export default {
         flex: "auto",
         "border-right-style": "solid",
         "border-width": `${(index - 1) % 2 === 0 ? 3 : 2}px`,
-        "border-color": `${
-          (index - 1) % 2 === 0 && index < length - 1 ? "transparent" : "#000"
-        }`,
+        "border-color": `${(index - 1) % 2 === 0 && index < length - 1 ? "transparent" : "#000"
+          }`,
         transform: "translateX(1.5px)",
         "font-family": "SimHei",
       };
@@ -911,9 +799,9 @@ export default {
           case "printing":
             window.print();
             break;
-             case 'dateChangePage':
-              this.handleChangePage(e.data.value)
-              break;
+          case 'dateChangePage':
+            this.handleChangePage(e.data.value)
+            break;
           case "nurseExchangeInfo":
             if (e.data.value) {
               this.adtLog = e.data.value.adtLog || ""; // 转科
@@ -1023,7 +911,7 @@ export default {
       for (let i = 0; i < vitalSigns.length; i++) {
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
-          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1]-1
+          this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1] - 1
         ) {
           // 超出时间范围的抛弃
           continue;
@@ -1214,8 +1102,7 @@ export default {
       const xaxis = notes.map((x) =>
         this.getXaxis(this.getLocationTime(x.time))
       );
-
-      const xaxisNew = this.handleNoteXaxis(xaxis, notes);
+      // const xaxisNew = this.handleNoteXaxis([...xaxis], notes);
       notes.forEach((x, i) => {
         let value = x.value;
         if (x.value.endsWith("|")) {
@@ -1223,27 +1110,28 @@ export default {
             new Date(x.time).getHours()
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`;
         }
-        if (this.PatientId.endsWith("_1") && value.includes("入院")) {
-          value = "";
+        // 从第二项开始，和前面的x判断是否相同，相同则需处理y
+        let yNew = 0;
+        for (let j = i - 1; j >= 0; j--) {
+          if (Math.abs(xaxis[j] - xaxis[i]) <= 1) {
+            if (notes[j].value.endsWith("|")) {
+              let noteTime = `${notes[j].value}${this.toChinesNum(
+                new Date(notes[j].time).getHours()
+              )}时${this.toChinesNum(new Date(notes[j].time).getMinutes())}分`;
+              yNew += (noteTime.length + 2) * this.ySpace -5;
+            } else {
+              yNew += (notes[j].value.length + 1) * this.ySpace + (notes[j].value.length + 1) * 2 - 3 ;
+            }
+          } else {
+            break;
+          }
         }
-
-        //画请假和手术的字体
-        let bottomContextList = this.bottomSheetNote.map((x) => {
+        let bottomValu = this.bottomSheetNote.map((x) => {
           return x.value;
-        });
-        //[
-        //   '温水擦浴',
-        //   '不升',
-        //   '特殊物理降温',
-        //   '辅助呼吸',
-        //   '物理降温',
-        //   '回室',
-        //   '请假'
-        // ]
+        })
         this.createText({
-          // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-          x: xaxisNew[i],
-          y: bottomContextList.includes(value) ? y + 5 * this.ySpace : y,
+          x: xaxis[i],
+          y: bottomValu.includes(value) ? y + 5 + yNew : yNew,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1277,10 +1165,10 @@ export default {
           color: isBreak
             ? "#594b4b"
             : isboundary
-            ? "transparent"
-            : isDegree37
-            ? "red"
-            : "#000",
+              ? "transparent"
+              : isDegree37
+                ? "red"
+                : "#000",
         };
         preSpace += lineWidth + this.ySpace;
         this.createLine(params);
@@ -1673,7 +1561,7 @@ export default {
     getYaxis(yRange, value) {
       return (
         ((yRange[1] - value) / (yRange[1] - yRange[0])) *
-          this.timesTempAreaHeight -
+        this.timesTempAreaHeight -
         1
       );
     },
@@ -1820,7 +1708,7 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeInterval) {
         const item = { timeNum: i, value: "" };
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
@@ -1862,8 +1750,8 @@ export default {
             (i == 0 && strArr[i] == 0
               ? ""
               : i > 0 && strArr[i] == 0 && strArr[i - 1] == 0
-              ? ""
-              : changeNum[strArr[i]] + (strArr[i] == 0 ? unit[0] : unit[i])) +
+                ? ""
+                : changeNum[strArr[i]] + (strArr[i] == 0 ? unit[0] : unit[i])) +
             newNum;
         }
         // 如果是两位数，一十改成十
@@ -1881,15 +1769,18 @@ export default {
     },
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
     handleNoteXaxis(xaxisList) {
+      //定义一个数组，为全部最后一格的数据，如果与最后一格重叠，就往底下移动
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {
-        if (!xaxisNew.includes(xaxisList[i])) {
-          xaxisNew.push(xaxisList[i]);
+        if (!xaxisNew.includes(Math.floor(xaxisList[i])) && xaxisNew.includes(Math.floor(xaxisList[i]) - 1) && xaxisNew.includes(Math.floor(xaxisList[i]) + 1)) {
+          xaxisNew.push(Math.floor(xaxisList[i]));
         } else {
-          while (xaxisNew.includes(xaxisList[i])) {
+          while (
+            (xaxisNew.includes(Math.floor(xaxisList[i])) || xaxisNew.includes(Math.floor(xaxisList[i]) - 1) || xaxisNew.includes(Math.floor(xaxisList[i]) + 1))
+          ) {
             xaxisList[i] += this.xSpace + 2;
           }
-          xaxisNew.push(xaxisList[i]);
+          xaxisNew.push(Math.floor(xaxisList[i]));
         }
       }
       return xaxisNew;
@@ -1957,6 +1848,7 @@ export default {
     margin: 8mm 5mm 8mm 5mm; // 页面的边距
   }
 }
+
 .main-view {
   padding: 5px 0;
   margin: 0 auto;
@@ -1965,44 +1857,53 @@ export default {
   font-weight: 900;
   font-family: Simsun;
   width: fit-content;
+
   .head-hos {
     font-family: SimHei;
     font-size: 25px;
     font-weight: bold;
   }
+
   .head-title {
     font-family: SimHei;
     padding: 13px 0;
     font-size: 30px;
     font-weight: bold;
   }
+
   .head-info {
     display: flex;
     font-size: 18px;
+
     .item {
       flex: 1;
       font-size: 16px;
       text-align: left;
       padding-left: 5px;
+
       .value {
         font-weight: normal;
         text-decoration: underline;
       }
     }
   }
+
   .head-info-1 {
     display: flex;
     font-size: 18px;
+
     .item {
       text-align: left;
       padding: 0 5px 5px 5px;
       margin-right: 80px;
+
       .value {
         font-weight: normal;
       }
     }
   }
 }
+
 .white_line {
   background-color: rgb(255, 255, 255);
   width: 160px;
@@ -2012,13 +1913,16 @@ export default {
   left: 0;
   border: none;
 }
+
 #main {
   flex-shrink: 0;
   position: relative;
 }
+
 .table-box {
   position: relative;
   z-index: 20;
+
   .vtline {
     position: absolute;
     top: 0;
@@ -2026,6 +1930,7 @@ export default {
     border-left: 3px solid #000;
     z-index: 30;
   }
+
   .left_box {
     width: 40px;
     border: 1px solid;
@@ -2035,15 +1940,18 @@ export default {
     border-top: none;
     padding-top: 15px;
   }
+
   .row {
     display: flex;
     align-items: center;
     border: 2px solid #000;
     border-right-color: transparent;
     transform: translateX(-0.5px);
+
     &:not(:first-child) {
       border-top: none;
     }
+
     .label {
       display: flex;
       width: 110px;
@@ -2053,18 +1961,21 @@ export default {
       height: 100%;
       transform: translateX(0.5px);
     }
+
     .value-item-box {
       flex: 1;
       height: 100%;
       display: flex;
       transform: translateX(1px);
     }
+
     .value-item {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100%;
+
       .increase {
         color: red;
         display: inline-block;
@@ -2078,7 +1989,9 @@ export default {
   .temp:nth-child(6) {
     color: red;
   }
+
   display: flex;
+
   .index-box {
     position: relative;
     flex-shrink: 0;
@@ -2086,119 +1999,153 @@ export default {
     font-size: 18px;
     border-left: 2px solid #000;
     transform: translateX(-0.5px);
-    > .item {
+
+    >.item {
       flex: 1;
       display: flex;
       flex-direction: column;
       text-align: right;
+
       &:not(:last-child) {
         border-right: 2px solid #000;
       }
+
       .text {
         padding-top: 5px;
         padding-right: 5px;
       }
+
       .index {
         height: 81.7px;
         padding-right: 5px;
-        > span {
+
+        >span {
           display: block;
         }
       }
     }
+
     .times {
       .text {
         height: 82.7px;
       }
+
       .index {
         color: red;
       }
+
       flex: 1.7;
     }
+
     .pain {
       position: relative;
+
       .text {
         flex-shrink: 0;
         flex-grow: 0;
       }
+
       .index {
         color: blue;
-        > span {
+
+        >span {
           margin-top: -3px;
         }
       }
+
       .s-index {
         color: blue;
         position: absolute;
         bottom: -6px;
       }
     }
+
     .temp {
       .text {
         height: 82.7px;
       }
     }
-    .temp :nth-child(2) > span {
+
+    .temp :nth-child(2)>span {
       margin-top: -4px;
     }
-    .temp :nth-child(3) > span {
+
+    .temp :nth-child(3)>span {
       margin-top: 7px;
     }
-    .temp :nth-child(4) > span {
+
+    .temp :nth-child(4)>span {
       margin-top: 15px;
     }
-    .temp :nth-child(5) > span {
+
+    .temp :nth-child(5)>span {
       margin-top: 25px;
     }
-    .temp :nth-child(6) > span {
+
+    .temp :nth-child(6)>span {
       margin-top: 33px;
     }
-    .temp :nth-child(7) > span {
+
+    .temp :nth-child(7)>span {
       margin-top: 40px;
     }
-    .temp :nth-child(8) > span {
+
+    .temp :nth-child(8)>span {
       margin-top: 53px;
     }
-    .temp :nth-child(9) > span {
+
+    .temp :nth-child(9)>span {
       margin-top: 63px;
     }
-    .times :nth-child(2) > span {
+
+    .times :nth-child(2)>span {
       margin-top: -4px;
     }
-    .times :nth-child(3) > span {
+
+    .times :nth-child(3)>span {
       margin-top: 7px;
     }
-    .times :nth-child(4) > span {
+
+    .times :nth-child(4)>span {
       margin-top: 15px;
     }
-    .times :nth-child(5) > span {
+
+    .times :nth-child(5)>span {
       margin-top: 25px;
     }
-    .times :nth-child(6) > span {
+
+    .times :nth-child(6)>span {
       margin-top: 33px;
     }
-    .times :nth-child(7) > span {
+
+    .times :nth-child(7)>span {
       margin-top: 40px;
     }
-    .times :nth-child(8) > span {
+
+    .times :nth-child(8)>span {
       margin-top: 53px;
     }
-    .times :nth-child(9) > span {
+
+    .times :nth-child(9)>span {
       margin-top: 63px;
     }
+
     .pain-area {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+
       .pain-index {
         height: 81.7px;
-        > span {
+
+        >span {
           display: block;
           margin-top: -10px;
         }
       }
+
       .s-index {
         position: absolute;
         bottom: -12px;
@@ -2209,15 +2156,18 @@ export default {
         text-align: center;
       }
     }
+
     .notes {
       font-size: 18px;
       position: absolute;
       left: 10px;
       bottom: 10px;
+
       .note-item {
         position: relative;
         margin-bottom: 22px;
       }
+
       .note-icon {
         display: inline-block;
         width: 18px;
@@ -2228,6 +2178,7 @@ export default {
         border-color: #fff;
         transform: translate(-4px, 2px);
       }
+
       .axillary {
         font-family: SimHei;
         position: absolute;
@@ -2240,6 +2191,7 @@ export default {
         line-height: 1;
         font-weight: bold;
       }
+
       .pain-icon {
         position: absolute;
         right: 3px;
@@ -2250,6 +2202,7 @@ export default {
         border-right: 10px solid transparent;
         border-bottom: 18px solid blue;
       }
+
       .pulse-icon {
         position: absolute;
         margin-top: 2px;
@@ -2260,6 +2213,7 @@ export default {
         border-radius: 50%;
         border-radius: 50px;
       }
+
       .oralTemperature-icon {
         position: absolute;
         margin-left: -4px;
@@ -2271,6 +2225,7 @@ export default {
         border-radius: 50px;
       }
     }
+
     .split-line {
       display: block;
       position: absolute;
@@ -2280,12 +2235,15 @@ export default {
     }
   }
 }
+
 .p-r-5 {
   padding-right: 5px;
 }
+
 .pagination {
   padding: 10px 0 0;
   font-weight: normal;
+
   .pre-icon {
     display: inline-block;
     width: 6px;
@@ -2296,6 +2254,7 @@ export default {
     cursor: pointer;
     margin-right: 10px;
   }
+
   .next-icon {
     display: inline-block;
     width: 6px;
@@ -2306,51 +2265,66 @@ export default {
     cursor: pointer;
     margin-left: 10px;
   }
+
   .pre-btn {
     margin-right: 10px;
   }
+
   .next-btn {
     margin-left: 10px;
   }
+
   button {
     cursor: pointer;
     width: 80px;
     height: 30px;
   }
+
   button[disabled="disabled"] {
     cursor: not-allowed;
   }
 }
+
 .font-12 {
   font-size: 12px;
 }
+
 .font-14 {
   font-size: 14px;
 }
+
 .font-13 {
   font-size: 13px;
 }
+
 .font-16 {
   font-size: 16px;
 }
+
 .font-time {
   font-size: 16px;
   font-weight: 400;
 }
+
 .font-18 {
   font-size: 18px;
 }
+
 .font-20 {
   font-size: 20px;
 }
+
 .border-bottom-black-2 {
   border-bottom: 3px solid black !important;
 }
+
 .border-top-black-2 {
   border-top: 3px solid black !important;
 }
+
 .table-area {
   position: relative;
+
   .vline {
     position: absolute;
     top: 0;
@@ -2360,9 +2334,11 @@ export default {
     transform: translateY(0.5px);
   }
 }
+
 .simhei {
   font-family: SimHei;
 }
+
 .pageInput {
   width: 30px;
   border: 0px;
