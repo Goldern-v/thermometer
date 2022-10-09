@@ -160,8 +160,28 @@
         </div>
         <div
           ref="main"
+          id="main-svg"
           :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
         ></div>
+        <div id="svgbox" ref="svgcanvas">
+              <svg class="svgelement" :style="{
+                width: `${areaWidth}`,
+                height: `${areaHeight}`,
+                position: 'absolute',
+                left: `${leftWidth}px`,
+              }">
+                <defs>
+                  <pattern :id="`pattern`" width="10" height="10" patternUnits="userSpaceOnUse">
+                    <line x1="0" y1="10" x2="10" y2="0" stroke="red" stroke-width="1" />
+                  </pattern>
+                </defs>
+                <g v-for="(item, index) in polygonPoints" :key="index">
+                  <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke="red" stroke-width="1.5px">
+                  </polygon>
+                </g>
+
+              </svg>
+            </div>
       </div>
       <div class="table-box" style="transform: translateY(-0.5px)">
         <div
@@ -1328,7 +1348,8 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(this.$refs.main);
+        let ops = { renderer: "svg" };
+        this.zr = zrender.init(this.$refs.main, ops);
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
@@ -1444,15 +1465,15 @@ export default {
             ①只填写脉搏没有填写心率的单据，不需要连接成闭环形成阴影
             ②填写脉搏和心率的单据需要连接两者数据点形成阴影(此情况为房颤患者)
         */
-        if (this.settingMap.heart.data.length > 0) {
-          this.polygonPoints.forEach((x) => {
-            this.createPolygon({
-              points: x,
-              lineWidth: 1,
-              color: "transparent",
-            });
-          });
-        }
+        // if (this.settingMap.heart.data.length > 0) {
+        //   this.polygonPoints.forEach((x) => {
+        //     this.createPolygon({
+        //       points: x,
+        //       lineWidth: 1,
+        //       color: "transparent",
+        //     });
+        //   });
+        // }
         // 生成心率脉搏过快注释
         this.createNote(this.topPulseNote, this.ySpace + 2, "black");
         // 生成表顶注释
@@ -2365,6 +2386,9 @@ export default {
 #main {
   flex-shrink: 0;
   position: relative;
+}
+#main-svg {
+  z-index: 99;
 }
 .table-area {
   position: relative;

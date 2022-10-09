@@ -172,6 +172,12 @@
           class="index-box"
           :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
         >
+        <i
+            class="split-line"
+            :style="{
+              top: `${96}px`,
+            }"
+          ></i>
           <div class="item times">
             <div :style="`height: ${topAreaHeight}px`"></div>
             <div class="pain-area" :style="`height: ${painAreaHeight}px`">
@@ -179,7 +185,7 @@
             </div>
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
               <div class="label" :style="{ height: `${trHeight}px` }">脉搏</div>
-              <div>n/min</div>
+              <div>次/分</div>
             </div>
             <div class="index" v-for="item in pulseList" :key="item">
               <span>{{ item }}</span>
@@ -188,7 +194,7 @@
           <div class="item temp">
             <div :style="`height: ${topAreaHeight}px`"></div>
             <div class="pain-area" :style="`height: ${painAreaHeight}px`">
-              <div class="pain-index" v-for="item in painList" :key="item">
+              <div class="pain-index" v-for="(item,index) in painList" :key="item" :style="`height: ${index <=4?6:8}px`">
                 <span>{{ item === 4 || item === 7 ? item : `&emsp;` }}</span>
               </div>
             </div>
@@ -203,8 +209,28 @@
         </div>
         <div
           ref="main"
+          id="main-context"
           :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
         ></div>
+        <div id="svgbox" ref="svgcanvas">
+            <svg class="svgelement" :style="{
+              width: `${areaWidth}`,
+              height: `${areaHeight}`,
+              position: 'absolute',
+              left: `${leftWidth}px`,
+            }">
+              <defs>
+                <pattern :id="`pattern`" width="10" height="10" patternUnits="userSpaceOnUse">
+                  <line x1="0" y1="0" x2="10" y2="10" stroke="blue" stroke-width="1" />
+                </pattern>
+              </defs>
+              <g v-for="(item, index) in polygonPoints" :key="index">
+                <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke-width="1.5px">
+                </polygon>
+              </g>
+
+            </svg>
+          </div>
       </div>
       <div class="table-box" style="transform: translateY(-0.5px)">
         <div
@@ -698,12 +724,10 @@ export default {
             break;
           }
         }
-        console.log(dateIndex,timeIndex)
         if(!moment(timeIndex).isBefore(moment(dateIndex))){
         list.push(item);
         }
       }
-      console.log(list)
       return list;
     },
     formatBreatheList() {
@@ -1062,7 +1086,6 @@ export default {
           this.getTimeNum(x[1]) >= this.getTimeNum(value)
         ) {
           this.currentPage = ind + 1;
-          console.log("页码========>", this.currentPage);
           this.$refs.main.innerHTML = "";
           this.reset();
           this.handleData();
@@ -1087,7 +1110,6 @@ export default {
         switch (e.data.type) {
           case "currentPage":
             if (e.data.value > 0) {
-              console.log("换页事件监听中=======》", e.data.value);
               this.currentPage = e.data.value;
               this.$refs.main.innerHTML = "";
               this.reset();
@@ -1399,7 +1421,7 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        let ops = { renderer: "canvas" };
+        let ops = { renderer: "svg" };
         this.zr = zrender.init(this.$refs.main, ops);
         const div = document.createElement("div");
         div.classList.add("tips");
@@ -1443,15 +1465,15 @@ export default {
             ①只填写脉搏没有填写心率的单据，不需要连接成闭环形成阴影
             ②填写脉搏和心率的单据需要连接两者数据点形成阴影(此情况为房颤患者)
         */
-        if (this.settingMap.heart.data.length > 0) {
-          this.polygonPoints.forEach((x) => {
-            this.createPolygon({
-              points: x,
-              lineWidth: 1,
-              color: "transparent",
-            });
-          });
-        }
+        // if (this.settingMap.heart.data.length > 0) {
+        //   this.polygonPoints.forEach((x) => {
+        //     this.createPolygon({
+        //       points: x,
+        //       lineWidth: 1,
+        //       color: "transparent",
+        //     });
+        //   });
+        // }
         // // 生成心率脉搏过快注释
         // this.createNote(this.topPulseNote, this.ySpace + 2, 'black')
         // 生成表顶注释
@@ -2350,7 +2372,7 @@ export default {
     },
   },
   mounted() {
-    document.title = '贵州省人医体温单'
+    document.title = '中国人民解放军联勤保障部队第九二五医院'
     if (window.matchMedia) {
       let this2 = this;
       var mediaQueryList = window.matchMedia("print");
@@ -2414,8 +2436,11 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 6mm 8mm 6mm 8mm; // 页面的边距
+    margin: 5mm 8mm 5mm 8mm; // 页面的边距
   }
+}
+#main-context {
+  z-index: 99;
 }
 .main-view {
   padding: 5px 0;
@@ -2426,11 +2451,11 @@ export default {
   font-family: Simsun;
   .head-hos {
     padding-top: 10px;
-    font-size: 24px;
+    font-size: 38px;
   }
   .head-title {
     padding: 15px 0;
-    font-size: 24px;
+    font-size: 34px;
   }
   .head-info {
     font-size: 14px;
@@ -2634,6 +2659,13 @@ export default {
     cursor: not-allowed;
   }
 }
+.split-line {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: -1px;
+      border-bottom: 2px solid rgb(3, 3, 2);
+    }
 .left_box {
     width: 90px;
     float: left;

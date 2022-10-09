@@ -5,7 +5,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     vitalSigns:[],
-    
+
   },
   mutations: {
     //存储患者信息
@@ -13,7 +13,7 @@ export default new Vuex.Store({
       state.vitalSigns = val.vitalSigns
       state.admission = val.admission_date
       sessionStorage.setItem('vitalSigns',JSON.stringify(val))
-      
+
     },
   },
   actions: {},

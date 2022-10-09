@@ -819,9 +819,8 @@ export default {
           }
         }
         this.createText({
-          // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: value !== "过快" ? y + 2 : y - this.ySpace - 1,
+          y: value !== "不升" ? 0 : this.areaHeight - 6 * this.ySpace + 7,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1415,10 +1414,8 @@ export default {
     // 根据值计算纵坐标
     getYaxis(yRange, value, vitalCode) {
       return (
-        ((yRange[1] - value) / (yRange[1] - yRange[0])) *
-          this.timesTempAreaHeight +
-        this.indexTextAreaHeight +
-        1
+        ((yRange[1] +1 - value) / (yRange[1] + 1 - yRange[0])) *
+          this.timesTempAreaHeight -2
       );
     },
     // 根据时间点计算横坐标

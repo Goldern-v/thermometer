@@ -188,7 +188,7 @@
           <div class="item temp">
             <div :style="`height: ${topAreaHeight}px`"></div>
             <div class="pain-area" :style="`height: ${painAreaHeight}px`">
-              <div class="pain-index" v-for="item in painList" :key="item">
+              <div class="pain-index" v-for="(item,index) in painList" :key="item" :style="`height: ${index <=4?7:8}px`">
                 <span>{{ item === 4 || item === 7 ? item : `&emsp;` }}</span>
               </div>
             </div>
@@ -473,7 +473,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       showFlage: true,

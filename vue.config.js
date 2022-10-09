@@ -74,7 +74,7 @@ const packageName = `${projectName}体温单_${today.getFullYear()}年${today.ge
   1}月${today.getDate()}日${today.getHours()}时${today.getMinutes()}分${today.getSeconds()}秒`;
 console.log(packageName);
 module.exports = {
-  publicPath: ["huaDu", "linYi", "lyyz",'zhzxy'].includes(project)
+  publicPath: ["huaDu", "linYi", "lyyz",'zhzxy','ytll'].includes(project)
     ? "/temperature/"
     : "./",
   outputDir: packageName,

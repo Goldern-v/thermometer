@@ -24,36 +24,22 @@ export const mockData = {
       expand2: '2021-10-18 10:34:00'
     },
     {
-      temperature_type: '病人事件',
-      value: '分娩|',
-      time_point: '2021-10-20 10:34:00',
-      vital_code: 'nurseEvents',
-      expand2: '2021-10-18 10:34:00'
-    },
-    {
-      temperature_type: '病人事件',
-      value: '分娩|',
-      time_point: '2021-10-23 10:34:00',
-      vital_code: 'nurseEvents',
-      expand2: '2021-10-18 10:34:00'
-    },
-    {
       temperature_type: '呼吸',
-      value: '201',
-      time_point: '2021-10-18 21:00:00',
+      value: '20',
+      time_point: '2021-10-18 10:34:00',
       vital_code: 'breathe',
       expand2: null
     },
     {
       temperature_type: '脉搏',
       value: '96',
-      time_point: '2021-10-18 21:00:00',
+      time_point: '2021-10-18 10:34:00',
       vital_code: 'pulse',
       expand2: null
     },
     {
       temperature_type: '心率',
-      value: '310',
+      value: '110',
       time_point: '2021-10-18 10:34:00',
       vital_code: 'heartRate',
       expand2: null
@@ -75,7 +61,7 @@ export const mockData = {
     {
       temperature_type: '血压',
       value: '94/65',
-      time_point: '2021-10-19 18:00:01',
+      time_point: '2021-10-18 10:34:00',
       vital_code: 'bloodPressure',
       expand2: null
     },
@@ -125,13 +111,6 @@ export const mockData = {
       temperature_type: '呼吸',
       value: '20',
       time_point: '2021-10-18 18:00:00',
-      vital_code: 'breathe',
-      expand2: null
-    },
-    {
-      temperature_type: '呼吸',
-      value: '56',
-      time_point: '2021-10-24 21:00:00',
       vital_code: 'breathe',
       expand2: null
     },
@@ -339,6 +318,13 @@ export const mockData = {
       expand2: null
     },
     {
+      temperature_type: '心率',
+      value: '115',
+      time_point: '2021-10-22 14:00:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
       temperature_type: '腋温',
       value: '36.1',
       time_point: '2021-10-22 14:00:00',
@@ -367,6 +353,13 @@ export const mockData = {
       expand2: null
     },
     {
+      temperature_type: '心率',
+      value: '80',
+      time_point: '2021-10-23 14:00:00',
+      vital_code: 'heartRate',
+      expand2: null
+    },
+    {
       temperature_type: '腋温',
       value: '36.2',
       time_point: '2021-10-23 14:00:00',
@@ -392,6 +385,13 @@ export const mockData = {
       value: '111',
       time_point: '2021-10-24 14:00:00',
       vital_code: 'pulse',
+      expand2: null
+    },
+    {
+      temperature_type: '心率',
+      value: '100',
+      time_point: '2021-10-24 14:00:00',
+      vital_code: 'heartRate',
       expand2: null
     },
     {
@@ -429,13 +429,13 @@ export const mockData = {
       vital_code: 'weight',
       expand2: null
     },
-    // {
-    //   temperature_type: '血压',
-    //   value: '89/50',
-    //   time_point: '2021-10-25 14:00:00',
-    //   vital_code: 'bloodPressure',
-    //   expand2: null
-    // },
+    {
+      temperature_type: '血压',
+      value: '89/50',
+      time_point: '2021-10-25 14:00:00',
+      vital_code: 'bloodPressure',
+      expand2: null
+    },
     {
       temperature_type: '腋温',
       value: '36.2',
@@ -504,13 +504,6 @@ export const mockData = {
       value: '灌肠',
       time_point: '2021-10-27 06:00:00',
       vital_code: 'excrement',
-      expand2: null
-    },
-    {
-      temperature_type: '腹围',
-      value: '1000',
-      time_point: '2021-10-19 06:00:00',
-      vital_code: 'AC',
       expand2: null
     },
     {
@@ -842,13 +835,13 @@ export const mockData = {
       vital_code: 'weight',
       expand2: null
     },
-    // {
-    //   temperature_type: '血压',
-    //   value: '95/52',
-    //   time_point: '2021-11-01 14:00:00',
-    //   vital_code: 'bloodPressure',
-    //   expand2: null
-    // },
+    {
+      temperature_type: '血压',
+      value: '95/52',
+      time_point: '2021-11-01 14:00:00',
+      vital_code: 'bloodPressure',
+      expand2: null
+    },
     {
       temperature_type: '腋温',
       value: '36.9',

@@ -3298,6 +3298,12 @@ export const mockData = {
           "vital_code": "01"
       },
       {
+          "temperature_type": "体温",
+          "value": "35",
+          "time_point": "2022-09-04 07:00:00",
+          "vital_code": "01"
+      },
+      {
           "temperature_type": "脉搏",
           "value": "75",
           "time_point": "2022-09-24 07:00:00",

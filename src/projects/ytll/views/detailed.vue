@@ -51,7 +51,7 @@
 </template>
 <script>
 import zrender from "zrender";
-import { mockData } from "src/projects/ytll/mockData.js";
+import { mockData } from "src/projects/foShanShiYi/mockData.js";
 import { common } from "src/api/index.js";
 
 export default {
@@ -81,7 +81,7 @@ export default {
       dateRangeList: [], // 数组长度决定页数
       settingMap: {
         axillaryTemperature: {
-          vitalCode: "1",
+          vitalCode: "01",
           label: "腋表",
           color: "blue",
           lineColor: "blue",
@@ -93,7 +93,7 @@ export default {
         },
 
         pulse: {
-          vitalCode: "11",
+          vitalCode: "02",
           label: "脉搏",
           color: "red",
           solid: true,
@@ -104,7 +104,7 @@ export default {
           ],
         },
         heart: {
-          vitalCode: "12",
+          vitalCode: "20",
           label: "心率",
           color: "red",
           dotType: "Circle",
@@ -115,9 +115,9 @@ export default {
         },
       },
       lineMap: {
-        1: "axillaryTemperature",
-        12: "heart",
-        11: "pulse",
+        "01": "axillaryTemperature",
+        "02": "heart",
+        "20": "pulse",
       },
     };
   },
@@ -139,19 +139,6 @@ export default {
       this.$nextTick(() => {
         this.handleData();
       });
-      // const urlParams = this.urlParse();
-      // let data = {
-      //   tradeCode: "nurse_getPatientVitalSigns",
-      //   PatientId: urlParams.PatientId,
-      //   VisitId: urlParams.VisitId,
-      //   StartTime: urlParams.StartTime,
-      // };
-      // common(data).then((res) => {
-      //   this.apiData = res.data;
-      //   this.$nextTick(() => {
-      //     this.handleData();
-      //   });
-      // });
     }
   },
   methods: {
@@ -168,10 +155,10 @@ export default {
         Object.values(this.settingMap)
           .filter((x) => {
             return showVitalSign === "1"
-              ? x.label === "腋表"
+              ? x.vitalCode === "01"
               : showVitalSign === "2"
-              ? x.label === "脉搏"
-              : x.label === "心率";
+              ? x.vitalCode === "02"
+              : x.vitalCode === "20";
           })
           .forEach((x) => {
             this.createBrokenLine({
@@ -486,19 +473,6 @@ export default {
     getTimeStamp(timeStr) {
       return new Date(timeStr).getTime();
     },
-    urlParse() {
-      let obj = {};
-      let reg = /[?&][^?&]+=[^?&%]+/g;
-      let url = window.location.hash;
-      let arr = url.match(reg) || [];
-      arr.forEach((item) => {
-        let tempArr = item.substring(1).split("=");
-        let key = decodeURIComponent(tempArr[0]);
-        let val = decodeURIComponent(tempArr[1]);
-        obj[key] = val;
-      });
-      return obj;
-    },
     // 事件处理
     messageHandle(e) {
       if (e && e.data) {
@@ -506,6 +480,7 @@ export default {
           case "currentPage":
             if (e.data.value > 0) {
               this.currentPage = e.data.value;
+              sessionStorage.setItem('currentPage',e.data.value)
               this.$refs.main.innerHTML = "";
               this.reset();
               this.handleData();
@@ -687,6 +662,7 @@ export default {
             time: this.vitalSigns[i].time_point,
             value: Number(this.vitalSigns[i].value),
           });
+          console.log(112121,this.settingMap)
           continue;
         }
       }
@@ -955,7 +931,8 @@ export default {
       return list;
     },
     showVitalSign() {
-      let type = this.urlParse().showVitalSign;
+      const patientInfo = this.$route.query
+      let type = patientInfo.showVitalSign;
       return type;
     },
     vitalSigns() {

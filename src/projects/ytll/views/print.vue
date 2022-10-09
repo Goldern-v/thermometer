@@ -1,11 +1,11 @@
 <template>
-  <div v-if="printData">
+  <div v-if="printData" class="printAll">
     <Thermometer
       ref="thermometer"
       :printData="printData"
-      :isPrintAll="isPrintAll"
-      v-for="(item, index) in pageTotal"
       :printPage="index + 1"
+      isPrintAll
+      v-for="(item, index) in pageTotal"
       :key="index"
       :class="index + 1 <= pageTotal ? 'printBreak' : ''"
     />
@@ -13,106 +13,111 @@
 </template>
 
 <script>
-import Thermometer from "./thermometer.vue";
-import { mockData } from "src/projects/ytll/mockData.js";
-import { common , getNurseExchangeInfoBatch } from "src/api/index.js"
+import Thermometer from './thermometer.vue'
+import { mockData } from 'src/projects/ytll/mockData.js'
 
 export default {
   components: {
-    Thermometer,
+    Thermometer
   },
   data() {
     return {
       useMockData: false,
       printData: null,
       pageTotal: 1,
-      isPrintAll: true,
-      exchangeInfoAll:[]
-    };
+      loadDone:false,
+    }
   },
   methods: {
     //外部打印事件
     messageHandle(e) {
       if (e && e.data) {
         switch (e.data.type) {
-          case "printingAll":
-             setTimeout(() => {
-         window.print();
-        }, 1000)
-            break;
+          case 'printingAll':
+            window.print()
+            break
           default:
-            break;
+            break
         }
       }
     },
     urlParse() {
-      let obj = {};
-      let reg = /[?&][^?&]+=[^?&%]+/g;
-      let url = window.location.hash;
-      let arr = url.match(reg) || [];
+      let obj = {}
+      let reg = /[?&][^?&]+=[^?&%]+/g
+      let url = window.location.hash
+      let arr = url.match(reg) || []
       arr.forEach((item) => {
-        let tempArr = item.substring(1).split("=");
-        let key = decodeURIComponent(tempArr[0]);
-        let val = decodeURIComponent(tempArr[1]);
-        obj[key] = val;
-      });
-      return obj;
-    },
+        let tempArr = item.substring(1).split('=')
+        let key = decodeURIComponent(tempArr[0])
+        let val = decodeURIComponent(tempArr[1])
+        obj[key] = val
+      })
+      return obj
+    }
   },
   created() {
     // 实现外部分页和打印
-    window.addEventListener("message", this.messageHandle, false);
+    window.addEventListener('message', this.messageHandle, false)
   },
   mounted() {
-    const urlParams = this.urlParse();
+    // const patientInfo = this.urlParse()
+    const patientInfo = this.$route.query
     if (this.useMockData) {
-      this.printData = mockData;
+      this.printData = mockData
       setTimeout(() => {
-        this.pageTotal = this.$refs.thermometer[0].pageTotal;
-      }, 0);
+          this.pageTotal = this.$refs.thermometer[0].pageTotal
+        }, 0)
+      // let timer = setInterval(()=>{
+      // this.$nextTick(() => {
+      //     const el = Array.from(this.$refs.thermometer).map(e=>!e.zr)
+      //     if(!el.includes(true)){
+      //       this.loadDone = true
+      //       timer = null
+      //     }
+      //   })
+      //   },1000)
+        // setTimeout(()=>{
+        //   this.$nextTick(() => {
+        //   const el = Array.from(this.$refs.thermometer).map(e=>e.zr)
+        //   console.log(el)
+        // })
+        // },1500)
+      // this.$nextTick(() => {
+      //   this.pageTotal = this.$refs.thermometer[0].pageTotal
+      //   const el = Array.from(this.$refs.thermometer)
+      //   console.log(this.$refs.thermometer,el)
+      // })
     } else {
-      let data={
-          tradeCode: "nurse_getPatientVitalSigns",
-          PatientId: urlParams.PatientId,
-          VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime,
+      this.$http({
+        method: 'post',
+        url: '/crHesb/hospital/common',
+        data: {
+          tradeCode: 'nurse_getPatientVitalSigns',
+          PatientId: patientInfo.PatientId,
+          VisitId: patientInfo.VisitId,
+          StartTime: patientInfo.StartTime
         }
-      common(data).then((res) => {
-        this.printData = res.data;
+      }).then((res) => {
+        this.printData = res.data
         setTimeout(() => {
-          this.pageTotal = this.$refs.thermometer[0].pageTotal;
-          let dataRangePrintAll=this.$refs.thermometer[0].dateRangeList
-        let exchangData={
-          startLogDateTime:dataRangePrintAll[0][0] +' 00:00:00',
-          endLogDateTime:dataRangePrintAll[dataRangePrintAll.length-1][1]+' 24:00:00',
-          visitId: urlParams.VisitId,
-          patientId: urlParams.PatientId,
-        }
-      getNurseExchangeInfoBatch(exchangData).then((res)=>{
-        let nurseExchangeInfo=res.data.data.exchangeInfos
-         this.$nextTick(()=>{
-          for(let i=0;i<this.$refs.thermometer.length;i++){
-            this.$refs.thermometer[i].adtLog=nurseExchangeInfo[i].adtLog
-            this.$refs.thermometer[i].bedExchangeLog=nurseExchangeInfo[i].bedExchangeLog
-          }
-          })
-
+          this.pageTotal = this.$refs.thermometer[0].pageTotal
+        }, 0)
       })
-         
-        }, 0);
-      });
     }
   },
   watch: {
-    // 因为分页可能在体温单外面，所以给父页面传递pageTotal
-    // pageTotal(value) {
-    //   window.parent.postMessage({ type: 'pageTotal', value }, '*')
-    // }
+    pageTotal: {
+      handler(val) {
+
+      }
+    },
+    immediate: true,
+    deep: true
   },
   beforeDestroy() {
-    window.removeEventListener("message", this.messageHandle, false);
-  },
-};
+    window.removeEventListener('message', this.messageHandle, false)
+  }
+}
 </script>
 
 <style>
