@@ -55,6 +55,8 @@
     "build:ytll": "vue-cli-service build --project=ytll",
     "dev:925": "vue-cli-service serve --project=925",
     "build:925": "vue-cli-service build --project=925",
+    "dev:fssd": "vue-cli-service serve --project=fssd",
+    "build:fssd": "vue-cli-service build --project=fssd",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },

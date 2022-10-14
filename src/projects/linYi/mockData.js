@@ -3332,6 +3332,12 @@ export const mockData = {
           "value": "入院|二十时十三分",
           "time_point": "2022-09-03 20:13:21",
           "vital_code": "5"
+      },
+      {
+          "temperature_type": "事件名称",
+          "value": "分娩",
+          "time_point": "2022-09-03 20:13:21",
+          "vital_code": "5"
       }
   ]
 }

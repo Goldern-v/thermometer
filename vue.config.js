@@ -59,6 +59,8 @@ const projectName = (() => {
       return "烟台玲珑英诚医院";
     case "925": // 
       return "中国人民解放军联勤保障部队第九二五医院";
+    case "fssd": // 
+      return "南方医科大学顺德医院";
     case "common": // 可配置的通用版本
       return "配置通用版本";
     default:
@@ -154,7 +156,9 @@ module.exports = {
           return "./src/projects/qhwy/main.js";
         case "ytll": // 烟台玲珑英诚医院
           return "./src/projects/ytll/main.js";
-        case "925": // 烟台玲珑英诚医院
+        case "fssd": // 烟台玲珑英诚医院
+          return "./src/projects/fssd/main.js";
+        case "925": // 贵州925医院
           return "./src/projects/925/main.js";
         case "common": // 可配置的通用版本
           return "./src/projects/common/main.js";
@@ -271,7 +275,7 @@ module.exports = {
             case "wuHanYaXin":
               return "http://218.107.37.134:9093";
             case "longJiang":
-              return "http://120.224.211.7:61025";
+              return "http://218.13.34.230:9091";
             case "linYi":
               return "http://120.224.211.7:61025"; //无可用外网
             case "yiZhou":
@@ -281,7 +285,7 @@ module.exports = {
             case "zhzxy":
               return "http://218.107.37.134:9093";
             case "tongJiang":
-              return "http://218.107.37.134:9093";
+              return "http://192.168.10.98:9091";
             case "qhwy":
               return "http://218.107.37.134:9093";
             case "common":

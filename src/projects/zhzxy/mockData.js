@@ -6,7 +6,7 @@ export const mockData = {
       patient_id: '590904',
       name: '陈小倩',
       sex: '女',
-      dept_name: '乳腺胸外科',
+      dept_name: '乳腺胸外科乳腺胸外科',
       bed_label: '012',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
@@ -121,20 +121,20 @@ export const mockData = {
       time_point: '2021-05-18 03:12:00',
       vital_code: '31'
     },
-    // {
-    //   temperature_type: '表底注释',
-    //   value: '请假',
-    //   // "time_point": "2020-12-15 03:12:00",
-    //   time_point: '2021-05-18 03:12:00',
-    //   vital_code: '31'
-    // },
-    // {
-    //   temperature_type: '表底注释',
-    //   value: '请假',
-    //   // "time_point": "2020-12-15 03:12:00",
-    //   time_point: '2021-05-20 03:12:00',
-    //   vital_code: '31'
-    // },
+    {
+      temperature_type: '表底注释',
+      value: '请假',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-18 03:12:00',
+      vital_code: '31'
+    },
+    {
+      temperature_type: '表底注释',
+      value: '请假',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-20 03:12:00',
+      vital_code: '31'
+    },
     {
       temperature_type: '总ww排出量',
       value: '1475',
@@ -334,14 +334,20 @@ export const mockData = {
     },
     {
       temperature_type: '体温',
-      value: '39.1',
+      value: '39',
       time_point: '2021-05-18 12:00:00',
       vital_code: '1'
     },
     {
       temperature_type: '体温',
-      value: '37.1',
-      time_point: '2021-05-18 16:00:00',
+      value: '39',
+      time_point: '2021-05-19 16:00:00',
+      vital_code: '1'
+    },
+    {
+      temperature_type: '体温',
+      value: '35',
+      time_point: '2021-05-19 16:00:00',
       vital_code: '1'
     },
     {

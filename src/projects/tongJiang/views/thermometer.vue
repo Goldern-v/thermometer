@@ -8,10 +8,10 @@
     <div class="head-hos">广东同江医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item" style="flex: 1.3">
+      <div class="item">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item" style="flex: 0.8" >
+      <div class="item">
         年龄：<span class="value">{{
           PatientId.endsWith("_1")
             ? "0岁"
@@ -20,23 +20,23 @@
             : patInfo.age
         }}</span>
       </div>
-      <div class="item" style="flex: 0.7">
+      <div class="item">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="flex: 1.5">
+      <div class="item">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item" style="flex: 1.3">
+      <div class="item">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" style="flex: 0.8">
+      <div class="item">
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="flex:1.5">
+      <div class="item">
         住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
     </div>
@@ -119,7 +119,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight - 10}px` }">
+        <div class="row" :style="{ height: `${trHeight - 3}px` }">
           <div class="white_line"></div>
           <div
             class="label"
@@ -253,9 +253,22 @@
             ></div>
           </div>
         </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            总出量(ml)
+          </div>
+          <div class="value-item-box">
+            <div
+              class="value-item font-16"
+              v-for="(item, index) in getFormatList({ tList: outputList })"
+              :key="index"
+              v-html="item.value"
+            ></div>
+          </div>
+        </div>
 
         <div>
-          <div class="left_box" :style="{ height: `${74.8}px` }">
+          <div class="left_box" :style="{ height: `${66}px` }">
             排<br />出<br />量
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
@@ -285,21 +298,22 @@
               ></div>
             </div>
           </div>
-          <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-              其他(ml)
+              {{ outCustomList.label || "其他(ml)" }}
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-13"
-                v-for="(item, index) in getFormatList({ tList: otherList })"
+                class="value-item font-14"
+                :style="{ 'font-size': scaleFont(item.value) }"
+                v-for="(item, index) in getFormatList({ tList: outCustomList })"
                 :key="index"
                 v-html="item.value"
               ></div>
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">体重</div>
+            <div class="label" :style="{ width: `${leftWidth}px` }">体重(kg)</div>
             <div class="value-item-box">
               <div
                 class="value-item font-13"
@@ -629,7 +643,7 @@ export default {
       return tds;
     },
     trHeight() {
-      return this.ySpace +10;
+      return this.ySpace +7;
     },
 
     maTds() {
@@ -1055,10 +1069,10 @@ export default {
           // 超出时间范围的抛弃
           continue;
         }
-        if (["4", "41", "42", "43"].includes(vitalSigns[i].vital_code)) {
+        if (["40", "41", "42", "43"].includes(vitalSigns[i].vital_code)) {
           const sign = vitalSigns[i].temperature_type;
           switch (vitalSigns[i].vital_code) {
-            case "4":
+            case "40":
               this.outCustomList.push({
                 time: vitalSigns[i].time_point,
                 value: vitalSigns[i].value,
@@ -2102,11 +2116,10 @@ export default {
   .head-info {
     display: flex;
     font-size: 15px;
+    margin-left:20px;
     .item {
-      flex: 1;
       font-size: 15px;
-      text-align: left;
-      padding-left: 5px;
+      padding-left: 10px;
       .value {
         font-weight: normal;
         text-decoration: underline;
@@ -2156,7 +2169,7 @@ export default {
     font-size: 18px;
     border-bottom: 2px solid black;
     border-top: none;
-    padding-top: 8px;
+    padding-top: 1px;
   }
   .row {
     display: flex;
@@ -2231,7 +2244,7 @@ export default {
     }
     .times {
       .text {
-        height: 82.7px;
+        height: 70.7px;
       }
       .index {
         color: red;
@@ -2258,44 +2271,32 @@ export default {
     }
     .temp {
       .text {
-        height: 82.7px;
+        height: 70.7px;
       }
     }
-    .temp :nth-child(2) > span {
-      margin-top: -7px;
-    }
     .temp :nth-child(5) > span {
-      margin-top: 5px;
-    }
-    .temp :nth-child(6) > span {
-      margin-top: 13px;
+      margin-top: -3px;
     }
     .temp :nth-child(7) > span {
-      margin-top: 15px;
+      margin-top: -6px;
     }
     .temp :nth-child(8) > span {
-      margin-top: 18px;
+      margin-top: -4px;
     }
     .temp :nth-child(9) > span {
-      margin-top: 23px;
-    }
-    .times :nth-child(2) > span {
-      margin-top: -7px;
+      margin-top: -4px;
     }
     .times :nth-child(5) > span {
-      margin-top: 5px;
-    }
-    .times :nth-child(6) > span {
-      margin-top: 13px;
+      margin-top: -3px;
     }
     .times :nth-child(7) > span {
-      margin-top: 16px;
+      margin-top: -6px;
     }
     .times :nth-child(8) > span {
-      margin-top: 18px;
+      margin-top: -4px;
     }
     .times :nth-child(9) > span {
-      margin-top: 23px;
+      margin-top: -4px;
     }
     .pain-area {
       position: relative;

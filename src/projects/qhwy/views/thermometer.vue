@@ -1,6 +1,6 @@
 <template>
   <div class="main-view" :style="{ width: `${leftWidth + areaWidth}px` }" v-if="apiData" @dblclick="dblclick">
-    <div class="head-hos" :style="{ width: `${leftWidth + areaWidth + 60}px`,color:'red' }">
+    <div class="head-hos" :style="{ width: `${leftWidth + areaWidth + 60}px`}">
       青海省第五人民医院(青海省肿瘤医院)
     </div>
     <div class="head-title" :style="{ width: `${leftWidth + areaWidth + 60}px` }">
@@ -74,17 +74,17 @@
           </div>
         </div>
         <div class="row border-bottom-black-2" :style="{ height: `${trHeight + 10}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">术后天数</div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
           <div class="value-item-box">
-            <div class="value-item" v-for="(item, index) in formatOperateDateList" :key="index">
+            <div class="value-item" v-for="(item, index) in formatStayDayList" :key="index">
               {{ item }}
             </div>
           </div>
         </div>
         <div class="row border-bottom-black-2" :style="{ height: `${trHeight + 10}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">术后天数</div>
           <div class="value-item-box">
-            <div class="value-item" v-for="(item, index) in formatStayDayList" :key="index">
+            <div class="value-item" v-for="(item, index) in formatOperateDateList" :key="index">
               {{ item }}
             </div>
           </div>

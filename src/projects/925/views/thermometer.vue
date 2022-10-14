@@ -28,7 +28,7 @@
         >
       </div>
       <div class="item">
-        住院号<span class="value">&emsp;{{ patInfo.patient_id }}&emsp;</span>
+        住院号<span class="value">&emsp;{{ patInfo.inp_no }}&emsp;</span>
       </div>
     </div>
     <div class="table-area">
@@ -323,7 +323,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">腹围(cm)</div>
           <div class="value-item-box">
             <div
@@ -334,7 +334,7 @@
               {{ item.value }}
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             总入量(ml)
@@ -687,18 +687,18 @@ export default {
         i < timeNumRange[1]-1;
         i += 6 * 60 * 60 * 1000
       ) {
-        const dateIndex = moment(new Date(i)).format('YYYY-MM-DD 12:00:00')
-        const timeIndex = moment(new Date(i)).format('YYYY-MM-DD HH:mm:ss')
+        const dateIndex = this.getTimeNum(moment(new Date(i)).format('YYYY-MM-DD 12:00:00'))
+        const timeIndex = i
         const item = { timeNum: i, value: "" };
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum > i && timeNum <=i + 6 * 60 * 60 * 1000) {
+          if (timeNum >= i && timeNum <i + 6 * 60 * 60 * 1000) {
             item.value = pressureList[j].value;
             pressureList.splice(j, 1);
             break;
           }
         }
-        if(moment(timeIndex).isBefore(moment(dateIndex))){
+        if(timeIndex<dateIndex){
         list.push(item);
         }
       }
@@ -713,23 +713,27 @@ export default {
         i < timeNumRange[1]-1;
         i += 6 * 60 * 60 * 1000
       ) {
-        const dateIndex = moment(new Date(i)).format('YYYY-MM-DD 12:00:00')
-        const timeIndex = moment(new Date(i)).format('YYYY-MM-DD HH:mm:ss')
+        const dateIndex2 = this.getTimeNum(moment(new Date(i)).format('YYYY-MM-DD 12:00:00'))
+        const dateIndex3 = this.getTimeNum(moment(new Date(i)).format('YYYY-MM-DD 23:59:59'))
+        const timeIndex = i
         const item = { timeNum: i, value: "" };
+        item.time = moment(new Date(timeIndex)).format('YYYY-MM-DD HH:mm:ss')
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum > i && timeNum <=i + 6 * 60 * 60 * 1000) {
+          if (timeNum >= i && timeNum <i + 6 * 60 * 60 * 1000) {
             item.value = pressureList[j].value;
+            item.valueTiame = pressureList[j].time
             pressureList.splice(j, 1);
             break;
           }
         }
-        if(!moment(timeIndex).isBefore(moment(dateIndex))){
+        if(timeIndex>=dateIndex2&&timeIndex<dateIndex3){
         list.push(item);
         }
       }
       return list;
     },
+
     formatBreatheList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
@@ -1404,13 +1408,16 @@ export default {
       notes.forEach((x, i) => {
         let value = x.value;
         if (x.value.includes("|")) {
-          value = `${x.value.replace("|", "于")}`;
+          value = `${x.value.replace("|", "||")}`;
         }
+        let bottomText = this.bottomSheetNote.map((x) => {
+          return x.value;
+        });
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
           y,
-          value: this.addn(value),
+          value: this.addn(value,bottomText),
           color,
           textLineHeight: this.ySpace + 1,
           fontWeight: "bold",
@@ -2074,10 +2081,17 @@ export default {
       return xAxis;
     },
     // 增加换行符
-    addn(str) {
+    addn(str, bottomText) {
       let formatStr = "";
-      if (str.length < 2) {
-        return str;
+      let formatTopValu = "";
+      if (str.length <= 2 && !bottomText.includes(str)) {
+        for (let i = 0; i < str.length; i++) {
+          formatTopValu +=
+            isNaN(str[i]) || (!isNaN(str[i]) && isNaN(str[i + 1]))
+              ? `${str[i]}\n\n\n\n`
+              : str[i];
+        }
+        return formatTopValu;
       } else {
         for (let i = 0; i < str.length; i++) {
           formatStr +=
@@ -2441,6 +2455,9 @@ export default {
 }
 #main-context {
   z-index: 99;
+  svg {
+    transform: translateX(-0.5px) !important;;
+  }
 }
 .main-view {
   padding: 5px 0;
@@ -2451,7 +2468,7 @@ export default {
   font-family: Simsun;
   .head-hos {
     padding-top: 10px;
-    font-size: 38px;
+    font-size: 24px;
   }
   .head-title {
     padding: 15px 0;

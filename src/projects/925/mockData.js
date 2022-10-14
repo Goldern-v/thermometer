@@ -24,6 +24,13 @@ export const mockData = {
       expand2: '2021-10-18 10:34:00'
     },
     {
+      temperature_type: '病人事件',
+      value: '手术',
+      time_point: '2021-10-18 14:34:00',
+      vital_code: 'nurseEvents',
+      expand2: '2021-10-18 10:34:00'
+    },
+    {
       temperature_type: '呼吸',
       value: '20',
       time_point: '2021-10-18 10:34:00',
@@ -60,11 +67,53 @@ export const mockData = {
     },
     {
       temperature_type: '血压',
-      value: '94/65',
-      time_point: '2021-10-18 10:34:00',
+      value: '04:00:00',
+      time_point: '2021-10-18 04:00:00',
       vital_code: 'bloodPressure',
       expand2: null
     },
+    {
+      temperature_type: '血压',
+      value: '08:00:00',
+      time_point: '2021-10-18 08:00:00',
+      vital_code: 'bloodPressure',
+      expand2: null
+    },
+    {
+      temperature_type: '血压',
+      value: '14:00:00',
+      time_point: '2021-10-18 14:00:00',
+      vital_code: 'bloodPressure',
+      expand2: null
+    },
+    {
+      temperature_type: '血压',
+      value: '18:00:00',
+      time_point: '2021-10-18 18:00:00',
+      vital_code: 'bloodPressure',
+      expand2: null
+    },
+    {
+      temperature_type: '血压',
+      value: '18:00:00',
+      time_point: '2021-10-19 18:00:00',
+      vital_code: 'bloodPressure',
+      expand2: null
+    },
+    {
+      temperature_type: '血压',
+      value: '18:00:00',
+      time_point: '2021-10-20 18:00:00',
+      vital_code: 'bloodPressure',
+      expand2: null
+    },
+    // {
+    //   temperature_type: '血压',
+    //   value: '05:59:59',
+    //   time_point: '2021-10-18 05:59:59',
+    //   vital_code: 'bloodPressure',
+    //   expand2: null
+    // },
     {
       temperature_type: '腋温',
       value: '36.7',
