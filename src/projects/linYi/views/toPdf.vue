@@ -1,12 +1,9 @@
 <template>
-  <div class="printAll">
-    <div>
-      <img :src="imgUrl" />
-    </div>
-    <div ref="printAll">
+  <div class="printAll" style="width:100% ;">
+    <!-- <div ref="printAll">
       <printAll > </printAll>
-    </div>
-
+    </div> -->
+<iframe src="http://localhost:4892/crNursing/index" width="100%" height="800px"></iframe>
   </div>
 </template>
 

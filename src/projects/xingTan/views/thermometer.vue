@@ -3,10 +3,10 @@
     <div class="head-hos">南方医科大学顺德医院附属杏坛医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item" style="flex: 1.2">
+      <div class="item" >
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item" style="flex: 0.8">
+      <div class="item">
         年龄：<span class="value">{{
         PatientId.endsWith("_1")
         ? "0岁"
@@ -15,15 +15,15 @@
         : patInfo.age
         }}</span>
       </div>
-      <div class="item" style="flex: 0.7">
+      <div class="item">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="flex: 1.4">
+      <div class="item">
         入院日期：<span class="value">{{
         patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item" style="flex: 1.3">
+      <div class="item">
         科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
       <div class="item">
@@ -31,7 +31,7 @@
         bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="text-align: right;flex:1.5">
+      <div class="item" >
         住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
     </div>
@@ -763,6 +763,14 @@ export default {
         }
       });
     },
+    //定位数据
+    clickDateChangeTime(dateTime){
+      if(dateTime.time)
+      window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime.time },
+          '*'
+        )
+    },
     middleTdStyle(index, length) {
       return {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 7 : 6)}px`,
@@ -1007,7 +1015,8 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        this.zr = zrender.init(this.$refs.main);
+        let ops = { renderer: "svg" };
+        this.zr = zrender.init(this.$refs.main, ops);
         const div = document.createElement("div");
         div.classList.add("tips");
         this.$refs.main.appendChild(div);
@@ -1118,7 +1127,7 @@ export default {
               let noteTime = `${notes[j].value}${this.toChinesNum(
                 new Date(notes[j].time).getHours()
               )}时${this.toChinesNum(new Date(notes[j].time).getMinutes())}分`;
-              yNew += (noteTime.length + 2) * this.ySpace -5;
+              yNew += (noteTime.length + 2) * this.ySpace -3;
             } else {
               yNew += (notes[j].value.length + 1) * this.ySpace + (notes[j].value.length + 1) * 2 - 3 ;
             }
@@ -1397,6 +1406,10 @@ export default {
         domTips[0].setAttribute("style", `display:none`);
         el.animateTo(shapeOut, 100, 0);
       });
+      el.on('click',()=>{
+      let dateTime=config.tips.slice(0,20)
+        this.clickDateChangeTime({time:dateTime})
+    })
     },
     createBrokenLine({
       vitalCode,
@@ -1874,13 +1887,10 @@ export default {
   .head-info {
     display: flex;
     font-size: 18px;
+    justify-content: space-between;
 
     .item {
-      flex: 1;
       font-size: 16px;
-      text-align: left;
-      padding-left: 5px;
-
       .value {
         font-weight: normal;
         text-decoration: underline;

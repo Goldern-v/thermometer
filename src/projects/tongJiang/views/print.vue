@@ -1,5 +1,5 @@
 <template>
-  <div v-if="printData">
+  <div v-if="printData" style="height:100%">
     <Thermometer
       ref="thermometer"
       :printData="printData"
@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import Thermometer from "./thermometer.vue";
+import Thermometer from "./printTem.vue";
 import { mockData } from "src/projects/tongJiang/mockData.js";
 
 export default {
@@ -33,7 +33,7 @@ export default {
       if (e && e.data) {
         switch (e.data.type) {
           case "printingAll":
-            this.isPrintAll = window.print();
+            window.print();
             break;
           default:
             break;
@@ -86,7 +86,15 @@ export default {
 </script>
 
 <style>
+@media print {
+  @page {
+    size: a4; 
+    margin: 8mm 5mm 8mm 5mm; 
+  }
+
+}
 .printBreak {
   page-break-after: always;
 }
+
 </style>

@@ -36,8 +36,8 @@ export default {
       if (e && e.data) {
         switch (e.data.type) {
           case "printingAll":
-             setTimeout(() => {
-         window.print();
+            setTimeout(() => {
+        window.print();
         }, 1000)
             break;
           default:

@@ -784,7 +784,7 @@ export default {
         if (days[index] <= 10) {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
           return index === 0
-            ? days[index]
+            ? days[index]==0?'':days[index]
             : `${this.numToRome(index + 1)}-${days[index]}`;
         } else {
           return "";

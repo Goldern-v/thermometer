@@ -285,7 +285,7 @@ module.exports = {
             case "zhzxy":
               return "http://218.107.37.134:9093";
             case "tongJiang":
-              return "http://192.168.10.98:9091";
+              return "http://218.204.204.90:9095";
             case "qhwy":
               return "http://218.107.37.134:9093";
             case "common":

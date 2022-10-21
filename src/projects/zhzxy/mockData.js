@@ -23,13 +23,13 @@ export const mockData = {
       time_point: '2021-05-15 13:00:00',
       vital_code: '3'
     },
-    {
-      temperature_type: '表顶注释',
-      value: '手术分娩|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-15 10:12:00',
-      vital_code: '3'
-    },
+    // {
+    //   temperature_type: '表顶注释',
+    //   value: '手术分娩|',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2021-05-15 10:12:00',
+    //   vital_code: '3'
+    // },
     {
       temperature_type: '表顶注释',
       value: '分娩|',
