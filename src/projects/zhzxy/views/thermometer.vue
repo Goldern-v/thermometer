@@ -770,7 +770,7 @@ export default {
         if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
           return "";
         //获取出院日期，如果出院了就结束运算
-        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
+        // if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
         if (!this.operateDateList.length) return "";
         // 构造天数差数组，有相同天数差的说明在同一天x
         const days = this.operateDateList.map((y) => {
@@ -781,7 +781,7 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
-        if (days[index] <= 10) {
+        if (days[index] <= 14) {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
           return index === 0
             ? days[index]==0?'':days[index]
@@ -1698,8 +1698,11 @@ export default {
               });
               const sameAxisItem = tList.find(
                 (x) =>
-                  x.x.toFixed(2) === cx.toFixed(2) &&
-                  x.y.toFixed(2) === cy.toFixed(2)
+                  //由于有些微小的偏差，比如存在一px左右的数据偏差，就写个区间
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 4.5 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 4.5
               );
               if (sameAxisItem) {
                 params = {
@@ -2143,7 +2146,12 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 5mm 8mm 5mm 8mm; // 页面的边距
+    margin: 7mm 8mm 7mm 8mm; // 页面的边距
+  }
+  .main-view {
+    transform: scaleY(1.05) !important; 
+    transform-origin: 0 0;
+
   }
 }
 .main-view {

@@ -3,7 +3,7 @@
     <!-- <div ref="printAll">
       <printAll > </printAll>
     </div> -->
-<iframe src="http://localhost:4892/crNursing/index" width="100%" height="800px"></iframe>
+<iframe src="https://info.cr-health.com:20206/crNursing/index" width="100%" height="800px"></iframe>
   </div>
 </template>
 

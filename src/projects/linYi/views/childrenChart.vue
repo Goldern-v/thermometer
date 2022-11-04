@@ -2,7 +2,6 @@
   <div
     class="main-view"
     :style="{ width: `${leftWidth + areaWidth}px` }"
-    v-if="apiData.patientInfo"
     @dblclick="dblclick"
   >
     <div class="head-hos">临邑县人民医院</div>
@@ -269,7 +268,7 @@ export default {
         return null;
       },
     },
-    apiData: {
+    apiDataObj: {
       type: Object | String,
       default() {
         return null;
@@ -346,6 +345,9 @@ export default {
     };
   },
   computed: {
+    apiData(){
+      return this.apiDataObj
+    },
     timeTds() {
       const list = [3, 7, 11, 15, 19, 23];
       const tds = [];
@@ -516,6 +518,7 @@ export default {
     }
   },
   created() {
+    console.log(this.apiData)
     document.title = "临邑县人民医院新生儿体温单";
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);

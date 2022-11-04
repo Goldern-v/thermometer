@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Thermometer from "./thermometer.vue";
+import Thermometer from "./thermometerPrint.vue";
 import { mockData } from "src/projects/foShanShiYi/mockData.js";
 import { common , getNurseExchangeInfoBatch } from "src/api/index.js"
 

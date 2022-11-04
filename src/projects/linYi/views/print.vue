@@ -66,6 +66,7 @@ export default {
       this.printData = mockData
       setTimeout(() => {
           this.pageTotal = this.$refs.thermometer[0].pageTotal
+          console.log(this.$refs.thermometer,987)
         }, 0)
       // let timer = setInterval(()=>{
       // this.$nextTick(() => {

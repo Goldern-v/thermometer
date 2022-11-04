@@ -53,7 +53,8 @@
 import zrender from "zrender";
 import { mockData } from "src/projects/foShanShiYi/mockData.js";
 import { common } from "src/api/index.js";
-
+import childrenChart from "./childrenChart.vue";
+import tem from "./childrenChart.vue";
 export default {
   props: {
     showItem: {

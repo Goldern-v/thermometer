@@ -295,7 +295,7 @@
     </div>
   </div>
   <div v-else>
-    <childrenChart v-if="apiData.patientInfo" :apiData="apiData" />
+    <childrenChart v-if="apiData" :apiDataObj.sync="apiData" :printPage="printPage"  isPrintAll :printData="printData" />
   </div>
 </template>
 

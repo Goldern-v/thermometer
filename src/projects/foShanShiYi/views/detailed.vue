@@ -65,7 +65,7 @@ export default {
     const temperatureRange = [34, 43];
     const pulseRange = [0, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度

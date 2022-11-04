@@ -508,9 +508,15 @@ export const mockData = {
     },
     {
       temperature_type: '脉搏',
-      value: '120',
+      value: '121',
       time_point: '2021-05-16 13:00:00',
       vital_code: '11'
+    },
+    {
+      temperature_type: '体温',
+      value: '39',
+      time_point: '2021-05-16 13:00:00',
+      vital_code: '1'
     },
     {
       temperature_type: '线上降温',

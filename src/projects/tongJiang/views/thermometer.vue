@@ -892,10 +892,11 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
-        currentPage(value) {
-     if(!this.isPrintAll){
-      window.parent.postMessage({ type: "currentPage", value }, "*");
-        }
+    currentPage(value) {
+      console.log(9999,value,!this.isPrintAll)
+      if (!this.isPrintAll) {
+        window.parent.postMessage({ type: "currentPage", value }, "*");
+      }
     },
   },
   created() {
@@ -941,7 +942,7 @@ export default {
       });
     },
     clickDateChangeTime(dateTime){
-      console.log(dateTime)
+      console.log('点击======》dateTime',dateTime)
       if(dateTime.time)
       window.parent.postMessage(
           { type: 'clickDateTime', value: dateTime.time },
@@ -1399,7 +1400,7 @@ export default {
                         (Number(heightList[k].value) *
                           Number(heightList[k].value));
                       item.value = value.toFixed(2);
-                      item.time = `${heightList[h].time}`
+                      item.time = heightList[k].time
                     }
                   }
                 }
@@ -1412,18 +1413,23 @@ export default {
       return list;
     },
     createNote(notes, y, color) {
+      const map = {}
+      for (let i = notes.length - 1; i >= 0; i--) {
+        const key = notes[i].value.substring(0, 2)
+        if(key=='入院'){
+          if (map[`${key}`]) {
+            notes.splice(i, 1)
+          } else {
+            map[`${key}`] = notes[i].time
+          }
+        } 
+      }
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
       const xaxis = notes.map((x) =>
         this.getXaxis(this.getLocationTime(x.time))
       );
-      const map = {}
-      for (let i = notes.length - 1; i >= 0; i--) {
-        if (map[notes[i].value.substring(0, 2)]) {
-          notes.splice(i, 1)
-        } else {
-          map[notes[i].value.substring(0, 2)] = notes[i].time
-        }
-      }
+
+      console.log(notes)
       const xaxisNew = this.handleNoteXaxis(xaxis, notes);
       notes.forEach((x, i) => {
         let value = x.value;
@@ -2085,7 +2091,6 @@ export default {
     },
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
     handleNoteXaxis(xaxisList,notes) {
-      console.log(notes)
       //定义一个数组，为全部最后一格的数据，如果与最后一格重叠，就往底下移动
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {

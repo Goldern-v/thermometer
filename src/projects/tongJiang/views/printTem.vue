@@ -929,7 +929,6 @@ export default {
       });
     },
     clickDateChangeTime(dateTime){
-      console.log(dateTime)
       if(dateTime.time)
       window.parent.postMessage(
           { type: 'clickDateTime', value: dateTime.time },
@@ -1372,38 +1371,33 @@ export default {
                         (Number(heightList[k].value) *
                           Number(heightList[k].value));
                       item.value = value.toFixed(2);
-                      item.time = `${heightList[h].time}`
+                      item.time = heightList[k].time
                     }
                   }
                 }
               }
             }
         }
-
         list.push(item);
       }
       return list;
     },
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
+      const map = {}
+      for (let i = notes.length - 1; i >= 0; i--) {
+        const key = notes[i].value.substring(0, 2)
+        if(key=='入院'){
+          if (map[`${key}`]) {
+            notes.splice(i, 1)
+          } else {
+            map[`${key}`] = notes[i].time
+          }
+        } 
+      }
       const xaxis = notes.map((x) =>
         this.getXaxis(this.getLocationTime(x.time))
       );
-      const map = {}
-      for (let i = notes.length - 1; i >= 0; i--) {
-        if (map[notes[i].value.substring(0, 2)]) {
-          notes.splice(i, 1)
-        } else {
-          map[notes[i].value.substring(0, 2)] = notes[i].time
-        }
-      }
-      notes.forEach((item,index)=>{
-        if(index>0){
-          if(this.getLocationTime(item.time)==this.getLocationTime(notes[index-1].time)&&(item.value.includes('入院')&&notes[index-1].value.includes('入院'))){
-            notes.splice(index-1,1)
-          }
-        }
-      })
       const xaxisNew = this.handleNoteXaxis(xaxis, notes);
       notes.forEach((x, i) => {
         let value = x.value;

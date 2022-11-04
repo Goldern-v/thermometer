@@ -43,8 +43,26 @@ export const mockData = {
     {
       temperature_type: "血压",
       value: "142/102",
-      time_point: "2022-08-29 11:39:00",
+      time_point: "2022-08-29 12:00:00",
       vital_code: "14"
+    },
+    {
+      temperature_type: "血压",
+      value: "142/102",
+      time_point: "2022-08-29 12:01:00",
+      vital_code: "14"
+    },
+    {
+      temperature_type: "腋温",
+      value: "36.8",
+      time_point: "2022-08-29 11:39:00",
+      vital_code: "1"
+    },
+    {
+      temperature_type: "脉搏",
+      value: "77",
+      time_point: "2022-08-29 11:39:00",
+      vital_code: "11"
     },
     {
       temperature_type: "腋温",
@@ -109,7 +127,19 @@ export const mockData = {
     {
       temperature_type: "呼吸",
       value: "36",
-      time_point: "2022-08-30 09:00:00",
+      time_point: "2022-08-30 06:00:00",
+      vital_code: "13"
+    },
+    {
+      temperature_type: "呼吸",
+      value: "36",
+      time_point: "2022-08-30 02:00:00",
+      vital_code: "13"
+    },
+    {
+      temperature_type: "呼吸",
+      value: "36",
+      time_point: "2022-08-30 12:00:00",
       vital_code: "13"
     },
     {
