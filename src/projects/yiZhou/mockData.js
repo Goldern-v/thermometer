@@ -36,8 +36,14 @@ export const mockData = {
     // },
     {
       temperature_type: '体温',
-      value: '40',
+      value: '41',
       time_point: '2021-11-03 03:00:00',
+      vital_code: '01'
+    },
+    {
+      temperature_type: '体温',
+      value: '40',
+      time_point: '2021-11-03 09:00:00',
       vital_code: '01'
     },
     {
@@ -154,12 +160,12 @@ export const mockData = {
       time_point: '2021-11-06 09:00:00',
       vital_code: '01'
     },
-    // {
-    //   temperature_type: '体重',
-    //   value: '67',
-    //   time_point: '2021-11-03 07:00:00',
-    //   vital_code: '033'
-    // },
+    {
+      temperature_type: '体重',
+      value: '2500',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '033'
+    },
     // {
     //   temperature_type: '血压',
     //   value: '120/76',
@@ -210,7 +216,7 @@ export const mockData = {
     },
     {
       temperature_type: '表顶注释',
-      value: '离院',
+      value: '离院|',
       time_point: '2021-11-04 07:00:00',
       vital_code: '5'
     },

@@ -770,7 +770,7 @@ export default {
         if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
           return "";
         //获取出院日期，如果出院了就结束运算
-        // if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
         if (!this.operateDateList.length) return "";
         // 构造天数差数组，有相同天数差的说明在同一天x
         const days = this.operateDateList.map((y) => {

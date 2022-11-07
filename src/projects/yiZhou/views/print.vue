@@ -22,9 +22,9 @@ export default {
   },
   data() {
     return {
-      useMockData: false,
-      printData: null,
-      pageTotal: 1
+      useMockData:false,
+      printData:null,
+      pageTotal:1
     }
   },
   methods: {
