@@ -166,12 +166,12 @@ export const mockData = {
     //   time_point: '2022-06-03 07:00:00',
     //   vital_code: '062'
     // },
-    // {
-    //   temperature_type: '表顶注释',
-    //   value: '入院||八时六分',
-    //   time_point: '2022-06-03 08:06:15',
-    //   vital_code: '5'
-    // },
+    {
+      temperature_type: '表顶注释',
+      value: '入院||八时六分',
+      time_point: '2022-06-03 08:06:15',
+      vital_code: '5'
+    },
     // {
     //   temperature_type: '呼吸',
     //   value: '18',

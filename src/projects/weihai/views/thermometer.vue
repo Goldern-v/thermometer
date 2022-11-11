@@ -65,7 +65,7 @@
             top: '1px',
             bottom: '0',
             right: '0',
-            transform: 'translateY(-0.5px)'
+            transform: 'translateY(-0.5px)',
           }"
         ></div>
         <div class="table-box" style="transform: translateY(0.5px)">
@@ -230,7 +230,9 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">身高(cm)</div>
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              身高(cm)
+            </div>
             <div class="value-item-box">
               <div
                 class="value-item"
@@ -242,7 +244,9 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">体重(kg)</div>
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              体重(kg)
+            </div>
             <div class="value-item-box">
               <div
                 class="value-item"
@@ -355,7 +359,9 @@
             class="row border-bottom-black-2"
             :style="{ height: `${trHeight}px` }"
           >
-            <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              住院天数
+            </div>
             <div class="value-item-box">
               <div
                 class="value-item"
@@ -428,15 +434,21 @@
       </div>
       <div class="pagination" v-else>第{{ currentPage }}页</div>
     </div>
-</div>
-<div v-else>
-    <childrenChart v-if="apiData" :apiDataObj.sync="apiData" :printPage="printPage"  isPrintAll :printData="printData" />
+  </div>
+  <div v-else>
+    <childrenChart
+      v-if="apiData"
+      :apiDataObj.sync="apiData"
+      :printPage="printPage"
+      isPrintAll
+      :printData="printData"
+    />
   </div>
 </template>
 
 <script>
 import zrender from "zrender";
-import { mockData } from "src/projects/linYi/mockData.js";
+import { mockData } from "src/projects/weihai/mockData.js";
 import childrenChart from "./childrenChart.vue";
 
 import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
@@ -937,23 +949,24 @@ export default {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
     currentPage(value) {
-      if(!this.isPrintAll){
-      window.parent.postMessage({ type: "currentPage", value }, "*");
-        }
+      if (!this.isPrintAll) {
+        window.parent.postMessage({ type: "currentPage", value }, "*");
+      }
     },
   },
   created() {
-    document.title='威海市立医院体温单'
+    document.title = "威海市立医院体温单";
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
-     // 实现外部分页和打印
-     const patientInfo = this.$route.query;
+    // 实现外部分页和打印
+    const patientInfo = this.$route.query;
     this.showInnerPage = patientInfo.showInnerPage === "1";
     if (this.isPrintAll) {
       // 批量打印
       this.apiData = this.printData;
       this.currentPage = this.printPage;
       this.$nextTick(() => {
+        this.reset()
         this.handleData();
         this.showChildrenPage =
           patientInfo.PatientId && patientInfo.PatientId.includes("_");
@@ -963,6 +976,7 @@ export default {
     if (this.useMockData) {
       this.apiData = mockData;
       this.$nextTick(() => {
+        this.reset()
         this.handleData();
         this.showChildrenPage =
           patientInfo.PatientId && patientInfo.PatientId.includes("_");
@@ -988,6 +1002,7 @@ export default {
             { type: "pageTotal", value: this.pageTotal },
             "*"
           );
+          this.reset()
           this.handleData();
         });
       });
@@ -1156,7 +1171,7 @@ export default {
       this.vitalSigns = vitalSigns;
 
       //保存数据到vueX给详细曲线使用
-      let vitalSignsData = this.apiData
+      let vitalSignsData = this.apiData;
       this.$store.commit("updateVitalSigns", vitalSignsData);
 
       // 计算最大标识时间
@@ -1309,15 +1324,33 @@ export default {
               time: vitalSigns[i].time_point,
               value: Number(vitalSigns[i].value),
             });
-            this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.forEach((y,index)=>{
-              if(index>=1&&this.getLocationTime(y.time)==this.getLocationTime(this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data[index-1].time)){
-                if(y.value>this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data[index-1].value){
-                this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.splice(index-1,1)
-                }else{
-                  this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.splice(index,1)
+            this.settingMap[
+              this.lineMap[vitalSigns[i].vital_code]
+            ].data.forEach((y, index) => {
+              if (
+                index >= 1 &&
+                this.getLocationTime(y.time) ==
+                  this.getLocationTime(
+                    this.settingMap[this.lineMap[vitalSigns[i].vital_code]]
+                      .data[index - 1].time
+                  )
+              ) {
+                if (
+                  y.value >
+                  this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data[
+                    index - 1
+                  ].value
+                ) {
+                  this.settingMap[
+                    this.lineMap[vitalSigns[i].vital_code]
+                  ].data.splice(index - 1, 1);
+                } else {
+                  this.settingMap[
+                    this.lineMap[vitalSigns[i].vital_code]
+                  ].data.splice(index, 1);
                 }
               }
-            })
+            });
           }
 
           continue;
@@ -1326,9 +1359,10 @@ export default {
           time: vitalSigns[i].time_point,
           value: vitalSigns[i].value,
         };
+      
         switch (vitalSigns[i].vital_code) {
           case "5":
-            this.topSheetNote.push(item);
+             this.topSheetNote.push(item);
             break;
           case "4":
             this.bottomSheetNote.push(item);
@@ -1401,9 +1435,9 @@ export default {
           y: value !== "过快" ? y + 2 : y - this.ySpace - 1,
           value: this.addn(value),
           color,
-          textLineHeight:this.ySpace + 1,
+          textLineHeight: this.ySpace + 1,
           fontWeight: "bold",
-          textHeight:30
+          textHeight: 30,
         });
       });
     },
@@ -1670,8 +1704,7 @@ export default {
       zlevel = 0,
       fontWeight = "normal",
       textLineHeight,
-      textHeight
-
+      textHeight,
     }) {
       const text = new zrender.Text({
         zlevel,
@@ -2213,7 +2246,7 @@ export default {
             time = parseInt(time);
           } else {
             time = time.replace(new RegExp(/-/gm), "/");
-            console.log(time,'time')
+            console.log(time, "time");
           }
         }
 
@@ -2376,6 +2409,7 @@ export default {
       this.apiData = this.printData;
       this.currentPage = this.printPage;
       this.$nextTick(() => {
+        this.reset()
         this.handleData();
         // window.parent.postMessage(
         //   { type: 'pageTotal', value: this.pageTotal },
@@ -2387,6 +2421,7 @@ export default {
     if (this.useMockData) {
       this.apiData = mockData;
       this.$nextTick(() => {
+        this.reset()
         this.handleData();
       });
     } else {
@@ -2409,6 +2444,7 @@ export default {
 
             "*"
           );
+          this.reset()
           this.handleData();
         });
       });
