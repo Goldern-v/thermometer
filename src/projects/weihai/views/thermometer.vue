@@ -1,439 +1,450 @@
 <template>
-  <div
-    class="main-view"
-    :style="{ width: `${leftWidth + areaWidth}px` }"
-    v-if="apiData"
-    @dblclick="dblclick"
-  >
-    <div class="head-hos">威海市立医院</div>
-    <div class="head-title">体温单</div>
-    <div class="head-info">
-      <div class="item" style="width: 120px; flex: none">
-        姓名：<span class="value">{{ patInfo.name }}</span>
-      </div>
-      <div class="item" style="width: 70px; flex: none">
-        性别：<span class="value">{{ patInfo.sex }}</span>
-      </div>
-      <div
-        class="item"
-        v-if="patInfo.dept_name !== '新生儿科病房'"
-        style="width: 100px; flex: none"
-      >
-        年龄：<span class="value">{{ patInfo.age }}</span>
-      </div>
-      <div
-        class="item"
-        v-if="patInfo.dept_name === '新生儿科病房'"
-        style="width: 160px; flex: none"
-      >
-        出生日期：<span class="value">{{ patInfo.birthday }}</span>
-      </div>
-      <div class="item" style="width: 180px; flex: none">
-        入院日期：<span class="value">{{
-          patInfo.admission_date.slice(0, 10)
-        }}</span>
-      </div>
-      <div class="item" style="width: 150px; flex: none">
-        病案号：<span class="value">{{ patInfo.patient_id }}</span>
-      </div>
-      <div class="item">
-        科别：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
-      </div>
-      <div class="item" style="width: 80px; flex: none">
-        床号：<span class="value">{{
-          bedExchangeLog || patInfo.bed_label
-        }}</span>
-      </div>
-    </div>
-    <!-- <div class="head-info-1">
-
-    </div> -->
-    <div class="table-area">
-      <div
-        class="vline"
-        :style="{
-          top: '1px',
-          bottom: '0',
-          left: '-1px',
-          transform: 'translateY(-0.5px)',
-        }"
-      ></div>
-      <div
-        class="vline"
-        :style="{
-          top: '1px',
-          bottom: '0',
-          right: '0',
-          transform: 'translateY(-0.5px)'
-        }"
-      ></div>
-      <div class="table-box" style="transform: translateY(0.5px)">
+  <div v-if="!showChildrenPage">
+    <div
+      class="main-view"
+      :style="{ width: `${leftWidth + areaWidth}px` }"
+      v-if="apiData"
+      @dblclick="dblclick"
+    >
+      <div class="head-hos">威海市立医院</div>
+      <div class="head-title">体温单</div>
+      <div class="head-info">
+        <div class="item" style="width: 120px; flex: none">
+          姓名：<span class="value">{{ patInfo.name }}</span>
+        </div>
+        <div class="item" style="width: 70px; flex: none">
+          性别：<span class="value">{{ patInfo.sex }}</span>
+        </div>
         <div
-          class="vtline"
-          :style="{ left: `${leftWidth + item * (6 * xSpace + 7) - 1}px` }"
-          v-for="item in 6"
-          :key="item"
+          class="item"
+          v-if="patInfo.dept_name !== '新生儿科病房'"
+          style="width: 100px; flex: none"
+        >
+          年龄：<span class="value">{{ patInfo.age }}</span>
+        </div>
+        <div
+          class="item"
+          v-if="patInfo.dept_name === '新生儿科病房'"
+          style="width: 160px; flex: none"
+        >
+          出生日期：<span class="value">{{ patInfo.birthday }}</span>
+        </div>
+        <div class="item" style="width: 180px; flex: none">
+          入院日期：<span class="value">{{
+            patInfo.admission_date.slice(0, 10)
+          }}</span>
+        </div>
+        <div class="item" style="width: 150px; flex: none">
+          病案号：<span class="value">{{ patInfo.patient_id }}</span>
+        </div>
+        <div class="item">
+          科别：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
+        </div>
+        <div class="item" style="width: 80px; flex: none">
+          床号：<span class="value">{{
+            bedExchangeLog || patInfo.bed_label
+          }}</span>
+        </div>
+      </div>
+      <!-- <div class="head-info-1">
+
+      </div> -->
+      <div class="table-area">
+        <div
+          class="vline"
+          :style="{
+            top: '1px',
+            bottom: '0',
+            left: '-1px',
+            transform: 'translateY(-0.5px)',
+          }"
         ></div>
         <div
-          class="row border-top-black-2 border-bottom-black-2"
-          :style="{ height: `${trHeight}px` }"
-        >
+          class="vline"
+          :style="{
+            top: '1px',
+            bottom: '0',
+            right: '0',
+            transform: 'translateY(-0.5px)'
+          }"
+        ></div>
+        <div class="table-box" style="transform: translateY(0.5px)">
           <div
-            class="label"
-            :style="{ width: `${leftWidth}px` }"
-            v-html="`日期`"
+            class="vtline"
+            :style="{ left: `${leftWidth + item * (6 * xSpace + 7) - 1}px` }"
+            v-for="item in 6"
+            :key="item"
           ></div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in formatDateList"
-              :key="index"
-            >
-              {{ item }}
-            </div>
-          </div>
-        </div>
-        <div
-          class="row border-bottom-black-2"
-          :style="{ height: `${trHeight}px` }"
-        >
           <div
-            class="label"
-            :style="{ width: `${leftWidth}px` }"
-            v-html="`时间`"
-          ></div>
-          <div class="value-item-box font-12">
+            class="row border-top-black-2 border-bottom-black-2"
+            :style="{ height: `${trHeight}px` }"
+          >
             <div
-              class="value-item"
-              :style="smallTdStyle(index, timeTds.length)"
-              v-for="(item, index) in timeTds"
-              :key="index"
-            >
-              {{ item }}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="info-box">
-        <div
-          class="index-box"
-          :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
-        >
-          <i
-            class="split-line"
-            :style="{
-              bottom: `${painAreaHeight + bottomAreaHeight - 1}px`,
-            }"
-          ></i>
-          <div class="item times">
-            <div class="text" :style="`height: ${indexTextAreaHeight}px`">
-              <div>脉搏<br />次/分</div>
-            </div>
-            <div class="index" v-for="item in pulseList" :key="item">
-              <span>{{ item }}</span>
-            </div>
-            <div class="pain-area" :style="`height: ${painAreaHeight}px`">
-              疼<br />痛<br />评<br />分
-            </div>
-            <div
-              class="bottom-area"
-              :style="`height: ${bottomAreaHeight}px`"
+              class="label"
+              :style="{ width: `${leftWidth}px` }"
+              v-html="`日期`"
             ></div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in formatDateList"
+                :key="index"
+              >
+                {{ item }}
+              </div>
+            </div>
           </div>
-          <div class="item temp">
-            <div class="text" :style="`height: ${indexTextAreaHeight}px`">
-              <!--<div class="label" :style="{ height: `${trHeight + 2}px` }">
-                体温
-              </div>-->
-              <div>体温<br />(℃)</div>
+          <div
+            class="row border-bottom-black-2"
+            :style="{ height: `${trHeight}px` }"
+          >
+            <div
+              class="label"
+              :style="{ width: `${leftWidth}px` }"
+              v-html="`时间`"
+            ></div>
+            <div class="value-item-box font-12">
+              <div
+                class="value-item"
+                :style="smallTdStyle(index, timeTds.length)"
+                v-for="(item, index) in timeTds"
+                :key="index"
+              >
+                {{ item }}
+              </div>
             </div>
-            <div class="index" v-for="item in temperaturelist" :key="item">
-              <span>{{ item }}</span>
-            </div>
-            <div class="pain-area" :style="`height: ${painAreaHeight}px`">
-              <div class="pain-index" v-for="item in painList" :key="item">
+          </div>
+        </div>
+        <div class="info-box">
+          <div
+            class="index-box"
+            :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
+          >
+            <i
+              class="split-line"
+              :style="{
+                bottom: `${painAreaHeight + bottomAreaHeight - 1}px`,
+              }"
+            ></i>
+            <div class="item times">
+              <div class="text" :style="`height: ${indexTextAreaHeight}px`">
+                <div>脉搏<br />次/分</div>
+              </div>
+              <div class="index" v-for="item in pulseList" :key="item">
                 <span>{{ item }}</span>
               </div>
-              <!-- <div class="s-index"><span>0</span></div>-->
+              <div class="pain-area" :style="`height: ${painAreaHeight}px`">
+                疼<br />痛<br />评<br />分
+              </div>
+              <div
+                class="bottom-area"
+                :style="`height: ${bottomAreaHeight}px`"
+              ></div>
             </div>
-            <div
-              class="bottom-area"
-              :style="`height: ${bottomAreaHeight}px`"
-            ></div>
-          </div>
-        </div>
-        <div
-          ref="main"
-          :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
-        ></div>
-      </div>
-      <div class="table-box" style="transform: translateY(-0.5px)">
-        <div
-          class="vtline"
-          :style="{
-            left: `${leftWidth + item * (6 * xSpace + 7) - 1}px`,
-            'border-color': '#000',
-          }"
-          v-for="item in 6"
-          :key="item"
-        ></div>
-        <div
-          class="row border-top-red-2"
-          :style="{ height: `${trHeight * 2 - 6}px` }"
-        >
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            呼吸(次/分)
-          </div>
-          <div class="value-item-box font-12">
-            <div
-              class="value-item"
-              :style="{
-                ...smallTdStyle(index, formatBreatheList.length),
-                ...item.style,
-                color: '#000',
-              }"
-              v-for="(item, index) in formatBreatheList"
-              :key="index"
-            >
-              {{ item.value }}
+            <div class="item temp">
+              <div class="text" :style="`height: ${indexTextAreaHeight}px`">
+                <!--<div class="label" :style="{ height: `${trHeight + 2}px` }">
+                  体温
+                </div>-->
+                <div>体温<br />(℃)</div>
+              </div>
+              <div class="index" v-for="item in temperaturelist" :key="item">
+                <span>{{ item }}</span>
+              </div>
+              <div class="pain-area" :style="`height: ${painAreaHeight}px`">
+                <div class="pain-index" v-for="item in painList" :key="item">
+                  <span>{{ item }}</span>
+                </div>
+                <!-- <div class="s-index"><span>0</span></div>-->
+              </div>
+              <div
+                class="bottom-area"
+                :style="`height: ${bottomAreaHeight}px`"
+              ></div>
             </div>
           </div>
+          <div
+            ref="main"
+            :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
+          ></div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            大便(次/日)
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatListShit({ tList: shitList })"
-              :key="index"
-            >
-              {{ item.value }}
+        <div class="table-box" style="transform: translateY(-0.5px)">
+          <div
+            class="vtline"
+            :style="{
+              left: `${leftWidth + item * (6 * xSpace + 7) - 1}px`,
+              'border-color': '#000',
+            }"
+            v-for="item in 6"
+            :key="item"
+          ></div>
+          <div
+            class="row border-top-red-2"
+            :style="{ height: `${trHeight * 2 - 6}px` }"
+          >
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              呼吸(次/分)
+            </div>
+            <div class="value-item-box font-12">
+              <div
+                class="value-item"
+                :style="{
+                  ...smallTdStyle(index, formatBreatheList.length),
+                  ...item.style,
+                  color: '#000',
+                }"
+                v-for="(item, index) in formatBreatheList"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            血压(mmHg)
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              :style="middleTdStyle(index)"
-              v-for="(item, index) in formatPressureList"
-              :key="index"
-            >
-              {{ item.value }}
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              大便(次/日)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatListShit({ tList: shitList })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">身高(cm)</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: heightList })"
-              :key="index"
-            >
-              {{ item.value }}
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              血压(mmHg)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                :style="middleTdStyle(index)"
+                v-for="(item, index) in formatPressureList"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">体重(kg)</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: weightList })"
-              :key="index"
-            >
-              {{ item.value }}
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">身高(cm)</div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatList({ tList: heightList })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            总入量(ml)
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: inputList })"
-              :key="index"
-            >
-              {{ item.value }}
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">体重(kg)</div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatList({ tList: weightList })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            总出量(ml)
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: outputList })"
-              :key="index"
-            >
-              {{ item.value }}
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              总入量(ml)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatList({ tList: inputList })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            引流量(ml)
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: yinliuList })"
-              :key="index"
-            >
-              {{ item.value }}
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              总出量(ml)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatList({ tList: outputList })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList0.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: customList0 })"
-              :key="index"
-            >
-              {{ item.value }}
+          <!-- <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              引流量(ml)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatList({ tList: yinliuList })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList1.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: customList1 })"
-              :key="index"
-            >
-              {{ item.value }}
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              {{ customList0.label || "" }}
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatList({ tList: customList0 })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList2.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: customList2 })"
-              :key="index"
-            >
-              {{ item.value }}
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              {{ customList1.label || "" }}
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatList({ tList: customList1 })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
           </div>
-        </div>
-         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            手术后天数
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in formatOperateDateList"
-              :key="index"
-            >
-              {{ item }}
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              {{ customList2.label || "" }}
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatList({ tList: customList2 })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
+            </div>
+          </div> -->
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              手术后天数
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in formatOperateDateList"
+                :key="index"
+              >
+                {{ item }}
+              </div>
             </div>
           </div>
-        </div>
-        <div
-          class="row border-bottom-black-2"
-          :style="{ height: `${trHeight}px` }"
-        >
-          <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in formatStayDayList"
-              :key="index"
-            >
-              {{ item }}
+          <div
+            class="row border-bottom-black-2"
+            :style="{ height: `${trHeight}px` }"
+          >
+            <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in formatStayDayList"
+                :key="index"
+              >
+                {{ item }}
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList3.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: customList3 })"
-              :key="index"
-            >
-              {{ item.value }}
+          <!-- <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              {{ customList3.label || "" }}
             </div>
-          </div>
-        </div> -->
-        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList4.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: customList4 })"
-              :key="index"
-            >
-              {{ item.value }}
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatList({ tList: customList3 })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
-          </div>
-        </div> -->
-        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList5.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: customList5 })"
-              :key="index"
-            >
-              {{ item.value }}
+          </div> -->
+          <!-- <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              {{ customList4.label || "" }}
             </div>
-          </div>
-        </div> -->
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatList({ tList: customList4 })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
+            </div>
+          </div> -->
+          <!-- <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              {{ customList5.label || "" }}
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in getFormatList({ tList: customList5 })"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
+            </div>
+          </div> -->
+        </div>
       </div>
+      <div class="pagination" v-if="showInnerPage">
+        <!-- <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i> -->
+        <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">
+          上一页
+        </button>
+        <span>第{{ currentPage }}页/共{{ pageTotal }}页</span>
+        <button
+          :disabled="currentPage === pageTotal"
+          @click="toNext"
+          class="next-btn"
+        >
+          下一页
+        </button>
+        <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
+      </div>
+      <div class="pagination" v-else>第{{ currentPage }}页</div>
     </div>
-    <div class="pagination" v-if="showInnerPage">
-      <!-- <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i> -->
-      <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">
-        上一页
-      </button>
-      <span>第{{ currentPage }}页/共{{ pageTotal }}页</span>
-      <button
-        :disabled="currentPage === pageTotal"
-        @click="toNext"
-        class="next-btn"
-      >
-        下一页
-      </button>
-      <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
-    </div>
-    <div class="pagination" v-else>第{{ currentPage }}页</div>
+</div>
+<div v-else>
+    <childrenChart v-if="apiData" :apiDataObj.sync="apiData" :printPage="printPage"  isPrintAll :printData="printData" />
   </div>
 </template>
 
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/linYi/mockData.js";
+import childrenChart from "./childrenChart.vue";
+
+import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
 
 export default {
+  components: {
+    childrenChart,
+  },
   props: {
     isPrintAll: {
       type: Boolean,
@@ -455,7 +466,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -620,6 +631,7 @@ export default {
       pageTotal: 1,
       currentPage: 1,
       showInnerPage: false, // 是否显示内部分页
+      showChildrenPage: false,
       adtLog: "", // 转科
       bedExchangeLog: "", // 转床
     };
@@ -934,6 +946,52 @@ export default {
     document.title='威海市立医院体温单'
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
+     // 实现外部分页和打印
+     const patientInfo = this.$route.query;
+    this.showInnerPage = patientInfo.showInnerPage === "1";
+    if (this.isPrintAll) {
+      // 批量打印
+      this.apiData = this.printData;
+      this.currentPage = this.printPage;
+      this.$nextTick(() => {
+        this.handleData();
+        this.showChildrenPage =
+          patientInfo.PatientId && patientInfo.PatientId.includes("_");
+      });
+      return;
+    }
+    if (this.useMockData) {
+      this.apiData = mockData;
+      this.$nextTick(() => {
+        this.handleData();
+        this.showChildrenPage =
+          patientInfo.PatientId && patientInfo.PatientId.includes("_");
+      });
+    } else {
+      this.$http({
+        method: "post",
+        url: "/crHesb/hospital/common",
+        data: {
+          tradeCode: "nurse_getPatientVitalSigns",
+          PatientId: patientInfo.PatientId,
+          VisitId: patientInfo.VisitId,
+          StartTime: patientInfo.StartTime,
+        },
+      }).then((res) => {
+        this.apiData = res.data;
+        this.showChildrenPage =
+          patientInfo.PatientId && patientInfo.PatientId.includes("_");
+        this.$nextTick(() => {
+          //每次获取数据都要传一次页数
+          this.currentPage = this.pageTotal;
+          window.parent.postMessage(
+            { type: "pageTotal", value: this.pageTotal },
+            "*"
+          );
+          this.handleData();
+        });
+      });
+    }
   },
   beforeDestroy() {
     window.removeEventListener("message", this.messageHandle, false);
@@ -1123,7 +1181,19 @@ export default {
       }
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
-
+      const urlParams = this.urlParse();
+      let data = {
+        startLogDateTime: this.timeRange[0],
+        endLogDateTime: this.timeRange[1],
+        visitId: urlParams.VisitId,
+        patientId: urlParams.PatientId,
+      };
+      if (!this.useMockData && !this.isPrintAll) {
+        getNurseExchangeInfoByTime(data).then((res) => {
+          this.adtLog = res.data.data.adtLog; // 转科
+          this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+        });
+      }
       // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
       window.parent.postMessage(
         {
@@ -1301,7 +1371,9 @@ export default {
         }
       }
 
-      this.init();
+      if (!this.showChildrenPage) {
+        this.init();
+      }
     },
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
