@@ -209,6 +209,7 @@
               }"
               v-for="(item, index) in formatBreatheList"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -227,6 +228,7 @@
               :style="middleTdStyle(index, formatBreatheList.length)"
               v-for="(item, index) in formatPressureList"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -239,6 +241,7 @@
               class="value-item font-14"
               v-for="(item, index) in getFormatList({ tList: inputList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
               v-html="item.value"
             ></div>
           </div>
@@ -250,6 +253,7 @@
               class="value-item font-14"
               v-for="(item, index) in getFormatList({ tList: outputList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
               v-html="item.value"
             ></div>
           </div>
@@ -267,6 +271,7 @@
                 class="value-item font-14"
                 v-for="(item, index) in getFormatList({ tList: shitList })"
                 :key="index"
+                @click="()=>clickDateChangeTime(item)"
               >
                 {{ item.value }}
               </div>
@@ -281,6 +286,7 @@
                 class="value-item font-14"
                 v-for="(item, index) in getFormatList({ tList: urineList })"
                 :key="index"
+                @click="()=>clickDateChangeTime(item)"
                 v-html="item.value"
               ></div>
             </div>
@@ -294,6 +300,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: yinliuList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -310,6 +317,7 @@
                 v-for="(item, index) in getFormatList({ tList: weightList })"
                 :key="index"
                 v-html="item.value"
+                @click="()=>clickDateChangeTime(item)"
               ></div>
             </div>
           </div>
@@ -323,6 +331,7 @@
                 v-for="(item, index) in getFormatList({ tList: heightList })"
                 :key="index"
                 v-html="item.value"
+                @click="()=>clickDateChangeTime(item)"
               ></div>
             </div>
           </div>
@@ -334,6 +343,7 @@
                 v-for="(item, index) in getFormatListBmi({ tList: BMIList })"
                 :key="index"
                 v-html="item.value"
+                @click="()=>clickDateChangeTime(item)"
               ></div>
             </div>
           </div>
@@ -345,6 +355,7 @@
                 v-for="(item, index) in getFormatList({ tList: skinTest })"
                 :key="index"
                 v-html="item.value"
+                @click="()=>clickDateChangeTime(item)"
               ></div>
             </div>
           </div>
@@ -360,6 +371,7 @@
               :style="{ 'font-size': scaleFont(item.value) }"
               v-for="(item, index) in getFormatList({ tList: customList0 })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
               v-html="item.value"
             ></div>
           </div>
@@ -374,6 +386,7 @@
               :style="{ 'font-size': scaleFont(item.value) }"
               v-for="(item, index) in getFormatList({ tList: customList1 })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
               v-html="item.value"
             ></div>
           </div>
@@ -388,6 +401,7 @@
               :style="{ 'font-size': scaleFont(item.value) }"
               v-for="(item, index) in getFormatList({ tList: customList2 })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
               v-html="item.value"
             ></div>
           </div>
@@ -638,6 +652,7 @@ export default {
           const timeNum = this.getTimeNum(pressureList[j].time);
           if (timeNum >= i && timeNum <= i + 3 * 4 * 60 * 60 * 1000) {
             item.value = pressureList[j].value;
+            item.time = pressureList[j].time;
             pressureList.splice(j, 1);
             break;
           }
@@ -681,6 +696,7 @@ export default {
           const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
             item.value = breatheList[j].value;
+            item.time = breatheList[j].time;
             breatheList.splice(j, 1);
             break;
           }
@@ -717,75 +733,62 @@ export default {
       ];
     },
     operateDateList() {
-      /* 一天中:
-        1同时出现多次 分娩（包括手术分娩）时，计算为一次。
-        2出现多个分娩（包括手术分娩）+手术（包括入院手术）时，分娩算一次，手术出现几个算几次，再两个相加
-        3同时出现多个手术（包括手术入院）时，每一个手术算为一次
-      */
-      const list = this.vitalSigns.filter(
-        (x) =>
-          x.vital_code === "3" &&
-           (x.value.includes("手术") ||
-            x.value.includes("分娩|") ||
-            x.value.includes("手术分娩|") ||
-            x.value.includes("手术入院|"))
-      );
-      const oDateList = list.map((x) => x.time_point.slice(0, 10));
-      const obj = {};
-      let deliveryObj = {};
-      /* 给每个日期定义对象obj存储当前日期的表顶注释列表数组 */
-      oDateList.forEach((x) => {
-        obj[x] = [];
-      });
-      /* 遍历表顶注释列表 */
-      list.forEach((x) => {
-        const date = x.time_point.slice(0, 10); // 只获取到日期
-        if (obj[date]) {
-          obj[date].push(
-            x
-          ); /* obj:{2019-05-20:[{},{},{}],2019-05-21:[{},{}],} */
-        }
-      });
-      oDateList.forEach((date) => {
-        if (obj[date].length > 0) {
-          deliveryObj = obj[date].find((obj) => obj.value.includes("分娩"));
-          for (let i = obj[date].length - 1; i >= 0; i--) {
-            if (obj[date][i].value.includes("分娩")) {
-              obj[date].splice(i, 1);
-            }
-          }
-          if (deliveryObj) {
-            obj[date].push(deliveryObj);
-          }
-        }
-      });
-      const listNew = [];
-      Object.values(obj).forEach((x) => {
-        listNew.push(...x);
-      });
-      return listNew.map((x) => x.time_point);
+      return this.vitalSigns
+        .filter(
+          (x) =>
+            x.vital_code === "3" &&
+            (x.value.includes("手术") ||
+              x.value.includes("手术入院"))
+        )
+        .map((x) => x.time_point);
     },
     formatOperateDateList() {
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
           return "";
-        //获取出院日期，如果出院了就结束运算
         if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
+
         if (!this.operateDateList.length) return "";
-        // 构造天数差数组，有相同天数差的说明在同一天x
-        const days = this.operateDateList.map((y) => {
-          return this.dayInterval(x, y);
-        });
+        const days = [
+          ...this.operateDateList.map((y) => {
+            return this.dayInterval(x, y);
+          }),
+        ];
         if (days.every((z) => z < 0)) return "";
+        // 找到前一次手术（最后一次天数差是正整数或者0的地方）
         let index = 0;
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
+        let apart = []; // 存储当天和前面手术的天数间隔
+        for (let i = 0; i < index; i++) {
+          apart.unshift(days[i]);
+        }
+        const operationNum = apart.length; // 记录此日之前所有的手术次数，不考虑间隔大于7天
+        // 间隔大于7天的手术，分子分母的写法要重置
+        if (apart.length) {
+          apart.unshift(days[index]);
+          for (let i = 1; i < apart.length; i++) {
+            if (apart[i] - apart[i - 1] > 14) {
+              apart = apart.slice(0, i); // 将间隔大于7天的之前的所有手术切割
+              break;
+            }
+            if(apart[i] > 14) {
+              apart = apart.slice(0, i); // 将间隔大于7天的之前的所有手术切割
+              break;
+            }
+          }
+          apart.splice(0, 1);
+        }
+        console.log(9999,apart)
         if (days[index] <= 14) {
-          /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
-          return index === 0
-            ? days[index]==0?'':days[index]
-            : `${this.numToRome(index + 1)}-${days[index]}`;
+          return index === 0 || !apart.length
+            ? days[index] === 0 && operationNum
+              ? `(${operationNum + 1})`
+              : days[index]==0 ? '':days[index]
+            : days[index] === 0
+              ? `${apart.join("/")}`
+              : `${days[index]}/${apart.join("/")}`
         } else {
           return "";
         }
@@ -870,6 +873,14 @@ export default {
         transform: "translateX(1.5px)",
         "font-family": "SimHei",
       };
+    },
+    clickDateChangeTime(dateTime){
+      console.log('点击======》dateTime',dateTime)
+      if(dateTime.time)
+      window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime.time },
+          '*'
+        )
     },
     middleTdStyle(index, length) {
       return {
@@ -1374,6 +1385,7 @@ export default {
       color,
       fontSize = 16,
       tips,
+      time,
       zlevel = 0,
       fontWeight = "bold",
       fontFamily = "SimHei",
@@ -1393,6 +1405,14 @@ export default {
           textLineHeight,
         },
       });
+      if (time) {
+        text.on('click', () => {
+          window.parent.postMessage(
+            { type: "clickDateTime", value: time },
+            "*"
+          );
+        })
+      }
       this.zr.add(text);
       if (tips) {
         this.addHover(
@@ -1526,6 +1546,7 @@ export default {
             const timeNum = this.getTimeNum(targetList[j].time);
             if (timeNum >= i && timeNum < i + timeInterval) {
               item.value = `${targetList[j].value}`;
+              item.time = `${targetList[j].time}`
             }
             //如果有身高和体重的数据 我们进入遍历循环  计算
             if (heightList.length > 0 && weightList.length > 0) {
@@ -1550,6 +1571,7 @@ export default {
                         (Number(heightList[k].value) *
                           Number(heightList[k].value));
                       item.value = value.toFixed(2);
+                      item.time = `${heightList[k].time}`
                     }
                   }
                 }
@@ -1581,6 +1603,7 @@ export default {
                         (Number(heightList[k].value) *
                           Number(heightList[k].value));
                       item.value = value.toFixed(2);
+                      item.time = heightList[k].time
                     }
                   }
                 }
@@ -1661,6 +1684,7 @@ export default {
               x: cx,
               y: cy - 17,
               value: "x",
+              time:x.time,
               color: dotColor,
               fontSize: 28,
               tips: `${x.time} ${label}：${x.value}`,
@@ -1983,7 +2007,7 @@ export default {
               "+",
               '<span class="increase">+</span>'
             );
-
+            item.time = targetList[j].time
             targetList.splice(j, 1);
             break;
           }

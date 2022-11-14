@@ -23,6 +23,13 @@ export const mockData = {
       time_point: '2021-05-15 13:00:00',
       vital_code: '3'
     },
+    {
+      temperature_type: '表顶注释',
+      value: '手术',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2021-05-17 13:00:00',
+      vital_code: '3'
+    },
     // {
     //   temperature_type: '表顶注释',
     //   value: '手术分娩|',
@@ -30,27 +37,27 @@ export const mockData = {
     //   time_point: '2021-05-15 10:12:00',
     //   vital_code: '3'
     // },
-    {
-      temperature_type: '表顶注释',
-      value: '分娩|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-18 18:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
-      value: '分娩|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-20 11:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
-      value: '手术',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-20 15:12:00',
-      vital_code: '3'
-    },
+    // {
+    //   temperature_type: '表顶注释',
+    //   value: '分娩|',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2021-05-18 18:12:00',
+    //   vital_code: '3'
+    // },
+    // {
+    //   temperature_type: '表顶注释',
+    //   value: '分娩|',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2021-05-20 11:12:00',
+    //   vital_code: '3'
+    // },
+    // {
+    //   temperature_type: '表顶注释',
+    //   value: '手术',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2021-05-20 15:12:00',
+    //   vital_code: '3'
+    // },
     {
       temperature_type: '皮试',
       value: '阿兰曼斯阴性',
@@ -72,41 +79,41 @@ export const mockData = {
       time_point: '2021-05-20 18:12:00',
       vital_code: '3'
     },
-    {
-      temperature_type: '表顶注释',
-      value: '手术入院|',
+    // {
+    //   temperature_type: '表顶注释',
+    //   value: '手术入院|',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2021-05-17 19:12:00',
+    //   vital_code: '3'
+    // },
+    // {
+    //   temperature_type: '表顶注释',
+    //   value: '手术入院|',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2021-05-17 05:12:00',
+    //   vital_code: '3'
+    // },
+    // {
+    //   temperature_type: '表顶注释',
+    //   value: '分娩',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2021-05-17 05:12:00',
+    //   vital_code: '3'
+    // },
+    // {
+    //   temperature_type: '表顶注释',
+    //   value: '手术分娩',
+    //   // "time_point": "2020-12-15 03:12:00",
+    //   time_point: '2021-05-17 10:12:00',
+    //   vital_code: '3'
+    // },
+    // {
+    //   temperature_type: '表顶注释',
+    //   value: '手术入院|',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-17 19:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
-      value: '手术入院|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-17 05:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
-      value: '分娩',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-17 05:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
-      value: '手术分娩',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-17 10:12:00',
-      vital_code: '3'
-    },
-    {
-      temperature_type: '表顶注释',
-      value: '手术入院|',
-      // "time_point": "2020-12-15 03:12:00",
-      time_point: '2021-05-23 18:12:00',
-      vital_code: '3'
-    },
+    //   time_point: '2021-05-23 18:12:00',
+    //   vital_code: '3'
+    // },
     // {
     //   "temperature_type": "表顶注释",
     //   "value": "入院|",

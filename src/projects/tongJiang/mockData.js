@@ -445,6 +445,7 @@ export const mockData = {
              value: "入院|测试1",
              time_point: "2021-11-08 16:00:00",
              vital_code: "5",
+             expand2:'2021-11-08 16:00:00',
            },
            {
              temperature_type: "表顶注释",
@@ -455,8 +456,9 @@ export const mockData = {
            {
              temperature_type: "表顶注释",
              value: "入院|测试2",
-             time_point: "2021-11-08 16:30:00",
+             time_point: "2021-11-08 16:00:00",
              vital_code: "5",
+             expand2:'2021-11-08 16:20:00',
            },
            {
             temperature_type: "表顶注释",

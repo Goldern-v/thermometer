@@ -5,24 +5,24 @@
     <div class="head-hos">临沂沂州医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
-      <div class="item" style="width: 120px; flex: none">
+      <div class="item" >
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item" style="width: 70px; flex: none">
+      <div class="item" >
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" v-if="patInfo.dept_name !== '新生儿科病房'" style="width: 100px; flex: none">
+      <div class="item" v-if="patInfo.dept_name !== '新生儿科病房'">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
-      <div class="item" v-if="patInfo.dept_name === '新生儿科病房'" style="width: 160px; flex: none">
+      <div class="item" v-if="patInfo.dept_name === '新生儿科病房'" >
         出生日期：<span class="value">{{ patInfo.birthday }}</span>
       </div>
-      <div class="item" style="width: 160px; flex: none">
+      <div class="item">
         入院日期：<span class="value">{{
             patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item" style="width: 80px; flex: none">
+      <div class="item">
         床号：<span class="value">{{
             bedExchangeLog || patInfo.bed_label
         }}</span>
@@ -30,7 +30,7 @@
       <div class="item">
         科别：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" style="width: 150px; flex: none">
+      <div class="item">
         病案号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
     </div>
@@ -140,7 +140,8 @@
               ...smallTdStyle(index, formatBreatheList.length),
               ...item.style,
               color: '#000',
-            }" v-for="(item, index) in formatBreatheList" :key="index">
+            }" v-for="(item, index) in formatBreatheList" :key="index"
+            @click="()=>clickDateChangeTime(item)">
               {{ item.value }}
             </div>
           </div>
@@ -152,7 +153,8 @@
           </div>
           <div class="value-item-box">
             <div class="value-item" :style="middleTdStyle(index)" v-for="(item, index) in formatPressureList"
-              :key="index">
+              :key="index"
+              @click="()=>clickDateChangeTime(item)">
               {{ item.value }}
             </div>
           </div>
@@ -162,7 +164,7 @@
             入量(ml)
           </div>
           <div class="value-item-box">
-            <div class="value-item" v-for="(item, index) in getFormatList({ tList: inputList })" :key="index">
+            <div class="value-item" v-for="(item, index) in getFormatList({ tList: inputList })" :key="index" @click="()=>clickDateChangeTime(item)">
               {{ item.value }}
             </div>
           </div>
@@ -172,7 +174,8 @@
             出量(ml)
           </div>
           <div class="value-item-box">
-            <div class="value-item" v-for="(item, index) in getFormatList({ tList: outputList })" :key="index">
+            <div class="value-item" v-for="(item, index) in getFormatList({ tList: outputList })" :key="index"
+            @click="()=>clickDateChangeTime(item)">
               {{ item.value }}
             </div>
           </div>
@@ -182,7 +185,8 @@
             大便(次/日)
           </div>
           <div class="value-item-box">
-            <div class="value-item" v-for="(item, index) in getFormatListShit({ tList: shitList })" :key="index">
+            <div class="value-item" v-for="(item, index) in getFormatListShit({ tList: shitList })" :key="index"
+            @click="()=>clickDateChangeTime(item)">
               {{ item.value }}
             </div>
           </div>
@@ -191,7 +195,8 @@
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">体重(kg)</div>
           <div class="value-item-box">
-            <div class="value-item" v-for="(item, index) in getFormatList({ tList: weightList })" :key="index">
+            <div class="value-item" v-for="(item, index) in getFormatList({ tList: weightList })" :key="index" 
+            @click="()=>clickDateChangeTime(item)">
               {{ item.value }}
             </div>
           </div>
@@ -199,7 +204,8 @@
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">身高(cm)</div>
           <div class="value-item-box">
-            <div class="value-item" v-for="(item, index) in getFormatList({ tList: heightList })" :key="index">
+            <div class="value-item" v-for="(item, index) in getFormatList({ tList: heightList })" :key="index"
+            @click="()=>clickDateChangeTime(item)">
               {{ item.value }}
             </div>
           </div>
@@ -527,7 +533,6 @@ export default {
         "061": "大便次数",
         10: "引流量",
         25: "护理事件",
-        27: "物理降温",
         28: "呕吐量",
         29: "在线降温",
         "092": "疼痛评分",
@@ -579,8 +584,9 @@ export default {
         const item = { timeNum: i, value: "" };
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum >= i && timeNum < i + 3 * 4 * 60 * 60 * 1000) {
+          if (timeNum > i && timeNum <= i + 3 * 4 * 60 * 60 * 1000) {
             item.value = pressureList[j].value;
+            item.time = `${pressureList[j].time}`
             pressureList.splice(j, 1);
             break;
           }
@@ -613,6 +619,7 @@ export default {
           const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
             item.value = breatheList[j].value;
+            item.time = `${breatheList[j].time}`
             breatheList.splice(j, 1);
             break;
           }
@@ -868,6 +875,14 @@ export default {
     window.removeEventListener("message", this.messageHandle, false);
   },
   methods: {
+    clickDateChangeTime(dateTime){
+      console.log('点击======》dateTime',dateTime)
+      if(dateTime.time)
+      window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime.time },
+          '*'
+        )
+    },
     smallTdStyle(index) {
       return {
         color:
@@ -2113,6 +2128,7 @@ export default {
           const timeNum = this.getTimeNum(targetList[j].time);
           if (timeNum >= i && timeNum < i + timeInterval) {
             item.value = targetList[j].value;
+            item.time = targetList[j].time
             targetList.splice(j, 1);
             break;
           }
@@ -2133,6 +2149,7 @@ export default {
           const timeNum = this.getTimeNum(targetList[j].time);
           if (timeNum >= i && timeNum < i + timeInterval) {
             item.value = targetList[j].value;
+            item.time = targetList[j].time
             targetList.splice(j, 1);
             break;
           }
@@ -2216,7 +2233,7 @@ export default {
   },
   mounted() {
     const patientInfo = this.$route.query
-    if(patientInfo&&patientInfo.PatientId.includes(' ')){
+    if(patientInfo.PatientId&&patientInfo.PatientId.includes(' ')){
       patientInfo.PatientId =  patientInfo.PatientId.toString().replace(' ','+')
     }
     console.log(9999,patientInfo)
@@ -2277,6 +2294,12 @@ export default {
     size: a4; //定义为a4纸
     margin: 5mm 8mm 5mm 8mm; // 页面的边距
   }
+  .main-view {
+    transform: scaleY(1.09) !important; 
+    transform-origin: 0 0;
+
+  }
+
 }
 
 .main-view {
@@ -2300,12 +2323,10 @@ export default {
   .head-info {
     font-size: 14px;
     display: flex;
+    justify-content: space-between;
 
     .item {
-      flex: 1;
-      text-align: left;
       padding: 0 0 5px 5px;
-
       .value {
         font-weight: normal;
       }
@@ -2502,7 +2523,7 @@ export default {
       }
     }
 
-    .temp :nth-child(5)>span {
+    /* .temp :nth-child(5)>span {
 
       padding-top: 3px;
     }
@@ -2510,7 +2531,7 @@ export default {
     .times :nth-child(5)>span {
 
       padding-top: 3px;
-    }
+    } */
 
     .temp :nth-child(6)>span {
 

@@ -271,7 +271,7 @@
               transform: 'translateX(2.5px)',
             }"
           >
-            血氧饱和度
+            血氧饱和度%
           </div>
           <div class="value-item-box font-14" style="color: blue">
             <div

@@ -41,6 +41,12 @@ export const mockData = {
       vital_code: '01'
     },
     {
+      temperature_type: '物理降温',
+      value: '38',
+      time_point: '2021-11-03 03:00:00',
+      vital_code: '3'
+    },
+    {
       temperature_type: '体温',
       value: '40',
       time_point: '2021-11-03 09:00:00',
@@ -709,7 +715,7 @@ export const mockData = {
     {
       temperature_type: '体重',
       value: '67',
-      time_point: '2021-11-10 07:00:00',
+      time_point: '2021-11-05 07:00:00',
       vital_code: '033'
     },
     {

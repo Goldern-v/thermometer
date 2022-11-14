@@ -76,7 +76,7 @@ const packageName = `${projectName}体温单_${today.getFullYear()}年${today.ge
   1}月${today.getDate()}日${today.getHours()}时${today.getMinutes()}分${today.getSeconds()}秒`;
 console.log(packageName);
 module.exports = {
-  publicPath: ["huaDu", "linYi", "lyyz",'zhzxy','ytll'].includes(project)
+  publicPath: ["huaDu", "linYi", "yiZhou",'zhzxy','ytll'].includes(project)
     ? "/temperature/"
     : "./",
   outputDir: packageName,
@@ -215,7 +215,7 @@ module.exports = {
             case "linYi":
               return "http://222.133.53.230:9091/";
             case "yiZhou":
-              return "http://218.107.37.134:9093";
+              return "http://112.233.241.99:8092";
             case "weihai":
               return "http://218.107.37.134:9093";
             case "zhzxy":

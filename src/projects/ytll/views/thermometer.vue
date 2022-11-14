@@ -29,7 +29,7 @@
           }}</span>
         </div>
         <div class="item" style="width: 150px; flex: none">
-          住院号：<span class="value">{{ patInfo.patient_id }}</span>
+          住院号：<span class="value">{{ patInfo.inp_no }}</span>
         </div>
         <div class="item" style="width: 180px; flex: none">
           入院日期：<span class="value">{{
@@ -87,7 +87,8 @@
                 <span>{{ item }}</span>
               </div>
               <div class="pain-area" :style="`height: ${painAreaHeight}px`">
-                疼<br />痛<br />评<br />分
+                <span style="padding-top: 20px;"> 疼<br />痛<br />评<br />分</span>
+               
               </div>
               <div class="bottom-area" :style="`height: ${bottomAreaHeight}px`"></div>
             </div>
@@ -105,7 +106,7 @@
                 <div class="pain-index" v-for="item in painList" :key="item">
                   <span>{{ item }}</span>
                 </div>
-                <!-- <div class="s-index"><span>0</span></div>-->
+                <div class="s-index"><span>0</span></div>
               </div>
               <div class="bottom-area" :style="`height: ${bottomAreaHeight}px`"></div>
             </div>
@@ -261,7 +262,7 @@
               </div>
             </div>
           </div>
-          <div class="row" :style="{ height: `${trHeight}px` }">
+          <!-- <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
               {{ customList0.label || "" }}
             </div>
@@ -270,8 +271,8 @@
                 {{ item.value }}
               </div>
             </div>
-          </div>
-          <div class="row" :style="{ height: `${trHeight}px` }">
+          </div> -->
+          <!-- <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
               {{ customList1.label || "" }}
             </div>
@@ -280,8 +281,8 @@
                 {{ item.value }}
               </div>
             </div>
-          </div>
-          <div class="row" :style="{ height: `${trHeight}px` }">
+          </div> -->
+          <!-- <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
               {{ customList2.label || "" }}
             </div>
@@ -290,7 +291,7 @@
                 {{ item.value }}
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
               手术后天数
@@ -753,7 +754,7 @@ export default {
       );
     },
     painAreaHeight() {
-      return this.ySpace * 5 + 7;
+      return this.ySpace * 6 + 7;
     },
     bottomAreaHeight() {
       return this.ySpace * 1 + 1;
@@ -1549,7 +1550,7 @@ export default {
         this.yRange[0] +
         1 +
         (this.yRange[1] - this.yRange[0]) * 4 +
-        5;
+        6;
       let preSpace = 0;
       let breakIndex = 0;
       for (let i = 0; i < totalLine; i++) {
@@ -2033,8 +2034,7 @@ export default {
         this.painAreaHeight +
         this.indexTextAreaHeight +
         this.timesTempAreaHeight -
-        2 * this.ySpace -
-        1
+        3 * this.ySpace + 1
         : ((yRange[1] - value) / (yRange[1] - yRange[0])) *
         this.timesTempAreaHeight +
         this.indexTextAreaHeight +
@@ -2519,7 +2519,7 @@ export default {
 
         .s-index {
           position: absolute;
-          bottom: -7px;
+          bottom: -23px;
         }
       }
     }
@@ -2567,31 +2567,32 @@ export default {
     }
 
     .temp :nth-child(3)>span {
-      margin-top: 3px;
+      margin-top: 1px;
     }
 
     .temp :nth-child(4)>span {
-      margin-top: 12px;
+      margin-top: 7px;
     }
 
     .temp :nth-child(5)>span {
-      margin-top: 19px;
+      margin-top: 13px;
+
     }
 
     .temp :nth-child(6)>span {
-      margin-top: 28px;
+      margin-top: 18px;
     }
 
     .temp :nth-child(7)>span {
-      margin-top: 37px;
+      margin-top: 25px;
     }
 
     .temp :nth-child(8)>span {
-      margin-top: 44px;
+      margin-top: 30px;
     }
 
     .temp :nth-child(9)>span {
-      margin-top: 52px;
+      margin-top: 36px;
     }
 
     .times :nth-child(2)>span {
@@ -2599,31 +2600,33 @@ export default {
     }
 
     .times :nth-child(3)>span {
-      margin-top: 3px;
+      margin-top: 1px;
+
     }
 
     .times :nth-child(4)>span {
-      margin-top: 12px;
+      margin-top: 7px;
+
     }
 
     .times :nth-child(5)>span {
-      margin-top: 19px;
+      margin-top: 13px;
     }
 
     .times :nth-child(6)>span {
-      margin-top: 28px;
+      margin-top: 18px;
     }
 
     .times :nth-child(7)>span {
-      margin-top: 37px;
+      margin-top: 25px;
     }
 
     .times :nth-child(8)>span {
-      margin-top: 44px;
+      margin-top: 30px;
     }
 
     .times :nth-child(9)>span {
-      margin-top: 52px;
+      margin-top: 36px;
     }
 
     .split-line {

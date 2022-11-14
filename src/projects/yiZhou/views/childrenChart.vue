@@ -90,8 +90,9 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: breastMilk })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
-              {{ item.value ? "✔️" : "" }}
+              {{ item.value  }}
             </div>
           </div>
         </div>
@@ -102,8 +103,9 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: milkList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
-              {{ item.value ? "✔️" : "" }}
+              {{ item.value  }}
             </div>
           </div>
         </div>
@@ -114,6 +116,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: aurigoList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -126,6 +129,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: weightList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -211,7 +215,7 @@ export default {
         weight: {
           vitalCode: "033",
           label: "体重",
-          color: "red",
+          color: "blue",
           lineColor: "blue",
           dotType: "Circle",
           range: weightRange,
@@ -292,7 +296,7 @@ export default {
       },
       lineMap: {
         "01": "axillaryTemperature",
-        "033":"weight",
+        // "033":"weight",
       },
       pageTotal: 1,
       currentPage: 1,
@@ -592,11 +596,13 @@ export default {
               value: "不升",
             });
           } else {
-            console.log(vitalSigns[i].value,9)
             this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
               time: vitalSigns[i].time_point,
               value: Number(vitalSigns[i].value),
             });
+            if(vitalSigns[i].vital_code =='033'){
+            this.weightList = this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data
+            }
           }
 
           continue;
@@ -612,11 +618,24 @@ export default {
           case "4":
             this.bottomSheetNote.push(item);
             break;
+          case "3":
+            this.coolList.push(item);
+            break;
           case "033":
             this.weightList.push(item);
             break;
-         
-         
+            case "funicle":
+            this.funicleList.push(item);
+            break;
+          case "aurigo":
+            this.aurigoList.push(item);
+            break;
+            case "breast":
+            this.breastMilk.push(item);
+            break;
+          case "milk":
+            this.milkList.push(item);
+            break;
           default:
             break;
         }
@@ -1113,7 +1132,7 @@ export default {
                 r: 4,
                 color: "red",
                 zlevel: 10,
-                tips: `${item.time} 降温：${item.value}`,
+                tips: `${item.time} 物理降温：${item.value}`,
                 dotSolid: false,
               });
               this.createLine({
@@ -1221,7 +1240,7 @@ export default {
     getYaxis(yRange, value, vitalCode) {
       return ((yRange[1] - value) / (yRange[1] - (["033", "02"].includes(vitalCode) ? 1000 : 34))) *
         (this.timesTempAreaHeight) +
-        this.indexTextAreaHeight ;
+        this.indexTextAreaHeight -1 ;
     },
     // 根据时间点计算横坐标
     getXaxis(time) {
@@ -1373,6 +1392,7 @@ export default {
           const timeNum = this.getTimeNum(targetList[j].time);
           if (timeNum >= i && timeNum < i + timeInterval) {
             item.value = targetList[j].value;
+            item.time = targetList[j].time
             targetList.splice(j, 1);
             break;
           }
@@ -1403,6 +1423,14 @@ export default {
         list.push(item);
       }
       return list;
+    },
+    clickDateChangeTime(dateTime){
+      console.log('点击======》dateTime',dateTime)
+      if(dateTime.time)
+      window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime.time },
+          '*'
+        )
     },
     // 数字转中文
     toChinesNum(num) {
@@ -1499,14 +1527,14 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @media print {
   @page {
     size: a4; //定义为a4纸
     margin: 5mm 8mm 5mm 8mm; // 页面的边距
   }
   .main-view {
-    transform: scaleY(1.12)!important; 
+    transform: scaleY(1.2)!important; 
     transform-origin: (0 0);
   }
 }
@@ -1532,9 +1560,9 @@ export default {
   .head-info {
     font-size: 14px;
     display: flex;
+    justify-content: space-between;
 
     .item {
-      flex: 1;
       text-align: left;
       padding: 0 0 5px 5px;
 

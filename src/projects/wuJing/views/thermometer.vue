@@ -234,6 +234,7 @@
               }"
               v-for="(item, index) in formatBreatheList"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -254,6 +255,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: pressureList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -266,6 +268,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: weightList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -278,6 +281,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: heightList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -290,6 +294,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: inputList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -302,6 +307,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: entryList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -314,6 +320,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: outputList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -326,6 +333,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: urineList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -342,6 +350,7 @@
                 afterColoclyster,
               })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -356,6 +365,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList0 })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -370,6 +380,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList1 })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -384,6 +395,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList2 })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -398,6 +410,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList3 })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -412,6 +425,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList4 })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -494,7 +508,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -729,6 +743,7 @@ export default {
           const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd()) {
             item.value = breatheList[j].value;
+            item.time = `${breatheList[j].time}`
             breatheList.splice(j, 1);
             break;
           }
@@ -1021,6 +1036,14 @@ export default {
         "border-color": `${(index - 5) % 6 === 0 ? "transparent" : "#000"}`,
         transform: "translateX(1px)",
       };
+    },
+    clickDateChangeTime(dateTime){
+      console.log('点击======》dateTime',dateTime)
+      if(dateTime.time)
+      window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime.time },
+          '*'
+        )
     },
     middleTdStyle(index) {
       return {
@@ -1924,7 +1947,7 @@ export default {
                   color: "red",
                   zlevel: 9,
                   tips: `${x.time} ${label}：${x.value}`,
-                  dotSolid: true,
+                  dotSolid: false,
                 };
               }
               if (Number(x.value) < this.pulseRange[0]) {
@@ -2302,6 +2325,7 @@ export default {
           const timeNum = this.getTimeNum(targetList[j].time);
           if (timeNum >= i && timeNum < i + timeInterval) {
             item.value = targetList[j].value;
+            item.time = targetList[j].time
             targetList.splice(j, 1);
             break;
           }
@@ -2332,6 +2356,7 @@ export default {
           const timeNum = this.getTimeNum(targetList[j].time);
           if (timeNum >= i && timeNum < i + timeInterval) {
             item.value = `${targetList[j].value}`;
+            item.time = `${targetList[j].time}`;
           }
           if (coloclysterList.length > 0 && afterColoclysterList.length > 0) {
             for (let k = 0; k < coloclysterList.length; k++) {
@@ -2353,12 +2378,10 @@ export default {
                 ) {
                   //小孩子的大便或者大人的大便存在灌肠或者失禁事件时，不用带////
                   item.value =
-                    // shitList[k].value.includes("E") ||
-                    // targetList[j].value.includes("E") ||
-                    // shitList[k].value.includes("※") ||
                     Number(coloclysterList[k].value) > 1
                       ? `${targetList[j].value} ${afterColoclysterList[h].value}/${coloclysterList[k].value}E`
                       : `${targetList[j].value} ${afterColoclysterList[h].value}/E`;
+                      item.time = `${targetList[j].time}`;
                   targetList.splice(j, 1);
                   afterColoclysterList.splice(h, 1);
                   coloclysterList.splice(k, 1);
@@ -2369,6 +2392,7 @@ export default {
           } else {
             if (timeNum >= i && timeNum < i + timeInterval) {
               item.value = `${targetList[j].value}`;
+              item.time = `${targetList[j].time}`;
               targetList.splice(j, 1);
               break;
             }

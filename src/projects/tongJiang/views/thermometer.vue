@@ -490,7 +490,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData:false,
+      useMockData:true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1169,6 +1169,7 @@ export default {
         const item = {
           time: vitalSigns[i].time_point,
           value: vitalSigns[i].value,
+          expand2:vitalSigns[i].expand2
         };
         switch (vitalSigns[i].vital_code) {
           case "3":
@@ -1422,14 +1423,12 @@ export default {
           } else {
             map[`${key}`] = notes[i].time
           }
-        } 
+        }
       }
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
       const xaxis = notes.map((x) =>
         this.getXaxis(this.getLocationTime(x.time))
       );
-
-      console.log(notes)
       const xaxisNew = this.handleNoteXaxis(xaxis, notes);
       notes.forEach((x, i) => {
         let value = x.value;
