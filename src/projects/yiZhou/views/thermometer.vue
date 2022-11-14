@@ -14,25 +14,28 @@
       <div class="item" v-if="patInfo.dept_name !== '新生儿科病房'">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
-      <div class="item" v-if="patInfo.dept_name === '新生儿科病房'" >
-        出生日期：<span class="value">{{ patInfo.birthday }}</span>
-      </div>
       <div class="item">
-        入院日期：<span class="value">{{
-            patInfo.admission_date.slice(0, 10)
-        }}</span>
+        科别：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
       <div class="item">
         床号：<span class="value">{{
             bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item">
-        科别：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
+      <div class="item" v-if="patInfo.dept_name === '新生儿科病房'" >
+        出生日期：<span class="value">{{ patInfo.birthday }}</span>
       </div>
       <div class="item">
-        病案号：<span class="value">{{ patInfo.patient_id }}</span>
+        住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
+      <div class="item">
+        入院日期：<span class="value">{{
+            patInfo.admission_date.slice(0, 10)
+        }}</span>
+      </div>
+    
+     
+    
     </div>
     <div class="table-area">
       <div class="vline" :style="{
@@ -112,13 +115,14 @@
             height: `${areaHeight}`,
             position: 'absolute',
             left: `${leftWidth}px`,
+            top:'8px'
           }">
             <defs>
               <pattern :id="`pattern`" width="10" height="10" patternUnits="userSpaceOnUse">
                 <line x1="0" y1="10" x2="10" y2="0" stroke="red" stroke-width="1" />
               </pattern>
             </defs>
-            <g v-for="(item, index) in polygonPoints" :key="index">
+            <g v-for="(item, index) in polygonPoints" :key="index" style="z-index:10000">
               <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke="red" stroke-width="1.5px">
               </polygon>
             </g>
@@ -737,7 +741,7 @@ export default {
         } else if (i > 0) {
           return this.dateList[i - 1].slice(0, 7) !== x.slice(0, 7)
             ? x
-            : x.slice(8, 10);
+            : Number(x.slice(8, 10));
         }
       });
     },
@@ -1784,8 +1788,10 @@ export default {
               });
               const sameAxisItem = tList.find(
                 (x) =>
-                  x.x.toFixed(2) === cx.toFixed(2) &&
-                  x.y.toFixed(2) === cy.toFixed(2)
+                Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 2 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 2
               );
               if (sameAxisItem) {
                 params = {
@@ -2241,7 +2247,6 @@ export default {
     if(patientInfo.PatientId&&patientInfo.PatientId.includes(' ')){
       patientInfo.PatientId =  patientInfo.PatientId.toString().replace(' ','+')
     }
-    console.log(9999,patientInfo)
     this.showInnerPage = patientInfo.showInnerPage === "1";
     if (this.isPrintAll) {
       // 批量打印
