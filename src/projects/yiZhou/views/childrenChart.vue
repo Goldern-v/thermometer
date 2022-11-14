@@ -4,16 +4,16 @@
     <div class="head-title">新生儿体温记录单</div>
     <div class="head-info">
       <div class="item" >
-        姓名：<span class="value">{{ patInfo.name }}</span>
+        母亲姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item" >
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item"  >
+      <!-- <div class="item"  >
         年龄：<span class="value">{{ patInfo.age }}</span>
-      </div>
+      </div> -->
       <div class="item" >
-        出生日期：<span class="value">{{ patInfo.birthday }}</span>
+        出生时间：<span class="value">{{ patInfo.birthday }}</span>
       </div>
       <div class="item" >
         住院号：<span class="value">{{ patInfo.patient_id }}</span>
@@ -110,26 +110,24 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight + 20}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">黄疸</div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">黄疸（mg/dl）</div>
           <div class="value-item-box">
             <div
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: aurigoList })"
               :key="index"
-              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight + 20}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">体重</div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">体重（KG）</div>
           <div class="value-item-box">
             <div
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: weightList })"
               :key="index"
-              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -352,13 +350,13 @@ export default {
       });
     },
     formatDateList() {
-      return this.dateList.map((x, i) => {
+       return this.dateList.map((x, i) => {
         if (i === 0) {
           return x;
         } else if (i > 0) {
           return this.dateList[i - 1].slice(0, 7) !== x.slice(0, 7)
             ? x
-            : x.slice(8, 10);
+            : Number(x.slice(8, 10));
         }
       });
     },
