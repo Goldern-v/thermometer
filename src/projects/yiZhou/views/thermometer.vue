@@ -790,6 +790,7 @@ export default {
       const settingMap = this.settingMap;
       const xyMap = new Map();
       settingMap.heart.data.forEach((x) => {
+        console.log(x,7777)
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
         if (xyMap.has(xAxis)) {
           xyMap.set(xAxis, {
@@ -850,6 +851,7 @@ export default {
             ...x.map((y) => [y, xyMap.get(y).pulse.y]).reverse(),
           ];
         });
+        console.log(data)
         return data;
       }
       return [];
@@ -1174,6 +1176,7 @@ export default {
             this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
               time: vitalSigns[i].time_point,
               value: Number(vitalSigns[i].value),
+              vitalCode:vitalSigns[i].vital_code,
             });
           }
 
@@ -1743,6 +1746,7 @@ export default {
         const cx = this.getXaxis(this.getLocationTime(x.time));
         const cy = this.getYaxis(yRange, x.value, vitalCode);
         dots.push({ x: cx, y: cy });
+
         let params = {
           cx,
           cy,
@@ -1968,13 +1972,14 @@ export default {
     },
     // 根据值计算纵坐标
     getYaxis(yRange, value, vitalCode) {
+      console.log('=======',vitalCode)
       return vitalCode === "092"
         ? ((this.painRange[1] - value) / (this.painRange[1] - yRange[0])) *
         this.painAreaHeight +
         this.indexTextAreaHeight +
         this.timesTempAreaHeight -
         2 * this.ySpace
-        : ((yRange[1] - value) / (yRange[1] - (["20", "02"].includes(vitalCode) ? 20 : 34))) *
+        : ((yRange[1] - value) / (yRange[1] - yRange[0])) *
         (this.timesTempAreaHeight - this.ySpace) +
         this.indexTextAreaHeight;
     },

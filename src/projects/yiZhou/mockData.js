@@ -16,24 +16,24 @@ export const mockData = {
     }
   },
   vitalSigns: [
-    // {
-    //   temperature_type: '身高',
-    //   value: '165',
-    //   time_point: '2021-11-03 07:00:00',
-    //   vital_code: '094'
-    // },
-    // {
-    //   temperature_type: '呼吸',
-    //   value: '18',
-    //   time_point: '2021-11-03 07:00:00',
-    //   vital_code: '04'
-    // },
-    // {
-    //   temperature_type: '疼痛',
-    //   value: '2',
-    //   time_point: '2021-11-03 07:00:00',
-    //   vital_code: '092'
-    // },
+    {
+      temperature_type: '身高',
+      value: '165',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '094'
+    },
+    {
+      temperature_type: '呼吸',
+      value: '18',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '04'
+    },
+    {
+      temperature_type: '疼痛',
+      value: '2',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '092'
+    },
     {
       temperature_type: '体温',
       value: '41',
@@ -172,42 +172,42 @@ export const mockData = {
       time_point: '2021-11-03 07:00:00',
       vital_code: '033'
     },
-    // {
-    //   temperature_type: '血压',
-    //   value: '120/76',
-    //   time_point: '2021-11-03 07:00:00',
-    //   vital_code: '062'
-    // },
+    {
+      temperature_type: '血压',
+      value: '120/76',
+      time_point: '2021-11-03 07:00:00',
+      vital_code: '062'
+    },
     {
       temperature_type: '表顶注释',
       value: '不升',
       time_point: '2021-11-08 08:06:15',
       vital_code: '4'
     },
-    // {
-    //   temperature_type: '呼吸',
-    //   value: '18',
-    //   time_point: '2021-11-03 15:00:00',
-    //   vital_code: '04'
-    // },
-    // {
-    //   temperature_type: '大便次数',
-    //   value: '1',
-    //   time_point: '2021-11-03 15:00:00',
-    //   vital_code: '061'
-    // },
-    // {
-    //   temperature_type: '脉搏',
-    //   value: '72',
-    //   time_point: '2021-11-03 15:00:00',
-    //   vital_code: '02'
-    // },
-    // {
-    //   temperature_type: '血压',
-    //   value: '115/70',
-    //   time_point: '2021-11-03 15:00:00',
-    //   vital_code: '062'
-    // },
+    {
+      temperature_type: '呼吸',
+      value: '18',
+      time_point: '2021-11-03 15:00:00',
+      vital_code: '04'
+    },
+    {
+      temperature_type: '大便次数',
+      value: '1',
+      time_point: '2021-11-03 15:00:00',
+      vital_code: '061'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '72',
+      time_point: '2021-11-03 15:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '血压',
+      value: '115/70',
+      time_point: '2021-11-03 15:00:00',
+      vital_code: '062'
+    },
     {
       temperature_type: '体温',
       value: '36.1',
@@ -272,6 +272,18 @@ export const mockData = {
       temperature_type: '心率',
       value: '80',
       time_point: '2021-11-05 15:00:00',
+      vital_code: '20'
+    },
+    {
+      temperature_type: '脉搏',
+      value: '90',
+      time_point: '2021-11-06 15:00:00',
+      vital_code: '02'
+    },
+    {
+      temperature_type: '心率',
+      value: '80',
+      time_point: '2021-11-06 15:00:00',
       vital_code: '20'
     },
     {
