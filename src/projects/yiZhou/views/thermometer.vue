@@ -115,7 +115,7 @@
             height: `${areaHeight}`,
             position: 'absolute',
             left: `${leftWidth}px`,
-            top:'8px'
+            // top:'8px'
           }">
             <defs>
               <pattern :id="`pattern`" width="10" height="10" patternUnits="userSpaceOnUse">
