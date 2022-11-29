@@ -948,11 +948,11 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
-    currentPage(value) {
-      if (!this.isPrintAll) {
-        window.parent.postMessage({ type: "currentPage", value }, "*");
-      }
-    },
+    // currentPage(value) {
+    //   if (!this.isPrintAll) {
+    //     window.parent.postMessage({ type: "currentPage", value }, "*");
+    //   }
+    // },
   },
   created() {
     document.title = "威海市立医院体温单";
@@ -1068,9 +1068,11 @@ export default {
           this.getTimeNum(x[1]) >= this.getTimeNum(value)
         ) {
           this.currentPage = ind + 1;
+
           this.$refs.main.innerHTML = "";
           this.reset();
           this.handleData();
+          window.parent.postMessage({ type: "currentPage", value:ind + 1}, "*");
         }
       });
     },

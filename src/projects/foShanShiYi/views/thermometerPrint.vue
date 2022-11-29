@@ -929,11 +929,11 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
-          currentPage(value) {
-      if(!this.isPrintAll){
-      window.parent.postMessage({ type: "currentPage", value }, "*");
-        }
-    },
+    //       currentPage(value) {
+    //   if(!this.isPrintAll){
+    //   window.parent.postMessage({ type: "currentPage", value }, "*");
+    //     }
+    // },
   },
   created() {
     // 实现外部分页和打印
@@ -1003,6 +1003,7 @@ export default {
           this.getTimeNum(x[1]) >= this.getTimeNum(value)
         ) {
           this.currentPage = ind + 1;
+          window.parent.postMessage({ type: "currentPage", value:ind + 1}, "*");
           this.$refs.main.innerHTML = "";
           this.reset();
           this.handleData();
@@ -1745,7 +1746,7 @@ export default {
       const dots = [];
       data.forEach((x) => {
         const cx = this.getXaxis(this.getLocationTime(x.time));
-        const cy = this.getYaxis(yRange, x.value, vitalCode);
+        let cy = this.getYaxis(yRange, x.value, vitalCode);
         dots.push({ x: cx, y: cy, time: x.time });
         let params = {
           cx,
@@ -1801,6 +1802,20 @@ export default {
                   ),
                 };
               });
+              // 如果脉搏或心率超限过快，则在最高的格子中间用实心红圈描点
+              if (Number(x.value) >= this.pulseRange[1]) {
+                cy = this.getYaxis(yRange, yRange[1], vitalCode);
+                params = {
+                  cx,
+                  cy:cy + 9,
+                  r: 7,
+                  color: dotColor,
+                  zlevel: 9,
+                  time:x.time,
+                  tips: `${x.time} ${label}：${x.value}`,
+                  dotSolid:dotSolid ,
+                };
+              }
               const sameAxisItem = tList.find(
                 (x) =>
                   //由于有些微小的偏差，比如存在一px左右的数据偏差，就写个区间
@@ -1896,6 +1911,22 @@ export default {
               })
               this.ttgyList.splice(i, 1)
             }
+          }
+        }
+        else if (["11", "12"].includes(vitalCode)) {
+          // 画脉搏/心率超限过快，在顶部画点并且标明数值 数值
+          if (x.value >= this.pulseRange[1]) {
+            this.createText({
+              x: cx - 1.2,
+              y: cy + this.ySpace * 1.6,
+              value: x.value,
+              color: "red",
+              time:x.time,
+              tips: "",
+              fontWeight: "bold",
+              zlevel: 10,
+              fontSize: 12,
+            });
           }
         }
       });

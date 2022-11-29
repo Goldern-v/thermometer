@@ -468,6 +468,7 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/tongJiang/mockData.js";
+import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
 import moment from "moment"; //导入文件
 export default {
   props: {
@@ -490,7 +491,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData:true,
+      useMockData:false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -892,12 +893,6 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
-    currentPage(value) {
-      console.log(9999,value,!this.isPrintAll)
-      if (!this.isPrintAll) {
-        window.parent.postMessage({ type: "currentPage", value }, "*");
-      }
-    },
   },
   created() {
     // 实现外部分页和打印
@@ -938,6 +933,7 @@ export default {
           this.$refs.main.innerHTML = "";
           this.reset();
           this.handleData();
+          window.parent.postMessage({ type: "currentPage", value:ind + 1}, "*");
         }
       });
     },
@@ -1103,16 +1099,29 @@ export default {
 
       this.pageTotal = dateRangeList.length;
       // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
-      window.parent.postMessage(
-        {
-          type: "getNurseExchangeInfo",
-          value: {
-            startLogDateTime: this.timeRange[0],
-            endLogDateTime: this.timeRange[1],
-          },
-        },
-        "*"
-      );
+      // window.parent.postMessage(
+      //   {
+      //     type: "getNurseExchangeInfo",
+      //     value: {
+      //       startLogDateTime: this.timeRange[0],
+      //       endLogDateTime: this.timeRange[1],
+      //     },
+      //   },
+      //   "*"
+      // );
+      const patientInfo = this.$route.query;
+      let data = {
+        startLogDateTime: this.timeRange[0],
+        endLogDateTime: this.timeRange[1],
+        visitId: patientInfo.VisitId,
+        patientId: patientInfo.PatientId,
+      };
+      if (!this.useMockData && !this.isPrintAll) {
+        getNurseExchangeInfoByTime(data).then((res) => {
+          this.adtLog = res.data.data.adtLogWardName; // 转科
+          this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+        });
+      }
 
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       // const customSigns = [] // 记录自定义字段的名字
@@ -2145,16 +2154,13 @@ export default {
         this.handleData();
       });
     } else {
-      this.$http({
-        method: "post",
-        url: "/crHesb/hospital/common",
-        data: {
+      let data = {
           tradeCode: "nurse_getPatientVitalSigns",
           PatientId: patientInfo.PatientId,
           VisitId: patientInfo.VisitId,
           StartTime: patientInfo.StartTime,
-        },
-      }).then((res) => {
+        }
+      common(data).then((res) => {
         this.apiData = res.data;
         this.$nextTick(() => {
           // this.handleData()

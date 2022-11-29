@@ -898,11 +898,11 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
-    currentPage(value) {
-      if (!this.isPrintAll) {
-        window.parent.postMessage({ type: "currentPage", value }, "*");
-      }
-    },
+    // currentPage(value) {
+    //   if (!this.isPrintAll) {
+    //     window.parent.postMessage({ type: "currentPage", value }, "*");
+    //   }
+    // },
   },
   created() {
     // 实现外部分页和打印
@@ -979,6 +979,7 @@ export default {
           this.getTimeNum(x[1]) >= this.getTimeNum(value)
         ) {
           this.currentPage = ind + 1;
+          window.parent.postMessage({ type: "currentPage", value:ind + 1}, "*");
           this.$refs.main.innerHTML = "";
           this.reset();
           this.handleData();
@@ -1515,6 +1516,7 @@ export default {
       zlevel = 0,
       fontWeight = "normal",
       textLineHeight,
+      time
     }) {
       const text = new zrender.Text({
         zlevel,
@@ -1529,6 +1531,14 @@ export default {
           textLineHeight,
         },
       });
+      if (time) {
+        text.on('click', () => {
+          window.parent.postMessage(
+            { type: "clickDateTime", value: time },
+            "*"
+          );
+        })
+      }
       this.zr.add(text);
       if (tips) {
         this.addHover(
@@ -1745,6 +1755,7 @@ export default {
               value: "x",
               color: dotColor,
               fontSize: 18,
+              time:x.time,
               tips: `${x.time} ${label}：${x.value}`,
               zlevel: 10,
               fontWeight: "bold",

@@ -505,11 +505,11 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
-    currentPage(value) {
-      if (!this.isPrintAll) {
-        window.parent.postMessage({ type: "currentPage", value }, "*");
-      }
-    },
+    // currentPage(value) {
+    //   if (!this.isPrintAll) {
+    //     window.parent.postMessage({ type: "currentPage", value }, "*");
+    //   }
+    // },
     apiData:{
       handler(val){
       },
@@ -575,6 +575,7 @@ export default {
           this.$refs.main.innerHTML = "";
           this.reset();
           this.handleData();
+          window.parent.postMessage({ type: "currentPage", value:ind + 1}, "*");
         }
       });
     },

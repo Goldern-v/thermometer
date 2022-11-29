@@ -111,15 +111,14 @@
         <div ref="main" id="main-svg" :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"></div>
         <div id="svgbox" ref="svgcanvas">
           <svg class="svgelement" :style="{
-            width: `${areaWidth}`,
-            height: `${areaHeight}`,
-            position: 'absolute',
-            left: `${leftWidth}px`,
-            // top:'8px'
-          }">
+                    width: `${areaWidth}`,
+                    height: `${areaHeight}`,
+                    position: 'absolute',
+                    left: `${leftWidth}px`,
+                  }">
             <defs>
               <pattern :id="`pattern`" width="10" height="10" patternUnits="userSpaceOnUse">
-                <line x1="0" y1="10" x2="10" y2="0" stroke="red" stroke-width="1" />
+                <line x1="0" y1="10" x2="10" y2="0" stroke="red" stroke-width="1"  />
               </pattern>
             </defs>
             <g v-for="(item, index) in polygonPoints" :key="index" style="z-index:10000">
@@ -671,9 +670,9 @@ export default {
     },
     formatOperateDateList() {
       return this.dateList.map((x) => {
-        if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
-          return "";
-        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
+        // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
+        //   return "";
+        // if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
         if (!this.operateDateList.length) return "";
         // 构造天数差数组，有相同天数差的说明在同一天，所以要去重
         // const days = [
@@ -794,7 +793,6 @@ export default {
       const settingMap = this.settingMap;
       const xyMap = new Map();
       settingMap.heart.data.forEach((x) => {
-        console.log(x,7777)
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
         if (xyMap.has(xAxis)) {
           xyMap.set(xAxis, {
@@ -889,6 +887,16 @@ export default {
           '*'
         )
     },
+    //找到表底存在不升的日期
+    bottomSheetNoteBusheng() {
+      let outTime = [];
+      this.bottomSheetNote.forEach((y) => {
+        if (y.value.includes("不升")) {
+          outTime.push(y.time);
+        }
+      });
+      return outTime;
+    },
     smallTdStyle(index) {
       return {
         color:
@@ -928,22 +936,26 @@ export default {
         }
       }
     },
-    //找到存在出院或者转出的日期
-    getLeaveTime() {
-      let outTime = "";
+        getNotTemTime() {
+      let outTime = [];
       this.topSheetNote.forEach((y) => {
-        if (y.value.includes("出院") || y.value.includes("转出")) {
-          outTime = y.time.slice(0, 10);
+        if (y.value.includes("转入")||y.value.includes("请假")||y.value.includes("返院")) {
+          outTime.push(y.time);
+        }
+      });
+      this.bottomSheetNote.forEach((y) => {
+        if (y.value.includes("外出")) {
+          outTime.push(y.time);
         }
       });
       return outTime;
     },
-    //找到表底存在不升的日期
-    getNotTemTime() {
-      let outTime = [];
-      this.bottomSheetNote.forEach((y) => {
-        if (y.value.includes("不升")) {
-          outTime.push(y.time);
+    //找到存在出院的日期
+    getLeaveTime() {
+      let outTime = "";
+      this.topSheetNote.forEach((y) => {
+        if (y.value.includes("出院")) {
+          outTime = y.time.slice(0, 10);
         }
       });
       return outTime;
@@ -1297,6 +1309,9 @@ export default {
               if (y.value <= 35) {
                 data.push([]);
               }
+              // if (this.getBreakPoint(x.data).includes(index)) {
+              //   data.push([]);
+              // }
               if (index < x.data.length - 1) {
                 //超过一天的时间点，中间断开
                 if (
@@ -1307,8 +1322,8 @@ export default {
                   data.push([x.data[index + 1]]);
                 }
                 //如果存在中间不升的情况，中间断开
-                if (this.getNotTemTime() !== []) {
-                  for (let item of this.getNotTemTime()) {
+                if (this.bottomSheetNoteBusheng() !== []) {
+                  for (let item of this.bottomSheetNoteBusheng()) {
                     if (
                       this.getTimeNum(x.data[index + 1].time) >=
                       this.getTimeNum(item) &&
@@ -1332,6 +1347,9 @@ export default {
             x.data.forEach((y, index) => {
               data[data.length - 1].push(y);
               // eslint-disable-next-line no-empty
+              // if (this.getBreakPoint(x.data).includes(index)) {
+              //   data.push([]);
+              // }
               if (index < x.data.length - 1) {
                 if (
                   this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
@@ -1357,6 +1375,9 @@ export default {
               } else {
                 data.push([]);
               }
+              // if (this.getBreakPoint(x.data).includes(index)) {
+              //   data.push([]);
+              // }
               if (index < x.data.length - 1) {
                 if (
                   this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
@@ -1364,6 +1385,18 @@ export default {
                   24 * 60 * 60 * 1000 * 2
                 ) {
                   data.push([x.data[index + 1]]);
+                }
+                //如果存在中间不升的情况，中间断开
+                if (this.bottomSheetNoteBusheng() !== []) {
+                  for (let item of this.bottomSheetNoteBusheng()) {
+                    if (
+                      this.getTimeNum(x.data[index + 1].time) >=
+                      this.getTimeNum(item) &&
+                      this.getTimeNum(y.time) <= this.getTimeNum(item)
+                    ) {
+                      data.push([x.data[index + 1]]);
+                    }
+                  }
                 }
               } else {
                 const list = data[data.length - 1];
@@ -1873,19 +1906,6 @@ export default {
             ) {
               createRepeatTest();
             }
-            //找到表底录入的不升时间点，不升后面的第一个体温数据就画体温复试
-            if (this.getNotTemTime() !== []) {
-              for (let item of this.getNotTemTime()) {
-                if (
-                  this.getTimeNum(x.time.slice(0, 10)) -
-                  this.getTimeNum(item.slice(0, 10)) >
-                  0 &&
-                  index === 0
-                ) {
-                  createRepeatTest();
-                }
-              }
-            }
           } else if (index === 0) {
             // 入院首次体温≥38℃
             const list = [
@@ -1906,22 +1926,22 @@ export default {
               .sort(
                 (a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time)
               );
-            if (
-              //存在第一天入院就不升的情况，那接后面的第一个体温就复测
-              vitalCode === list[0].vitalCode &&
-              this.getTimeNum(list[0].time) -
-              this.getTimeNum(this.getNotTemTime()[0]) >
-              0
-            ) {
-              createRepeatTest();
-            }
-            if (
-              //断开的时候，体温单复测
-              vitalCode === list[0].vitalCode && //体温为第一个，就判断为断开
-              x.time !== list[0].time //排查第一个温度的情况
-            ) {
-              createRepeatTest();
-            }
+            // if (
+            //   //存在第一天入院就不升的情况，那接后面的第一个体温就复测
+            //   vitalCode === list[0].vitalCode &&
+            //   this.getTimeNum(list[0].time) -
+            //   this.getTimeNum(this.getNotTemTime()[0]) >
+            //   0
+            // ) {
+            //   createRepeatTest();
+            // }
+            // if (
+            //   //断开的时候，体温单复测
+            //   vitalCode === list[0].vitalCode && //体温为第一个，就判断为断开
+            //   x.time !== list[0].time //排查第一个温度的情况
+            // ) {
+            //   createRepeatTest();
+            // }
             // if (
             //   //首次入院的体温高于38度，用温度列表里面第一个时间跟时间想且当前页面为1等判断为第一天
             //   x.time.slice(0, 10) === list[0].time.slice(0, 10) &&

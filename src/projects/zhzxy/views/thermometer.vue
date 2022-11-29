@@ -464,7 +464,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -563,6 +563,7 @@ export default {
       customList2: [], // 自定义3
       dateRangeList: [], // 数组长度决定页数
       getIinnerWidth:1,
+      pulseRateBreaken:[],
       patInfo: {
         patient_id: "",
         name: "",
@@ -685,9 +686,9 @@ export default {
       });
       const timeAdd = (i) => {
         return timeNumList.some((x) => x.start === i)
-          ? 6 * 60 * 60 * 1000
-          : timeNumList.some((x) => x.end - 2 * 60 * 60 * 1000 === i)
-          ? 2 * 60 * 60 * 1000
+          ? 5 * 60 * 60 * 1000
+          : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
+          ? 3 * 60 * 60 * 1000
           : 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeAdd(i)) {
@@ -746,7 +747,7 @@ export default {
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
           return "";
-        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
+        // if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
 
         if (!this.operateDateList.length) return "";
         const days = [
@@ -1178,6 +1179,17 @@ export default {
             break;
         }
       }
+            //先计算是否存在相同的时间的脉搏心率，如果存在 就说明画了房颤
+      //接着  计算脉搏心率相同的数组 筛选出跟录入心率相同的数组
+      // 如果 数组的下标index 是123456 这种 就说明  连续的录入脉搏心率 如果中间断开 就说明录入了脉搏 没录入心率
+      // 那么这时候时间想等的点 就跟下一个点断开
+      let sameList=[]
+      const heartTimeList = this.settingMap.heart.data.map((item)=>item.time)
+      this.settingMap.pulse.data.map((item,index) => {
+        if(index>0){
+          if(item.time)
+        }
+      })
       this.init();
     },
     init() {
@@ -1192,15 +1204,96 @@ export default {
         this.yLine(); //生成Y轴坐标
         this.xLine(); //生成X轴坐标
         Object.values(this.settingMap).forEach((x) => {
-          this.createBrokenLine({
-            vitalCode: x.vitalCode,
-            data: x.data,
-            yRange: x.range,
-            lineColor: x.lineColor || x.color,
-            label: x.label,
-            dotColor: x.color,
-            dotSolid: x.solid,
-            dotType: x.dotType,
+          let data = [x.data];
+          if (["2", "1", "19"].includes(x.vitalCode)) {
+            // 体温为不升时，折线需要断开
+            data = [[]];
+            x.data.forEach((y, index) => {
+              if (y.value > 35) {
+                data[data.length - 1].push(y);
+              }
+              if (index < x.data.length - 1) {
+                //超过一天的时间点，中间断开
+                if (
+                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                    this.getTimeNum(y.time.slice(0, 10)) >=
+                  24 * 60 * 60 * 1000 * 2
+                ) {
+                  data.push([x.data[index + 1]]);
+                }
+              } else {
+                const list = data[data.length - 1];
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y);
+                }
+              }
+            });
+          }
+          if (["11"].includes(x.vitalCode)) {
+            // 心率或脉搏过快时，折线需要断开
+            data = [[]];
+            x.data.forEach((y, index) => {
+              if (y.value <= this.pulseRange[1]) {
+                data[data.length - 1].push(y);
+              } else {
+                data.push([]);
+              }
+              if(this.pulseRateBreaken.includes(y.time)){
+                data.push([x.data[index + 1]]);
+              }
+              if (index < x.data.length - 1) {
+                if (
+                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                    this.getTimeNum(y.time.slice(0, 10)) >=
+                  24 * 60 * 60 * 1000 * 2
+                ) {
+                  data.push([x.data[index + 1]]);
+                }
+              } else {
+                const list = data[data.length - 1];
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y);
+                }
+              }
+
+            });
+          }
+          if (["12"].includes(x.vitalCode)) {
+            // 心率或脉搏过快时，折线需要断开
+            data = [[]];
+            x.data.forEach((y, index) => {
+              if (y.value <= this.pulseRange[1]) {
+                data[data.length - 1].push(y);
+              } else {
+                data.push([]);
+              }
+              if (index < x.data.length - 1) {
+                if (
+                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                    this.getTimeNum(y.time.slice(0, 10)) >=
+                  24 * 60 * 60 * 1000 * 2
+                ) {
+                  data.push([x.data[index + 1]]);
+                }
+              } else {
+                const list = data[data.length - 1];
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y);
+                }
+              }
+            });
+          }
+          data.forEach((z, index) => {
+            this.createBrokenLine({
+              vitalCode: x.vitalCode,
+              data: z,
+              yRange: x.range,
+              lineColor: x.lineColor || x.color,
+              label: x.label,
+              dotColor: x.color,
+              dotSolid: x.solid,
+              dotType: x.dotType,
+            });
           });
           this.handleCustomList();
         });
@@ -1874,12 +1967,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "04:00:59"],
-        "06:00:00": ["04:01:00", "8:00:59"],
-        "10:00:00": ["08:01:00", "12:00:59"],
-        "14:00:00": ["12:01:00", "16:00:59"],
-        "18:00:00": ["16:01:00", "20:00:59"],
-        "22:00:00": ["20:01:00", "23:59:59"],
+        "02:00:00": ["00:00:00", "05:00:59"],
+        "06:00:00": ["05:01:00", "9:00:59"],
+        "10:00:00": ["9:01:00", "13:00:59"],
+        "14:00:00": ["13:01:00", "17:00:59"],
+        "18:00:00": ["17:01:00", "21:00:59"],
+        "22:00:00": ["21:01:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -2170,10 +2263,10 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 7mm 8mm 7mm 8mm; // 页面的边距
+    margin: 5mm 8mm 5mm 8mm; // 页面的边距
   }
   .main-view {
-    transform: scaleY(1.05) !important; 
+    transform: scaleY(1.07) !important; 
     transform-origin: 0 0;
 
   }
@@ -2199,6 +2292,7 @@ export default {
   }
   .head-info {
     display: flex;
+    justify-content: space-around;
     font-size: 18px;
     margin-left: 35px;
     .item {

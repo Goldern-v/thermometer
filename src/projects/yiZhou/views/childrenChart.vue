@@ -437,22 +437,22 @@ export default {
         transform: "translateX(1px)",
       };
     },
+    //找到表底存在不升的日期
+    bottomSheetNoteBusheng() {
+      let outTime = [];
+      this.bottomSheetNote.forEach((y) => {
+        if (y.value.includes("不升")) {
+          outTime.push(y.time);
+        }
+      });
+      return outTime;
+    },
     //找到存在出院或者转出的日期
     getLeaveTime() {
       let outTime = "";
       this.topSheetNote.forEach((y) => {
         if (y.value.includes("出院") || y.value.includes("转出")) {
           outTime = y.time.slice(0, 10);
-        }
-      });
-      return outTime;
-    },
-    //找到表底存在不升的日期
-    getNotTemTime() {
-      let outTime = [];
-      this.bottomSheetNote.forEach((y) => {
-        if (y.value.includes("不升")) {
-          outTime.push(y.time);
         }
       });
       return outTime;
@@ -689,7 +689,6 @@ export default {
         this.xLine(); //生成X轴坐标
         // 画折线
         Object.values(this.settingMap).forEach((x) => {
-          console.log(x,999)
           let data = [x.data];
           if (["01"].includes(x.vitalCode)) {
             // 体温为不升时，折线需要断开
@@ -711,8 +710,8 @@ export default {
                   data.push([x.data[index + 1]]);
                 }
                 //如果存在中间不升的情况，中间断开
-                if (this.getNotTemTime() !== []) {
-                  for (let item of this.getNotTemTime()) {
+                if (this.bottomSheetNoteBusheng() !== []) {
+                  for (let item of this.bottomSheetNoteBusheng()) {
                     if (
                       this.getTimeNum(x.data[index + 1].time) >=
                       this.getTimeNum(item) &&
@@ -1168,19 +1167,6 @@ export default {
             ) {
               createRepeatTest();
             }
-            //找到表底录入的不升时间点，不升后面的第一个体温数据就画体温复试
-            if (this.getNotTemTime() !== []) {
-              for (let item of this.getNotTemTime()) {
-                if (
-                  this.getTimeNum(x.time.slice(0, 10)) -
-                  this.getTimeNum(item.slice(0, 10)) >
-                  0 &&
-                  index === 0
-                ) {
-                  createRepeatTest();
-                }
-              }
-            }
           } else if (index === 0) {
             // 入院首次体温≥38℃
             const list = [
@@ -1194,15 +1180,15 @@ export default {
               .sort(
                 (a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time)
               );
-            if (
-              //存在第一天入院就不升的情况，那接后面的第一个体温就复测
-              vitalCode === list[0].vitalCode &&
-              this.getTimeNum(list[0].time) -
-              this.getTimeNum(this.getNotTemTime()[0]) >
-              0
-            ) {
-              createRepeatTest();
-            }
+            // if (
+            //   //存在第一天入院就不升的情况，那接后面的第一个体温就复测
+            //   vitalCode === list[0].vitalCode &&
+            //   this.getTimeNum(list[0].time) -
+            //   this.getTimeNum(this.getNotTemTime()[0]) >
+            //   0
+            // ) {
+            //   // createRepeatTest();
+            // }
             // if (
             //   //断开的时候，体温单复测
             //   vitalCode === list[0].vitalCode && //体温为第一个，就判断为断开

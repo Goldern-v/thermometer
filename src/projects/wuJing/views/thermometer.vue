@@ -1007,11 +1007,11 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
-    currentPage(value) {
-      if (!this.isPrintAll) {
-        window.parent.postMessage({ type: "currentPage", value }, "*");
-      }
-    },
+    // currentPage(value) {
+    //   if (!this.isPrintAll) {
+    //     window.parent.postMessage({ type: "currentPage", value }, "*");
+    //   }
+    // },
   },
   created() {
     // 实现外部分页和打印
@@ -1124,6 +1124,7 @@ export default {
         ) {
           this.currentPage = ind + 1;
           this.$refs.main.innerHTML = "";
+          window.parent.postMessage({ type: "currentPage", value:ind + 1}, "*");
           this.reset();
           this.handleData();
         }
@@ -1480,6 +1481,7 @@ export default {
           y: bottomText.includes(value) ? y - 5 * this.ySpace + 3 : y - 3,
           value: this.addn(value, bottomText),
           color,
+          time:x.time,
           textLineHeight: this.ySpace + 1,
           fontWeight: "nomal",
         });
@@ -1687,6 +1689,7 @@ export default {
       zlevel = 0,
       fontWeight = "normal",
       textLineHeight,
+      time
     }) {
       const text = new zrender.Text({
         zlevel,
@@ -1701,6 +1704,14 @@ export default {
           textLineHeight,
         },
       });
+      if (time) {
+        text.on('click', () => {
+          window.parent.postMessage(
+            { type: "clickDateTime", value: time },
+            "*"
+          );
+        })
+      }
       this.zr.add(text);
       if (tips) {
         this.addHover(
@@ -2114,6 +2125,7 @@ export default {
               y: cy - this.ySpace * 1.6,
               value: x.value,
               color: "red",
+              time:x.time,
               tips: "",
               fontWeight: "bold",
               zlevel: 10,
@@ -2128,6 +2140,7 @@ export default {
               value: x.value,
               color: "red",
               tips: "",
+              time:x.time,
               fontWeight: "bold",
               zlevel: 100,
               fontSize: 12,

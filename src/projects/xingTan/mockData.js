@@ -17,6 +17,19 @@ export const mockData = {
   },
   vitalSigns: [
     {
+      temperature_type: "表顶注释",
+      value: "出生|一时十七分",
+      time_point: "2021-12-08 04:00:00",
+      vital_code: "5",
+      expand2:"2021-12-08 01:17:00"
+    },
+    {
+      temperature_type: "表顶注释",
+      value: "出院|一时五十万分",
+      time_point: "2021-12-08 04:00:00",
+      vital_code: "5",
+    },
+    {
       temperature_type: "体温",
       value: "38.7",
       time_point: "2021-12-08 05:59:00",

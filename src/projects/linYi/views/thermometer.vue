@@ -329,7 +329,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -539,7 +539,23 @@ export default {
     formatBreatheList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
-      const breatheList = [...this.breatheList];
+      let breatheList = [...this.breatheList];
+      breatheList.forEach((bList,index)=>{
+              if (
+                index >= 1 &&
+                this.getLocationTime(bList.time) ==
+                this.getLocationTime(breatheList[index - 1].time
+                )
+              ) {
+                if (
+                  bList.value >breatheList[index - 1].value
+                ) {
+                  breatheList.splice(index - 1, 1);
+                } else {
+                  breatheList.splice(index, 1);
+                }
+              }
+            })
       // 根据医院要求，0-5点落在当天第一个格子，21-24点落在当天最后一个格子，所以特殊处理每天第一个格子和最后一个格子的落点
       const timeNumList = this.dateList.map((x) => {
         return {
@@ -559,7 +575,12 @@ export default {
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
+            if(item.value){
+              console.log(99999999,item)
+            }
             item.value = breatheList[j].value;
+            item.time = breatheList[j].time;
+
             breatheList.splice(j, 1);
             break;
           }
