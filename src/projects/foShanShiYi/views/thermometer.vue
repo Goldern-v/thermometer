@@ -378,7 +378,7 @@
               ></div>
             </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight}px` }" v-if="!isNaN(patInfo.age)&&Number(patInfo.age)>=14">
+          <div class="row font-14" :style="{ height: `${trHeight}px` }" v-if="!isNaN(patInfo.age.replace('岁',''))&&Number(patInfo.age.replace('岁',''))>=14">
             <div class="label" :style="{ width: `${leftWidth}px` }">BMI</div>
             <div class="value-item-box">
               <div

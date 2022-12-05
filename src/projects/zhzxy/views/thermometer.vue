@@ -1183,13 +1183,7 @@ export default {
       //接着  计算脉搏心率相同的数组 筛选出跟录入心率相同的数组
       // 如果 数组的下标index 是123456 这种 就说明  连续的录入脉搏心率 如果中间断开 就说明录入了脉搏 没录入心率
       // 那么这时候时间想等的点 就跟下一个点断开
-      let sameList=[]
-      const heartTimeList = this.settingMap.heart.data.map((item)=>item.time)
-      this.settingMap.pulse.data.map((item,index) => {
-        if(index>0){
-          if(item.time)
-        }
-      })
+
       this.init();
     },
     init() {

@@ -61,6 +61,8 @@ const projectName = (() => {
       return "中国人民解放军联勤保障部队第九二五医院";
     case "fssd": // 
       return "南方医科大学顺德医院";
+    case "liaoBu": // 
+      return "东莞市寮步医院";
     case "common": // 可配置的通用版本
       return "配置通用版本";
     default:
@@ -160,6 +162,8 @@ module.exports = {
           return "./src/projects/fssd/main.js";
         case "925": // 贵州925医院
           return "./src/projects/925/main.js";
+        case "liaoBu": // 贵州925医院
+          return "./src/projects/liaoBu/main.js";
         case "common": // 可配置的通用版本
           return "./src/projects/common/main.js";
         default:
@@ -217,7 +221,7 @@ module.exports = {
             case "yiZhou":
               return "http://112.233.241.99:8092";
             case "weihai":
-              return "http://218.107.37.134:9093";
+              return "http://221.2.154.22:9091";
             case "zhzxy":
               return "http://218.107.37.134:9093";
             case "tongJiang":

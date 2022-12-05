@@ -77,7 +77,7 @@
         <div class="info-box">
           <div class="index-box" :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }">
             <i class="split-line" :style="{
-              bottom: `${painAreaHeight + bottomAreaHeight - 1}px`,
+              bottom: `${painAreaHeight + bottomAreaHeight - 8 }px`,
             }"></i>
             <div class="item times">
               <div class="text" :style="`height: ${indexTextAreaHeight}px`">
@@ -165,9 +165,9 @@
           </div>
           <div>
             <div class="left_box" :style="{ height: `${trHeight * 5 }px` }">
-            <span>
+            <div class="label">
               出<br />量
-            </span>
+            </div>
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth - 30}px` }">
@@ -369,7 +369,7 @@ export default {
       areaHeight: 0, // 网格区域的高度
       xSpace: 18, // 纵向网格的间距
       ySpace: 16, //  横向网格的间距
-      leftWidth: 90, // 左侧内容宽度
+      leftWidth: 120, // 左侧内容宽度
       xRange: [1, 8],
       yRange,
       pulseRange,
@@ -757,7 +757,7 @@ export default {
       return this.ySpace * 6 + 7;
     },
     bottomAreaHeight() {
-      return this.ySpace * 1 + 1;
+      return this.ySpace * 2 - 7;
     },
     polygonPoints() {
       /*
@@ -1226,7 +1226,7 @@ export default {
           case "10":
             this.yinliuList.push(item);
             break;
-          case "12":
+          case "15":
             this.urineList.push(item);
             break;
           case "19":
@@ -2313,6 +2313,10 @@ export default {
     size: a4; //定义为a4纸
     margin: 8mm 8mm 5mm 8mm; // 页面的边距
   }
+  .main-view {
+    transform: scaleY(1.07) !important; 
+    transform-origin: 0 0;
+  }
 }
 
 .main-view {
@@ -2408,10 +2412,15 @@ export default {
   .left_box {
     width: 30px;
     float: left;
-    font-size: 16px;
     border-top: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    .label {
+    font-size: 16px;
     font-weight: 500;
-    padding-top: 36px;
+    
+    }
   }
   .row {
     display: flex;
@@ -2519,7 +2528,7 @@ export default {
 
         .s-index {
           position: absolute;
-          bottom: -23px;
+          bottom: -16px;
         }
       }
     }
@@ -2580,19 +2589,20 @@ export default {
     }
 
     .temp :nth-child(6)>span {
-      margin-top: 18px;
+      margin-top: 22px;
     }
 
     .temp :nth-child(7)>span {
-      margin-top: 25px;
+      margin-top: 27px;
     }
 
     .temp :nth-child(8)>span {
-      margin-top: 30px;
+      margin-top: 35px;
     }
 
     .temp :nth-child(9)>span {
-      margin-top: 36px;
+      margin-top: 43px;
+      color:red;
     }
 
     .times :nth-child(2)>span {
@@ -2614,19 +2624,19 @@ export default {
     }
 
     .times :nth-child(6)>span {
-      margin-top: 18px;
+      margin-top: 22px;
     }
 
     .times :nth-child(7)>span {
-      margin-top: 25px;
+      margin-top: 27px;
     }
 
     .times :nth-child(8)>span {
-      margin-top: 30px;
+      margin-top: 35px;
     }
 
     .times :nth-child(9)>span {
-      margin-top: 36px;
+      margin-top: 43px;
     }
 
     .split-line {

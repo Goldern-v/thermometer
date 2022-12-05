@@ -589,6 +589,12 @@ export const mockData = {
     {
         temperature_type: '脉搏',
         value: '121',
+        time_point: '2021-05-15 13:00:00',
+        vital_code: '11'
+      },
+    {
+        temperature_type: '脉搏',
+        value: '121',
         time_point: '2021-05-16 13:00:00',
         vital_code: '11'
       },
@@ -600,8 +606,38 @@ export const mockData = {
       },
     {
         temperature_type: '脉搏',
+        value: '121',
+        time_point: '2021-05-18 13:00:00',
+        vital_code: '11'
+      },
+    {
+        temperature_type: '脉搏',
+        value: '121',
+        time_point: '2021-05-19 13:00:00',
+        vital_code: '11'
+      },
+    {
+        temperature_type: '脉搏',
         value: '101',
-        time_point: '2021-05-16 17:00:00',
+        time_point: '2021-05-16 03:00:00',
+        vital_code: '12'
+      },
+    {
+        temperature_type: '脉搏',
+        value: '101',
+        time_point: '2021-05-15 17:00:00',
+        vital_code: '12'
+      },
+    {
+        temperature_type: '脉搏',
+        value: '101',
+        time_point: '2021-05-18 17:00:00',
+        vital_code: '12'
+      },
+    {
+        temperature_type: '脉搏',
+        value: '101',
+        time_point: '2021-05-17 21:00:00',
         vital_code: '12'
       },
     // {

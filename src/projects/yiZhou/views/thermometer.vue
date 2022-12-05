@@ -34,8 +34,6 @@
         }}</span>
       </div>
     
-     
-    
     </div>
     <div class="table-area">
       <div class="vline" :style="{
@@ -145,7 +143,7 @@
               color: '#000',
             }" v-for="(item, index) in formatBreatheList" :key="index"
             @click="()=>clickDateChangeTime(item)">
-              {{ item.value }}
+              <div :style="{fontSize:!isNaN(item.value) ?'':'large'}">{{ item.value}}</div>
             </div>
           </div>
         </div>
@@ -621,6 +619,9 @@ export default {
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
+            if(['呼吸机','R','r','辅助呼吸'].includes(breatheList[j].value)){
+              breatheList[j].value = '®'
+            }
             item.value = breatheList[j].value;
             item.time = `${breatheList[j].time}`
             breatheList.splice(j, 1);

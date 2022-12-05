@@ -11,7 +11,7 @@ export const mockData = {
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
       admission_date: '2022-08-29 11:00:00',
-      age: '14',
+      age: null,
       inp_no: '1568587'
     }
   },

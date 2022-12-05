@@ -57,6 +57,8 @@
     "build:925": "vue-cli-service build --project=925",
     "dev:fssd": "vue-cli-service serve --project=fssd",
     "build:fssd": "vue-cli-service build --project=fssd",
+    "dev:liaoBu": "vue-cli-service serve --project=liaoBu",
+    "build:liaoBu": "vue-cli-service build --project=liaoBu",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
