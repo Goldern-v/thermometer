@@ -64,18 +64,18 @@ export const mockData = {
       time_point: '2022-06-30 03:00:00',
       vital_code: '01'
     },
-    // {
-    //   temperature_type: '自定义1',
-    //   value: '自定义1',
-    //   time_point: '2022-06-03 03:00:00',
-    //   vital_code: '32'
-    // },
-    // {
-    //   temperature_type: '自定义1',
-    //   value: '自定义1',
-    //   time_point: '2022-06-05 03:00:00',
-    //   vital_code: '32'
-    // },
+    {
+      temperature_type: '粪便',
+      value: '粪便',
+      time_point: '2022-06-03 03:00:00',
+      vital_code: '31'
+    },
+    {
+      temperature_type: '卡介苗',
+      value: '11',
+      time_point: '2022-06-05 03:00:00',
+      vital_code: 'vaccine'
+    },
     // {
     //   temperature_type: '自定义1',
     //   value: '自定义1',
