@@ -20,20 +20,10 @@ const routes = [
     component: () => import('src/projects/wuJing/views/withoutPain.vue') //默认版本无疼痛
   },
   {
-    path: '/babyChart',
-    name: 'BabyChart',
-    component: () => import('src/projects/wuJing/views/babyChart.vue') //婴儿体温单
-  },
-  {
     path: '/withoutPainAll',
     name: 'WithoutPainAll',
     component: () => import('src/projects/wuJing/views/printnoPain.vue') //默认版本无疼痛
   },
-  {
-    path: '/babyChartPainAll',
-    name: 'BabyChartPainAll',
-    component: () => import('src/projects/wuJing/views/printBabyChart.vue') //默认版本无疼痛
-  }
 ]
 
 const router = new VueRouter({

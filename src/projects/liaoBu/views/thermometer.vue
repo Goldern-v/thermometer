@@ -293,7 +293,7 @@
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatList({ tList: entryList })"
+              v-for="(item, index) in getFormatList({ tList: inputList })"
               :key="index"
               @click="()=>clickDateChangeTime(item)"
             >
@@ -513,7 +513,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1343,63 +1343,63 @@ export default {
               value: Number(vitalSigns[i].value),
             });
           }
-          let dataArray =this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data;
-          let vitalCode = vitalSigns[i].vital_code
-          const inTime = this.getBeHospitalized();
-          dataArray.forEach((y, index) => {
-            if (
-              index >= 1 &&
-              this.getLocationTime(y.time) ==
-                this.getLocationTime(dataArray[index - 1].time)
-            ) {
-              if (!inTime.includes(this.getLocationTime(y.time))) {
-                if(['1','2','20','12'].includes(vitalCode)){
-                                  if (y.value >= 35) {
-                  if (y.value > dataArray[index - 1].value) {
-                    dataArray.splice(index - 1, 1);
-                  } else {
-                    dataArray.splice(index, 1);
-                  }
-                } else {
-                  if (
-                    y.value < dataArray[index - 1].value &&
-                    dataArray[index - 1].value < 35
-                  ) {
-                    dataArray.splice(index - 1, 1);
-                  } else {
-                    dataArray.splice(index, 1);
-                  }
-                }
-                }else{
-                    if (y.value >= 60) {
-                  if (y.value > dataArray[index - 1].value) {
-                    dataArray.splice(index - 1, 1);
-                  } else {
-                    dataArray.splice(index, 1);
-                  }
-                } else {
-                  if (
-                    y.value < dataArray[index - 1].value &&
-                    dataArray[index - 1].value < 60
-                  ) {
-                    dataArray.splice(index - 1, 1);
-                  } else {
-                    dataArray.splice(index, 1);
-                  }
-                }
-                }
-              } else {
-                if (
-                  this.getTimeNum(y.time) <
-                  this.getTimeNum(dataArray[index - 1].time)
-                ) {
-                  dataArray.splice(index - 1, 1);
-                } else {
-                  dataArray.splice(index, 1);
-                }
-              }
-            }
-          });
+          // let dataArray =this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data;
+          // let vitalCode = vitalSigns[i].vital_code
+          // const inTime = this.getBeHospitalized();
+          // dataArray.forEach((y, index) => {
+          //   if (
+          //     index >= 1 &&
+          //     this.getLocationTime(y.time) ==
+          //       this.getLocationTime(dataArray[index - 1].time)
+          //   ) {
+          //     if (!inTime.includes(this.getLocationTime(y.time))) {
+          //       if(['1','2','20','12'].includes(vitalCode)){
+          //                         if (y.value >= 35) {
+          //         if (y.value > dataArray[index - 1].value) {
+          //           dataArray.splice(index - 1, 1);
+          //         } else {
+          //           dataArray.splice(index, 1);
+          //         }
+          //       } else {
+          //         if (
+          //           y.value < dataArray[index - 1].value &&
+          //           dataArray[index - 1].value < 35
+          //         ) {
+          //           dataArray.splice(index - 1, 1);
+          //         } else {
+          //           dataArray.splice(index, 1);
+          //         }
+          //       }
+          //       }else{
+          //           if (y.value >= 60) {
+          //         if (y.value > dataArray[index - 1].value) {
+          //           dataArray.splice(index - 1, 1);
+          //         } else {
+          //           dataArray.splice(index, 1);
+          //         }
+          //       } else {
+          //         if (
+          //           y.value < dataArray[index - 1].value &&
+          //           dataArray[index - 1].value < 60
+          //         ) {
+          //           dataArray.splice(index - 1, 1);
+          //         } else {
+          //           dataArray.splice(index, 1);
+          //         }
+          //       }
+          //       }
+          //     } else {
+          //       if (
+          //         this.getTimeNum(y.time) <
+          //         this.getTimeNum(dataArray[index - 1].time)
+          //       ) {
+          //         dataArray.splice(index - 1, 1);
+          //       } else {
+          //         dataArray.splice(index, 1);
+          //       }
+          //     }
+          //   }
+          // });
           continue;
         }
         const item = {
@@ -2599,7 +2599,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 5mm 8mm 5mm 20mm; // 页面的边距
+    margin: 5mm 8mm 5mm 8mm; // 页面的边距
   }
 }
 .main-view {

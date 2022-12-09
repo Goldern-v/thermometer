@@ -464,7 +464,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -747,7 +747,7 @@ export default {
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
           return "";
-        // if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
 
         if (!this.operateDateList.length) return "";
         const days = [

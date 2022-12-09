@@ -986,6 +986,14 @@ export default {
         }
       });
     },
+    clickDateChangeTime(dateTime){
+      console.log('点击======》dateTime',dateTime)
+      if(dateTime.time)
+      window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime.time },
+          '*'
+        )
+    },
     middleTdStyle(index) {
       return {
         width: `${this.xSpace * 3 + ((index - 1) % 2 === 0 ? 4 : 3)}px`,
@@ -1356,6 +1364,7 @@ export default {
             : y + 3 * this.ySpace,
           value: this.addn(value, bottomText),
           color,
+          time:x.time,
           textLineHeight: this.ySpace + 1,
           fontWeight: "nomal",
         });
