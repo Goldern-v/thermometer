@@ -165,7 +165,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             大便次数
           </div>
@@ -189,8 +189,20 @@
                 {{ item.value }}
               </div>
             </div>
-          </div>
+          </div> -->
         <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">粪便</div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in getFormatList({ tList: faecesList })"
+              :key="index"
+            >
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+          <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">脐带</div>
           <div class="value-item-box">
             <div
@@ -208,6 +220,18 @@
             <div
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: weightList })"
+              :key="index"
+            >
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">卡介苗</div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in getFormatList({ tList: vaccineList })"
               :key="index"
             >
               {{ item.value }}
@@ -321,6 +345,8 @@ export default {
       milkList: [], //牛乳
       aurigoList: [], //黄疸
       funicleList: [], //脐带
+      faecesList:[],//粪便
+      vaccineList:[],//卡介苗
       urineList: [], // 尿量
       dateRangeList: [], // 数组长度决定页数
       patInfo: {
@@ -635,6 +661,8 @@ export default {
       this.milkList = []; //牛乳
       this.aurigoList = []; //黄疸
       this.funicleList = []; //脐带
+      this.faecesList=[];
+      this.vaccineList=[];
       this.urineList = [];
     },
     toNext() {
@@ -790,8 +818,14 @@ export default {
           case "3":
             this.coolList.push(item);
             break;
-          case "funicle":
+            case "funicle":
             this.funicleList.push(item);
+            break;
+            case "31":
+            this.faecesList.push(item);
+            break;
+            case "vaccine":
+            this.vaccineList.push(item);
             break;
           default:
             break;
