@@ -1443,7 +1443,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: bottomValu.includes(value) ? y + 1 + yNew : yNew + 2 * this.ySpace + 2,
+          y: bottomValu.includes(value) ? y + 1 + yNew : yNew + 2 * this.ySpace + 4,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
