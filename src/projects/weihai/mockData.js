@@ -168,7 +168,7 @@ export const mockData = {
     // },
     {
       temperature_type: '表顶注释',
-      value: '入院||八时六分',
+      value: '入院|八时三十五分',
       time_point: '2022-06-03 08:06:15',
       vital_code: '5'
     },
