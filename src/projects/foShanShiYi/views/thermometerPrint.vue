@@ -2357,7 +2357,6 @@ export default {
     border: 1px solid;
     float: left;
     font-size: 18px;
-    border-left: 2px solid black;
     border-bottom: 2px solid black;
     border-top: none;
     padding-top: 19px;
