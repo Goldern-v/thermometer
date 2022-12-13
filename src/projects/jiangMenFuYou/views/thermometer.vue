@@ -300,6 +300,7 @@
               ></div>
             </div>
           </div>
+          <div class="clear"></div>
           <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
               体重(kg)
@@ -444,7 +445,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -2395,5 +2396,9 @@ export default {
 .pageInput {
   width: 30px;
   border: 0px;
+}
+
+.clear {
+  clear: both;
 }
 </style>

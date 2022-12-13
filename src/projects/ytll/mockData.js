@@ -29,8 +29,8 @@ export const mockData = {
       },
       {
           "temperature_type": "呼吸",
-          "value": "25",
-          "time_point": "2022-09-03 20:17:00",
+          "value": "66",
+          "time_point": "2022-09-03 05:00:00",
           "vital_code": "04"
       },
       {
@@ -83,7 +83,7 @@ export const mockData = {
       },
       {
           "temperature_type": "呼吸",
-          "value": "25",
+          "value": "215",
           "time_point": "2022-09-03 23:00:00",
           "vital_code": "04"
       },

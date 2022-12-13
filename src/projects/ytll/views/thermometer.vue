@@ -315,7 +315,6 @@
         </div>
       </div>
       <div class="pagination" v-if="showInnerPage">
-        <!-- <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i> -->
         <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">
           上一页
         </button>
@@ -334,7 +333,7 @@
 
 <script>
 import zrender from "zrender";
-import { mockData } from "src/projects/linYi/mockData.js";
+import { mockData } from "src/projects/ytll/mockData.js";
 import childrenChart from "./childrenChart.vue";
 
 export default {
@@ -585,7 +584,7 @@ export default {
       });
       const timeAdd = (i) => {
         return timeNumList.some((x) => x.start === i)
-          ? 4 * 60 * 60 * 1000
+          ? 5 * 60 * 60 * 1000
           : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
             ? 3 * 60 * 60 * 1000
             : 4 * 60 * 60 * 1000;
@@ -852,7 +851,8 @@ export default {
     document.title = "烟台玲珑英诚医院体温单";
     // 实现外部分页和打印
     const patientInfo = this.$route.query;
-    this.showInnerPage = patientInfo.showInnerPage === "1";
+    this.showInnerPage = patientInfo.showInnerPage == 1;
+    http://192.168.254.92:9091/temperature/?PatientId=99463&VisitId=2&StartTime=2022-12-01&showInnerPage=1
     if (this.isPrintAll) {
       // 批量打印
       this.apiData = this.printData;
@@ -1841,8 +1841,11 @@ export default {
               });
               const sameAxisItem = tList.find(
                 (x) =>
-                  x.x.toFixed(2) === cx.toFixed(2) &&
-                  x.y.toFixed(2) === cy.toFixed(2)
+                  // console.log(x.y,cy)
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 2 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 2
               );
               if (sameAxisItem) {
                 params = {
@@ -2047,7 +2050,7 @@ export default {
           (this.getTimeStamp(this.timeRange[1]) -
             this.getTimeStamp(this.timeRange[0]))) *
         this.areaWidth;
-      return xAxis;
+      return xAxis - 4;
     },
     // 增加字符（过快，不升，请假等字符的换行）换行符
     addn(str) {
@@ -2082,12 +2085,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "03:59:59"],
-        "06:00:00": ["04:00:00", "07:59:59"],
-        "10:00:00": ["8:00:00", "11:59:59"],
-        "14:00:00": ["12:00:00", "15:59:59"],
-        "18:00:00": ["16:00:00", "19:59:59"],
-        "22:00:00": ["20:00:00", "23:59:59"],
+        "03:00:00": ["00:00:00", "04:59:59"],
+        "07:00:00": ["05:00:00", "08:59:59"],
+        "11:00:00": ["09:00:00", "12:59:59"],
+        "15:00:00": ["13:00:00", "16:59:59"],
+        "19:00:00": ["17:00:00", "21:59:59"],
+        "23:00:00": ["21:00:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
