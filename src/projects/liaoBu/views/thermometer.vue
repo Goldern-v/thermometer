@@ -305,7 +305,7 @@
             排<br />出<br />量
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">尿量(ml)</div>
+          <div class="label" :style="{ width: `${leftWidth - 30}px` }">尿量(ml)</div>
           <div class="value-item-box">
             <div
               class="value-item"
@@ -318,7 +318,7 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">大便(次)</div>
+          <div class="label" :style="{ width: `${leftWidth - 30}px` }">大便(次)</div>
           <div class="value-item-box">
             <div
               class="value-item"
@@ -335,7 +335,7 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="custom-label" :style="{ width: `${leftWidth - 40}px` }">
+          <div class="custom-label" :style="{ width: `${leftWidth - 30}px` }">
             {{ customList0.label || "" }}
           </div>
           <div class="value-item-box">
@@ -350,7 +350,7 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="custom-label" :style="{ width: `${leftWidth - 40}px` }">
+          <div class="custom-label" :style="{ width: `${leftWidth - 30}px` }">
             {{ customList1.label || "" }}
           </div>
           <div class="value-item-box">
@@ -419,7 +419,7 @@
             其<br />他
           </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="custom-label" :style="{ width: `${leftWidth - 40}px` }">
+          <div class="custom-label" :style="{ width: `${leftWidth - 30}px` }">
             {{ customList2.label || "" }}
           </div>
           <div class="value-item-box">
@@ -434,7 +434,7 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="custom-label" :style="{ width: `${leftWidth - 40}px` }">
+          <div class="custom-label" :style="{ width: `${leftWidth - 30}px` }">
             {{ customList3.label || "" }}
           </div>
           <div class="value-item-box">
@@ -449,7 +449,7 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="custom-label" :style="{ width: `${leftWidth - 40}px` }">
+          <div class="custom-label" :style="{ width: `${leftWidth - 30}px` }">
             {{ customList4.label || "" }}
           </div>
           <div class="value-item-box">
@@ -520,7 +520,7 @@ export default {
       areaHeight: 0, // 网格区域的高度
       xSpace: 18, // 纵向网格的间距
       ySpace: 16, //  横向网格的间距
-      leftWidth: 130, // 左侧内容宽度
+      leftWidth: 140, // 左侧内容宽度
       xRange: [1, 8],
       yRange,
       pulseRange,
@@ -711,7 +711,7 @@ export default {
       return tds;
     },
     trHeight() {
-      return this.ySpace + 7;
+      return this.ySpace + 5;
     },
     formatPressureList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
@@ -805,7 +805,7 @@ export default {
       */
       const list = this.vitalSigns.filter(
         (x) =>
-          x.vital_code === "21" &&
+          x.vital_code === "3" &&
           (x.value.includes("手术") ||
             x.value.includes("分娩|") ||
             x.value.includes("手术|") ||
@@ -1475,8 +1475,8 @@ export default {
         });
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-          x: xaxisNew[i] - 1,
-          y: bottomText.includes(value) ? y - 5 * this.ySpace + 3 : y - 3,
+          x: xaxisNew[i] - 0.5,
+          y: bottomText.includes(value) ? y - 5 * this.ySpace + 3 : y - 2 * this.ySpace - 4,
           value: this.addn(value, bottomText),
           color,
           time:x.time,
@@ -2174,7 +2174,7 @@ export default {
         ((this.getTimeStamp(time) - this.getTimeStamp(this.timeRange[0])) /
           (this.getTimeStamp(this.timeRange[1]) -
             this.getTimeStamp(this.timeRange[0]))) *
-        this.areaWidth-1;
+        this.areaWidth;
       return xAxis;
     },
     // 增加换行符
@@ -2539,7 +2539,7 @@ export default {
           while (
             (xaxisNew.includes(Math.floor(xaxisList[i]))||xaxisNew.includes(Math.floor(xaxisList[i])-1)||xaxisNew.includes(Math.floor(xaxisList[i])+1)) 
           ) {
-            xaxisList[i] += this.xSpace + 2;
+            xaxisList[i] += this.xSpace + 0.5;
           }
           xaxisNew.push(Math.floor(xaxisList[i]));
         }
@@ -2599,7 +2599,12 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 5mm 8mm 5mm 8mm; // 页面的边距
+    margin: 5mm 8mm 0mm 8mm; // 页面的边距
+  }
+  .main-view {
+    transform: scale(1) !important;
+    transform: scaleY(0.96) !important; 
+    transform-origin: 0 0;
   }
 }
 .main-view {
@@ -3010,7 +3015,7 @@ export default {
   }
 }
 .left_box {
-    width: 40px;
+    width: 30px;
     border: 1px solid;
     float: left;
     font-size: 14px;

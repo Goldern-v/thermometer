@@ -361,7 +361,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -644,9 +644,9 @@ export default {
     },
     formatOperateDateList() {
       return this.dateList.map((x) => {
-        if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
-          return "";
-        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
+        // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
+        //   return "";
+        // if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
 
         if (!this.operateDateList.length) return "";
         // 构造天数差数组，有相同天数差的说明在同一天，所以要去重

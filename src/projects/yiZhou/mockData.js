@@ -414,7 +414,7 @@ export const mockData = {
     },
     {
       temperature_type: '脉搏',
-      value: '104',
+      value: '194',
       time_point: '2021-11-07 07:00:00',
       vital_code: '02'
     },

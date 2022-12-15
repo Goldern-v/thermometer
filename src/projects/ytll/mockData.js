@@ -239,7 +239,7 @@ export const mockData = {
       },
       {
           "temperature_type": "脉搏",
-          "value": "132",
+          "value": "192",
           "time_point": "2022-09-04 19:00:00",
           "vital_code": "02"
       },
@@ -3332,6 +3332,18 @@ export const mockData = {
           "value": "入院|二十时十三分",
           "time_point": "2022-09-03 20:13:21",
           "vital_code": "5"
-      }
+      },
+      {
+          "temperature_type": "事件名称",
+          "value": "手术",
+          "time_point": "2022-09-03 20:13:21",
+          "vital_code": "5"
+      },
+      {
+          "temperature_type": "事件名称",
+          "value": "手术",
+          "time_point": "2022-09-07 20:13:21",
+          "vital_code": "5"
+      },
   ]
 }

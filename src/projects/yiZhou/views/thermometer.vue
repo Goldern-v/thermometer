@@ -392,7 +392,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1278,7 +1278,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: bottomText.includes(value) ? y - this.ySpace : y + 2,
+          y: bottomText.includes(value) ? y - this.ySpace : value!=='过快' ? y + 2 : y - this.ySpace - 1,
           value: this.addn(value),
           time: x.time,
           color,

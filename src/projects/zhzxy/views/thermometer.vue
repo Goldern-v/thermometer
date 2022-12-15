@@ -739,6 +739,7 @@ export default {
           (x) =>
             x.vital_code === "3" &&
             (x.value.includes("手术") ||
+            x.value.includes("分娩|") ||
               x.value.includes("手术入院"))
         )
         .map((x) => x.time_point);
