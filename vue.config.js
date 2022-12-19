@@ -63,6 +63,8 @@ const projectName = (() => {
       return "南方医科大学顺德医院";
     case "liaoBu": // 
       return "东莞市寮步医院";
+    case "songTao": // 
+      return "松桃苗族自治区人民医院";
     case "common": // 可配置的通用版本
       return "配置通用版本";
     default:
@@ -78,7 +80,7 @@ const packageName = `${projectName}体温单_${today.getFullYear()}年${today.ge
   1}月${today.getDate()}日${today.getHours()}时${today.getMinutes()}分${today.getSeconds()}秒`;
 console.log(packageName);
 module.exports = {
-  publicPath: ["huaDu", "linYi", "yiZhou",'zhzxy','ytll'].includes(project)
+  publicPath: ["huaDu", "linYi", "yiZhou",'zhzxy','ytll','songTao'].includes(project)
     ? "/temperature/"
     : "./",
   outputDir: packageName,
@@ -162,8 +164,10 @@ module.exports = {
           return "./src/projects/fssd/main.js";
         case "925": // 贵州925医院
           return "./src/projects/925/main.js";
-        case "liaoBu": // 贵州925医院
+        case "liaoBu": // 寮步医院
           return "./src/projects/liaoBu/main.js";
+        case "songTao": // 松桃苗族自治区人民医院
+          return "./src/projects/songTao/main.js";
         case "common": // 可配置的通用版本
           return "./src/projects/common/main.js";
         default:

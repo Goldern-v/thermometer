@@ -915,7 +915,7 @@ export default {
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
           return "";
-        // if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
         if (!this.operateDateList.length) return "";
         const days = [
           ...this.operateDateList.map((y) => {
@@ -970,6 +970,7 @@ export default {
           }
         });
         if (this.dayInterval(x, today) > 0) return "";
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
         return this.dayInterval(x, this.patInfo.admission_date) + 1;
       });
     },
@@ -1069,7 +1070,7 @@ export default {
     getLeaveTime() {
       let outTime = "";
       this.topSheetNote.forEach((y) => {
-        if (y.value.includes("出院") || y.value.includes("转出")) {
+        if (y.value.includes("出院") || y.value.includes("转出")|| y.value.includes("死亡")) {
           outTime = y.time.slice(0, 10);
         }
       });
