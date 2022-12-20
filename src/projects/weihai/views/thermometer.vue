@@ -1448,6 +1448,7 @@ export default {
           color,
           textLineHeight: this.ySpace + 1,
           fontWeight: "bold",
+          fontSize:12,
           textHeight: 30,
         });
       });
