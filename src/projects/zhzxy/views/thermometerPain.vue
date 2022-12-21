@@ -852,7 +852,7 @@ export default {
         this.topSheetNote.forEach((y) => {
           if (
             y.time.slice(0, 10) === tomorrow &&
-            (y.value.includes("出院") || y.value.includes("转出"))
+            (y.value.includes("出院"))
           ) {
             today = tomorrow;
           }
@@ -953,7 +953,7 @@ export default {
     getLeaveTime() {
       let outTime = "";
       this.topSheetNote.forEach((y) => {
-        if (y.value.includes("出院") || y.value.includes("转出")) {
+        if (y.value.includes("出院")) {
           outTime = y.time.slice(0, 10);
         }
       });

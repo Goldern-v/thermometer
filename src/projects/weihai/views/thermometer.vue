@@ -1332,7 +1332,6 @@ export default {
             dataArray.forEach((y, index) => {
               if (index >= 1 && this.getLocationTime(y.time) == this.getLocationTime(dataArray[index - 1].time)) {
                 if (this.getTimeNum(y.time) > this.getTimeNum(dataArray[index - 1].time)) {
-                  console.log(dataArray[index-1].time.slice(11,19))
                   // if(!nomalTime.includes(dataArray[index-1].time.slice(11,19))){
                   dataArray.splice(index - 1, 1)
                   // }
@@ -1344,14 +1343,12 @@ export default {
               }
             })
           }
-
           continue;
         }
         const item = {
           time: vitalSigns[i].time_point,
           value: vitalSigns[i].value,
         };
-      
         switch (vitalSigns[i].vital_code) {
           case "5":
              this.topSheetNote.push(item);
@@ -1964,8 +1961,10 @@ export default {
               });
               const sameAxisItem = tList.find(
                 (x) =>
-                  x.x.toFixed(2) === cx.toFixed(2) &&
-                  x.y.toFixed(2) === cy.toFixed(2)
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 4 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 4
               );
               if (sameAxisItem) {
                 params = {
@@ -1998,6 +1997,7 @@ export default {
         }
         if (["01", "043", "041"].includes(vitalCode)) {
           // 画降温
+
           for (let i = this.coolList.length - 1; i >= 0; i--) {
             const item = this.coolList[i];
             const coolX = this.getXaxis(this.getLocationTime(item.time));
@@ -2022,7 +2022,9 @@ export default {
                 zlevel: 1,
                 lineDash: [3, 3],
               });
+              setTimeout(()=>{
               this.coolList.splice(i, 1);
+              },0)
             }
           }
           // 画复试
