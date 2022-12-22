@@ -259,7 +259,7 @@
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
-              总入量(ml)
+              入量(ml)
             </div>
             <div class="value-item-box">
               <div
@@ -273,7 +273,7 @@
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
-              总出量(ml)
+              出量(ml)
             </div>
             <div class="value-item-box">
               <div
