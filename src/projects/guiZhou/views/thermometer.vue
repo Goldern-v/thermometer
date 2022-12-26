@@ -6,13 +6,13 @@
     v-if="apiData && showFlage"
     @dblclick="dblclick"
   >
-    <div class="head-hos" @click="() => {}">贵州省人民医院</div>
+    <div class="head-hos">贵州省人民医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
       <div class="item">
         姓名<span class="value">&emsp;{{ patInfo.name }}&emsp;</span>
       </div>
-      <div class="item" style="width: 210px; flex: none">
+      <div class="item">
         科别<span class="value"
           >&emsp;{{ adtLogWardName || patInfo.dept_name }}&emsp;</span
         >
@@ -1067,6 +1067,7 @@ export default {
       };
     },
     messageHandle(e) {
+      console.log(e,999999)
       if (e && e.data) {
         switch (e.data.type) {
           case "currentPage":
@@ -1083,6 +1084,7 @@ export default {
             break;
           case "nurseExchangeInfo":
             if (e.data.value) {
+              console.log('e.data.value',e.data.value)
               this.adtLog = e.data.value.adtLog || ""; // 转科
               this.adtLogWardName = e.data.value.adtLogWardName || ""; // 转科
               this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
@@ -2419,22 +2421,10 @@ export default {
   .head-info {
     font-size: 14px;
     display: flex;
+    justify-content: space-between;
     .item {
-      flex: 1;
-      text-align: center;
+      /* flex: 1; */
       padding: 0 0 5px 5px;
-      &:nth-child(1) {
-        flex: 0.7;
-      }
-      &:nth-child(2) {
-        flex: 1.5;
-      }
-      &:nth-child(3) {
-        flex: 0.7;
-      }
-      &:nth-child(4) {
-        flex: 1.3;
-      }
       .value {
         font-weight: normal;
         text-decoration: underline;

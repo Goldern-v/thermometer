@@ -18,7 +18,12 @@ const routes = [
     path: '/printAll',
     name: 'Print',
     component: () => import('src/projects/foShanShiYi/views/print.vue')
-  }
+  },
+  {
+    path: '/new',
+    name: 'New',
+    component: () => import('src/projects/foShanShiYi/views/thermometerNew.vue')
+  },
 ]
 
 const router = new VueRouter({
