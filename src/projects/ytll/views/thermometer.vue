@@ -1857,7 +1857,13 @@ export default {
             const item = this.coolList[i];
             const coolX = this.getXaxis(this.getLocationTime(item.time));
             const coolY = this.getYaxis(yRange, item.value, vitalCode);
-            if (coolX === cx) {
+            const sameAxisItem = this.settingMap.axillaryTemperature.data.find(
+                (x,index) =>
+                 { 
+                   return x.time==item.time
+                }
+              );
+            if (coolX === cx &&(!sameAxisItem ||(sameAxisItem&&sameAxisItem.value!=item.value))) {
               this.createCircle({
                 cx: coolX,
                 cy: coolY,
@@ -1879,6 +1885,21 @@ export default {
               });
               this.coolList.splice(i, 1);
             }
+            if (coolX === cx &&sameAxisItem&&sameAxisItem.value==item.value) {
+                this.createText({
+                  x: cx+5,
+                  y: cy-20,
+                  value: "=",
+                  color: "red",
+                  fontSize: 18,
+                  time:item.time,
+                  tips: `${item.time} 降温：${item.value}`,
+                  zlevel: 10,
+                  fontWeight: "bold",
+                });
+              }
+          
+            
           }
           // 画复试
           const lastX = this.getXaxis(this.dateRange[1] + " " + ":22:00:00");
