@@ -39,7 +39,7 @@
       </div>
       <div class="item" style="text-align: right;flex: 0.7">
         床号：<span class="value">{{
-          bedExchangeLog || patInfo.bed_label
+          bedExchangeLog || patInfo.inp_no
         }}</span>
       </div>
     </div>
