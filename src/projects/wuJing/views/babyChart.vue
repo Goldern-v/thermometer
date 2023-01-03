@@ -19,26 +19,10 @@
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <!-- <div class="item" style="width: 80px; flex: none">
-        性别：<span class="value">{{ patInfo.sex }}</span>
-      </div> -->
-      <!-- <div class="item" style="width: 80px; flex: none">
-        年龄：<span class="value">{{ patInfo.age }}</span>
-      </div> -->
-      <!-- <div class="item" >
-        入院日期：<span class="value">{{
-          patInfo.admission_date.slice(0, 10)
-        }}</span>
-      </div> -->
       <div class="item" >
         住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
-     
-     
     </div>
-    <!-- <div class="head-info-1">
-      
-    </div> -->
     <div class="table-area">
       <div
         class="vline"

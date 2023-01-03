@@ -88,7 +88,6 @@
               </div>
               <div class="pain-area" :style="`height: ${painAreaHeight}px`">
                 <span style="padding-top: 20px;"> 疼<br />痛<br />评<br />分</span>
-               
               </div>
               <div class="bottom-area" :style="`height: ${bottomAreaHeight}px`"></div>
             </div>
@@ -262,36 +261,6 @@
               </div>
             </div>
           </div>
-          <!-- <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">
-              {{ customList0.label || "" }}
-            </div>
-            <div class="value-item-box">
-              <div class="value-item" v-for="(item, index) in getFormatList({ tList: customList0 })" :key="index">
-                {{ item.value }}
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">
-              {{ customList1.label || "" }}
-            </div>
-            <div class="value-item-box">
-              <div class="value-item" v-for="(item, index) in getFormatList({ tList: customList1 })" :key="index">
-                {{ item.value }}
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">
-              {{ customList2.label || "" }}
-            </div>
-            <div class="value-item-box">
-              <div class="value-item" v-for="(item, index) in getFormatList({ tList: customList2 })" :key="index">
-                {{ item.value }}
-              </div>
-            </div>
-          </div> -->
           <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">
               手术后天数
@@ -868,8 +837,7 @@ export default {
       this.currentPage = this.printPage;
       this.$nextTick(() => {
         this.handleData();
-        this.showChildrenPage =
-          patientInfo.PatientId && patientInfo.PatientId.includes("_");
+        this.showChildrenPage = this.apiData.patientInfo.patInfo.charge_type&&this.apiData.patientInfo.patInfo.charge_type.includes('新生儿')
       });
       return;
     }
@@ -877,8 +845,7 @@ export default {
       this.apiData = mockData;
       this.$nextTick(() => {
         this.handleData();
-        this.showChildrenPage =
-          patientInfo.PatientId && patientInfo.PatientId.includes("_");
+        this.showChildrenPage = this.apiData.patientInfo.patInfo.charge_type&&this.apiData.patientInfo.patInfo.charge_type.includes('新生儿')
       });
     } else {
       this.$http({
@@ -892,8 +859,7 @@ export default {
         },
       }).then((res) => {
         this.apiData = res.data;
-        this.showChildrenPage =
-          patientInfo.PatientId && patientInfo.PatientId.includes("_");
+        this.showChildrenPage = this.apiData.patientInfo.patInfo.charge_type&&this.apiData.patientInfo.patInfo.charge_type.includes('新生儿')
         this.$nextTick(() => {
           //每次获取数据都要传一次页数
           this.currentPage = this.pageTotal;
@@ -2341,7 +2307,7 @@ export default {
 
   .head-hos {
     padding-top: 10px;
-    font-size: 18px;
+    font-size: 36px;
   }
 
   .head-title {

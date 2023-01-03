@@ -1,12 +1,20 @@
 <template>
   <div
     class="main-view"
-    :style="{ width: `${leftWidth + areaWidth}px` }"
+    :style="{ width: `${leftWidth + areaWidth +rightWidth}px` }"
     v-if="apiData.patientInfo"
     @dblclick="dblclick"
   >
-    <div class="head-hos">烟台玲珑英诚医院</div>
-    <div class="head-title">新生儿体温单</div>
+    <div class="head-hos">玲珑英诚医院</div>
+    <div class="head-title">
+        <div class="pic">
+        <img :src="logoUrl" class="logo" />
+      </div>
+        <div class="title" style="flex: 2;">
+        <span>新生儿体温记录单</span>
+      </div>
+      <div class="right"></div>
+      </div>
     <div class="head-info">
       <div class="item">
         姓名：<span class="value">{{ patInfo.name }}</span>
@@ -46,7 +54,7 @@
         ></div>
         <div
           class="row border-top-black-2 border-bottom-black-2"
-          :style="{ height: `${trHeight}px` }"
+          :style="{ height: `${trHeight}px`,width:`calc(100% - ${rightWidth}px)`}"
         >
           <div
             class="label"
@@ -65,12 +73,12 @@
         </div>
         <div
           class="row border-bottom-black-2"
-          :style="{ height: `${trHeight}px` }"
+          :style="{ height: `${trHeight}px`,width:`calc(100% - ${rightWidth}px)` }"
         >
           <div
             class="label"
             :style="{ width: `${leftWidth}px` }"
-            v-html="`时间`"
+            v-html="`检查时间`"
           ></div>
           <div class="value-item-box font-12">
             <div
@@ -89,21 +97,18 @@
           class="index-box"
           :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
         >
-          <div class="notes" style="flex:none">
-            <div
-              v-for="(value, key) in settingMap"
-              :key="key"
-              class="note-item"
-            >
-              {{ value.label }}
-              <template v-if="key === 'axillaryTemperature'">
-                <span class="axillary">x</span>
-              </template>
+          <div class="item tempC">
+            <div class="text" :style="`height: ${indexTextAreaHeight}px`">
+              <div>体重</div>
+            </div>
+            <div class="index" v-for="item in weightRangeList" :key="item">
+              <span>{{ item.slice(2,4) }}</span>
+              <div class="line_text"></div>
             </div>
           </div>
           <div class="item tempC">
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
-              <div>体温<br />(℃)</div>
+              <div>体温</div>
             </div>
             <div class="index" v-for="item in temperaturelist" :key="item">
               <span>{{ item }}</span>
@@ -115,7 +120,34 @@
           id="main1"
           :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
         ></div>
+
+      <div class="info-box-right" :style="{ width: `${rightWidth}px` }">
+          <div
+            class="index-box_01"
+            :style="{
+              height: `${ySpace * 2 + 6}px`,
+              width: `${rightWidth}px`,
+            }"
+          >
+          脉<br />搏
+        </div>
+          <div
+            class="index-box_02"
+            :style="{ height: `${ySpace * 2 - 4}px`, width: `${rightWidth}px` }"
+          ></div>
+          <div
+            class="index-box_text"
+            :style="{
+              width: `${rightWidth - 3}px`,
+            }"
+          >
+          <div class="index" v-for="item in pulseList" :key="item">
+              <span>{{ item }}</span>
+            </div>
+          </div>
+        </div>
       </div>
+      
       <div class="table-box" style="transform: translateY(-1px)">
         <div
           class="vtlineC"
@@ -125,84 +157,110 @@
         ></div>
         <div class="border-top-red-2" :style="{ height: `${1}px` }"></div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">母乳</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: breastMilk })"
-              :key="index"
-            >
-              {{ item.value ? "✔️" : "" }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">牛乳</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: milkList })"
-              :key="index"
-            >
-              {{ item.value ? "✔️" : "" }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">黄疸</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: aurigoList })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            大便次数
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              :style="middleTdStyle(index)"
-              v-for="(item, index) in formatShiteList"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">
-              小便次数
-            </div>
-            <div class="value-item-box">
-              <div class="value-item" v-for="(item, index) in getFormatList({ tList: urineList })" :key="index">
-                {{ item.value }}
-              </div>
-            </div>
-          </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">脐带</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: funicleList })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">体重</div>
           <div class="value-item-box">
             <div
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: weightList })"
+              :style="biggerTdStyle(index)"
+              :key="index"
+            >
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+        <div class="left_box" :style="{ height: `${trHeight * 3}px` }">
+          大<br />便
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth - 30}px` }">早</div>
+          <div class="value-item-box">
+            <div class="value-item"
+            v-for="(item, index) in formatShitList3" 
+            :style="biggerTdStyle(index)"
+            :key="index">
+              {{ item.value}}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth - 30}px` }">中</div>
+          <div class="value-item-box">
+            <div class="value-item"
+            v-for="(item, index) in formatShitList2"
+            :style="biggerTdStyle(index)"
+            :key="index">
+              {{ item.value}}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth - 30}px` }">晚</div>
+          <div class="value-item-box">
+            <div class="value-item"
+          v-for="(item, index) in formatShitList1"
+          :style="biggerTdStyle(index)"
+          :key="index">
+              {{ item.value}}
+            </div>
+          </div>
+        </div>
+        <div class="left_box" :style="{ height: `${trHeight * 3}px` }">
+          呕<br />吐
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth - 30}px` }">早</div>
+          <div class="value-item-box">
+            <div class="value-item"
+          v-for="(item, index) in formatVomitList3"
+          :style="biggerTdStyle(index)"
+          :key="index">
+              {{ item.value}}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth - 30}px` }">中</div>
+          <div class="value-item-box">
+            <div class="value-item"
+            v-for="(item, index) in formatVomitList2"
+            :style="biggerTdStyle(index)"
+            :key="index">
+              {{ item.value}}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth - 30}px` }">晚</div>
+          <div class="value-item-box">
+            <div class="value-item" 
+            v-for="(item, index) in formatVomitList1" 
+            :style="biggerTdStyle(index)"
+            :key="index">
+              {{ item.value}}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">加奶量(ml)</div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in getFormatList({ tList: milkList })"
+              :style="biggerTdStyle(index)"
+              :key="index"
+            >
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">摄入总量(ml)</div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in getFormatList({ tList: allInputList })"
+              :style="biggerTdStyle(index)"
               :key="index"
             >
               {{ item.value }}
@@ -213,11 +271,12 @@
           class="row border-bottom-black-2"
           :style="{ height: `${trHeight}px` }"
         >
-          <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">出生天数</div>
           <div class="value-item-box">
             <div
               class="value-item"
               v-for="(item, index) in formatStayDayList"
+              :style="biggerTdStyle(index)"
               :key="index"
             >
               {{ item }}
@@ -271,8 +330,10 @@ export default {
     },
   },
   data() {
-    const yRange = [33, 42];
+    const yRange = [34, 42];
     const painRange = [0, 10];
+    const pulseRange = [50, 190];
+    const weightRange = [1500, 5000];
     return {
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -280,9 +341,13 @@ export default {
       xSpace: 18, // 纵向网格的间距
       ySpace: 16, //  横向网格的间距
       leftWidth: 90, // 左侧内容宽度
+      rightWidth:50,
       xRange: [1, 8],
+      logoUrl: require("../static/logo.jpeg"),
       yRange,
       painRange,
+      pulseRange,
+      weightRange,
       settingMap: {
         axillaryTemperature: {
           vitalCode: "01",
@@ -314,6 +379,8 @@ export default {
       shitList: [], // 大便次数
       breastMilk: [], //母乳
       milkList: [], //牛乳
+      vomitList: [], //牛乳
+      allInputList: [], //摄入总量
       aurigoList: [], //黄疸
       funicleList: [], //脐带
       urineList: [], // 尿量
@@ -471,10 +538,162 @@ export default {
         }
       });
     },
+    formatShitList1() {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const shitList = [...this.shitList];
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1]-1;
+        i += 24 * 60 * 60 * 1000
+      ) {
+        const item = { timeNum: i, value: "" };
+        for (let j = shitList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(shitList[j].time);
+          if (timeNum > i && timeNum <=i + 8 * 60 * 60 * 1000) {
+            item.value = shitList[j].value;
+            item.time = shitList[j].time;
+            shitList.splice(j, 1);
+            break;
+          }
+        }
+        list.push(item);
+      }
+      return list;
+    },
+    formatShitList2() {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const shitList = [...this.shitList];
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1]-1;
+        i += 24 * 60 * 60 * 1000
+      ) {
+        const item = { timeNum: i, value: "" };
+        for (let j = shitList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(shitList[j].time);
+          if (timeNum > i+8* 60 * 60 * 1000 && timeNum <= i + 16 * 60 * 60 * 1000) {
+            item.value = shitList[j].value;
+            item.time = shitList[j].time;
+            shitList.splice(j, 1);
+            break;
+          }
+        }
+        list.push(item);
+      }
+      return list;
+    },
+    formatShitList3() {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const shitList = [...this.shitList];
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1]-1;
+        i += 24 * 60 * 60 * 1000
+      ) {
+        const item = { timeNum: i, value: "" };
+        for (let j = shitList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(shitList[j].time);
+          if (timeNum >i + 16 * 60 * 60 * 1000 && timeNum <= i + 24 * 60 * 60 * 1000) {
+            item.value = shitList[j].value;
+            item.time = shitList[j].time;
+            shitList.splice(j, 1);
+            break;
+          }
+        }
+        list.push(item);
+      }
+      return list;
+    },
+    formatVomitList1() {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const vomitList = [...this.vomitList];
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1]-1;
+        i += 24 * 60 * 60 * 1000
+      ) {
+        const item = { timeNum: i, value: "" };
+        for (let j = vomitList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(vomitList[j].time);
+          if (timeNum > i && timeNum <=i + 8 * 60 * 60 * 1000) {
+            item.value = vomitList[j].value;
+            item.time = vomitList[j].time;
+            vomitList.splice(j, 1);
+            break;
+          }
+        }
+        list.push(item);
+      }
+      return list;
+    },
+    formatVomitList2() {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const vomitList = [...this.vomitList];
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1]-1;
+        i += 24 * 60 * 60 * 1000
+      ) {
+        const item = { timeNum: i, value: "" };
+        for (let j = vomitList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(vomitList[j].time);
+          if (timeNum > i+8* 60 * 60 * 1000 && timeNum <= i + 16 * 60 * 60 * 1000) {
+            item.value = vomitList[j].value;
+            item.time = vomitList[j].time;
+            vomitList.splice(j, 1);
+            break;
+          }
+        }
+        list.push(item);
+      }
+      return list;
+    },
+    formatVomitList3() {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const vomitList = [...this.vomitList];
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1]-1;
+        i += 24 * 60 * 60 * 1000
+      ) {
+        const item = { timeNum: i, value: "" };
+        for (let j = vomitList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(vomitList[j].time);
+          if (timeNum >i + 16 * 60 * 60 * 1000 && timeNum <= i + 24 * 60 * 60 * 1000) {
+            item.value = vomitList[j].value;
+            item.time = vomitList[j].time;
+            vomitList.splice(j, 1);
+            break;
+          }
+        }
+        list.push(item);
+      }
+      return list;
+    },
     temperaturelist() {
       const list = [];
       for (let i = this.yRange[1]; i > this.yRange[0]; i--) {
+        list.push(`${i}`);
+      }
+      return list;
+    },
+    pulseList() {
+      const list = [];
+      for (let i = this.pulseRange[1]; i >= this.pulseRange[0]; i = i - 20) {
         list.push(i);
+      }
+      return list;
+    },
+    weightRangeList() {
+      const list = [];
+      for (let i = this.weightRange[1]; i >= this.weightRange[0]; i = i - 500) {
+        list.push(`${i}`);
       }
       return list;
     },
@@ -486,10 +705,15 @@ export default {
       return list;
     },
     indexTextAreaHeight() {
-      return this.ySpace * 5 + 4;
+      return this.ySpace * 2 + 1;
     },
     timesTempAreaHeight() {
-      return this.areaHeight;
+      return (
+        this.areaHeight +
+        this.indexTextAreaHeight +
+        4 * this.ySpace +
+        3
+      );
     },
   },
   watch: {
@@ -531,6 +755,15 @@ export default {
         "border-right-style": "solid",
         "border-width": `${(index - 5) % 6 === 0 ? 2 : 1}px`,
         "border-color": `${(index - 5) % 6 === 0 ? "transparent" : "#000"}`,
+        transform: "translateX(1px)",
+      }
+    },
+    biggerTdStyle(index){
+      return {
+        width: `${ index<6 ? this.xSpace * 6 + 7 : this.xSpace * 6 + 57}px`,
+        flex: "auto",
+        "flex-grow": 0,
+        "flex-shrink": 0,
         transform: "translateX(1px)",
       };
     },
@@ -623,6 +856,8 @@ export default {
       this.shitList = []; // 大便次数
       this.breastMilk = []; //母乳
       this.milkList = []; //牛乳
+      this.vomitList = []; //呕吐
+      this.allInputList = []; //牛乳
       this.aurigoList = []; //黄疸
       this.funicleList = []; //脐带
       this.urineList = [];
@@ -771,6 +1006,12 @@ export default {
           case "milk":
             this.milkList.push(item);
             break;
+          case "vomit":
+            this.vomitList.push(item);
+            break;
+          case "allInput":
+            this.allInputList.push(item);
+            break;
             case "12":
             this.urineList.push(item);
             break;
@@ -814,7 +1055,7 @@ export default {
         }
         this.createText({
           x: xaxisNew[i],
-          y: value !== "不升" ? 0 : this.areaHeight - 6 * this.ySpace + 7,
+          y: value !== "不升" ? 0 : this.areaHeight - 2 * this.ySpace - 2,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -827,7 +1068,7 @@ export default {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
       this.$nextTick(() => {
-        let ops = { renderer: "canvas" };
+        let ops = { renderer: "svg" };
         this.zr = zrender.init(this.$refs.main, ops);
         const div = document.createElement("div");
         div.classList.add("tips");
@@ -914,13 +1155,11 @@ export default {
       const totalLine =
         this.yRange[1] -
         this.yRange[0] +
-        1 +
-        (this.yRange[1] - this.yRange[0]) * 4 +
-        5;
+        (this.yRange[1] - this.yRange[0]) * 4  
       let preSpace = 0;
       let breakIndex = 0;
       for (let i = 0; i < totalLine; i++) {
-        const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1;
+        const isBreak = (i - 2) % 5 === 0 && i > 0 && i < totalLine - 1;
         const isboundary = i === 0 || i === totalLine - 1;
         const lineWidth = isBreak ? 2 : 1;
         const params = {
@@ -969,8 +1208,7 @@ export default {
         this.yRange[1] -
         this.yRange[0] +
         1 +
-        (this.yRange[1] - this.yRange[0]) * 4 +
-        5;
+        (this.yRange[1] - this.yRange[0]) * 4 - 1
       let preSpace = 0;
       let breakIndex = 0;
       for (let i = 0; i < totalLine; i++) {
@@ -1406,11 +1644,10 @@ export default {
       }
     },
     // 根据值计算纵坐标
-    getYaxis(yRange, value, vitalCode) {
-      return (
-        ((yRange[1] +1 - value) / (yRange[1] + 1 - yRange[0])) *
-          this.timesTempAreaHeight -2
-      );
+      getYaxis(yRange, value, vitalCode) {
+      return ((yRange[1]  - value) / (yRange[1] - yRange[0] + 1)) *
+            this.timesTempAreaHeight + 
+            this.indexTextAreaHeight +2
     },
     // 根据时间点计算横坐标
     getXaxis(time) {
@@ -1418,7 +1655,7 @@ export default {
         ((this.getTimeStamp(time) - this.getTimeStamp(this.timeRange[0])) /
           (this.getTimeStamp(this.timeRange[1]) -
             this.getTimeStamp(this.timeRange[0]))) *
-        this.areaWidth;
+        this.areaWidth ;
       return xAxis;
     },
     // 增加字符（过快，不升，请假等字符的换行）换行符
@@ -1444,12 +1681,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "03:59:59"],
-        "06:00:00": ["04:00:00", "07:59:59"],
-        "10:00:00": ["8:00:00", "11:59:59"],
-        "14:00:00": ["12:00:00", "15:59:59"],
-        "18:00:00": ["16:00:00", "19:59:59"],
-        "22:00:00": ["20:00:00", "23:59:59"],
+        "02:00:00": ["00:00:00", "04:59:59"],
+        "06:00:00": ["05:00:00", "08:59:59"],
+        "10:00:00": ["09:00:00", "12:59:59"],
+        "14:00:00": ["13:00:00", "16:59:59"],
+        "18:00:00": ["17:00:00", "21:59:59"],
+        "22:00:00": ["21:00:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -1627,7 +1864,7 @@ export default {
             xaxisNew.includes(Math.floor(xaxisList[i]) - 1) ||
             xaxisNew.includes(Math.floor(xaxisList[i]) + 1)
           ) {
-            xaxisList[i] += this.xSpace + 2;
+            xaxisList[i] += this.xSpace + 1;
           }
           xaxisNew.push(Math.floor(xaxisList[i]));
         }
@@ -1779,6 +2016,8 @@ export default {
       }
       .text {
         text-align: center;
+        position: relative;
+        top: 53px;
         .label {
           display: flex;
           align-items: center;
@@ -1787,34 +2026,73 @@ export default {
         }
       }
     }
-    .tempC :nth-child(3) > span {
-      padding-top: 3px;
-    }
-    .tempC :nth-child(4) > span {
-      padding-top: 6px;
-    }
-    .tempC :nth-child(5) > span {
-      padding-top: 13px;
-    }
-    .tempC :nth-child(6) > span {
-      padding-top: 18px;
-    }
-    .tempC :nth-child(7) > span {
-      padding-top: 20px;
-    }
-    .tempC :nth-child(8) > span {
-      padding-top: 26px;
-    }
-    .tempC :nth-child(9) > span {
-      padding-top: 30px;
-    }
-    .tempC :nth-child(10) > span {
-      padding-top: 35px;
-    }
+        .tempC :nth-child(3) {
+          span {
+            padding-top: 6px;
+          }
+          .line_text {
+            position: relative;
+            top: 7px;
+          }
+        }
+        .tempC :nth-child(4) {
+          span {
+            padding-top: 12px;
+          }
+          .line_text {
+            position: relative;
+            top: 12px;
+          }
+        }
+        .tempC :nth-child(5) {
+          span {
+            padding-top: 17px;
+          }
+          .line_text {
+            position: relative;
+            top: 17px;
+          }
+        }
+        .tempC :nth-child(6) {
+          span {
+            padding-top: 24px;
+          }
+          .line_text {
+            position: relative;
+            top: 25px;
+          }
+        }
+        .tempC :nth-child(7) {
+          span {
+            padding-top: 30px;
+          }
+          .line_text {
+            position: relative;
+            top: 30px;
+          }
+        }
+        .tempC :nth-child(8) {
+          span {
+            padding-top: 35px;
+          }
+          .line_text {
+            position: relative;
+            top: 35px;
+          }
+        }
+        .tempC :nth-child(9) {
+          span {
+            padding-top: 43px;
+          }
+          .line_text {
+            position: relative;
+            top: 43px;
+          }
+        }
   }
   .index span {
     float: right;
-    padding-right: 15px;
+    padding-right: 10px;
   }
 }
 .pagination {
@@ -1880,6 +2158,70 @@ export default {
   font-size: 16px;
   border-top: none;
   position: relative;
+}
+.line_text {
+  width: 35px;
+  height: 2px;
+  background: black;
+  transform: translateX(33px);
+}
+.info-box-right {
+  height: 100%;
+  border: solid 2px black;
+  border-left: none;
+  border-bottom: none;
+    position: absolute;
+    right: 1px;
+    top: 0.5px;
+  .index-box_01 {
+    border-left: 1.5px solid black;
+    transform: translateX(-1px);    
+    border-left: 1.5px solid black;
+  }
+  .index-box_text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    text-align: center;
+  }
+  .index {
+    height: 81.7px;
+  }
+  .index-box_text :nth-child(2){
+    span {
+      margin-top: 4px;
+    }
+  }
+  .index-box_text :nth-child(3){
+    span {
+      margin-top: 7px;
+    }
+  }
+  .index-box_text :nth-child(4){
+    span {
+      margin-top: 10px;
+    }
+  }
+  .index-box_text :nth-child(5){
+    span {
+      margin-top: 16px;
+    }
+  }
+  .index-box_text :nth-child(6){
+    span {
+      margin-top: 20px;
+    }
+  }
+  .index-box_text :nth-child(7){
+    span {
+      margin-top: 23px;
+    }
+  }
+  .index-box_text :nth-child(8){
+    span {
+      margin-top: 26px;
+    }
+  }
 }
 .left_box_text {
   font-weight: 400;

@@ -298,6 +298,8 @@ module.exports = {
               return "http://218.107.37.134:9093";
             case "common":
               return "http://172.17.5.41:9091";
+            case "ytll":
+              return "http://192.168.254.92:9091";
             default:
               return "http://218.14.180.38:9091";
               break;

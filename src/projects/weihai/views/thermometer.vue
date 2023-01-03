@@ -2099,14 +2099,14 @@ export default {
             ) {
               createRepeatTest();
             }
-            if (
-              //首次入院的体温高于38度，用温度列表里面第一个时间跟时间想且当前页面为1等判断为第一天
-              x.time.slice(0, 10) === list[0].time.slice(0, 10) &&
-              Number(list[0].value) >= 38 &&
-              this.currentPage === 1
-            ) {
-              createRepeatTest();
-            }
+            // if (
+            //   //首次入院的体温高于38度，用温度列表里面第一个时间跟时间想且当前页面为1等判断为第一天
+            //   x.time.slice(0, 10) === list[0].time.slice(0, 10) &&
+            //   Number(list[0].value) >= 38 &&
+            //   this.currentPage === 1
+            // ) {
+            //   // createRepeatTest();
+            // }
           }
         } else if (vitalCode === "092") {
           // 画疼痛干预

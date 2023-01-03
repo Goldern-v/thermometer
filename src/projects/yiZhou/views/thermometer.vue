@@ -2276,14 +2276,14 @@ export default {
       this.currentPage = this.printPage;
       this.$nextTick(() => {
         this.handleData();
-        this.showChildrenPage =patientInfo.PatientId && patientInfo.PatientId.includes("+");
+        this.showChildrenPage =true;
       });
       return;
     }
     if (this.useMockData) {
       this.apiData = mockData;
       this.showChildrenPage =
-          patientInfo.PatientId && patientInfo.PatientId.includes("+");
+          true;
       this.$nextTick(() => {
         this.handleData();
       });
@@ -2300,7 +2300,7 @@ export default {
       }).then((res) => {
         this.apiData = res.data;
         this.showChildrenPage =
-          patientInfo.PatientId && patientInfo.PatientId.includes("+");
+          true;
         this.$nextTick(() => {
           //每次获取数据都要传一次页数
           this.currentPage = this.pageTotal;

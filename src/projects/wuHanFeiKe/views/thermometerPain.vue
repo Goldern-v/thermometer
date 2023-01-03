@@ -668,7 +668,7 @@ export default {
       }
       return list;
     },
-     formatPressureList3() {
+    formatPressureList3() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const pressureList = [...this.pressureList];
