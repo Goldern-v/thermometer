@@ -173,12 +173,6 @@ export const mockData = {
       vital_code: '033'
     },
     {
-      temperature_type: '血压',
-      value: '120/76',
-      time_point: '2021-11-03 07:00:00',
-      vital_code: '062'
-    },
-    {
       temperature_type: '表顶注释',
       value: '不升',
       time_point: '2021-11-06 18:06:15',
@@ -206,6 +200,12 @@ export const mockData = {
       temperature_type: '血压',
       value: '115/70',
       time_point: '2021-11-03 15:00:00',
+      vital_code: '062'
+    },
+    {
+      temperature_type: '血压',
+      value: '120/76',
+      time_point: '2021-11-03 07:00:00',
       vital_code: '062'
     },
     {

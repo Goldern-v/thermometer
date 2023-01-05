@@ -365,6 +365,7 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/yiZhou/mockData.js";
+import moment from "moment";
 import { mockDataError } from "src/projects/yiZhou/mockDataError.js";
 import ChildrenChartVue from "./childrenChart.vue";
 export default {
@@ -575,7 +576,11 @@ export default {
     },
     formatPressureList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
-      const list = [];
+      let list = [];
+      const newItem = {}
+      this.dateList.forEach((list)=>{
+        newItem[`${list}`] = []
+      })
       const pressureList = [...this.pressureList];
       for (
         let i = timeNumRange[0];
@@ -584,16 +589,21 @@ export default {
       ) {
         const item = { timeNum: i, value: "" };
         for (let j = pressureList.length - 1; j >= 0; j--) {
-          console.log(j,i)
           const timeNum = this.getTimeNum(pressureList[j].time);
           if (timeNum > i && timeNum <= i + 3 * 4 * 60 * 60 * 1000) {
             item.value = pressureList[j].value;
             item.time = `${pressureList[j].time}`
-            pressureList.splice(j, 1);
+            item.index = j
             break;
           }
         }
-        list.push(item);
+        item.dateTime = moment(item.timeNum).format('YYYY-MM-DD')
+        newItem[`${item.dateTime}`].push({value:item.value,index:item.index})
+        let arr =  Array.from(Object.values(newItem)).map((itemList) => {
+          itemList.sort((a, b) => a.index - b.index)
+          return itemList
+        })
+        list = arr.flat()
       }
       return list;
     },
@@ -680,7 +690,6 @@ export default {
         // const days = [
         //   ...new Set(
         //     this.operateDateList.map((y) => {
-        //       console.log(y)
         //       return this.dayInterval(x, y)
         //     })
         //   )
@@ -855,7 +864,6 @@ export default {
             ...x.map((y) => [y, xyMap.get(y).pulse.y]).reverse(),
           ];
         });
-        console.log(data)
         return data;
       }
       return [];
@@ -882,7 +890,6 @@ export default {
   },
   methods: {
     clickDateChangeTime(dateTime){
-      console.log('点击======》dateTime',dateTime)
       if(dateTime.time)
       window.parent.postMessage(
           { type: 'clickDateTime', value: dateTime.time },
@@ -1043,9 +1050,7 @@ export default {
     handleData() {
       if (this.apiData.patientInfo)
         this.patInfo = this.apiData.patientInfo.patInfo;
-      const vitalSigns = this.apiData.vitalSigns.sort(
-        (a, b) => this.getTimeNum(a.time_point) - this.getTimeNum(b.time_point)
-      );
+      const vitalSigns = this.apiData.vitalSigns
       if (!vitalSigns.length) {
         vitalSigns.push({
           // 空数据加个占位，否则样式会错乱
@@ -2000,7 +2005,6 @@ export default {
     },
     // 根据值计算纵坐标
     getYaxis(yRange, value, vitalCode) {
-      console.log('=======',vitalCode)
       return vitalCode === "092"
         ? ((this.painRange[1] - value) / (this.painRange[1] - yRange[0])) *
         this.painAreaHeight +
@@ -2276,14 +2280,13 @@ export default {
       this.currentPage = this.printPage;
       this.$nextTick(() => {
         this.handleData();
-        this.showChildrenPage =true;
+        this.showChildrenPage =patientInfo.PatientId && patientInfo.PatientId.includes("+");;
       });
       return;
     }
     if (this.useMockData) {
       this.apiData = mockData;
-      this.showChildrenPage =
-          true;
+      this.showChildrenPage = patientInfo.PatientId && patientInfo.PatientId.includes("+");;
       this.$nextTick(() => {
         this.handleData();
       });
@@ -2299,8 +2302,7 @@ export default {
         },
       }).then((res) => {
         this.apiData = res.data;
-        this.showChildrenPage =
-          true;
+        this.showChildrenPage = patientInfo.PatientId && patientInfo.PatientId.includes("+");
         this.$nextTick(() => {
           //每次获取数据都要传一次页数
           this.currentPage = this.pageTotal;
@@ -2312,7 +2314,6 @@ export default {
           this.handleData();
         });
       }).catch((error)=>{
-        console.log('错误=====》',error)
         this.apiData = mockDataError
       });
     }

@@ -1859,7 +1859,7 @@ export default {
                 color: "red",
                 zlevel: 10,
                 tips: `${item.time} 物理降温：${item.value}`,
-                dotSolid: true,
+                dotSolid: false,
               });
               this.createLine({
                 x1: cx,
@@ -2288,8 +2288,8 @@ export default {
   .head-info {
     display: flex;
     justify-content: space-around;
-    font-size: 18px;
-    margin-left: 35px;
+    font-size: 17px;
+    /* margin-left: 15px; */
     .item {
       text-align: left;
       padding: 0 5px 5px 5px;

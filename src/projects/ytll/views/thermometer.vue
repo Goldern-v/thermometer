@@ -2291,10 +2291,6 @@ export default {
     size: a4; //定义为a4纸
     margin: 8mm 8mm 5mm 8mm; // 页面的边距
   }
-  .main-view {
-    transform: scaleY(1.06) !important; 
-    transform-origin: 0 0;
-  }
 }
 
 .main-view {
@@ -2332,7 +2328,7 @@ export default {
 
     .item {
       flex: 1;
-      text-align: left;
+      text-align: center;
       padding: 0 0 5px 5px;
 
       .value {

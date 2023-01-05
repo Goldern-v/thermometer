@@ -20,10 +20,10 @@
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
       <div class="item">
-        年龄：<span class="value">{{ patInfo.age }}</span>
+        年龄：<span class="value">{{ '新生儿' }}</span>
       </div>
       <div class="item">
-        住院号：<span class="value">{{ patInfo.patient_id }}</span>
+        住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
     </div>
     <div class="table-area">
@@ -1009,7 +1009,7 @@ export default {
           case "vomit":
             this.vomitList.push(item);
             break;
-          case "allInput":
+          case "babyInput":
             this.allInputList.push(item);
             break;
             case "12":
@@ -1055,7 +1055,7 @@ export default {
         }
         this.createText({
           x: xaxisNew[i],
-          y: value !== "不升" ? 0 : this.areaHeight - 2 * this.ySpace - 2,
+          y: value !== "不升" ? this.ySpace * 2 + 4 : this.areaHeight - 2 * this.ySpace - 2,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1903,6 +1903,10 @@ export default {
   @page {
     size: a4; //定义为a4纸
     margin: 8mm 8mm 5mm 8mm; // 页面的边距
+  }
+  .main-view {
+    transform: scaleY(1.22) !important; 
+    transform-origin: 0 0;
   }
 }
 .main-view {
