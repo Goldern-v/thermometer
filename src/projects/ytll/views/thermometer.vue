@@ -1473,7 +1473,7 @@ export default {
           (((i - 2) % 5 === 0 && i < 40) ||
             isPainBreak ||
             i === 40 ||
-            i === 44) &&
+            i === 45) &&
           i > 0 &&
           i < totalLine - 1;
         const isboundary = i === 0 || i === totalLine - 1;
@@ -1887,7 +1887,7 @@ export default {
             }
             if (coolX === cx &&sameAxisItem&&sameAxisItem.value==item.value) {
                 this.createText({
-                  x: cx+5,
+                  x: cx,
                   y: cy-20,
                   value: "=",
                   color: "red",
@@ -2407,6 +2407,7 @@ export default {
   .left_box {
     width: 30px;
     float: left;
+    border: 1px solid;
     border-top: none;
     display: flex;
     flex-direction: column;

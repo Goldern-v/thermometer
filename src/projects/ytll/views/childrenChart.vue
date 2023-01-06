@@ -1544,11 +1544,18 @@ export default {
         }
         if (["01", "043", "041"].includes(vitalCode)) {
           // 画降温
-          for (let i = this.coolList.length - 1; i >= 0; i--) {
+                    // 画降温
+                    for (let i = this.coolList.length - 1; i >= 0; i--) {
             const item = this.coolList[i];
             const coolX = this.getXaxis(this.getLocationTime(item.time));
             const coolY = this.getYaxis(yRange, item.value, vitalCode);
-            if (coolX === cx) {
+            const sameAxisItem = this.settingMap.axillaryTemperature.data.find(
+                (x,index) =>
+                 { 
+                   return x.time==item.time
+                }
+              );
+            if (coolX === cx &&(!sameAxisItem ||(sameAxisItem&&sameAxisItem.value!=item.value))) {
               this.createCircle({
                 cx: coolX,
                 cy: coolY,
@@ -1570,6 +1577,21 @@ export default {
               });
               this.coolList.splice(i, 1);
             }
+            if (coolX === cx &&sameAxisItem&&sameAxisItem.value==item.value) {
+                this.createText({
+                  x: cx,
+                  y: cy-20,
+                  value: "=",
+                  color: "red",
+                  fontSize: 18,
+                  time:item.time,
+                  tips: `${item.time} 降温：${item.value}`,
+                  zlevel: 10,
+                  fontWeight: "bold",
+                });
+              }
+          
+            
           }
           // 画复试
           const lastX = this.getXaxis(this.dateRange[1] + " " + ":22:00:00");
@@ -1898,7 +1920,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @media print {
   @page {
     size: a4; //定义为a4纸
