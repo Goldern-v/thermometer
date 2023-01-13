@@ -45,12 +45,12 @@ export const mockData = {
     //       "time_point": "2022-09-03 20:17:00",
     //       "vital_code": "02"
     //   },
-    //   {
-    //       "temperature_type": "疼痛",
-    //       "value": "0",
-    //       "time_point": "2022-09-03 20:17:00",
-    //       "vital_code": "092"
-    //   },
+      {
+          "temperature_type": "疼痛",
+          "value": "2",
+          "time_point": "2022-09-03 20:17:00",
+          "vital_code": "092"
+      },
     //   {
     //       "temperature_type": "血压",
     //       "value": "121/70",
@@ -1504,11 +1504,41 @@ export const mockData = {
           "vital_code": "19"
       },
       {
+        "temperature_type": "疼痛",
+        "value": "0",
+        "time_point": "2022-09-09 23:00:00",
+        "vital_code": "092"
+    },
+      {
           "temperature_type": "疼痛",
           "value": "2",
-          "time_point": "2022-09-12 11:00:00",
+          "time_point": "2022-09-09 03:00:00",
           "vital_code": "092"
       },
+      {
+        "temperature_type": "疼痛",
+        "value": "4",
+        "time_point": "2022-09-09 07:00:00",
+        "vital_code": "092"
+    },
+    {
+        "temperature_type": "疼痛",
+        "value": "6",
+        "time_point": "2022-09-09 11:00:00",
+        "vital_code": "092"
+    },
+    {
+        "temperature_type": "疼痛",
+        "value": "8",
+        "time_point": "2022-09-09 15:00:00",
+        "vital_code": "092"
+    },
+    {
+        "temperature_type": "疼痛",
+        "value": "10",
+        "time_point": "2022-09-09 19:00:00",
+        "vital_code": "092"
+    },
       {
           "temperature_type": "脉搏",
           "value": "125",
