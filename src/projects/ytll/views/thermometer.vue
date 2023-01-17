@@ -946,6 +946,11 @@ export default {
           outTime.push(y.time);
         }
       });
+      this.topSheetNote.forEach((y) => {
+        if (y.value.includes("不在")||y.value.includes("拒测")) {
+          outTime.push(y.time);
+        }
+      });
       return outTime;
     },
     dblclick() {
