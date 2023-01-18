@@ -233,6 +233,7 @@
               }"
               v-for="(item, index) in formatBreatheList"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -248,6 +249,7 @@
               :style="middleTdStyle(index)"
               v-for="(item, index) in formatPressureList"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -262,6 +264,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: inputList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -276,6 +279,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: outputList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -288,6 +292,7 @@
               class="value-item"
               v-for="(item, index) in getFormatShitList({ tList: shitList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -300,6 +305,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: weightList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -312,6 +318,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: heightList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -324,6 +331,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: nounList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -336,6 +344,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: urineList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -348,6 +357,7 @@
               class="value-item"
               v-for="(item, index) in formatChildbirthDateList"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item }}
             </div>
@@ -360,6 +370,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: allergyList })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ formatAllergy(item.value) }}
             </div>
@@ -374,6 +385,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList0 })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -388,6 +400,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList1 })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -402,6 +415,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList2 })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -419,6 +433,7 @@
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: customList3 })"
               :key="index"
+              @click="()=>clickDateChangeTime(item)"
             >
               {{ item.value }}
             </div>
@@ -473,7 +488,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       showFlage: true,
@@ -682,6 +697,7 @@ export default {
           const timeNum = this.getTimeNum(pressureList[j].time);
           if (timeNum >= i && timeNum <= i + 3 * 4 * 60 * 60 * 1000) {
             item.value = pressureList[j].value;
+            item.time = pressureList[j].time;
             pressureList.splice(j, 1);
             break;
           }
@@ -702,11 +718,7 @@ export default {
         };
       });
       const timeAdd = (i) => {
-        return timeNumList.some((x) => x.start === i)
-          ? 5 * 60 * 60 * 1000
-          : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
-          ? 3 * 60 * 60 * 1000
-          : 4 * 60 * 60 * 1000;
+        return 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
@@ -717,7 +729,7 @@ export default {
             !isNaN(breatheList[j].value)
               ? (item.value = breatheList[j].value)
               : (item.value = "Ⓡ");
-            // item.value = breatheList[j].value
+              item.time = breatheList[j].time
             breatheList.splice(j, 1);
             break;
           }
@@ -990,11 +1002,11 @@ export default {
     pageTotal(value) {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
-    currentPage(value) {
-      if (!this.isPrintAll) {
-        window.parent.postMessage({ type: "currentPage", value }, "*");
-      }
-    },
+    // currentPage(value) {
+    //   if (!this.isPrintAll) {
+    //     window.parent.postMessage({ type: "currentPage", value }, "*");
+    //   }
+    // },
   },
   created() {
     // 实现外部分页和打印
@@ -1028,6 +1040,14 @@ export default {
         transform: "translateX(1px)",
       };
     },
+    clickDateChangeTime(dateTime){
+      console.log('点击======》dateTime',dateTime)
+      if(dateTime.time)
+      window.parent.postMessage(
+          { type: 'clickDateTime', value: dateTime.time },
+          '*'
+        )
+    },
     //操作自定义的显示位置，存在空的自定义时 往上推不留空
     handleCustomList() {
       for (let k = 0; k < 4; k++) {
@@ -1046,10 +1066,10 @@ export default {
           this.getTimeNum(x[1]) >= this.getTimeNum(value)
         ) {
           this.currentPage = ind + 1;
-          console.log("页码========>", this.currentPage);
           this.$refs.main.innerHTML = "";
           this.reset();
           this.handleData();
+          window.parent.postMessage({ type: "currentPage", value:ind + 1}, "*");
           return;
         }
       });
@@ -1067,12 +1087,10 @@ export default {
       };
     },
     messageHandle(e) {
-      console.log(e,999999)
       if (e && e.data) {
         switch (e.data.type) {
           case "currentPage":
             if (e.data.value > 0) {
-              console.log("换页事件监听中=======》", e.data.value);
               this.currentPage = e.data.value;
               this.$refs.main.innerHTML = "";
               this.reset();
@@ -1084,7 +1102,6 @@ export default {
             break;
           case "nurseExchangeInfo":
             if (e.data.value) {
-              console.log('e.data.value',e.data.value)
               this.adtLog = e.data.value.adtLog || ""; // 转科
               this.adtLogWardName = e.data.value.adtLogWardName || ""; // 转科
               this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
@@ -1376,6 +1393,7 @@ export default {
           y,
           value: this.addn(value),
           color,
+          time:x.time,
           textLineHeight: this.ySpace + 1,
           fontWeight: "bold",
         });
@@ -1564,6 +1582,7 @@ export default {
       zlevel = 0,
       fontWeight = "normal",
       textLineHeight,
+      time
     }) {
       const text = new zrender.Text({
         zlevel,
@@ -1578,6 +1597,14 @@ export default {
           textLineHeight,
         },
       });
+      if (time) {
+        text.on('click', () => {
+          window.parent.postMessage(
+            { type: "clickDateTime", value: time },
+            "*"
+          );
+        })
+      }
       this.zr.add(text);
       if (tips) {
         this.addHover(
@@ -1977,6 +2004,7 @@ export default {
               fontWeight: "bold",
               zlevel: 10,
               fontSize: 12,
+              time:x.time,
             });
           }
         }
@@ -2067,12 +2095,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "05:00:59"],
-        "06:00:00": ["05:01:00", "9:00:59"],
-        "10:00:00": ["9:01:00", "13:00:59"],
-        "14:00:00": ["13:01:00", "17:00:59"],
-        "18:00:00": ["17:01:00", "21:00:59"],
-        "22:00:00": ["21:01:00", "23:59:59"],
+        "02:00:00": ["00:00:00", "04:00:59"],
+        "06:00:00": ["04:01:00", "8:00:59"],
+        "10:00:00": ["8:01:00", "12:00:59"],
+        "14:00:00": ["12:01:00", "16:00:59"],
+        "18:00:00": ["16:01:00", "20:00:59"],
+        "22:00:00": ["20:01:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -2183,6 +2211,7 @@ export default {
           const timeNum = this.getTimeNum(targetList[j].time);
           if (timeNum >= i && timeNum <= i + timeInterval) {
             item.value = targetList[j].value;
+            item.time = targetList[j].time;
             targetList.splice(j, 1);
             break;
           }
@@ -2213,6 +2242,7 @@ export default {
               "☆"
             )}`;
             item.value = targetList[j].value;
+            item.time = targetList[j].time;
             targetList.splice(j, 1);
             break;
           }

@@ -39,6 +39,13 @@ export const mockData = {
     },
     {
       temperature_type: '呼吸',
+      value: '11',
+      time_point: '2021-10-18 08:00:00',
+      vital_code: 'breathe',
+      expand2: null
+    },
+    {
+      temperature_type: '呼吸',
       value: '201',
       time_point: '2021-10-18 21:00:00',
       vital_code: 'breathe',
