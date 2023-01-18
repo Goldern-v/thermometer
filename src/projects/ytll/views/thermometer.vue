@@ -2034,11 +2034,11 @@ export default {
     // 根据值计算纵坐标
     getYaxis(yRange, value, vitalCode) {
       return vitalCode === "092"
-        ? ((yRange[1] - value) / (yRange[1] - yRange[0]+1)) *
+        ? ((yRange[1] - value) / (yRange[1] - yRange[0]+2)) *
         this.painAreaHeight +
         this.indexTextAreaHeight +
         this.timesTempAreaHeight -
-        3 * this.ySpace+13
+        2 * this.ySpace + 1
         : ((yRange[1] - value) / (yRange[1] - yRange[0])) *
         this.timesTempAreaHeight +
         this.indexTextAreaHeight +
