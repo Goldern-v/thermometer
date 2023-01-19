@@ -6,7 +6,7 @@
     @dblclick="dblclick"
   >
     <div class="head-hos">武警广东省总队医院</div>
-    <div class="head-title">体温单</div>
+    <div class="head-title">{{ showChildrenPage ? "婴儿体温单" : '体温单' }}</div>
     <div class="head-info">
       <div class="item" style="width: 135px; flex: none">
         姓名：<span class="value">{{ patInfo.name }}</span>
@@ -85,7 +85,7 @@
           class="row border-bottom-black-2"
           :style="{ height: `${trHeight}px` }"
         >
-          <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">{{ showChildrenPage ? '出生天数' : '住院天数' }}</div>
           <div class="value-item-box">
             <div
               class="value-item"
@@ -226,17 +226,9 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight}px` }" v-if="!showChildrenPage">
           <div class="label" :style="{ width: `${leftWidth}px` }">血压</div>
           <div class="value-item-box">
-            <!-- <div
-              class="value-item"
-              :style="middleTdStyle(index)"
-              v-for="(item, index) in formatPressureList"
-              :key="index"
-            >
-              {{ item.value }}
-            </div> -->
             <div
               class="value-item"
               v-for="(item, index) in getFormatList({ tList: pressureList })"
@@ -260,7 +252,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight}px` }" v-if="!showChildrenPage">
           <div class="label" :style="{ width: `${leftWidth}px` }">身高</div>
           <div class="value-item-box">
             <div
@@ -273,7 +265,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight}px` }" v-if="!showChildrenPage">
           <div class="label" :style="{ width: `${leftWidth}px` }">总入量</div>
           <div class="value-item-box">
             <div
@@ -286,7 +278,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight}px` }" v-if="!showChildrenPage">
           <div class="label" :style="{ width: `${leftWidth}px` }">输入液量</div>
           <div class="value-item-box">
             <div
@@ -299,7 +291,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight}px` }" v-if="!showChildrenPage">
           <div class="label" :style="{ width: `${leftWidth}px` }">总出量</div>
           <div class="value-item-box">
             <div
@@ -312,7 +304,7 @@
             </div>
           </div>
         </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight}px` }" v-if="!showChildrenPage">
           <div class="label" :style="{ width: `${leftWidth}px` }">尿量</div>
           <div class="value-item-box">
             <div
@@ -326,7 +318,7 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">大便</div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">{{ showChildrenPage ? '大便次数':'大便'}}</div>
           <div class="value-item-box">
             <div
               class="value-item"
@@ -417,7 +409,7 @@
             </div>
           </div>
         </div>
-        <!--  <div class="row" :style="{ height: `${trHeight}px` }">
+         <div class="row" :style="{ height: `${trHeight}px` }" v-if="showChildrenPage">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList5.label || "" }}
           </div>
@@ -430,8 +422,8 @@
               {{ item.value }}
             </div>
           </div>
-        </div> -->
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }" v-if="!showChildrenPage">
           <div class="label" :style="{ width: `${leftWidth}px` }">术后天数</div>
           <div class="value-item-box" style="color: red">
             <div
@@ -680,6 +672,9 @@ export default {
         tds.push(...list);
       }
       return tds;
+    },
+    showChildrenPage() {
+      return this.$route.query.PatientId && this.$route.query.PatientId.includes("_");
     },
     trHeight() {
       return this.ySpace + 4;
