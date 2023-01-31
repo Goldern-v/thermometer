@@ -160,6 +160,41 @@
             </div>
           </div>
         </div>
+    
+        <!--  <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            出量(ml)
+          </div>
+          <div class="value-item-box">
+            <div class="value-item" v-for="(item, index) in getFormatList({ tList: outputList })" :key="index"
+            @click="()=>clickDateChangeTime(item)">
+              {{ item.value }}
+            </div>
+          </div>
+        </div> -->
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            大便次数
+          </div>
+          <div class="value-item-box">
+            <div class="value-item" v-for="(item, index) in getFormatListShit({ tList: shitList })" :key="index"
+            @click="()=>clickDateChangeTime(item)">
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">尿量(ml)</div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in getFormatList({ tList: urineList })"
+              :key="index"
+            >
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             入量(ml)
@@ -171,29 +206,6 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            出量(ml)
-          </div>
-          <div class="value-item-box">
-            <div class="value-item" v-for="(item, index) in getFormatList({ tList: outputList })" :key="index"
-            @click="()=>clickDateChangeTime(item)">
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            大便(次/日)
-          </div>
-          <div class="value-item-box">
-            <div class="value-item" v-for="(item, index) in getFormatListShit({ tList: shitList })" :key="index"
-            @click="()=>clickDateChangeTime(item)">
-              {{ item.value }}
-            </div>
-          </div>
-        </div>
-
-        <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">体重(kg)</div>
           <div class="value-item-box">
             <div class="value-item" v-for="(item, index) in getFormatList({ tList: weightList })" :key="index" 
@@ -203,6 +215,15 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">SpO2(%)</div>
+          <div class="value-item-box">
+            <div class="value-item" v-for="(item, index) in getFormatList({ tList: SpO2List })" :key="index" 
+            @click="()=>clickDateChangeTime(item)">
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">身高(cm)</div>
           <div class="value-item-box">
             <div class="value-item" v-for="(item, index) in getFormatList({ tList: heightList })" :key="index"
@@ -210,7 +231,7 @@
               {{ item.value }}
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
@@ -226,18 +247,7 @@
             </div>
           </div>
         </div> -->
-        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">尿量(ml)</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in getFormatList({ tList: urineList })"
-              :key="index"
-            >
-              {{ item.value }}
-            </div>
-          </div>
-        </div> -->
+       
         <!-- <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             {{ customList0.label || "" }}
@@ -323,7 +333,7 @@
           </div>
         </div> -->
 
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <!-- <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
           <div class="value-item-box">
             <div class="value-item" v-for="(item, index) in formatStayDayList" :key="index">
@@ -340,7 +350,7 @@
               {{ item }}
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="pagination" v-if="showInnerPage">
@@ -489,6 +499,7 @@ export default {
       ], // 呼吸
       pressureList: [], // 血压
       weightList: [], // 体重
+      SpO2List: [],
       heightList: [], // 身高
       inputList: [], // 液体入量
       shitList: [], // 大便次数
@@ -564,7 +575,8 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [3, 7, 11, 15, 19, 23];
+      // const list = [3, 7, 11, 15, 19, 23];
+      const list = [2, 6 ,10 ,14, 18 ,22];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
@@ -1007,6 +1019,7 @@ export default {
       this.breatheList = [];
       this.pressureList = [];
       this.weightList = [];
+      this.SpO2List = [];
       this.heightList = [];
       this.inputList = [];
       this.shitList = [];
@@ -1224,6 +1237,9 @@ export default {
             break;
           case "033":
             this.weightList.push(item);
+            break;
+          case "51":
+            this.SpO2List.push(item);
             break;
           case "091":
             this.inputList.push(item);
