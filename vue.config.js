@@ -49,6 +49,8 @@ const projectName = (() => {
       return "临邑县人民医院";
     case "yiZhou": // 广东医科大学附属第三医院(顺德龙江医院)
       return "临沂沂州医院";
+    case "wuhanhankou": // 广东医科大学附属第三医院(顺德龙江医院)
+      return "武汉汉口医院";
     case "weihai": // 威海市立医院
       return "威海市立医院";
     case "zhzxy": // 威海市立医院
@@ -82,7 +84,7 @@ const packageName = `${projectName}体温单_${today.getFullYear()}年${today.ge
   1}月${today.getDate()}日${today.getHours()}时${today.getMinutes()}分${today.getSeconds()}秒`;
 console.log(packageName);
 module.exports = {
-  publicPath: ["huaDu", "linYi", "yiZhou",'zhzxy','ytll','songTao'].includes(project)
+  publicPath: ["huaDu", "linYi", "yiZhou",'zhzxy','ytll','songTao','wuhanhankou'].includes(project)
     ? "/temperature/"
     : "./",
   outputDir: packageName,
@@ -154,6 +156,8 @@ module.exports = {
           return "./src/projects/linYi/main.js";
         case "yiZhou": // 临邑县人民医院
           return "./src/projects/yiZhou/main.js";
+        case "wuhanhankou": // 临邑县人民医院
+          return "./src/projects/wuhanhankou/main.js";
         case "weihai": // 威海市立医院
           return "./src/projects/weihai/main.js";
         case "zhzxy": // 珠海中西医
@@ -230,6 +234,8 @@ module.exports = {
               return "http://222.133.53.230:9091/";
             case "yiZhou":
               return "http://112.233.241.99:8092";
+            case "wuhanhankou":
+              return "http://112.233.241.99:8092";
             case "weihai":
               return "http://221.2.154.22:9091";
             case "zhzxy":
@@ -295,6 +301,8 @@ module.exports = {
             case "linYi":
               return "http://120.224.211.7:61025"; //无可用外网
             case "yiZhou":
+              return "http://218.107.37.134:9093"; //无可用外网
+            case "wuhanhankou":
               return "http://218.107.37.134:9093"; //无可用外网
             case "weihai":
               return "http://218.107.37.134:9093";
