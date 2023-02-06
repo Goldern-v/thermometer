@@ -37,6 +37,8 @@ const projectName = (() => {
       return "南方中西医结合医院";
     case "foShanShiYi": // 南方中西医结合医院
       return "佛山市第一人民医院";
+    case "zzwy": // 南方中西医结合医院
+      return "漳州市第五医院";
     case "nfykdxsdyy": // 南方中西医结合医院
       return "南方医科大学顺德医院";
     case "wuHanFeiKe": // 武汉肺科医院
@@ -144,6 +146,8 @@ module.exports = {
           return "./src/projects/zhongXi/main.js";
         case "foShanShiYi": // 佛山市一
           return "./src/projects/foShanShiYi/main.js";
+        case "zzwy": 
+          return "./src/projects/zzwy/main.js";
         case "nfykdxsdyy": // 佛山市一
           return "./src/projects/nfykdxsdyy/main.js";
         case "wuHanFeiKe": // 武汉结核病防治所
@@ -222,6 +226,8 @@ module.exports = {
               return "http://218.107.37.134:9093";
             case "foShanShiYi":
               return "https://cr.fsyyy.com:9094";
+            case "zzwy":
+              return "https://cr.fsyyy.com:9094";
             case "nfykdxsdyy":
               return "https://cr.fsyyy.com:9094";
             case "wuHanFeiKe":
@@ -289,6 +295,8 @@ module.exports = {
             case "zhongXi":
               return "http://218.107.37.134:9093";
             case "foShanShiYi":
+              return "http://219.159.198.37:9091";
+            case "zzwy":
               return "http://219.159.198.37:9091";
             case "nfykdxsdyy":
               return "http://219.159.198.37:9091";
