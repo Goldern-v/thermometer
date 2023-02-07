@@ -21,6 +21,18 @@ export const getNurseExchangeInfoByTime = (data) => {
     }
   })
 }
+//佛一后端增加数据判断 
+export const getNurseExchangeInfoByTimeNew = (data) => {
+  return axios({
+    method: 'post',
+    url: `${apiPath}nurseLog/getNurseExchangeInfo2`,
+    data,
+    headers: {
+      "App-Token-Nursing": appToken,
+      "Auth-Token-Nursing": authToken,
+    }
+  })
+}
 //获取所有转科转床记录的数据，用于批量打印时获取用户所有时间内的转科转床记录
 export const getNurseExchangeInfoBatch = (data) => {
   return axios({

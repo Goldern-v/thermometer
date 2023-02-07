@@ -484,7 +484,7 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/foShanShiYi/mockData.js";
-import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
+import { common, getNurseExchangeInfoByTimeNew } from "src/api/index.js";
 import moment from "moment"; //导入文件
 export default {
   props: {
@@ -508,7 +508,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1149,7 +1149,7 @@ export default {
         patientId: urlParams.PatientId,
       };
       if (!this.useMockData && !this.isPrintAll) {
-        getNurseExchangeInfoByTime(data).then((res) => {
+        getNurseExchangeInfoByTimeNew(data).then((res) => {
           this.adtLog = res.data.data.adtLog; // 转科
           this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
         });

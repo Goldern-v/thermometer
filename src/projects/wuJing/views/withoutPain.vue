@@ -1153,7 +1153,7 @@ export default {
           // 超出时间范围的抛弃
           continue;
         }
-        if (["16", "17", "18", "19", "20"].includes(vitalSigns[i].vital_code)) {
+        if (["16", "17", "18", "19", "20","37"].includes(vitalSigns[i].vital_code)) {
           // 自定义字段填入
           const sign = vitalSigns[i].temperature_type;
           switch (vitalSigns[i].vital_code) {
