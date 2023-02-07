@@ -37,6 +37,8 @@ const projectName = (() => {
       return "南方中西医结合医院";
     case "foShanShiYi": // 南方中西医结合医院
       return "佛山市第一人民医院";
+    case "zzwy": // 南方中西医结合医院
+      return "漳州市第五医院";
     case "nfykdxsdyy": // 南方中西医结合医院
       return "南方医科大学顺德医院";
     case "wuHanFeiKe": // 武汉肺科医院
@@ -49,6 +51,8 @@ const projectName = (() => {
       return "临邑县人民医院";
     case "yiZhou": // 广东医科大学附属第三医院(顺德龙江医院)
       return "临沂沂州医院";
+    case "wuhanhankou": // 广东医科大学附属第三医院(顺德龙江医院)
+      return "武汉汉口医院";
     case "weihai": // 威海市立医院
       return "威海市立医院";
     case "zhzxy": // 威海市立医院
@@ -82,7 +86,7 @@ const packageName = `${projectName}体温单_${today.getFullYear()}年${today.ge
   1}月${today.getDate()}日${today.getHours()}时${today.getMinutes()}分${today.getSeconds()}秒`;
 console.log(packageName);
 module.exports = {
-  publicPath: ["huaDu", "linYi", "yiZhou",'zhzxy','ytll','songTao'].includes(project)
+  publicPath: ["huaDu", "linYi", "yiZhou",'zhzxy','ytll','songTao','wuhanhankou'].includes(project)
     ? "/temperature/"
     : "./",
   outputDir: packageName,
@@ -142,6 +146,8 @@ module.exports = {
           return "./src/projects/zhongXi/main.js";
         case "foShanShiYi": // 佛山市一
           return "./src/projects/foShanShiYi/main.js";
+        case "zzwy": 
+          return "./src/projects/zzwy/main.js";
         case "nfykdxsdyy": // 佛山市一
           return "./src/projects/nfykdxsdyy/main.js";
         case "wuHanFeiKe": // 武汉结核病防治所
@@ -154,6 +160,8 @@ module.exports = {
           return "./src/projects/linYi/main.js";
         case "yiZhou": // 临邑县人民医院
           return "./src/projects/yiZhou/main.js";
+        case "wuhanhankou": // 临邑县人民医院
+          return "./src/projects/wuhanhankou/main.js";
         case "weihai": // 威海市立医院
           return "./src/projects/weihai/main.js";
         case "zhzxy": // 珠海中西医
@@ -218,6 +226,8 @@ module.exports = {
               return "http://218.107.37.134:9093";
             case "foShanShiYi":
               return "https://cr.fsyyy.com:9094";
+            case "zzwy":
+              return "https://cr.fsyyy.com:9094";
             case "nfykdxsdyy":
               return "https://cr.fsyyy.com:9094";
             case "wuHanFeiKe":
@@ -229,6 +239,8 @@ module.exports = {
             case "linYi":
               return "http://222.133.53.230:9091/";
             case "yiZhou":
+              return "http://112.233.241.99:8092";
+            case "wuhanhankou":
               return "http://112.233.241.99:8092";
             case "weihai":
               return "http://221.2.154.22:9091";
@@ -284,6 +296,8 @@ module.exports = {
               return "http://218.107.37.134:9093";
             case "foShanShiYi":
               return "http://219.159.198.37:9091";
+            case "zzwy":
+              return "http://219.159.198.37:9091";
             case "nfykdxsdyy":
               return "http://219.159.198.37:9091";
             case "wuHanFeiKe":
@@ -295,6 +309,8 @@ module.exports = {
             case "linYi":
               return "http://120.224.211.7:61025"; //无可用外网
             case "yiZhou":
+              return "http://218.107.37.134:9093"; //无可用外网
+            case "wuhanhankou":
               return "http://218.107.37.134:9093"; //无可用外网
             case "weihai":
               return "http://218.107.37.134:9093";
