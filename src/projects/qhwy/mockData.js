@@ -269,6 +269,12 @@ export const mockData = {
       vital_code: '20'
     },
     {
+      temperature_type: '心率',
+      value: '90',
+      time_point: '2022-06-04 15:00:00',
+      vital_code: '20'
+    },
+    {
       temperature_type: '呼吸',
       value: '18',
       time_point: '2022-06-05 15:00:00',

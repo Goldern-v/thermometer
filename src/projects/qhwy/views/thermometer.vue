@@ -399,6 +399,7 @@ export default {
       painRange,
       FahrenheitListRange,
       FahrenheitRange,
+      monitoringInterval:[],//心电监护的区间 ，也就是前后脉搏间隔24小时的数组
       settingMap: {
         oralTemperature: {
           vitalCode: "041",
@@ -1377,17 +1378,32 @@ export default {
               }
             });
           }
-          // if (['pulse', '20'].includes(x.vitalCode)) {
-          //   // 心率或脉搏过快时，折线需要断开
-          //   data = [[]]
-          //   x.data.forEach((y) => {
-          //     if (y.value > this.pulseRange[1]) {
-          //       data.push([])
-          //     } else {
-          //       data[data.length - 1].push(y)
-          //     }
-          //   })
-          // }
+          if (["02",'20'].includes(x.vitalCode)) {
+            // 心率或脉搏过快时，折线需要断开
+            data = [[]];
+            x.data.forEach((y, index) => {
+              if (y.value <= this.pulseRange[1]) {
+                data[data.length - 1].push(y);
+              } else {
+                data.push([]);
+              }
+              if (index < x.data.length - 1) {
+                if (
+                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                    this.getTimeNum(y.time.slice(0, 10)) >=
+                  24 * 60 * 60 * 1000 * 2
+                ) {
+                  x.vitalCode=="02"&&this.monitoringInterval.push([x.data[index],x.data[index + 1]])
+                  data.push([x.data[index + 1]]);
+                }
+              } else {
+                const list = data[data.length - 1];
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y);
+                }
+              }
+            });
+          }
           data.forEach((z) => {
             this.createBrokenLine({
               vitalCode: x.vitalCode,
@@ -1429,6 +1445,46 @@ export default {
           this.areaHeight - 4 * (this.ySpace + 1),
           "red"
         );
+        if (this.monitoringInterval.length) {
+          //返回中间断层的脉搏数组
+          const pluseRateCon = this.monitoringInterval.map((list) => {
+            return list.map((item) => { return { time: this.getLocationTime(item.time), timeNum: this.getTimeNum(this.getLocationTime(item.time)),value:item.value} })
+          })
+          const heartRateCon = this.settingMap.heart.data.map((item) => { return { time: this.getLocationTime(item.time), timeNum: this.getTimeNum(this.getLocationTime(item.time)),value:item.value } })
+          const heartInterval = []
+          pluseRateCon.forEach((interval,index) => {
+            const intervalList = []
+            heartRateCon.forEach((heartItem) => {
+              if (heartItem.timeNum > interval[0].timeNum && heartItem.timeNum < interval[1].timeNum) {
+                intervalList.push(heartItem)
+              }
+            })
+            heartInterval.push(intervalList)
+            const heartIcon = heartInterval[index]
+            if (heartIcon.length) {
+              //找到中间存在心率监听器数值的数组，然后首首尾尾相连
+              const lastIndex = heartIcon.length - 1
+              const params1 = {
+                x1: this.getXaxis(interval[0].time),
+                y1: this.getYaxis(this.pulseRange, interval[0].value,'20'),
+                x2: this.getXaxis(heartIcon[0].time),
+                y2: this.getYaxis(this.pulseRange, heartIcon[0].value,'20'),
+                lineWidth: 1,
+                color: "red",
+              };
+              const params2 = {
+                x1: this.getXaxis(interval[1].time),
+                y1: this.getYaxis(this.pulseRange, interval[1].value,'20'),
+                x2: this.getXaxis(heartIcon[lastIndex].time),
+                y2: this.getYaxis(this.pulseRange, heartIcon[lastIndex].value,'20'),
+                lineWidth: 1,
+                color: "red",
+              };
+              this.createLine(params1)
+              this.createLine(params2)
+            }
+          })
+        }
       });
     },
     yLine() {
@@ -1895,21 +1951,21 @@ export default {
       return ans;
     },
     // 根据值计算纵坐标, vitalCode会传过来判断数据类型 
-          getYaxis(yRange, value, vitalCode) {
-          return vitalCode == '092' ?
-          (10 - value) /
-          (10 - 0) *
-          this.painAreaHeight +
-          this.middleAreaHeight +
-          this.timesTempAreaHeight +
-          5 * this.ySpace
+    getYaxis(yRange, value, vitalCode) {
+      return vitalCode == '092' ?
+        (10 - value) /
+        (10 - 0) *
+        this.painAreaHeight +
+        this.middleAreaHeight +
+        this.timesTempAreaHeight +
+        5 * this.ySpace
 
-          : ['20', '02'].includes(vitalCode)
+        : ['20', '02'].includes(vitalCode)
           ? ((this.pulseRange[1] + 10 - value) / (this.pulseRange[1] - this.pulseRange[0])) *
-          (this.timesTempAreaHeight + 3 * this.ySpace +2) - 1
+          (this.timesTempAreaHeight + 3 * this.ySpace + 2) - 1
           : ((yRange[1] + 1 - value) /
-          (yRange[1] - yRange[0])) *
-          this.timesTempAreaHeight -3
+            (yRange[1] - yRange[0])) *
+          this.timesTempAreaHeight - 3
     },
     // 根据时间点计算横坐标
     getXaxis(time) {
