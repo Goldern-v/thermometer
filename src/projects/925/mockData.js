@@ -25,7 +25,7 @@ export const mockData = {
     },
     {
       temperature_type: '病人事件',
-      value: '手术',
+      value: '手术|yyy',
       time_point: '2021-10-18 14:34:00',
       vital_code: 'nurseEvents',
       expand2: '2021-10-18 10:34:00'
