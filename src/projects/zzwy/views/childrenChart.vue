@@ -117,13 +117,9 @@
         >
           <div class="item times">
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
-              <div>
-                体重
-                <br />
-                (g)
-              </div>
+              <div>脉搏<br />次/分</div>
             </div>
-            <div class="index" v-for="item in weightRangeList" :key="item">
+            <div class="index" v-for="item in pulseList" :key="item">
               <span>{{ item }}</span>
             </div>
           </div>
@@ -160,7 +156,7 @@
           :key="item"
         ></div>
 
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        <div class="row" :style="{ height: `${trHeight+20}px`,borderTop:'2px solid #000' }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             大便次数
           </div>
@@ -217,14 +213,30 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight + 20}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            {{ customList0.label || "" }}
+          </div>
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in formatStayDayList"
+              v-for="(item, index) in getFormatList({ tList: customList0 })"
               :key="index"
             >
-              {{ item }}
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight + 20}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">
+            {{ customList1.label || "" }}
+          </div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in getFormatList({ tList: customList1 })"
+              :key="index"
+            >
+              {{ item.value }}
             </div>
           </div>
         </div>
@@ -276,8 +288,9 @@ export default {
     },
   },
   data() {
-    const yRange = [34, 42]
+    const yRange = [35, 42]
     const weightRange = [1000, 5000]
+    const pulseRange = [20, 180];
     return {
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -288,6 +301,7 @@ export default {
       xRange: [1, 8],
       yRange,
       weightRange,
+      pulseRange,
       settingMap: {
         axillaryTemperature: {
           vitalCode: '01',
@@ -338,6 +352,9 @@ export default {
       funicleList: [], //脐带
       coolList: [],
       urineList: [], // 尿量
+      customList0: [], // 自定义1
+      customList1: [], // 自定义2
+      customList2: [], // 自定义3
       dateRangeList: [], // 数组长度决定页数
       patInfo: {
         patient_id: '',
@@ -461,6 +478,13 @@ export default {
         list.push(i)
       }
       return list
+    },
+    pulseList() {
+      const list = [];
+      for (let i = this.pulseRange[1]; i > this.pulseRange[0]; i = i - 20) {
+        list.push(i);
+      }
+      return list;
     },
     indexTextAreaHeight() {
       return this.ySpace * 3 + 2
@@ -665,8 +689,43 @@ export default {
         ) {
           // 超出时间范围的抛弃
           continue
+          
         }
-
+        if (
+          ["32", "33", "34", "35", "36", "37"].includes(
+            vitalSigns[i].vital_code
+          )
+        ) {
+          // 自定义字段填入
+          const sign = vitalSigns[i].temperature_type;
+          // const index = customSigns.indexOf(sign)
+          switch (vitalSigns[i].vital_code) {
+            case "32":
+              this.customList0.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList0.label = sign;
+              break;
+            case "33":
+              this.customList1.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList1.label = sign;
+              break;
+            case "34":
+              this.customList2.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList2.label = sign;
+              break;
+          
+            default:
+              break;
+          }
+        }
         if (this.lineMap[vitalSigns[i].vital_code]) {
           if (
             ['01'].includes(vitalSigns[i].vital_code) &&
