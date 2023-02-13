@@ -1967,6 +1967,7 @@ export default {
     addn(str, bottomText) {
       let formatStr = "";
       let formatTopValu = "";
+      if(str.includes('手术')) str = str.slice(0,2)
       if (str.length <= 2 && !bottomText.includes(str)) {
         for (let i = 0; i < str.length; i++) {
           formatTopValu +=
@@ -2226,16 +2227,20 @@ export default {
       return overWan ? getWan(overWan) + "万" + getWan(noWan) : getWan(num);
     },
     // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
-    handleNoteXaxis(xaxisList) {
+    // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
+    handleNoteXaxis(xaxisList,notes) {
+      //定义一个数组，为全部最后一格的数据，如果与最后一格重叠，就往底下移动
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {
-        if (!xaxisNew.includes(xaxisList[i])) {
-          xaxisNew.push(xaxisList[i]);
+        if (!xaxisNew.includes(Math.floor(xaxisList[i])) && xaxisNew.includes(Math.floor(xaxisList[i]) - 1) && xaxisNew.includes(Math.floor(xaxisList[i]) + 1)) {
+          xaxisNew.push(Math.floor(xaxisList[i]));
         } else {
-          while (xaxisNew.includes(xaxisList[i])) {
-            xaxisList[i] += this.xSpace;
+          while (
+            (xaxisNew.includes(Math.floor(xaxisList[i])) || xaxisNew.includes(Math.floor(xaxisList[i]) - 1) || xaxisNew.includes(Math.floor(xaxisList[i]) + 1))
+          ) {
+            xaxisList[i] += this.xSpace + 2;
           }
-          xaxisNew.push(xaxisList[i]);
+          xaxisNew.push(Math.floor(xaxisList[i]));
         }
       }
       return xaxisNew;
