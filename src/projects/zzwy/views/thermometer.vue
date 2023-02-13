@@ -439,7 +439,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -611,7 +611,7 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [3, 7, 11, 15, 19, 23];
+      const list = [2,6,10,2,6,10];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
@@ -928,7 +928,7 @@ export default {
     },
   },
   created() {
-    document.title = '临沂沂州医院体温单'
+    document.title = '漳州市第五医院体温单'
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
   },
@@ -2321,9 +2321,9 @@ export default {
   },
   mounted() {
     const patientInfo = this.$route.query
-    if(patientInfo.PatientId&&patientInfo.PatientId.includes(' ')){
-      patientInfo.PatientId =  patientInfo.PatientId.toString().replace(' ','+')
-    }
+    // if(patientInfo.PatientId&&patientInfo.PatientId.includes(' ')){
+    //   patientInfo.PatientId =  patientInfo.PatientId.toString().replace(' ','+')
+    // }
     this.showInnerPage = patientInfo.showInnerPage === "1";
     if (this.isPrintAll) {
       // 批量打印
@@ -2331,13 +2331,13 @@ export default {
       this.currentPage = this.printPage;
       this.$nextTick(() => {
         this.handleData();
-        this.showChildrenPage =patientInfo.PatientId && patientInfo.PatientId.includes("+");;
+        this.showChildrenPage =patientInfo.PatientId && patientInfo.PatientId.includes("B");;
       });
       return;
     }
     if (this.useMockData) {
       this.apiData = mockData;
-      this.showChildrenPage = patientInfo.PatientId && patientInfo.PatientId.includes("+");;
+      this.showChildrenPage = patientInfo.PatientId && patientInfo.PatientId.includes("B");;
       this.$nextTick(() => {
         this.handleData();
       });
@@ -2353,7 +2353,7 @@ export default {
         },
       }).then((res) => {
         this.apiData = res.data;
-        this.showChildrenPage = patientInfo.PatientId && patientInfo.PatientId.includes("+");
+        this.showChildrenPage = patientInfo.PatientId && patientInfo.PatientId.includes("B");
         this.$nextTick(() => {
           //每次获取数据都要传一次页数
           this.currentPage = this.pageTotal;
@@ -2379,9 +2379,10 @@ export default {
     margin: 5mm 8mm 5mm 8mm; // 页面的边距
   }
   .main-view {
-    transform: scaleY(1.09) !important; 
+    // transform: scaleY(1.09) !important; 
     transform-origin: 0 0;
-
+    transform: scale(1)!important; 
+    transform: scaleY(0.96)!important; 
   }
 
 }
@@ -2419,6 +2420,7 @@ export default {
 
   .head-info {
     display: flex;
+    font-size: 14px;
     .item {
       flex: 1;
       text-align: left;
@@ -2430,7 +2432,8 @@ export default {
   }
   .head-info-1 {
     display: flex;
-    justify-content: center;
+    font-size: 14px;
+    justify-content: space-between;
     .item {
       text-align: left;
       padding: 0 5px 5px 5px;
