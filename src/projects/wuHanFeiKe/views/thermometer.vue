@@ -31,7 +31,7 @@
       </div>
       <div class="item" style="flex:0.5">
         床号：<span class="value">{{
-          bedExchangeLog || patInfo.bed_label
+          bedExchangeLog || patInfo.bed_label 
         }}</span>
       </div>
       <div class="item" style="flex:1.3">
@@ -1104,17 +1104,31 @@ export default {
       }
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
+
+      const patientInfo = this.$route.query;
+      let data = {
+        startLogDateTime: this.timeRange[0],
+        endLogDateTime: this.timeRange[1],
+        visitId: patientInfo.VisitId,
+        patientId: patientInfo.PatientId,
+      };
+      if (!this.useMockData && !this.isPrintAll) {
+        getNurseExchangeInfoByTime(data).then((res) => {
+          this.adtLog = res.data.data.adtLogWardName; // 转科
+          this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+        });
+      }
       // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
-      window.parent.postMessage(
-        {
-          type: "getNurseExchangeInfo",
-          value: {
-            startLogDateTime: this.timeRange[0],
-            endLogDateTime: this.timeRange[1],
-          },
-        },
-        "*"
-      );
+      // window.parent.postMessage(
+      //   {
+      //     type: "getNurseExchangeInfo",
+      //     value: {
+      //       startLogDateTime: this.timeRange[0],
+      //       endLogDateTime: this.timeRange[1],
+      //     },
+      //   },
+      //   "*"
+      // );
 
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       // const customSigns = [] // 记录自定义字段的名字
