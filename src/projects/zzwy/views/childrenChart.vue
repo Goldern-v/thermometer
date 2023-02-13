@@ -5,7 +5,7 @@
     v-if="apiData"
   >
     <div class="head-hos">漳州市第五医院</div>
-    <div class="head-title">新生儿体温记录单</div>
+    <div class="head-title">体温单</div>
     <div class="head-info-1">
       <div class="item">
         科室：
@@ -90,6 +90,25 @@
           </div>
         </div>
         <div
+          class="row 2 border-bottom-black-2"
+          :style="{ height: `${trHeight + 8}px` }"
+        >
+          <div
+            class="label"
+            :style="{ width: `${leftWidth}px` }"
+            v-html="`住院天数`"
+          ></div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in formatStayDayList"
+              :key="index"
+            >
+              {{ item }}
+            </div>
+          </div>
+        </div>
+        <div
           class="row border-bottom-black-2"
           :style="{ height: `${trHeight + 8}px` }"
         >
@@ -109,6 +128,7 @@
             </div>
           </div>
         </div>
+        
       </div>
       <div class="info-box">
         <div
@@ -508,7 +528,7 @@ export default {
     },
   },
   created() {
-    document.title = '临沂沂州医院体温单'
+    document.title = '漳州市第五医院体温单'
     // 实现外部分页和打印
     window.addEventListener('message', this.messageHandle, false)
   },
