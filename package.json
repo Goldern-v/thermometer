@@ -41,6 +41,8 @@
     "build:wuHanYaXin": "vue-cli-service build --project=wuHanYaXin",
     "dev:longJiang": "vue-cli-service serve --project=longJiang",
     "build:longJiang": "vue-cli-service build --project=longJiang",
+    "dev:gdszy": "vue-cli-service serve --project=gdszy",
+    "build:gdszy": "vue-cli-service build --project=gdszy",
     "dev:linYi": "vue-cli-service serve --project=linYi",
     "build:linYi": "vue-cli-service build --project=linYi",
     "dev:weihai": "vue-cli-service serve --project=weihai",

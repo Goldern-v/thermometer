@@ -47,6 +47,8 @@ const projectName = (() => {
       return "武汉亚洲心脏病医院";
     case "longJiang": // 广东医科大学附属第三医院(顺德龙江医院)
       return "广东医科大学附属第三医院(顺德龙江医院)";
+    case "gdszy": // 广东省中医院
+      return "广东省中医院";
     case "linYi": // 广东医科大学附属第三医院(顺德龙江医院)
       return "临邑县人民医院";
     case "yiZhou": // 广东医科大学附属第三医院(顺德龙江医院)
@@ -156,6 +158,8 @@ module.exports = {
           return "./src/projects/wuHanYaXin/main.js";
         case "longJiang": // 广东医科大学附属第三医院(顺德龙江医院)
           return "./src/projects/longJiang/main.js";
+        case "gdszy": // 广东医科大学附属第三医院(顺德龙江医院)
+          return "./src/projects/gdszy/main.js";
         case "linYi": // 临邑县人民医院
           return "./src/projects/linYi/main.js";
         case "yiZhou": // 临邑县人民医院
@@ -236,6 +240,8 @@ module.exports = {
               return "http://218.107.37.134:9093/";
             case "longJiang":
               return "http://218.13.34.230:9094";
+            case "gdszy":
+              return "http://218.13.34.230:9094";
             case "linYi":
               return "http://222.133.53.230:9091/";
             case "yiZhou":
@@ -305,6 +311,8 @@ module.exports = {
             case "wuHanYaXin":
               return "http://218.107.37.134:9093";
             case "longJiang":
+              return "http://218.13.34.230:9091";
+            case "gdszy":
               return "http://218.13.34.230:9091";
             case "linYi":
               return "http://120.224.211.7:61025"; //无可用外网
