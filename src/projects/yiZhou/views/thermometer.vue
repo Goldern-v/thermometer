@@ -482,7 +482,7 @@ export default {
         // { time: '2019-05-19 20:10:00', value: '不升' },
       ], // 表底注释  体温低于或等于35度则剔除，在体温单下面标注"不升"
       topPulseNote: [
-        // { time: '2019-05-16 17:10:00', value: '过快' }
+        // { time: '2019-11-06 17:10:00', value: '过快' }
       ], // 心率和脉搏过快超出体温单上限则剔除，在体温单上面标注"过快"
       breatheList: [
         // { time: '2019-05-18 03:12:00', value: '20' }
@@ -1183,7 +1183,7 @@ export default {
             ["02", "20"].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) > this.pulseRange[1]
           ) {
-            this.topPulseNote.push({
+            this.topSheetNote.push({
               time: vitalSigns[i].time_point,
               value: "过快",
             });
@@ -1283,7 +1283,8 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: bottomText.includes(value) ? y - this.ySpace : value!=='过快' ? y + 2 : y - this.ySpace - 1,
+          // y: bottomText.includes(value) ? y - this.ySpace : value!=='过快' ? y + 2 : y - this.ySpace - 1,
+          y: bottomText.includes(value) ? y - this.ySpace :  y + 2 ,
           value: this.addn(value),
           time: x.time,
           color,
@@ -1451,7 +1452,7 @@ export default {
         //   });
         // }
         // 生成心率脉搏过快注释
-        this.createNote(this.topPulseNote, this.ySpace + 2, "black");
+        this.createNote(this.topPulseNote, this.ySpace + 36, "black");
         // 生成表顶注释
         this.createNote(this.topSheetNote, this.indexTextAreaHeight + 2, "red");
         // 生成表底注释
