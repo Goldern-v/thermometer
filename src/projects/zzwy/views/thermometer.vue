@@ -1,6 +1,6 @@
 <template>
 
-  <div v-if="!showChildrenPage">
+  <div v-if="!showChildrenPage" class="main-content">
     <div class="main-view" :style="{ width: `${leftWidth + areaWidth}px` }" v-if="apiData">
     <div class="head-hos">漳州市第五医院</div>
     <div class="head-title">体温单</div>
@@ -439,7 +439,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1304,6 +1304,7 @@ export default {
             break;
         }
       }
+     
       if (!this.showChildrenPage) {
         this.init();
       }
@@ -2378,11 +2379,11 @@ export default {
     size: a4; //定义为a4纸
     margin: 5mm 8mm 5mm 8mm; // 页面的边距
   }
-  .main-view {
+  .main-content {
     // transform: scaleY(1.09) !important; 
     transform-origin: 0 0;
-    transform: scale(1)!important; 
-    transform: scaleY(0.96)!important; 
+    // transform: scale(1)!important; 
+    transform: scaleY(0.9) !important; 
   }
 
 }
@@ -2394,6 +2395,7 @@ export default {
   color: #000;
   font-weight: bold;
   font-family: Simsun;
+  // transform: scale(0.70)!important; 
 
   .head-hos {
     padding-top: 10px;

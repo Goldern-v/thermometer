@@ -128,7 +128,6 @@
             </div>
           </div>
         </div>
-        
       </div>
       <div class="info-box">
         <div
@@ -137,7 +136,11 @@
         >
           <div class="item times">
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
-              <div>脉搏<br />次/分</div>
+              <div>
+                脉搏
+                <br />
+                次/分
+              </div>
             </div>
             <div class="index" v-for="item in pulseList" :key="item">
               <span>{{ item }}</span>
@@ -164,6 +167,48 @@
           id="main-svg"
           :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
         ></div>
+        <div id="svgbox" ref="svgcanvas">
+          <svg
+            class="svgelement"
+            :style="{
+              width: `${areaWidth}`,
+              height: `${areaHeight}`,
+              position: 'absolute',
+              left: `${leftWidth}px`,
+            }"
+          >
+            <defs>
+              <pattern
+                :id="`pattern`"
+                width="10"
+                height="10"
+                patternUnits="userSpaceOnUse"
+              >
+                <line
+                  x1="0"
+                  y1="10"
+                  x2="10"
+                  y2="0"
+                  stroke="red"
+                  stroke-width="1"
+                />
+              </pattern>
+            </defs>
+            <g
+              v-for="(item, index) in polygonPoints"
+              :key="index"
+              style="z-index: 10000;"
+            >
+              <polygon
+                :fill="`url(#pattern)`"
+                :points="item"
+                :key="index"
+                stroke="red"
+                stroke-width="1.5px"
+              ></polygon>
+            </g>
+          </svg>
+        </div>
       </div>
       <div class="table-box" style="transform: translateY(-0.5px);">
         <div
@@ -176,7 +221,10 @@
           :key="item"
         ></div>
 
-        <div class="row" :style="{ height: `${trHeight+20}px`,borderTop:'2px solid #000' }">
+        <div
+          class="row"
+          :style="{ height: `${trHeight + 20}px`, borderTop: '2px solid #000' }"
+        >
           <div class="label" :style="{ width: `${leftWidth}px` }">
             大便次数
           </div>
@@ -196,7 +244,9 @@
           <div class="value-item-box">
             <div
               class="value-item"
-              v-for="(item, index) in getFormatList({ tList: stoolCharacterList })"
+              v-for="(item, index) in getFormatList({
+                tList: stoolCharacterList,
+              })"
               :key="index"
               @click="() => clickDateChangeTime(item)"
             >
@@ -206,7 +256,7 @@
         </div>
         <div class="row" :style="{ height: `${trHeight + 20}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-           小便次数
+            小便次数
           </div>
           <div class="value-item-box">
             <div
@@ -234,7 +284,7 @@
         </div>
         <div class="row" :style="{ height: `${trHeight + 20}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList0.label || "" }}
+            {{ customList0.label || '' }}
           </div>
           <div class="value-item-box">
             <div
@@ -248,7 +298,7 @@
         </div>
         <div class="row" :style="{ height: `${trHeight + 20}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList1.label || "" }}
+            {{ customList1.label || '' }}
           </div>
           <div class="value-item-box">
             <div
@@ -308,9 +358,9 @@ export default {
     },
   },
   data() {
-    const yRange = [35, 42]
+    const yRange = [34, 42]
     const weightRange = [1000, 5000]
-    const pulseRange = [20, 180];
+    const pulseRange = [20, 180]
     return {
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -334,15 +384,25 @@ export default {
             // { time: '2019-05-15 07:10:00', value: 36.5 },
           ],
         },
-        weight: {
-          vitalCode: '033',
-          label: '体重',
-          color: 'blue',
-          lineColor: 'blue',
+        heart: {
+          vitalCode: '20',
+          label: '心率',
+          color: 'red',
           dotType: 'Circle',
-          range: weightRange,
+          range: pulseRange,
           data: [
-            // { time: '2019-05-15 07:10:00', value: 36.5 },
+            // { time: '2019-05-15 07:10:00', value: 140},
+          ],
+        },
+        pulse: {
+          vitalCode: '02',
+          label: '脉搏',
+          color: 'red',
+          solid: true,
+          dotType: 'Circle',
+          range: pulseRange,
+          data: [
+            // { time: '2019-05-15 07:10:00', value: 120},
           ],
         },
       }, // 折线部分
@@ -421,6 +481,7 @@ export default {
       },
       lineMap: {
         '01': 'axillaryTemperature',
+        '02': 'pulse',
         // "033":"weight",
       },
       pageTotal: 1,
@@ -500,11 +561,11 @@ export default {
       return list
     },
     pulseList() {
-      const list = [];
-      for (let i = this.pulseRange[1]; i > this.pulseRange[0]; i = i - 20) {
-        list.push(i);
+      const list = []
+      for (let i = this.pulseRange[1]; i >= this.pulseRange[0]; i = i - 20) {
+        list.push(i)
       }
-      return list;
+      return list
     },
     indexTextAreaHeight() {
       return this.ySpace * 3 + 2
@@ -514,6 +575,81 @@ export default {
     },
     bottomAreaHeight() {
       return this.ySpace * 1 + 1
+    },
+    polygonPoints() {
+      /*
+        形成心率和脉搏多边形锚点二维数组，多个数组则画多个多边形，
+        注意同一对录入的心率值肯定大于脉搏值的，而且脉搏和心率可能不一一对应
+        构造xyMap，结构为以x轴坐标作为key，{heart: {value, y}，pulse: {value, y}}作为value
+        心率heart/脉搏pulse有一个为空时记为一个多边形断点， 同时心率过快也作为一个断点
+      */
+      const settingMap = this.settingMap
+      const xyMap = new Map()
+      settingMap.heart.data.forEach((x) => {
+        const xAxis = this.getXaxis(this.getLocationTime(x.time))
+        if (xyMap.has(xAxis)) {
+          xyMap.set(xAxis, {
+            ...xyMap.get(xAxis),
+            heart: {
+              value: x.value,
+              y: this.getYaxis(settingMap.heart.range, x.value),
+            },
+          })
+        } else {
+          xyMap.set(xAxis, {
+            heart: {
+              value: x.value,
+              y: this.getYaxis(settingMap.heart.range, x.value),
+            },
+            pulse: null,
+          })
+        }
+      })
+      settingMap.pulse.data.forEach((x) => {
+        const xAxis = this.getXaxis(this.getLocationTime(x.time))
+        if (xyMap.has(xAxis)) {
+          xyMap.set(xAxis, {
+            ...xyMap.get(xAxis),
+            pulse: {
+              value: x.value,
+              y: this.getYaxis(settingMap.pulse.range, x.value),
+            },
+          })
+        } else {
+          xyMap.set(xAxis, {
+            pulse: {
+              value: x.value,
+              y: this.getYaxis(settingMap.pulse.range, x.value),
+            },
+            heart: null,
+          })
+        }
+      })
+      console.log('settingMap.pulse ', settingMap.pulse)
+      const allList = [...xyMap.entries()].sort((a, b) => a[0] - b[0])
+      if (allList.length) {
+        let data = [[]]
+        allList.forEach((x) => {
+          if (
+            !x[1].heart ||
+            !x[1].pulse ||
+            (x[1].heart && x[1].heart.value > this.pulseRange[1])
+          ) {
+            // 断点
+            data.push([])
+          } else {
+            data[data.length - 1].push(x[0])
+          }
+        })
+        data = data.map((x) => {
+          return [
+            ...x.map((y) => [y, xyMap.get(y).heart.y]),
+            ...x.map((y) => [y, xyMap.get(y).pulse.y]).reverse(),
+          ]
+        })
+        return data
+      }
+      return []
     },
   },
   watch: {
@@ -709,45 +845,52 @@ export default {
         ) {
           // 超出时间范围的抛弃
           continue
-          
         }
         if (
-          ["32", "33", "34", "35", "36", "37"].includes(
-            vitalSigns[i].vital_code
+          ['32', '33', '34', '35', '36', '37'].includes(
+            vitalSigns[i].vital_code,
           )
         ) {
           // 自定义字段填入
-          const sign = vitalSigns[i].temperature_type;
+          const sign = vitalSigns[i].temperature_type
           // const index = customSigns.indexOf(sign)
           switch (vitalSigns[i].vital_code) {
-            case "32":
+            case '32':
               this.customList0.push({
                 time: vitalSigns[i].time_point,
                 value: vitalSigns[i].value,
-              });
-              this.customList0.label = sign;
-              break;
-            case "33":
+              })
+              this.customList0.label = sign
+              break
+            case '33':
               this.customList1.push({
                 time: vitalSigns[i].time_point,
                 value: vitalSigns[i].value,
-              });
-              this.customList1.label = sign;
-              break;
-            case "34":
+              })
+              this.customList1.label = sign
+              break
+            case '34':
               this.customList2.push({
                 time: vitalSigns[i].time_point,
                 value: vitalSigns[i].value,
-              });
-              this.customList2.label = sign;
-              break;
-          
+              })
+              this.customList2.label = sign
+              break
+
             default:
-              break;
+              break
           }
         }
         if (this.lineMap[vitalSigns[i].vital_code]) {
           if (
+            ['02', '20'].includes(vitalSigns[i].vital_code) &&
+            Number(vitalSigns[i].value) > this.pulseRange[1]
+          ) {
+            this.topPulseNote.push({
+              time: vitalSigns[i].time_point,
+              value: '过快',
+            })
+          } else if (
             ['01'].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) <= 35
           ) {
@@ -798,9 +941,9 @@ export default {
           case '26':
             this.stoolCharacterList.push(item)
             break
-          case "061":
-            this.shitList.push(item);
-            break;
+          case '061':
+            this.shitList.push(item)
+            break
           default:
             break
         }
@@ -897,7 +1040,56 @@ export default {
               }
             })
           }
+          if (['02', '20'].includes(x.vitalCode)) {
+            // 心率或脉搏过快时，折线需要断开
+            data = [[]]
+            x.data.forEach((y, index) => {
+              if (y.value <= this.pulseRange[1]) {
+                data[data.length - 1].push(y)
+              } else {
+                data.push([])
+              }
+              // if (this.getBreakPoint(x.data).includes(index)) {
+              //   data.push([]);
+              // }
+              if (index < x.data.length - 1) {
+                if (
+                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                    this.getTimeNum(y.time.slice(0, 10)) >=
+                  24 * 60 * 60 * 1000 * 2
+                ) {
+                  data.push([x.data[index + 1]])
+                }
+                //如果存在中间不升的情况，中间断开
+                if (this.bottomSheetNoteBusheng() !== []) {
+                  for (let item of this.bottomSheetNoteBusheng()) {
+                    if (
+                      this.getTimeNum(x.data[index + 1].time) >=
+                        this.getTimeNum(item) &&
+                      this.getTimeNum(y.time) <= this.getTimeNum(item)
+                    ) {
+                      data.push([x.data[index + 1]])
+                    }
+                  }
+                }
+              } else {
+                const list = data[data.length - 1]
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y)
+                }
+              }
+            })
+            // x.data.forEach((y, index) => {
+            //   if (y.value > this.pulseRange[1]) {
+            //     data.push([])
+            //   } else {
+            //     data[data.length - 1].push(y)
+            //   }
+            // })
+          }
+          console.log('data', data, x)
           data.forEach((z) => {
+            console.log(z)
             this.createBrokenLine({
               vitalCode: x.vitalCode,
               data: z,
@@ -930,8 +1122,7 @@ export default {
         this.yRange[1] -
         this.yRange[0] +
         1 +
-        (this.yRange[1] - this.yRange[0]) * 5 -
-        5
+        (this.yRange[1] - this.yRange[0]) * 4 +5
       let preSpace = 0
       let breakIndex = 0
       for (let i = 0; i < totalLine; i++) {
@@ -981,8 +1172,7 @@ export default {
         this.yRange[1] -
         this.yRange[0] +
         1 +
-        (this.yRange[1] - this.yRange[0]) * 4 +
-        4
+        (this.yRange[1] - this.yRange[0]) * 4 +4
       let preSpace = 0
       let breakIndex = 0
       for (let i = 0; i < totalLine; i++) {
@@ -1276,6 +1466,36 @@ export default {
             })
             break
           case 'Circle':
+            // 如果脉搏或心率和体温坐标重叠，改成在体温标识外面画红色的圆圈
+            if (vitalCode === '02' || vitalCode === '20') {
+              const tList = [...this.settingMap.axillaryTemperature.data].map(
+                (x) => {
+                  return {
+                    x: this.getXaxis(this.getLocationTime(x.time)),
+                    y: this.getYaxis(this.yRange, x.value),
+                  }
+                },
+              )
+              const sameAxisItem = tList.find(
+                (x) =>
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 2 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 2,
+              )
+              if (sameAxisItem) {
+                params = {
+                  cx,
+                  cy,
+                  r: 8,
+                  color: 'red',
+                  zlevel: 9,
+                  tips: `${x.time} ${label}：${x.value}`,
+                  dotSolid: false,
+                }
+              }
+            }
+            console.log('params',params)
             this.createCircle(params)
             break
           default:
@@ -1384,13 +1604,16 @@ export default {
     },
     // 根据值计算纵坐标
     getYaxis(yRange, value, vitalCode) {
-      return (
-        ((yRange[1] - value) /
-          (yRange[1] - (['033', '02'].includes(vitalCode) ? 1000 : 34))) *
-          this.timesTempAreaHeight +
-        this.indexTextAreaHeight -
-        1
-      )
+      // return (
+      //   ((yRange[1] - value) /
+      //     (yRange[1] - (['02'].includes(vitalCode) ? 0 : 34))) *
+      //     this.timesTempAreaHeight +
+      //   this.indexTextAreaHeight -
+      //   1
+      // )
+      return ((yRange[1] - value) / (yRange[1] - yRange[0])) *
+        (this.timesTempAreaHeight) +
+        this.indexTextAreaHeight;
     },
     // 根据时间点计算横坐标
     getXaxis(time) {
@@ -1872,7 +2095,7 @@ export default {
       }
 
       .index {
-        height: 85px;
+        height: 79px;
         position: relative;
 
         > span {

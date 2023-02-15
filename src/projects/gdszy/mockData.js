@@ -395,13 +395,13 @@ export const mockData = {
              temperature_type: '疼痛',
              value: '2',
              time_point: '2021-05-19 23:12:00',
-             vital_code: 'ttpf'
+             vital_code: '1012'
            },
            {
              temperature_type: '疼痛',
              value: '7',
              time_point: '2021-05-20 23:12:00',
-             vital_code: 'ttpf'
+             vital_code: '1012'
            },
            {
              temperature_type: '血压',
@@ -689,7 +689,7 @@ export const mockData = {
              temperature_type: '疼痛',
              value: '1.25',
              time_point: '2021-05-16 13:00:00',
-             vital_code: 'ttpf'
+             vital_code: '1012'
            },
            {
              temperature_type: '脉搏',

@@ -507,7 +507,7 @@ export default {
     const pulseRange = [0, 180]
     const painRange = [0, 10]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -575,7 +575,7 @@ export default {
           ],
         },
         pain: {
-          vitalCode: 'ttpf',
+          vitalCode: '1012',
           label: '',
           color: 'red',
           solid: true,
@@ -656,7 +656,7 @@ export default {
         27: '物理降温',
         28: '呕吐量',
         29: '在线降温',
-        ttpf: '疼痛评分',
+        1012: '疼痛评分',
         sjxt: '随机血糖',
         xybhd: '血氧饱和度',
         4: '自定义1',
@@ -670,7 +670,7 @@ export default {
         19: 'analTemperature',
         1003: 'heart',
         1002: 'pulse',
-        ttpf: 'pain',
+        1012: 'pain',
       },
       pageTotal: 1,
       currentPage: 1,
@@ -1483,7 +1483,7 @@ export default {
               }
             })
           }
-          if (['ttpf'].includes(x.vitalCode)) {
+          if (['1012'].includes(x.vitalCode)) {
             // 心率或脉搏过快时，折线需要断开
             data = [[]]
             x.data.forEach((y, index) => {
@@ -1936,14 +1936,14 @@ export default {
                 })),
                 ...this.settingMap.pain.data.map((x) => ({
                   ...x,
-                  vitalCode: 'ttpf',
+                  vitalCode: '1012',
                 })),
               ].map((x) => {
                 return {
                   x: this.getXaxis(this.getLocationTime(x.time)),
                   y: Math.round(
                     this.getYaxis(
-                      x.vitalCode === 'ttpf' ? this.painRange : this.yRange,
+                      x.vitalCode === '1012' ? this.painRange : this.yRange,
                       x.value,
                       x.vitalCode,
                     ),
@@ -2042,7 +2042,7 @@ export default {
     },
     // 根据值计算纵坐标
     getYaxis(yRange, value, vitalCode) {
-      return vitalCode === 'ttpf'
+      return vitalCode === '1012'
         ? ((yRange[1] - value) / (yRange[1] - yRange[0])) *
             this.painAreaHeight +
             this.middleAreaHeight +
