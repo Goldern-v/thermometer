@@ -358,15 +358,15 @@ export default {
     },
   },
   data() {
-    const yRange = [34, 42]
+    const yRange = [35, 42]
     const weightRange = [1000, 5000]
-    const pulseRange = [20, 180]
+    const pulseRange = [40, 180]
     return {
       zr: '',
       areaWidth: 0, // 网格区域的宽度
       areaHeight: 0, // 网格区域的高度
       xSpace: 18, // 纵向网格的间距
-      ySpace: 16, //  横向网格的间距
+      ySpace: 15, //  横向网格的间距
       leftWidth: 90, // 左侧内容宽度
       xRange: [1, 8],
       yRange,
@@ -625,7 +625,6 @@ export default {
           })
         }
       })
-      console.log('settingMap.pulse ', settingMap.pulse)
       const allList = [...xyMap.entries()].sort((a, b) => a[0] - b[0])
       if (allList.length) {
         let data = [[]]
@@ -1087,9 +1086,7 @@ export default {
             //   }
             // })
           }
-          console.log('data', data, x)
           data.forEach((z) => {
-            console.log(z)
             this.createBrokenLine({
               vitalCode: x.vitalCode,
               data: z,
@@ -1495,7 +1492,6 @@ export default {
                 }
               }
             }
-            console.log('params',params)
             this.createCircle(params)
             break
           default:
@@ -1806,7 +1802,6 @@ export default {
       return list
     },
     clickDateChangeTime(dateTime) {
-      console.log('点击======》dateTime', dateTime)
       if (dateTime.time)
         window.parent.postMessage(
           { type: 'clickDateTime', value: dateTime.time },
@@ -1914,9 +1909,11 @@ export default {
     size: a4; //定义为a4纸
     margin: 5mm 8mm 5mm 8mm; // 页面的边距
   }
-  .main-view {
-    transform: scaleY(1.2) !important;
-    transform-origin: (0 0);
+  .main-content {
+    // transform: scaleY(1.09) !important; 
+    transform-origin: 0 0;
+    // transform: scale(1)!important; 
+    transform: scaleY(0.95) !important; 
   }
 }
 
