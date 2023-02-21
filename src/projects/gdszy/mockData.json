@@ -1,0 +1,220 @@
+{
+  "ErrorCode": "1",
+  "ErrorMsg": "查询成功！",
+  "patientInfo": {
+      "patInfo": {
+          "patient_id": "285170",
+          "name": "沈朝杰",
+          "dept_name": "儿科一区                        ",
+          "bed_label": "03",
+          "visit_id": "4",
+          "admission_date": "2022-03-08 14:00:00",
+          "age": "1岁",
+          "inp_no": "285170",
+          "sex": "男",
+          "birthday": null
+      }
+  },
+  "vitalSigns": [
+      {
+          "temperature_type": "总入液量",
+          "value": "251",
+          "time_point": "2022-03-08 14:00:00",
+          "vital_code": "33"
+      },
+      {
+          "temperature_type": "心率",
+          "value": "22",
+          "time_point": "2022-03-08 14:00:00",
+          "vital_code": "1003"
+      },
+      {
+          "temperature_type": "血压饱和度",
+          "value": "122",
+          "time_point": "2022-03-08 12:00:10",
+          "vital_code": "xybhd"
+      },
+      {
+          "temperature_type": "体温",
+          "value": "36.8",
+          "time_point": "2022-03-08 14:00:00",
+          "vital_code": "1"
+      },
+      {
+          "temperature_type": "脉搏",
+          "value": "36",
+          "time_point": "2022-03-08 14:00:00",
+          "vital_code": "11"
+      },
+      {
+          "temperature_type": "护理事件",
+          "value": "22",
+          "time_point": "2022-03-08 14:00:00",
+          "vital_code": "25"
+      },
+      {
+          "temperature_type": "呼吸",
+          "value": "11",
+          "time_point": "2022-03-08 13:15:00",
+          "vital_code": "13"
+      },
+      {
+          "temperature_type": "呼吸",
+          "value": "21",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "13"
+      },
+      {
+          "temperature_type": "肛温",
+          "value": "36",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "19"
+      },
+      {
+          "temperature_type": "发热体温",
+          "value": "35",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "21"
+      },
+      {
+          "temperature_type": "大便次数",
+          "value": "1",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "24"
+      },
+      {
+          "temperature_type": "随机血糖",
+          "value": "22:00 100",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "sjxt"
+      },
+      {
+          "temperature_type": "表顶注释",
+          "value": "出院||十七时二十四分",
+          "time_point": "2022-03-08 20:00:00",
+          "vital_code": "3"
+      },
+      {
+          "temperature_type": "表底注释",
+          "value": "拒测",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "31"
+      },
+      {
+          "temperature_type": "呼吸机R",
+          "value": "R",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "23"
+      },
+      {
+          "temperature_type": "总入液量",
+          "value": "1000",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "33"
+      },
+      {
+          "temperature_type": "口温",
+          "value": "37",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "2"
+      },
+      {
+          "temperature_type": "脉搏",
+          "value": "100",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "11"
+      },
+      {
+          "temperature_type": "尿量",
+          "value": "36",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "15"
+      },
+      {
+          "temperature_type": "体温",
+          "value": "36",
+          "time_point": "2022-03-10 17:24:12",
+          "vital_code": "1"
+      },
+      {
+          "temperature_type": "物理降温",
+          "value": "33",
+          "time_point": "2022-03-10 17:24:12",
+          "vital_code": "27"
+      },
+      {
+          "temperature_type": "皮试",
+          "value": "35阿斯达",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "35"
+      },
+      {
+          "temperature_type": "体重",
+          "value": "123",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "18"
+      },
+      {
+          "temperature_type": "体重",
+          "value": "223",
+          "time_point": "2022-03-10 17:24:12",
+          "vital_code": "18"
+      },
+      {
+          "temperature_type": "身高",
+          "value": "155",
+          "time_point": "2022-03-08 20:24:12",
+          "vital_code": "32"
+      },
+      
+      
+      {
+          "temperature_type": "物理降温",
+          "value": "35",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "27"
+      },
+      {
+          "temperature_type": "线上降温",
+          "value": "35",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "22"
+      },
+      {
+          "temperature_type": "心率",
+          "value": "100",
+          "time_point": "2022-03-08 17:24:12",
+          "vital_code": "12"
+      },
+      {
+          "temperature_type": "血压",
+          "value": "120",
+          "time_point": "2022-03-08 12:00:00",
+          "vital_code": "14"
+      },
+      {
+        "temperature_type": "自定义1",
+       "value" : "PG(+)",
+        "time_point": "2022-03-08 01:12:00",
+        "vital_code": "4"
+      },
+      {
+          "temperature_type": "呼吸",
+          "value": "33",
+          "time_point": "2022-03-08 13:10:42",
+          "vital_code": "13"
+      },
+      {
+          "temperature_type": "呼吸",
+          "value": "33",
+          "time_point": "2022-03-14 20:00:00",
+          "vital_code": "13"
+      },
+      {
+          "temperature_type": "体温",
+          "value": "37",
+          "time_point": "2022-03-08 18:10:42",
+          "vital_code": "1"
+      }
+  ]
+}
