@@ -125,6 +125,18 @@ export const mockData = {
       vital_code: "1"
     },
     {
+      temperature_type: "耳温",
+      value: "37.2",
+      time_point: "2022-08-31 14:00:00",
+      vital_code: "39"
+    },
+    {
+      temperature_type: "耳温",
+      value: "39.2",
+      time_point: "2022-09-01 14:00:00",
+      vital_code: "39"
+    },
+    {
       temperature_type: "物理降温",
       value: "37.2",
       time_point: "2022-08-30 14:00:00",
