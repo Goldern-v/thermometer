@@ -7,7 +7,7 @@ export const mockData = {
       name: '陈小倩（婴）',
       sex: '女',
       dept_name: '神经内科VIP病房（本部）',
-      bed_label: '23',
+      bed_label: '23->23->24->24->24',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
       admission_date: '2022-04-08 16:03:24.0',
@@ -104,7 +104,11 @@ export const mockData = {
     { temperature_type: "体温", value: "37.3", time_point: "2022-04-09 23:00:00", vital_code: "01" },
 
     { temperature_type: "心率", value: "86", time_point: "2022-04-09 23:00:00", vital_code: "20" },
-    { temperature_type: "脉搏", value: "78", time_point: "2022-04-12 23:00:00", vital_code: "02" },
+    { temperature_type: "脉搏", value: "78", time_point: "2022-04-08 23:00:00", vital_code: "02" },
+    { temperature_type: "脉搏", value: "40", time_point: "2022-04-09 13:00:00", vital_code: "02" },
+    { temperature_type: "脉搏", value: "60", time_point: "2022-04-10 23:00:00", vital_code: "02" },
+    { temperature_type: "脉搏", value: "70", time_point: "2022-04-11 23:00:00", vital_code: "02" },
+    { temperature_type: "脉搏", value: "80", time_point: "2022-04-12 23:00:00", vital_code: "02" },
 
     { temperature_type: "呼吸", value: "24", time_point: "2022-04-10 04:00:00", vital_code: "04" },
 

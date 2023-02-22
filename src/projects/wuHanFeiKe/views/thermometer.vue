@@ -10,7 +10,38 @@
       武汉市肺科医院(武汉市结核病防治所)</div>
     <div class="head-title">体温单</div>
    
-    <div class="head-info">
+    <div class="head-info"  v-if="!bedExchangeLog" >
+      <div class="item" style="flex:none">
+        姓名：<span class="value">{{ patInfo.name }}</span>
+      </div>
+      <div class="item" style="flex:0.7">
+        年龄：<span class="value">{{
+          PatientId.endsWith("_1")
+          ? "0天"
+          : typeof parseInt(patInfo.age) === "number" && !isNaN(patInfo.age)
+          ? patInfo.age + "岁"
+          : patInfo.age
+          }}</span>
+      </div>
+      <div class="item" style="flex:0.5">
+        性别：<span class="value">{{ patInfo.sex }}</span>
+      </div>
+      <div class="item" style="flex:2.2">
+        科别：<span class="value"> {{ adtLog || patInfo.dept_name }}</span>
+      </div>
+      <div class="item" style="flex:0.5">
+        床号：<span class="value">{{
+          bedExchangeLog || patInfo.bed_label
+          }}</span>
+      </div>
+      <div class="item" style="flex:1.3">
+        入院日期：<span class="value">{{
+          patInfo.admission_date.slice(0, 10)
+          }}</span>
+      </div>
+
+    </div>
+    <div class="head-info" v-if="bedExchangeLog">
       <div class="item"  style="flex:none">
         姓名：<span class="value">{{ patInfo.name }}</span>
       </div>
@@ -26,15 +57,20 @@
       <div class="item" style="flex:0.5">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-       <div class="item" style="flex:2.2">
+       <div class="item" style="flex:1.5">
         科别：<span class="value" > {{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" style="flex:0.5">
+      <div class="item" v-if="bedExchangeLog" style="flex:1.5">
         床号：<span class="value">{{
           bedExchangeLog || patInfo.bed_label 
         }}</span>
       </div>
-      <div class="item" style="flex:1.3">
+      <div class="item" v-if="!bedExchangeLog" style="flex:1.5">
+        床号：<span class="value">{{
+          bedExchangeLog || patInfo.bed_label 
+        }}</span>
+      </div>
+      <div class="item" style="flex:1.5">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
@@ -497,7 +533,7 @@ export default {
     const yRange = [34, 42];
     const pulseRange = [30, 180];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
