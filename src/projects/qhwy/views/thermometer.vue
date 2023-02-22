@@ -1,6 +1,6 @@
 <template>
   <div class="main-view" :style="{ width: `${leftWidth + areaWidth}px` }" v-if="apiData" @dblclick="dblclick">
-    <div class="head-hos" :style="{ width: `${leftWidth + areaWidth + 60}px`}">
+    <div class="head-hos" :style="{ width: `${leftWidth + areaWidth + 60}px` }">
       青海省第五人民医院(青海省肿瘤医院)
     </div>
     <div class="head-title" :style="{ width: `${leftWidth + areaWidth + 60}px` }">
@@ -22,12 +22,12 @@
       <div class="item" style="flex: 0.7">
         床号:<span class="value">{{
           bedExchangeLog || patInfo.bed_label
-          }}</span>
+        }}</span>
       </div>
       <div class="item" style="flex: 1.5">
         入院日期<span class="value">{{
           patInfo.admission_date.slice(0, 10)
-          }}</span>
+        }}</span>
       </div>
       <div class="item" style="flex: 1.7">
         住院号:<span class="value">{{ patInfo.patient_id }}</span>
@@ -36,32 +36,32 @@
     <div class="table-area">
       <div class="hline"></div>
       <div class="vline" :style="{
-          top: 0,
-          bottom: '2px',
-          transform: 'translateX(-0.5px)',
-        }"></div>
+        top: 0,
+        bottom: '2px',
+        transform: 'translateX(-0.5px)',
+      }"></div>
       <div class="vline" :style="{
-          left: `${leftWidth - 1}px`,
-          top: 0,
-          bottom: '2.5px',
-          transform: 'translateY(0.5px)',
-          'border-color': 'black',
-        }"></div>
+        left: `${leftWidth - 1}px`,
+        top: 0,
+        bottom: '2.5px',
+        transform: 'translateY(0.5px)',
+        'border-color': 'black',
+      }"></div>
       <div class="vline" :style="{
-          right: 0,
-          'border-color': 'black',
-          top: 0,
-          bottom: '40px',
-          transform: 'translateY(0.5px)',
-        }"></div>
+        right: 0,
+        'border-color': 'black',
+        top: 0,
+        bottom: '40px',
+        transform: 'translateY(0.5px)',
+      }"></div>
       <div class="vline" :style="{
-          right: 0,
-          'border-color': 'black',
-          bottom: '1px',
-          top: `${areaHeight + 5 * trHeight}px`,
-          'z-index': 40,
-          transform: 'translateY(0.5px)',
-        }"></div>
+        right: 0,
+        'border-color': 'black',
+        bottom: '1px',
+        top: `${areaHeight + 5 * trHeight}px`,
+        'z-index': 40,
+        transform: 'translateY(0.5px)',
+      }"></div>
       <div class="table-box" style="transform: translateY(0.5px)">
         <div class="vtline" :style="{ left: `${leftWidth + item * (6 * xSpace + 7) - 1}px` }" v-for="item in 6"
           :key="item"></div>
@@ -114,8 +114,8 @@
       <div class="info-box">
         <div class="index-box" :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }">
           <i class="split-line" :style="{
-              bottom: `${painAreaHeight}px`,
-            }"></i>
+            bottom: `${painAreaHeight}px`,
+          }"></i>
           <div class="item times">
             <div :style="`height: ${topAreaHeight}px`"></div>
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
@@ -144,8 +144,8 @@
               <span>{{ item }}</span>
             </div>
             <div class="pain-area2" :style="`height: ${painAreaHeight}px`">
-              <div class="pain-index" v-for="(item , index) in painList" :key="item"
-                :style="{borderBottom:`${index==3 ? 2 : 1}px solid #000`,height:`${index==3 ? 18:index==4 ? 17.7 : 16.7 }px`}">
+              <div class="pain-index" v-for="(item, index) in painList" :key="item"
+                :style="{ borderBottom: `${index == 3 ? 2 : 1}px solid #000`, height: `${index == 3 ? 18 : index == 4 ? 17.7 : 16.7}px` }">
                 <span>{{ item }}</span>
               </div>
               <div class="s-index"><span>0</span></div>
@@ -155,14 +155,14 @@
         </div>
         <div class="info-box-right" :style="{ width: `${leftWidth - 30}px` }">
           <div class="index-box_01" :style="{
-              height: `${ySpace * 3 + 30 - 1.5}px`,
-              width: `${leftWidth - 30}px`,
-            }"></div>
+            height: `${ySpace * 3 + 30 - 1.5}px`,
+            width: `${leftWidth - 30}px`,
+          }"></div>
           <div class="index-box_02" :style="{ height: `${ySpace * 2}px`, width: `${leftWidth - 30}px` }"></div>
           <div class="index-box_text" :style="{
-              height: `${ySpace * 3 + 1}px`,
-              width: `${leftWidth - 30}px`,
-            }">
+            height: `${ySpace * 3 + 1}px`,
+            width: `${leftWidth - 30}px`,
+          }">
             <br />华<br />氏
           </div>
           <div class="main-indexBox">
@@ -182,21 +182,41 @@
 
         <div ref="main" :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"></div>
       </div>
+      <div id="svgbox" ref="svgcanvas">
+        <svg class="svgelement" :style="{
+          width: `${areaWidth}`,
+          height: `${areaHeight}`,
+          position: 'absolute',
+          left: `${leftWidth - 2}px`,
+          top:`${trHeight * 4 + 46}`
+        }">
+          <defs>
+            <pattern :id="`pattern`" width="10" height="10" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="10" x2="10" y2="0" stroke="red" stroke-width="1" />
+            </pattern>
+          </defs>
+          <g v-for="(item, index) in polygonPoints" :key="index">
+            <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke="red" stroke-width="1.5px">
+            </polygon>
+          </g>
+
+        </svg>
+      </div>
       <div class="table-box" style="transform: translateY(-0.5px)">
         <div class="vtline" :style="{
-            left: `${leftWidth + item * (6 * xSpace + 7) - 1}px`,
-            'border-color': '#000',
-          }" v-for="item in 6" :key="item"></div>
+          left: `${leftWidth + item * (6 * xSpace + 7) - 1}px`,
+          'border-color': '#000',
+        }" v-for="item in 6" :key="item"></div>
         <div class="row border-top-black-2" :style="{ height: `${bottomTrHeight + 5}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             呼吸(次/分)
           </div>
           <div class="value-item-box font-12">
             <div class="value-item" :style="{
-                ...smallTdStyle(index, formatBreatheList.length),
-                ...item.style,
-                color: '#000',
-              }" v-for="(item, index) in formatBreatheList" :key="index">
+              ...smallTdStyle(index, formatBreatheList.length),
+              ...item.style,
+              color: '#000',
+            }" v-for="(item, index) in formatBreatheList" :key="index">
               {{ item.value }}
             </div>
           </div>
@@ -206,11 +226,8 @@
             血压(mmHg)
           </div>
           <div class="value-item-box">
-            <div class="value-item" 
-            v-for="(item, index) in formatPressureList"
-            :style="middleTdStyle(index, formatBreatheList.length)"
-            :key="index"
-            >
+            <div class="value-item" v-for="(item, index) in formatPressureList"
+              :style="middleTdStyle(index, formatBreatheList.length)" :key="index">
               {{ item.value }}
             </div>
           </div>
@@ -399,7 +416,7 @@ export default {
       painRange,
       FahrenheitListRange,
       FahrenheitRange,
-      monitoringInterval:[],//心电监护的区间 ，也就是前后脉搏间隔24小时的数组
+      monitoringInterval: [],//心电监护的区间 ，也就是前后脉搏间隔24小时的数组
       settingMap: {
         oralTemperature: {
           vitalCode: "041",
@@ -545,7 +562,7 @@ export default {
         "043": "analTemperature",
         "20": "heart",
         "02": "pulse",
-        '092':'pain'
+        '092': 'pain'
       },
       pageTotal: 1,
       currentPage: 1,
@@ -599,7 +616,7 @@ export default {
       const pressureList = [...this.pressureList];
       for (
         let i = timeNumRange[0];
-        i < timeNumRange[1]-1;
+        i < timeNumRange[1] - 1;
         i += 3 * 4 * 60 * 60 * 1000
       ) {
         const item = { timeNum: i, value: "" };
@@ -630,8 +647,8 @@ export default {
         return timeNumList.some((x) => x.start === i)
           ? 5 * 60 * 60 * 1000
           : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
-          ? 3 * 60 * 60 * 1000
-          : 4 * 60 * 60 * 1000;
+            ? 3 * 60 * 60 * 1000
+            : 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
@@ -639,7 +656,7 @@ export default {
           const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
             typeof parseInt(breatheList[j].value) === "number" &&
-            !isNaN(breatheList[j].value)
+              !isNaN(breatheList[j].value)
               ? (item.value = breatheList[j].value)
               : (item.value = "Ⓡ");
             // item.value = breatheList[j].value
@@ -653,10 +670,10 @@ export default {
         .filter((x) => x.value !== "")
         .forEach(
           (x, i) =>
-            (x.style =
-              i % 2 === 0
-                ? { "align-items": "flex-start" }
-                : { "align-items": "flex-end" })
+          (x.style =
+            i % 2 === 0
+              ? { "align-items": "flex-start" }
+              : { "align-items": "flex-end" })
         );
       return list;
     },
@@ -675,8 +692,8 @@ export default {
         return timeNumList.some((x) => x.start === i)
           ? 5 * 60 * 60 * 1000
           : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
-          ? 3 * 60 * 60 * 1000
-          : 4 * 60 * 60 * 1000;
+            ? 3 * 60 * 60 * 1000
+            : 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
@@ -695,10 +712,10 @@ export default {
         .filter((x) => x.value !== "")
         .forEach(
           (x, i) =>
-            (x.style =
-              i % 2 === 0
-                ? { "align-items": "flex-start" }
-                : { "align-items": "flex-end" })
+          (x.style =
+            i % 2 === 0
+              ? { "align-items": "flex-start" }
+              : { "align-items": "flex-end" })
         );
       return list;
     },
@@ -736,10 +753,10 @@ export default {
         .filter((x) => x.value !== "")
         .forEach(
           (x, i) =>
-            (x.style =
-              i % 2 === 0
-                ? { "align-items": "flex-start" }
-                : { "align-items": "flex-end" })
+          (x.style =
+            i % 2 === 0
+              ? { "align-items": "flex-start" }
+              : { "align-items": "flex-end" })
         );
       return list;
     },
@@ -853,15 +870,15 @@ export default {
         }
         if (days[index] <= 14) {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
-          return index === 0&&days[index]===0
-            ? '术日':index===0?days[index]
-            : `${this.numToRome(index + 1)}-${days[index]}`;
+          return index === 0 && days[index] === 0
+            ? '术日' : index === 0 ? days[index]
+              : `${this.numToRome(index + 1)}-${days[index]}`;
         } else {
           return "";
         }
       });
     },
-    
+
     formatStayDayList() {
       /* 住院天数 */
       return this.dateList.map((x) => {
@@ -925,7 +942,7 @@ export default {
         this.areaHeight -
         this.middleAreaHeight -
         this.painAreaHeight -
-        this.bottomAreaHeight -4 *this.ySpace -4
+        this.bottomAreaHeight - 4 * this.ySpace - 4
       );
     },
     polygonPoints() {
@@ -944,34 +961,35 @@ export default {
             ...xyMap.get(xAxis),
             heart: {
               value: x.value,
-              y: this.getYaxis(settingMap.heart.range, x.value),
+              y: this.getYaxis(settingMap.heart.range, x.value,x.vitalCode),
             },
           });
         } else {
           xyMap.set(xAxis, {
             heart: {
               value: x.value,
-              y: this.getYaxis(settingMap.heart.range, x.value),
+              y: this.getYaxis(settingMap.heart.range, x.value,x.vitalCode),
             },
             pulse: null,
           });
         }
       });
       settingMap.pulse.data.forEach((x) => {
+        console.log(x)
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
         if (xyMap.has(xAxis)) {
           xyMap.set(xAxis, {
             ...xyMap.get(xAxis),
             pulse: {
               value: x.value,
-              y: this.getYaxis(settingMap.pulse.range, x.value),
+              y: this.getYaxis(settingMap.pulse.range, x.value,x.vitalCode),
             },
           });
         } else {
           xyMap.set(xAxis, {
             pulse: {
               value: x.value,
-              y: this.getYaxis(settingMap.pulse.range, x.value),
+              y: this.getYaxis(settingMap.pulse.range, x.value,x.vitalCode),
             },
             heart: null,
           });
@@ -983,9 +1001,8 @@ export default {
         allList.forEach((x) => {
           if (
             !x[1].heart ||
-            !x[1].pulse
-            //贵州不存在过快的逻辑观点，所以去除这个判断
-            // (x[1].heart && x[1].heart.value > this.pulseRange[1])
+            !x[1].pulse ||
+            (x[1].heart && x[1].heart.value > this.pulseRange[1])
           ) {
             // 断点
             data.push([]);
@@ -995,10 +1012,13 @@ export default {
         });
         data = data.map((x) => {
           return [
-            ...x.map((y) => [y, xyMap.get(y).heart.y]),
-            ...x.map((y) => [y, xyMap.get(y).pulse.y]).reverse(),
-          ];
-        });
+            ...x.map((y) => [`${y+2} ${xyMap.get(y).heart.y}`]),
+            ...x.map((y) => [`${y+2} ${xyMap.get(y).pulse.y}`]).reverse(),
+          ].reduce((acc, cur) => {
+            acc.map((h) => h)
+            return acc.concat(cur);
+          }, []);;
+        }).filter((item) => item.length)
         return data;
       }
       return [];
@@ -1227,11 +1247,12 @@ export default {
             this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
               time: vitalSigns[i].time_point,
               value: Number(vitalSigns[i].value),
+              vitalCode:vitalSigns[i].vital_code
             });
           }
           continue;
         }
-        if (["32", "33", "34", "35", "36",'37'].includes(vitalSigns[i].vital_code)) {
+        if (["32", "33", "34", "35", "36", '37'].includes(vitalSigns[i].vital_code)) {
           const sign = vitalSigns[i].temperature_type;
           switch (vitalSigns[i].vital_code) {
             case "32":
@@ -1378,7 +1399,7 @@ export default {
               }
             });
           }
-          if (["02",'20'].includes(x.vitalCode)) {
+          if (["02", '20'].includes(x.vitalCode)) {
             // 心率或脉搏过快时，折线需要断开
             data = [[]];
             x.data.forEach((y, index) => {
@@ -1390,17 +1411,48 @@ export default {
               if (index < x.data.length - 1) {
                 if (
                   this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
-                    this.getTimeNum(y.time.slice(0, 10)) >=
+                  this.getTimeNum(y.time.slice(0, 10)) >=
                   24 * 60 * 60 * 1000 * 2
                 ) {
-                  x.vitalCode=="02"&&this.monitoringInterval.push([x.data[index],x.data[index + 1]])
-                  data.push([x.data[index + 1]]);
+                  data.push([x.data[index + 1]],);
                 }
-              } else {
+                if (
+                  this.getTimeNum(this.getLocationTime(x.data[index + 1].time)) -
+                  this.getTimeNum(this.getLocationTime(y.time)) >=
+                  8 * 60 * 60 * 1000
+                ) {
+                  x.vitalCode == "02" && this.monitoringInterval.push([x.data[index], x.data[index + 1]])
+                  //如果脉搏或者心率 中间区间没有数据  而且相邻两个脉搏有心率  或者相邻两个心率中间有脉搏  则断开
+                  if (x.vitalCode == "02") {
+                    this.settingMap.heart.data.forEach((heartItem, ind) => {
+                      const heartTimeNum = this.getTimeNum(this.getLocationTime(heartItem.time))
+                      if (heartTimeNum < this.getTimeNum(this.getLocationTime(x.data[index + 1].time)) &&
+                        heartTimeNum > this.getTimeNum(this.getLocationTime(y.time))) {
+                        data.push([x.data[index + 1]],);
+                      }
+                    })
+                  }
+                  if (x.vitalCode == "20") {
+                    this.settingMap.pulse.data.forEach((heartItem, ind) => {
+                      const pluseTimeNum = this.getTimeNum(this.getLocationTime(heartItem.time))
+                      if (pluseTimeNum < this.getTimeNum(this.getLocationTime(x.data[index + 1].time)) &&
+                        pluseTimeNum > this.getTimeNum(this.getLocationTime(y.time))) {
+                        data.push([x.data[index + 1]],);
+                      }
+                    })
+                  }
+                }
+              }
+              else {
                 const list = data[data.length - 1];
                 if (!(list.length && list[list.length - 1].time === y.time)) {
                   data[data.length - 1].push(y);
                 }
+                if (x.vitalCode == "02" && index == x.data.length - 1) {
+                  const lastDate = { time: `${this.dateRange[1]} 23:00:00`, value: null }
+                  x.vitalCode == "02" && this.monitoringInterval.push([list[list.length - 1], lastDate])
+                }
+
               }
             });
           }
@@ -1448,11 +1500,11 @@ export default {
         if (this.monitoringInterval.length) {
           //返回中间断层的脉搏数组
           const pluseRateCon = this.monitoringInterval.map((list) => {
-            return list.map((item) => { return { time: this.getLocationTime(item.time), timeNum: this.getTimeNum(this.getLocationTime(item.time)),value:item.value} })
+            return list.map((item) => { return { time: this.getLocationTime(item.time), timeNum: this.getTimeNum(this.getLocationTime(item.time)), value: item.value } })
           })
-          const heartRateCon = this.settingMap.heart.data.map((item) => { return { time: this.getLocationTime(item.time), timeNum: this.getTimeNum(this.getLocationTime(item.time)),value:item.value } })
+          const heartRateCon = this.settingMap.heart.data.map((item) => { return { time: this.getLocationTime(item.time), timeNum: this.getTimeNum(this.getLocationTime(item.time)), value: item.value } })
           const heartInterval = []
-          pluseRateCon.forEach((interval,index) => {
+          pluseRateCon.forEach((interval, index) => {
             const intervalList = []
             heartRateCon.forEach((heartItem) => {
               if (heartItem.timeNum > interval[0].timeNum && heartItem.timeNum < interval[1].timeNum) {
@@ -1464,24 +1516,26 @@ export default {
             if (heartIcon.length) {
               //找到中间存在心率监听器数值的数组，然后首首尾尾相连
               const lastIndex = heartIcon.length - 1
+              const lastPlueIndex = pluseRateCon.length - 1
               const params1 = {
                 x1: this.getXaxis(interval[0].time),
-                y1: this.getYaxis(this.pulseRange, interval[0].value,'20'),
+                y1: this.getYaxis(this.pulseRange, interval[0].value, '20'),
                 x2: this.getXaxis(heartIcon[0].time),
-                y2: this.getYaxis(this.pulseRange, heartIcon[0].value,'20'),
+                y2: this.getYaxis(this.pulseRange, heartIcon[0].value, '20'),
                 lineWidth: 1,
                 color: "red",
               };
               const params2 = {
                 x1: this.getXaxis(interval[1].time),
-                y1: this.getYaxis(this.pulseRange, interval[1].value,'20'),
+                y1: this.getYaxis(this.pulseRange, interval[1].value, '20'),
                 x2: this.getXaxis(heartIcon[lastIndex].time),
-                y2: this.getYaxis(this.pulseRange, heartIcon[lastIndex].value,'20'),
+                y2: this.getYaxis(this.pulseRange, heartIcon[lastIndex].value, '20'),
                 lineWidth: 1,
-                color: "red",
+                color: (index != lastPlueIndex) ? "red" : "transparent",
               };
               this.createLine(params1)
               this.createLine(params2)
+              this.monitoringInterval = []
             }
           })
         }
@@ -1767,7 +1821,7 @@ export default {
         const tipWidth = tipsDom.clientWidth;
         tipsDom.style.left = `${x - tipWidth / 2}px`;
         el.animateTo(shapeOn, 100, 0);
-      }).on("mouseout", function() {
+      }).on("mouseout", function () {
         domTips[0].setAttribute("style", `display:none`);
         el.animateTo(shapeOut, 100, 0);
       });
@@ -1851,9 +1905,9 @@ export default {
                 };
               }
             }
-            if(vitalCode=='092') {
+            if (vitalCode == '092') {
               params.dotSolid = false
-              
+
             }
             this.createCircle(params);
             break;
@@ -2178,8 +2232,8 @@ export default {
             (i == 0 && strArr[i] == 0
               ? ""
               : i > 0 && strArr[i] == 0 && strArr[i - 1] == 0
-              ? ""
-              : changeNum[strArr[i]] + (strArr[i] == 0 ? unit[0] : unit[i])) +
+                ? ""
+                : changeNum[strArr[i]] + (strArr[i] == 0 ? unit[0] : unit[i])) +
             newNum;
         }
         // 如果是两位数，一十改成十
@@ -2226,13 +2280,6 @@ export default {
           (newItem.expand2 = item.time_point);
         return newItem;
       });
-      // let newaa=[...this.apiData.vitalSigns];
-      // this.apiData.vitalSigns=newaa.filter(item=>{
-      //   console.log(item)
-      //   console.log(item.time_point.substring(0,10))
-      //   return  item.time_point.substring(0,10)!='2021-10-01'
-      // }).slice(0,2)
-      // params.startTime =
     },
     //同一时间，同一类型返回一条数据
     setMedicineGroup(data, vital_code, symbol = " | ") {
@@ -2316,10 +2363,12 @@ export default {
     size: a4; //定义为a4纸
     margin: 8mm 8mm 5mm 8mm;
   }
+
   .main-view {
     transform: scaleX(0.85);
   }
 }
+
 .main-view {
   padding: 5px 0;
   margin: 0 auto;
@@ -2327,17 +2376,21 @@ export default {
   color: #000;
   font-weight: bold;
   font-family: Simsun;
+
   .head-hos {
     padding-top: 10px;
     font-size: 30px;
   }
+
   .head-title {
     padding: 15px 0;
     font-size: 30px;
   }
+
   .head-info {
     font-size: 16px;
     display: flex;
+
     .item {
       flex: 1;
       text-align: center;
@@ -2350,12 +2403,15 @@ export default {
       }
     }
   }
+
   .head-info-1 {
     display: flex;
     font-size: 16px;
+
     .item {
       text-align: left;
       padding: 0 5px 10px 5px;
+
       &:nth-child(1) {
         flex: 1;
       }
@@ -2372,8 +2428,10 @@ export default {
   flex-shrink: 0;
   position: relative;
 }
+
 .table-area {
   position: relative;
+
   .hline {
     position: absolute;
     top: 0;
@@ -2382,24 +2440,26 @@ export default {
     border-top: 2px solid #000;
     z-index: 60;
   }
+
   .vline {
     position: absolute;
     border-left: 2px solid #000;
     z-index: 30;
   }
+
   .Yline {
-    background: linear-gradient(
-      165deg,
-      transparent 49.5%,
-      black 49.5%,
-      black 50.5%,
-      transparent 50.5%
-    );
+    background: linear-gradient(165deg,
+        transparent 49.5%,
+        black 49.5%,
+        black 50.5%,
+        transparent 50.5%);
   }
 }
+
 .table-box {
   position: relative;
   z-index: 20;
+
   .vtline {
     position: absolute;
     top: 0;
@@ -2407,15 +2467,18 @@ export default {
     border-left: 2px solid red;
     z-index: 30;
   }
+
   .row {
     display: flex;
     align-items: center;
     border-top: 1px solid #000;
     border-bottom: 1px solid #000;
     transform: translateX(-0.5px);
+
     &:not(:first-child) {
       border-top: none;
     }
+
     .label {
       display: flex;
       align-items: center;
@@ -2425,12 +2488,14 @@ export default {
       transform: translateX(0.5px);
       flex-shrink: 0;
     }
+
     .value-item-box {
       flex: 1;
       height: 100%;
       display: flex;
       transform: translateX(1px);
     }
+
     .value-item {
       flex: 1;
       display: flex;
@@ -2438,6 +2503,7 @@ export default {
       justify-content: center;
       height: 100%;
     }
+
     .time-label {
       display: block;
       width: 100%;
@@ -2450,57 +2516,70 @@ export default {
 
 .info-box {
   display: flex;
+
   .index-box {
     position: relative;
     flex-shrink: 0;
     display: flex;
     font-size: 12px;
     transform: translateX(-0.5px);
-    > .item {
+
+    >.item {
       flex: 1;
       display: flex;
       flex-direction: column;
       text-align: center;
+
       &:not(:last-child) {
         border-right: 1px solid #000;
       }
+
       .text {
         text-align: center;
+
         .label {
           display: flex;
           align-items: center;
           justify-content: center;
         }
       }
+
       .index {
         flex: 1;
         transform: translateY(-1px);
+
         &:last-child {
           flex: 0.8;
         }
-        > span {
+
+        >span {
           display: block;
           text-align: center;
         }
       }
+
       .times {
         .text {
           flex-shrink: 0;
           flex-grow: 0;
         }
+
         .index {
           color: red;
         }
       }
+
       .temp {
         .text {
           flex-shrink: 0;
           flex-grow: 0;
+
           .label {
             margin-right: -1px;
             padding-right: 1px;
           }
         }
+
         .index {
           margin-right: -1px;
           padding-right: 1px;
@@ -2508,105 +2587,128 @@ export default {
       }
     }
   }
-    .split-line {
-      display: block;
-      position: absolute;
-      left: 0;
-      right: -1px;
-      border-bottom: 2px solid black;
-    }
+
+  .split-line {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: -1px;
+    border-bottom: 2px solid black;
+  }
 }
-      .times :nth-child(4) > span {
-        margin-top: 7px;
-      }
-      .temp :nth-child(4) > span {
-        margin-top: 7px;
-      }
-      .times :nth-child(5) > span {
-        margin-top: 17px;
-      }
-      .temp :nth-child(5) > span {
-        margin-top: 17px;
-      }
-      .times :nth-child(6) > span {
-        margin-top: 25px;
 
-      }
-      .temp :nth-child(6) > span {
-        margin-top: 25px;
-      }
-      .times :nth-child(7) > span {
-        margin-top: 30px;
+.times :nth-child(4)>span {
+  margin-top: 7px;
+}
 
-      }
-      .temp :nth-child(7) > span {
-        margin-top: 30px;
-      }
-      .times :nth-child(8) > span {
-        margin-top: 36px;
-      }
-      .temp :nth-child(8) > span {
-        margin-top: 36px;
-      }
-      .times :nth-child(9) > span {
-        margin-top: 45px;
-      }
-      .temp :nth-child(9) > span {
-        margin-top: 45px;
-      }
-      .times :nth-child(10) > span {
-        margin-top: 55px;
-      }
-      .temp :nth-child(10) > span {
-        margin-top: 55px;
-      }
-      .p-r-5 {
-        padding-right: 5px;
-      }
-      .pain-area {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: #000;
-        .pain-index {
-          height: 61.7px;
-          > span {
-            flex:1;
-            display: block;
-          }
-        }     
+.temp :nth-child(4)>span {
+  margin-top: 7px;
+}
 
-        .s-index {
-          position: absolute;
-          bottom: 2px;
-          left: 50%;
-          color: #000;
-          -webkit-transform: translate(-50%);
-          -moz-transform: translate(-50%);
-          transform: translate(-50%);
-          text-align: center;
-        }
-      }
-      .pain-area2 {
-        display: flex;
-        flex-direction: column;
-        .pain-index {
-          border:1px solid #000;
-          border-top: none;
-        }     
+.times :nth-child(5)>span {
+  margin-top: 17px;
+}
 
-        .s-index {
-          height: 17.7px;
-          border:1px solid #000;
-          border-top: none;
-          border-bottom: none;
-        }
-      }
+.temp :nth-child(5)>span {
+  margin-top: 17px;
+}
+
+.times :nth-child(6)>span {
+  margin-top: 25px;
+
+}
+
+.temp :nth-child(6)>span {
+  margin-top: 25px;
+}
+
+.times :nth-child(7)>span {
+  margin-top: 30px;
+
+}
+
+.temp :nth-child(7)>span {
+  margin-top: 30px;
+}
+
+.times :nth-child(8)>span {
+  margin-top: 36px;
+}
+
+.temp :nth-child(8)>span {
+  margin-top: 36px;
+}
+
+.times :nth-child(9)>span {
+  margin-top: 45px;
+}
+
+.temp :nth-child(9)>span {
+  margin-top: 45px;
+}
+
+.times :nth-child(10)>span {
+  margin-top: 55px;
+}
+
+.temp :nth-child(10)>span {
+  margin-top: 55px;
+}
+
+.p-r-5 {
+  padding-right: 5px;
+}
+
+.pain-area {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+
+  .pain-index {
+    height: 61.7px;
+
+    >span {
+      flex: 1;
+      display: block;
+    }
+  }
+
+  .s-index {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    color: #000;
+    -webkit-transform: translate(-50%);
+    -moz-transform: translate(-50%);
+    transform: translate(-50%);
+    text-align: center;
+  }
+}
+
+.pain-area2 {
+  display: flex;
+  flex-direction: column;
+
+  .pain-index {
+    border: 1px solid #000;
+    border-top: none;
+  }
+
+  .s-index {
+    height: 17.7px;
+    border: 1px solid #000;
+    border-top: none;
+    border-bottom: none;
+  }
+}
+
 .pagination {
   padding: 10px 0 0;
   font-weight: normal;
+
   .pre-icon {
     display: inline-block;
     width: 6px;
@@ -2617,6 +2719,7 @@ export default {
     cursor: pointer;
     margin-right: 10px;
   }
+
   .next-icon {
     display: inline-block;
     width: 6px;
@@ -2627,21 +2730,26 @@ export default {
     cursor: pointer;
     margin-left: 10px;
   }
+
   .pre-btn {
     margin-right: 10px;
   }
+
   .next-btn {
     margin-left: 10px;
   }
+
   button {
     cursor: pointer;
     width: 80px;
     height: 30px;
   }
+
   button[disabled="disabled"] {
     cursor: not-allowed;
   }
 }
+
 .info-box-right {
   height: 100%;
   border: solid 2px black;
@@ -2649,9 +2757,11 @@ export default {
   right: -78px;
   border-left: none;
   top: 0px;
+
   .index-box_01 {
     border-bottom: 2px solid black;
   }
+
   .index-box_02 {
     border-bottom: 2px solid black;
   }
@@ -2661,7 +2771,8 @@ export default {
     flex-shrink: 0;
     display: flex;
     font-size: 12px;
-    > .item {
+
+    >.item {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -2670,17 +2781,21 @@ export default {
       //   border-right: 1px solid #000;
       // }
     }
+
     .index-box_left {
       transform: translateY(0.5px);
     }
+
     .index-box_right {
       .index {
         flex: 0.8;
         transform: translateY(-5px);
+
         &:last-child {
           flex: 0.8;
         }
-        > span {
+
+        >span {
           display: block;
           text-align: center;
         }
@@ -2688,15 +2803,19 @@ export default {
     }
   }
 }
+
 .font-12 {
   font-size: 12px;
 }
+
 .border-top-red-2 {
   border-top: 2px solid red !important;
 }
+
 .border-bottom-black-2 {
   border-bottom: 2px solid black !important;
 }
+
 .border-top-black-2 {
   border-top: 2px solid black !important;
 }

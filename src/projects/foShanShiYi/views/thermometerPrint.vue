@@ -162,6 +162,10 @@
                 <span class="pain-icon"></span>
                 <i class="note-icon"></i>
               </template>
+              <template v-else-if="key === 'earTemperature'">
+                <span class="ear-temperature"></span>
+                <i class="note-icon"></i>
+              </template>
               <template v-else-if="key === 'oralTemperature'">
                 <span class="oralTemperature-icon"></span>
                 <i class="note-icon"></i>
@@ -524,7 +528,7 @@ export default {
       settingMap: {
         oralTemperature: {
           vitalCode: "2",
-          label: "口表",
+          label: "口温",
           color: "blue",
           solid: true,
           dotType: "Circle",
@@ -535,7 +539,7 @@ export default {
         },
         axillaryTemperature: {
           vitalCode: "1",
-          label: "腋表",
+          label: "腋温",
           color: "blue",
           lineColor: "blue",
           dotType: "Text",
@@ -546,7 +550,7 @@ export default {
         },
         analTemperature: {
           vitalCode: "19",
-          label: "肛表",
+          label: "肛温",
           color: "blue",
           range: yRange,
           dotType: "Circle",
@@ -554,7 +558,17 @@ export default {
             // { time: '2019-05-15 07:10:00', value: 34 },
           ],
         },
-
+        earTemperature: {
+          vitalCode: '39',
+          label: '耳温',
+          color: 'blue',
+          solid: true,
+          dotType: 'Isogon',
+          range: yRange,
+          data: [
+            // { time: '2019-05-15 07:10:00', value: 2},
+          ],
+        },
         pulse: {
           vitalCode: "11",
           label: "脉搏",
@@ -667,6 +681,7 @@ export default {
         12: "heart",
         11: "pulse",
         ttpf: "pain",
+        39: 'earTemperature',
       },
       pageTotal: 1,
       currentPage: 1,
@@ -1296,6 +1311,7 @@ export default {
           ...this.settingMap.oralTemperature.data,
           ...this.settingMap.axillaryTemperature.data,
           ...this.settingMap.analTemperature.data,
+          ...this.settingMap.earTemperature.data,
         ].sort((a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time));
         this.feverList.forEach((x) => {
           const xTimeStamp = this.getTimeStamp(x.time);
@@ -1781,6 +1797,10 @@ export default {
                 ...this.settingMap.axillaryTemperature.data.map((x) => ({
                   ...x,
                   vitalCode: "1",
+                })),
+                ...this.settingMap.earTemperature.data.map((x) => ({
+                  ...x,
+                  vitalCode: "39",
                 })),
                 ...this.settingMap.analTemperature.data.map((x) => ({
                   ...x,
@@ -2587,6 +2607,16 @@ export default {
         // border-left: 10px solid transparent;
         // border-right: 10px solid transparent;
         // border-bottom: 18px solid red;
+      }
+      .ear-temperature {
+        position: absolute;
+        left: 37px;
+        top: 1px;
+        display: inline-block;
+        z-index: 2;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 18px solid blue;
       }
       .oralTemperature-icon {
         position: absolute;

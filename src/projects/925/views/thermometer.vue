@@ -344,7 +344,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       showFlage: true,
@@ -607,11 +607,7 @@ export default {
         };
       });
       const timeAdd = (i) => {
-        return timeNumList.some((x) => x.start === i)
-          ? 5 * 60 * 60 * 1000
-          : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
-            ? 3 * 60 * 60 * 1000
-            : 4 * 60 * 60 * 1000;
+        return 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
@@ -728,8 +724,8 @@ export default {
         if (days[index] <= 6) {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
           return index == 0
-            ?  days[index] +1
-            : `${this.numToRome(index + 1)}-${days[index] +1}`;
+            ?  days[index] 
+            : `${this.numToRome(index + 1)}-${days[index]}`;
         } else {
           return "";
         }
@@ -2001,12 +1997,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "05:00:59"],
-        "06:00:00": ["05:01:00", "9:00:59"],
-        "10:00:00": ["9:01:00", "13:00:59"],
-        "14:00:00": ["13:01:00", "17:00:59"],
-        "18:00:00": ["17:01:00", "21:00:59"],
-        "22:00:00": ["21:01:00", "23:59:59"],
+        "02:00:00": ["00:00:00", "04:00:00"],
+        "06:00:00": ["04:00:01", "08:00:00"],
+        "10:00:00": ["08:00:01", "12:00:00"],
+        "14:00:00": ["12:00:01", "16:00:00"],
+        "18:00:00": ["16:00:00", "20:00:00"],
+        "22:00:00": ["20:00:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
