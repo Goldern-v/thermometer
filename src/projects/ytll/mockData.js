@@ -887,7 +887,7 @@ export const mockData = {
       },
       {
           "temperature_type": "呼吸",
-          "value": "®",
+          "value": "111",
           "time_point": "2022-09-08 15:00:00",
           "vital_code": "04"
       },

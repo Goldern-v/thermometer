@@ -142,11 +142,12 @@
             <div class="label" :style="{ width: `${leftWidth}px` }">
               呼吸(次/分)
             </div>
-            <div class="value-item-box font-12">
+            <div class="value-item-box ">
               <div class="value-item" :style="{
                 ...smallTdStyle(index, formatBreatheList.length),
                 ...item.style,
                 color: '#000',
+                'font-size':item.value=='®'?'16px':'12px'
               }" v-for="(item, index) in formatBreatheList" :key="index">
                 {{ item.value }}
               </div>
@@ -572,7 +573,11 @@ export default {
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
+            if(['呼吸机','R','r','辅助呼吸'].includes(breatheList[j].value)){
+              breatheList[j].value = '®'
+            }
             item.value = breatheList[j].value;
+            item.time = `${breatheList[j].time}`
             breatheList.splice(j, 1);
             break;
           }
