@@ -344,7 +344,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       showFlage: true,
@@ -544,25 +544,50 @@ export default {
       const list = [];
       const pressureList = [...this.pressureList];
       for (
-        let i = timeNumRange[0];
+        let i = timeNumRange[0],index=0;
         i < timeNumRange[1] - 1;
-        i += 6 * 60 * 60 * 1000
+        index++
       ) {
+        // console.log(moment(i).format('YYYY-MM-DD HH:mm:ss'))
+         
+        let time = 0;
+        if(index%4==0){
+          time=8* 60 * 60 * 1000
+        }else if(index%4==1){
+          time =4* 60 * 60 * 1000
+        } else if(index%4==2) {
+          time =4* 60 * 60 * 1000
+        }else if(index%4==3) {
+          time =8* 60 * 60 * 1000
+        }
+        // console.log(index,moment(i).format('YYYY-MM-DD HH:mm:ss'),moment(i+time).format('YYYY-MM-DD HH:mm:ss'))
+         
         const dateIndex = this.getTimeNum(moment(new Date(i)).format('YYYY-MM-DD 12:00:00'))
         const timeIndex = i
         const item = { timeNum: i, value: "" };
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum > i && timeNum <= i + 6 * 60 * 60 * 1000) {
+          if ( timeNum > i && timeNum <= i +time) {
+            // console.log(moment(i).format('YYYY-MM-DD HH:mm:ss'),moment(i +time).format('YYYY-MM-DD HH:mm:ss'),moment(timeNum).format('YYYY-MM-DD HH:mm:ss'))
             item.value = pressureList[j].value;
             pressureList.splice(j, 1);
             break;
           }
         }
         if (timeIndex < dateIndex) {
-          list.push(item);
+         list.push(item);
+        }
+        if(index%4==0){
+          i+= 8* 60 * 60 * 1000
+        }else if(index%4==1){
+          i +=  4* 60 * 60 * 1000
+        } else if(index%4==2) {
+          i+=4* 60 * 60 * 1000
+        }else if(index%4==3) {
+          i +=  8* 60 * 60 * 1000
         }
       }
+      console.log(list)
       return list;
     },
     formatPressureList2() {
@@ -570,31 +595,53 @@ export default {
       const list = [];
       const pressureList = [...this.pressureList];
       for (
-        let i = timeNumRange[0];
+        let i = timeNumRange[0],index=0;
         i < timeNumRange[1] - 1;
-        i += 4 * 60 * 60 * 1000
+        index++
       ) {
+        // console.log(moment(i).format('YYYY-MM-DD HH:mm:ss'))
+         
+        let time = 0;
+        if(index%4==0){
+          time=8* 60 * 60 * 1000
+        }else if(index%4==1){
+          time =4* 60 * 60 * 1000
+        } else if(index%4==2) {
+          time =4* 60 * 60 * 1000
+        }else if(index%4==3) {
+          time =8* 60 * 60 * 1000
+        }
+        // console.log(index,moment(i).format('YYYY-MM-DD HH:mm:ss'),moment(i+time).format('YYYY-MM-DD HH:mm:ss'))
+         
         const dateIndex2 = this.getTimeNum(moment(new Date(i)).format('YYYY-MM-DD 12:00:00'))
-        const dateIndex3 = this.getTimeNum(moment(new Date(i)).format('YYYY-MM-DD 18:59:59'))
+        const dateIndex3 = this.getTimeNum(moment(new Date(i)).format('YYYY-MM-DD 16:01:00')) 
         const timeIndex = i
         const item = { timeNum: i, value: "" };
-        item.time = moment(new Date(timeIndex)).format('YYYY-MM-DD HH:mm:ss')
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum >= i && timeNum < i + 4 * 60 * 60 * 1000) {
+          if ( timeNum > i && timeNum <= i +time) {
+            // console.log(moment(i).format('YYYY-MM-DD HH:mm:ss'),moment(i +time).format('YYYY-MM-DD HH:mm:ss'),moment(timeNum).format('YYYY-MM-DD HH:mm:ss'))
             item.value = pressureList[j].value;
-            item.valueTiame = pressureList[j].time
             pressureList.splice(j, 1);
             break;
           }
         }
         if (timeIndex >= dateIndex2 && timeIndex <= dateIndex3) {
-          list.push(item);
+         list.push(item);
+        }
+        if(index%4==0){
+          i+= 8* 60 * 60 * 1000
+        }else if(index%4==1){
+          i +=  4* 60 * 60 * 1000
+        } else if(index%4==2) {
+          i+=4* 60 * 60 * 1000
+        }else if(index%4==3) {
+          i +=  8* 60 * 60 * 1000
         }
       }
+      console.log(list)
       return list;
     },
-
     formatBreatheList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
@@ -603,7 +650,7 @@ export default {
       const timeNumList = this.dateList.map((x) => {
         return {
           start: this.getTimeNum(`${x} 00:00:00`),
-          end: this.getTimeNum(`${x} 24:00:00`),
+          end: this.getTimeNum(`${x} 24:00:00`), 
         };
       });
       const timeAdd = (i) => {
@@ -715,7 +762,6 @@ export default {
         const days = this.operateDateList.map((y) => {
           return this.dayInterval(x, y);
         });
-        console.log(days)
         if (days.every((z) => z < 0)) return "";
         let index = 0;
         for (let i = 0; i < days.length; i++) {
