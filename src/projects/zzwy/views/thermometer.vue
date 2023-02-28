@@ -446,7 +446,7 @@ export default {
       areaHeight: 0, // 网格区域的高度
       xSpace: 18, // 纵向网格的间距
       ySpace: 16, //  横向网格的间距
-      leftWidth: 90, // 左侧内容宽度
+      leftWidth: 90, // 左侧内容宽度 
       xRange: [1, 8],
       yRange,
       pulseRange,
@@ -541,6 +541,7 @@ export default {
       yinliuList: [], // 引流量
       urineList: [], // 尿量
       skinTest: [], //皮试
+      feverList: [], // 发热体温
       outputList: [], // 出量
       customList0: [], // 自定义1
       customList1: [], // 自定义2
@@ -576,7 +577,7 @@ export default {
         "033": "体重",
         "043": "肛温",
         "041": "口温",
-        21: "发热体温",
+        "05": "发热体温",
         22: "线上降温",
         23: "呼吸机R",
         "061": "大便次数",
@@ -1055,6 +1056,7 @@ export default {
       this.pressureList = [];
       this.weightList = [];
       this.skinTest = [];
+      this.feverList = [];
       this.heightList = [];
       this.inputList = [];
       this.shitList = [];
@@ -1300,6 +1302,8 @@ export default {
           case "30":
             this.skinTest.push(item);
             break;
+          case "05":
+            this.feverList.push(item);
           default:
             break;
         }
@@ -1504,6 +1508,56 @@ export default {
         // }
         // 生成心率脉搏过快注释
         this.createNote(this.topPulseNote, this.ySpace + 2, "black");
+        const list = [
+          ...this.settingMap.oralTemperature.data,
+          ...this.settingMap.axillaryTemperature.data,
+          ...this.settingMap.analTemperature.data,
+        ].sort((a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time));
+        this.feverList.forEach((x) => {
+          const xTimeStamp = this.getTimeStamp(x.time);
+          for (let i = 0; i < list.length; i++) {
+            let isTarget = false;
+            const item = list[i];
+            const itemTimeStamp = this.getTimeStamp(item.time);
+            if (i < list.length - 1) {
+              if (
+                itemTimeStamp <= xTimeStamp &&
+                xTimeStamp < this.getTimeStamp(list[i + 1].time)
+              ) {
+                isTarget = true;
+              }
+            } else if (itemTimeStamp <= xTimeStamp) {
+              isTarget = true;
+            }
+            if (isTarget) {
+              const itemX = this.getXaxis(this.getLocationTime(item.time));
+              const itemY = this.getYaxis(this.yRange, item.value);
+              const feverX = this.getXaxis(this.getLocationTime(x.time));
+              const feverY = this.getYaxis(this.yRange, x.value);
+              this.createCircle({
+                cx: feverX,
+                cy: feverY,
+                r: 7,
+                color: "blue",
+                zlevel: 10,
+                tips: `${x.time} 发热体温：${x.value}`,
+                dotSolid: false,
+              });
+              this.createLine({
+                x1: itemX,
+                y1: itemY,
+                x2: feverX,
+                y2: feverY,
+                lineWidth: 2,
+                color: "blue",
+                zlevel: 1,
+                lineDash: [3, 3],
+              });
+              break;
+            }
+          }
+        });
+      
         // 生成表顶注释
         this.createNote(this.topSheetNote, this.indexTextAreaHeight + 2, "red");
         // 生成表底注释

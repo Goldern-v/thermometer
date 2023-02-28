@@ -2057,13 +2057,24 @@ export default {
        margin: 5mm 12mm 5mm 12mm; // 页面的边距
 
   }
-  .main-view {
-    transform: scaleY(0.92);
-    transform-origin: 0 0;
-  }
+  // .main-view {
+  //   transform: scaleY(0.82);
+  //   transform-origin: 0 0;
+  // }
+  // .print-content{
+  //   transform: scaleY(0.92);
+  //   transform-origin: 0 0;
+  // //   .main-view {
+  // //   transform: scaleY(1);
+  // //   transform-origin: 0 0;
+  // // }
+  // }
 }
 .main-view {
+  transform: scaleY(0.92);
+  transform-origin: 0 0;
   padding: 5px 0;
+  height: 1572px;
   margin: 0 auto;
   font-size: 21px;
   color: #000;
@@ -2278,7 +2289,7 @@ background-color: rgb(2, 2, 2);}
 background-color: rgb(2, 2, 2);}
       }
       .index {
-        height: 90px;
+        height: 64px;
         color: red;
       }
       flex: 1.7;

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="printData">
+  <div v-if="printData" class="print-content">
     <Thermometer
       ref="thermometer"
       :printData="printData"
@@ -127,6 +127,6 @@ export default {
 
 <style>
 .printBreak {
-  page-break-after: always;
+  /* page-break-after: always; */
 }
 </style>
