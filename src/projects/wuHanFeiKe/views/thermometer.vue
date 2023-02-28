@@ -70,7 +70,7 @@
           bedExchangeLog || patInfo.bed_label 
         }}</span>
       </div>
-      <div class="item" style="flex:1.5">
+      <div class="item" style="flex:1">
         入院日期：<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
@@ -533,7 +533,7 @@ export default {
     const yRange = [34, 42];
     const pulseRange = [30, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
