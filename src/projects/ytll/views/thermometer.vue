@@ -952,7 +952,17 @@ export default {
         }
       });
       this.topSheetNote.forEach((y) => {
-        if (y.value.includes("不在")||y.value.includes("拒测")) {
+        if (y.value.includes("拒测")) {
+          outTime.push(y.time);
+        }
+      });
+      return outTime;
+    },
+     //找到表底存在不在的日期
+     getNotTemTime1() {
+      let outTime = [];
+      this.topSheetNote.forEach((y) => {
+        if (y.value.includes("不在")) {
           outTime.push(y.time);
         }
       });
@@ -1134,7 +1144,7 @@ export default {
             ["02", "20"].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) > this.pulseRange[1]
           ) {
-            this.topPulseNote.push({
+            this.topSheetNote.push({
               time: vitalSigns[i].time_point,
               value: "过快",
             });
@@ -1281,7 +1291,7 @@ export default {
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: value !== "过快" ? y + 2 : y - this.ySpace - 1,
+          y:  y + 2 ,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1336,6 +1346,19 @@ export default {
                     }
                   }
                 }
+                 //如果存在中间不在的情况，中间断开
+                 if (this.getNotTemTime1() !== []) {
+                  for (let item of this.getNotTemTime1()) {
+                    if (
+                      this.getTimeNum(x.data[index+1].time) >=
+                        this.getTimeNum(item) &&
+                      this.getTimeNum(y.time) <= this.getTimeNum(item)
+                      // item.slice(0, 10) === y.time.slice(0, 10)
+                    ) {
+                      data.push([x.data[index+1]]);
+                    }
+                  }
+                }
               } else {
                 const list = data[data.length - 1];
                 if (!(list.length && list[list.length - 1].time === y.time)) {
@@ -1373,6 +1396,8 @@ export default {
               } else {
                 data.push([]);
               }
+           
+             
               if (index < x.data.length - 1) {
                 if (
                   this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
@@ -1380,6 +1405,19 @@ export default {
                   24 * 60 * 60 * 1000 * 2
                 ) {
                   data.push([x.data[index + 1]]);
+                }
+                  //如果存在中间不在的情况，中间断开
+                if (this.getNotTemTime1() !== []) {
+                  for (let item of this.getNotTemTime1()) {
+                    if (
+                      this.getTimeNum(x.data[index+1].time) >=
+                        this.getTimeNum(item) &&
+                      this.getTimeNum(y.time) <= this.getTimeNum(item)
+                      // item.slice(0, 10) === y.time.slice(0, 10)
+                    ) {
+                      data.push([x.data[index+1]]);
+                    }
+                  }
                 }
               } else {
                 const list = data[data.length - 1];
@@ -2018,6 +2056,17 @@ export default {
                 zlevel: 1,
                 lineDash: [3, 3],
               });
+              this.createText({
+                  x: cx,
+                  y: cy-20,
+                  value: "=",
+                  color: "red",
+                  fontSize: 18,
+                  time:item.time,
+                  tips: `${item.time} 疼痛：${item.value}`,
+                  zlevel: 10,
+                  fontWeight: "bold",
+                });
               this.ttgyList.splice(i, 1);
             }
           }
