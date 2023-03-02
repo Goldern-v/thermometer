@@ -178,6 +178,7 @@
               血压(mmHg)
             </div>
           </div>
+         
           <div class="row" :style="{ height: `${trHeight}px` }">
             <div class="value-item-box font-21" style="color: blue">
               <div class="value-item" :style="middleTdStyle(index)" v-for="(item, index) in formatPressureList1"
@@ -194,6 +195,7 @@
               </div>
             </div>
           </div>
+          <div class="clear"></div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">大便(次)</div>
@@ -211,10 +213,19 @@
             </div>
           </div>
         </div>
+       
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">身高(cm)</div>
           <div class="value-item-box">
             <div class="value-item" v-for="(item, index) in getFormatList({ tList: heightList })" :key="index">
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+        <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">腹围</div>
+          <div class="value-item-box">
+            <div class="value-item" v-for="(item, index) in getFormatList({ tList: ACList })" :key="index">
               {{ item.value }}
             </div>
           </div>
@@ -443,6 +454,7 @@ export default {
       pressureList: [], // 血压
       weightList: [], // 体重
       heightList: [], // 身高
+      ACList: [],
       inputList: [], // 液体入量
       shitList: [], // 大便次数 大便失禁者用“※”表示，人工肛门用“☆”表示，灌肠“E”表示。
       yinliuList: [], // 引流量
@@ -971,14 +983,14 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener("message", this.messageHandle, false);
-    window.removeEventListener(
-      "afterprint",
-      () => {
-        this.reset();
-        this.handleData();
-      },
-      false
-    );
+    // window.removeEventListener(
+    //   "afterprint",
+    //   () => {
+    //     this.reset();
+    //     this.handleData();
+    //   },
+    //   false
+    // );
   },
   methods: {
     smallTdStyle(index) {
@@ -1102,6 +1114,7 @@ export default {
       this.breatheList = [];
       this.pressureList = [];
       this.weightList = [];
+      this.ACList = [];
       this.allergyList = [];
       this.heightList = [];
       this.inputList = [];
@@ -1290,6 +1303,9 @@ export default {
           case "weight":
             this.weightList.push(item);
             break;
+          case "AC":
+            this.ACList.push(item);
+            break;
           case "ruliang":
             this.inputList.push(item);
             break;
@@ -1352,6 +1368,7 @@ export default {
     init() {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
+      this.$refs.main.innerHTML = "";
       this.$nextTick(() => {
         let ops = { renderer: "svg" };
         this.zr = zrender.init(this.$refs.main, ops);
@@ -2345,7 +2362,7 @@ export default {
     },
   },
   mounted() {
-    document.title = '中国人民解放军联勤保障部队第九二五医院'
+    document.title = '中国人民解放军联勤保障部队第九二五医院'+moment().format('YYYY-MM-DD')
     if (window.matchMedia) {
       let this2 = this;
       var mediaQueryList = window.matchMedia("print");
@@ -2719,4 +2736,7 @@ export default {
 .border-top-black-2 {
   border-top: 2px solid black !important;
 }
+.clear {
+    clear: both;
+  }
 </style>
