@@ -1972,18 +1972,18 @@ export default {
               createRepeatTest();
             }
             //找到表底录入的不升时间点，不升后面的第一个体温数据就画体温复试
-            if (this.getNotTemTime() !== []) {
-              for (let item of this.getNotTemTime()) {
-                if (
-                  this.getTimeNum(x.time.slice(0, 10)) -
-                  this.getTimeNum(item.slice(0, 10)) >
-                  0 &&
-                  index === 0
-                ) {
-                  createRepeatTest();
-                }
-              }
-            }
+            // if (this.getNotTemTime() !== []) {
+            //   for (let item of this.getNotTemTime()) {
+            //     if (
+            //       this.getTimeNum(x.time.slice(0, 10)) -
+            //       this.getTimeNum(item.slice(0, 10)) >
+            //       0 &&
+            //       index === 0
+            //     ) {
+            //       createRepeatTest();
+            //     }
+            //   }
+            // }
           } else if (index === 0) {
             // 入院首次体温≥38℃
             const list = [
@@ -2004,15 +2004,15 @@ export default {
               .sort(
                 (a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time)
               );
-            if (
-              //存在第一天入院就不升的情况，那接后面的第一个体温就复测
-              vitalCode === list[0].vitalCode &&
-              this.getTimeNum(list[0].time) -
-              this.getTimeNum(this.getNotTemTime()[0]) >
-              0
-            ) {
-              createRepeatTest();
-            }
+            // if (
+            //   //存在第一天入院就不升的情况，那接后面的第一个体温就复测
+            //   vitalCode === list[0].vitalCode &&
+            //   this.getTimeNum(list[0].time) -
+            //   this.getTimeNum(this.getNotTemTime()[0]) >
+            //   0
+            // ) {
+            //   createRepeatTest();
+            // }
             // if (
             //   //断开的时候，体温单复测
             //   vitalCode === list[0].vitalCode && //体温为第一个，就判断为断开
