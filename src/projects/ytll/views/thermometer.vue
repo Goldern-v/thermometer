@@ -2056,7 +2056,8 @@ export default {
                 zlevel: 1,
                 lineDash: [3, 3],
               });
-              this.createText({
+              if(ttgyY ==cy){
+                this.createText({
                   x: cx,
                   y: cy-20,
                   value: "=",
@@ -2067,6 +2068,8 @@ export default {
                   zlevel: 10,
                   fontWeight: "bold",
                 });
+              }
+             
               this.ttgyList.splice(i, 1);
             }
           }

@@ -47,7 +47,7 @@ export const mockData = {
     //   },
       {
           "temperature_type": "疼痛",
-          "value": "2",
+          "value": "6",
           "time_point": "2022-09-03 20:17:00",
           "vital_code": "092"
       },
