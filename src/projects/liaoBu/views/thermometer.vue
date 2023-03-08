@@ -32,7 +32,7 @@
         }}</span>
       </div>
       <div class="item">
-        住院号：<span class="value">{{ patInfo.inp_no }}</span>
+        住院号：<span class="value">{{ patInfo.patient_id }}</span>
       </div>
     </div>
     <div class="head-info-1">
