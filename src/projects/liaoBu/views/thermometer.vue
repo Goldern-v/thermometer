@@ -32,7 +32,7 @@
         }}</span>
       </div>
       <div class="item">
-        住院号：<span class="value">{{ patInfo.patient_id }}</span>
+        住院号：<span class="value">{{ patInfo.inp_no }}</span>
       </div>
     </div>
     <div class="head-info-1">
@@ -640,7 +640,7 @@ export default {
       BMIList: [], // BMI
       dateRangeList: [], // 数组长度决定页数
       patInfo: {
-        patient_id: "",
+        inp_no: "",
         name: "",
         sex: "",
         dept_name: "", // 由于存在转科的情况，所以这个字段基本废弃
