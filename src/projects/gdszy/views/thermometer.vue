@@ -507,7 +507,7 @@ export default {
     const pulseRange = [0, 180]
     const painRange = [0, 10]
     return {
-      useMockData: false,
+      useMockData:  false,
       apiData: '', // 接口数据
       zr: '',
       areaWidth: 0, // 网格区域的宽度
@@ -681,7 +681,7 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [2, 6, 10, 14, 18, 22]
+      const list = [3, 7, 11, 15, 19, 23]
       const tds = []
       for (let i = 0; i < 7; i++) {
         tds.push(...list)
