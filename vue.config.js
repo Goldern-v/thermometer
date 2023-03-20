@@ -71,6 +71,8 @@ const projectName = (() => {
       return "南方医科大学顺德医院";
     case "liaoBu": // 
       return "东莞市寮步医院";
+    case "dghm": // 
+      return "东莞市虎门医院";
     case "songTao": // 
       return "松桃苗族自治区人民医院";
     case "common": // 可配置的通用版本
@@ -182,6 +184,8 @@ module.exports = {
           return "./src/projects/925/main.js";
         case "liaoBu": // 寮步医院
           return "./src/projects/liaoBu/main.js";
+        case "dghm": // 寮步医院
+          return "./src/projects/dghm/main.js";
         case "songTao": // 松桃苗族自治区人民医院
           return "./src/projects/songTao/main.js";
         case "common": // 可配置的通用版本

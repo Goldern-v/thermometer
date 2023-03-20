@@ -67,6 +67,8 @@
     "build:fssd": "vue-cli-service build --project=fssd",
     "dev:liaoBu": "vue-cli-service serve --project=liaoBu",
     "build:liaoBu": "vue-cli-service build --project=liaoBu",
+    "dev:dghm": "vue-cli-service serve --project=dghm",
+    "build:dghm": "vue-cli-service build --project=dghm",
     "dev:songTao": "vue-cli-service serve --project=songTao",
     "build:songTao": "vue-cli-service build --project=songTao",
     "test:unit": "vue-cli-service test:unit",
