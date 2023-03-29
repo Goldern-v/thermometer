@@ -371,12 +371,12 @@
             </div>
           </div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
+          <div class="label font-12" :style="{ width: `${leftWidth}px` }">
             {{ customList0.label || "" }}
           </div>
           <div class="value-item-box">
             <div
-              class="value-item font-14"
+              class="value-item font-12"
               :style="{ 'font-size': scaleFont(item.value) }"
               v-for="(item, index) in getFormatList({ tList: customList0 })"
               :key="index"
@@ -387,12 +387,12 @@
         </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px`,fontSize:`12px`  }">
+          <div class="label font-12" :style="{ width: `${leftWidth}px`,fontSize:`12px`  }">
             {{ customList1.label || '' }}
           </div>
           <div class="value-item-box">
             <div
-              class="value-item"
+              class="value-item font-12"
               :style="{ 'font-size': scaleFont(item.value) }"
               v-for="(item, index) in getFormatList({ tList: customList1 })"
               :key="index"
@@ -402,7 +402,7 @@
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px`,fontSize:`12px`  }">
+          <div class="label font-12" :style="{ width: `${leftWidth}px`,fontSize:`12px`  }">
             {{ customList2.label || '' }}
           </div>
           <div class="value-item-box">
@@ -2283,6 +2283,9 @@ export default {
       justify-content: center;
       height: 100%;
       transform: translateX(0.5px);
+      &.font-12 {
+        font-size: 12px;
+      }
     }
     .value-item-box {
       flex: 1;
