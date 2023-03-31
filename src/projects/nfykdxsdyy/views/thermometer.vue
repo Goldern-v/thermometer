@@ -8,8 +8,13 @@
         <div class="item">
           科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
         </div>
-        <div class="item">
+        <div class="item"/>
+        <div class="item"/>
+        <div class="item"/>
+        <div class="item" style="margin-left: 24px">
           病区：<span class="value">{{ adtLog || patInfo.ward_name }}</span>
+        </div>
+        <div class="item">
         </div>
       </div>
       <div class="head-info">
@@ -32,11 +37,11 @@
           }}</span>
         </div>
         <div class="item">
-          住院号：<span class="value">{{ patInfo.patient_id }}</span>
+          住院号：<span class="value">{{ patInfo.inpNo }}</span>
         </div>
         <div class="item" style="text-align: right">
           床号：<span class="value">{{
-            bedExchangeLog || patInfo.inp_no
+            bedExchangeLog || patInfo.bedLabel
           }}</span>
         </div>
       </div>
@@ -204,20 +209,20 @@
                 @click="() => clickDateChangeTime(item)" :key="index" v-html="item.value"></div>
             </div>
           </div>
-          <div>
-            <div class="left_box" :style="{ height: `${trHeight * 4}px` }">
-              排<br />出<br />量
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+              大便(次)
             </div>
-            <div class="row font-14" :style="{ height: `${trHeight}px` }">
-              <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-                大便(次)
+            <div class="value-item-box">
+              <div class="value-item font-14" v-for="(item, index) in getFormatList({ tList: shitList })"
+                   @click="() => clickDateChangeTime(item)" :key="index">
+                {{ item.value }}
               </div>
-              <div class="value-item-box">
-                <div class="value-item font-14" v-for="(item, index) in getFormatList({ tList: shitList })"
-                  @click="() => clickDateChangeTime(item)" :key="index">
-                  {{ item.value }}
-                </div>
-              </div>
+            </div>
+          </div>
+          <div>
+            <div class="left_box" :style="{ height: `${trHeight *4}px` }">
+              排<br />出<br />量
             </div>
             <div class="row font-14" :style="{ height: `${trHeight}px` }">
               <div class="label" :style="{ width: `${leftWidth - 40}px` }">
@@ -230,7 +235,8 @@
             </div>
             <div class="row font-14" :style="{ height: `${trHeight}px` }">
               <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-                {{ outCustomList.label || "" }}
+<!--                {{ outCustomList.label || "" }}-->
+                排出自定义1
               </div>
               <div class="value-item-box">
                 <div class="value-item font-14" :style="{ 'font-size': scaleFont(item.value) }"
@@ -240,12 +246,22 @@
             </div>
             <div class="row font-14" :style="{ height: `${trHeight}px` }">
               <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-                {{ outCustomList1.label || "" }}
+                排出自定义2
               </div>
               <div class="value-item-box">
                 <div class="value-item font-14" :style="{ 'font-size': scaleFont(item.value) }"
                   v-for="(item, index) in getFormatList({ tList: outCustomList1 })"
                   @click="() => clickDateChangeTime(item)" :key="index" v-html="item.value"></div>
+              </div>
+            </div>
+            <div class="row font-14" :style="{ height: `${trHeight}px` }">
+              <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+                排出自定义3
+              </div>
+              <div class="value-item-box">
+                <div class="value-item font-14" :style="{ 'font-size': scaleFont(item.value) }"
+                     v-for="(item, index) in getFormatList({ tList: outCustomList2 })"
+                     @click="() => clickDateChangeTime(item)" :key="index" v-html="item.value"></div>
               </div>
             </div>
             <div class="clear"></div>
@@ -295,7 +311,7 @@
             </div>
           </div>
 
-          <div class="left_box" :style="{ height: `${trHeight * 3}px` }">
+          <div class="left_box" :style="{ height: `${trHeight * 2}px`,paddingTop:0 }">
             其<br />它<br />
           </div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
@@ -318,16 +334,16 @@
                 @click="() => clickDateChangeTime(item)" v-html="item.value"></div>
             </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-              {{ customList3.label || "" }}
-            </div>
-            <div class="value-item-box">
-              <div class="value-item font-14" :style="{ 'font-size': scaleFont(item.value) }"
-                v-for="(item, index) in getFormatList({ tList: customList3 })" :key="index"
-                @click="() => clickDateChangeTime(item)" v-html="item.value"></div>
-            </div>
-          </div>
+<!--          <div class="row font-14" :style="{ height: `${trHeight}px` }">-->
+<!--            <div class="label" :style="{ width: `${leftWidth - 40}px` }">-->
+<!--              {{ customList3.label || "" }}-->
+<!--            </div>-->
+<!--            <div class="value-item-box">-->
+<!--              <div class="value-item font-14" :style="{ 'font-size': scaleFont(item.value) }"-->
+<!--                v-for="(item, index) in getFormatList({ tList: customList3 })" :key="index"-->
+<!--                @click="() => clickDateChangeTime(item)" v-html="item.value"></div>-->
+<!--            </div>-->
+<!--          </div>-->
           <div class="clear"></div>
           <div class="vtline" :style="{
             left: `${leftWidth + item * (6 * xSpace + 13)}px`,
@@ -499,6 +515,7 @@ export default {
       ttgyList: [], // 疼痛干预
       outCustomList: [], // 自定义1
       outCustomList1: [], // 排出自定义2
+      outCustomList2: [], // 排出自定义3
       customList0: [], // 自定义2
       customList1: [], // 自定义3
       customList2: [], // 自定义4
@@ -540,6 +557,7 @@ export default {
         29: "在线降温",
         ttpf: "疼痛评分",
         4: "排出自定义",
+        6: "排出自定义3",
         41: "自定义1",
         42: "自定义2",
         43: "自定义3",
@@ -968,6 +986,7 @@ export default {
       this.dateRangeList = [];
       this.outCustomList = []
       this.outCustomList1 = []
+      this.outCustomList2 = []
 
       for (let i = 0; i < 4; i++) {
         this[`customList${i}`] = [];
@@ -1053,7 +1072,7 @@ export default {
           continue;
         }
 
-        if (["4", "41", "42", "43", '5'].includes(vitalSigns[i].vital_code)) {
+        if (["4", "41", "42", "43", '5','6'].includes(vitalSigns[i].vital_code)) {
           const sign = vitalSigns[i].temperature_type;
           switch (vitalSigns[i].vital_code) {
             case "4":
@@ -1069,6 +1088,13 @@ export default {
                 value: vitalSigns[i].value,
               });
               this.outCustomList1.label = sign;
+              break;
+            case "6":
+              this.outCustomList2.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.outCustomList2.label = sign;
               break;
             case "41":
               this.customList0.push({
@@ -2279,7 +2305,8 @@ export default {
     font-weight: bold;
 
     img {
-      height: 80px;
+      width: 260px;
+      height: 50px;
     }
   }
 
@@ -2287,6 +2314,7 @@ export default {
     font-family: SimHei;
     font-size: 38px;
     font-weight: bold;
+
   }
 
   .head-info {
@@ -2310,7 +2338,7 @@ export default {
     .item {
       text-align: left;
       padding: 0 5px 5px 5px;
-      margin-right: 80px;
+      //margin-right: 80px;
 
       .value {
         font-weight: normal;
