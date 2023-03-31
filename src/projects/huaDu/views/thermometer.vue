@@ -1013,8 +1013,8 @@ export default {
       console.log(this.isPrintAll)
       if(!this.isPrintAll){
         getNurseExchangeInfoByTime(data).then((res) => {
-        this.adtLog = res.data.data.adtLog; // 转科
-        this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+        this.adtLog = res?.data?.data?.adtLog; // 转科
+        this.bedExchangeLog = res?.data?.data?.bedExchangeLog; // 转床
       });
       }
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));

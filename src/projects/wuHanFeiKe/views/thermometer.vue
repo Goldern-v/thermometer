@@ -1265,12 +1265,12 @@ export default {
           if (["01", "02"].includes(x.vitalCode)) {
             data = [[]];
             x.data.forEach((y, index) => {
-              if (y.value > 35) {
+              // if (y.value > 35) {
                 data[data.length - 1].push(y);
-              }
-              if (y.value <= 35) {
-                data.push([]);
-              }
+              // }
+              // if (y.value <= 35) {
+              //   data.push([]);
+              // }
               if (index < x.data.length - 1) {
                 //超过一天的时间点，中间断开
                 if (

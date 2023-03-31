@@ -213,6 +213,12 @@ export const mockData = {
     },
     {
       temperature_type: "表顶注释",
+      value: "拒测",
+      time_point: "2022-09-03 10:00:00",
+      vital_code: "3",
+    },
+    {
+      temperature_type: "表顶注释",
       value: "转入||五时零分",
       time_point: "2022-09-02 17:00:00",
       vital_code: "3",

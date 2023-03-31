@@ -1269,6 +1269,16 @@ export default {
       }
       this.init();
     },
+    //找到表底/表顶存在外出不升拒测的日期
+    getNotTemTime(sheetNote = []) {
+      let outTime = [];
+      sheetNote.forEach((y) => {
+        if (['不升', '外出', '拒测'].includes(y.value)) {
+          outTime.push(y.time);
+        }
+      });
+      return outTime;
+    },
     init() {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
@@ -1282,16 +1292,81 @@ export default {
         this.yLine(); //生成Y轴坐标
         this.xLine(); //生成X轴坐标
         Object.values(this.settingMap).forEach((x) => {
-          this.createBrokenLine({
-            vitalCode: x.vitalCode,
-            data: x.data,
-            yRange: x.range,
-            lineColor: x.lineColor || x.color,
-            label: x.label,
-            dotColor: x.color,
-            dotSolid: x.solid,
-            dotType: x.dotType,
-          });
+          let data = [x.data];
+          if (["1", "11"].includes(x.vitalCode)) {
+            data = [[]];
+            x.data.forEach((y, index) => {
+              // if (y.value > 35) {
+                data[data.length - 1].push(y);
+              // }
+              // if (y.value <= 35) {
+              //   data.push([]);
+              // }
+              if (index < x.data.length - 1) {
+                //超过一天的时间点，中间断开
+                if (
+                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                    this.getTimeNum(y.time.slice(0, 10)) >= 24 * 60 * 60 * 1000 * 2
+                ) {
+                  data.push([x.data[index + 1]]);
+                }
+                //如果存在：不升/拒测/外出 的情况，中间断开
+                const bottomNode = this.getNotTemTime(this.bottomSheetNote)
+                const topNode = this.getNotTemTime(this.topSheetNote)
+                if (bottomNode.length > 0) {
+                  for (let item of bottomNode) {
+                    if (
+                      this.getTimeNum(x.data[index + 1].time) >=
+                        this.getTimeNum(item) &&
+                      this.getTimeNum(y.time) <= this.getTimeNum(item)
+                      // item.slice(0, 10) === y.time.slice(0, 10)
+                    ) {
+                      data.push([x.data[index + 1]]);
+                    }
+                  }
+                }
+                if (topNode.length > 0) {
+                  for (let item of topNode) {
+                    if (
+                      this.getTimeNum(x.data[index + 1].time) >=
+                        this.getTimeNum(item) &&
+                      this.getTimeNum(y.time) <= this.getTimeNum(item)
+                      // item.slice(0, 10) === y.time.slice(0, 10)
+                    ) {
+                      data.push([x.data[index + 1]]);
+                    }
+                  }
+                }
+              } else {
+                const list = data[data.length - 1];
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y);
+                }
+              }
+            });
+          }
+          data.forEach((z) => {
+            this.createBrokenLine({
+              vitalCode: x.vitalCode,
+              data: z,
+              yRange: x.range,
+              lineColor: x.lineColor || x.color,
+              label: x.label,
+              dotColor: x.color,
+              dotSolid: x.solid,
+              dotType: x.dotType,
+            });
+          })
+          // this.createBrokenLine({
+          //   vitalCode: x.vitalCode,
+          //   data: x.data,
+          //   yRange: x.range,
+          //   lineColor: x.lineColor || x.color,
+          //   label: x.label,
+          //   dotColor: x.color,
+          //   dotSolid: x.solid,
+          //   dotType: x.dotType,
+          // });
           this.handleCustomList();
         });
         // 画线上降温，画红圈不用连线
