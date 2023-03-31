@@ -75,9 +75,7 @@
               class="value-item"
               v-for="(item, index) in formatDateList"
               :key="index"
-            >
-              {{ item }}
-            </div>
+            >{{ item }}</div>
           </div>
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
@@ -677,6 +675,7 @@ export default {
       showInnerPage: true, // 是否显示内部分页
       adtLog: '', // 转科
       bedExchangeLog: '', // 转床
+      firstInPage: -1, // 第一次进入页面设置的页数，-1表示最后一页，0表示不需要处理，设置过一次后重置为0
     }
   },
   computed: {
@@ -910,9 +909,10 @@ export default {
       return list
     },
     dateList() {
+      if(!this.dateRange.length) return []
       const list = []
-      const min = new Date(`${this.dateRange[0]} 00:00:00`).getTime()
-      const max = new Date(`${this.dateRange[1]} 00:00:00`).getTime()
+      const min = moment(`${this.dateRange[0]} 00:00:00`).valueOf()
+      const max = moment(`${this.dateRange[1]} 00:00:00`).valueOf()
       for (let i = min; i <= max; i += 24 * 60 * 60 * 1000) {
         list.push(this.parseTime(i, '{y}-{m}-{d}'))
       }
@@ -922,6 +922,7 @@ export default {
       return this.dateRangeList[this.currentPage - 1] || []
     },
     timeRange() {
+      if(!this.dateList.length) return []
       return [
         `${this.dateList[0]} 00:00:00`,
         `${this.dateList[this.dateList.length - 1]} 24:00:00`,
@@ -1260,11 +1261,11 @@ export default {
       // 计算最大标识时间
       const maxTimeNum = Math.max.apply(
         null,
-        vitalSigns.map((x) => new Date(x.time_point).getTime()),
+        vitalSigns.map((x) => moment(x.time_point).valueOf()),
       )
-      const admissionDateNum = new Date(
+      const admissionDateNum = moment(
         `${this.patInfo.admission_date.slice(0, 10)} 00:00:00`,
-      ).getTime()
+      ).valueOf()
       // 根据入院时间和最大标识时间计算出页数和每页的时间范围
       const dateRangeList = []
       for (
@@ -1279,6 +1280,12 @@ export default {
       }
       this.dateRangeList = dateRangeList
       this.pageTotal = dateRangeList.length
+      if (this.firstInPage) {
+        if (this.firstInPage === -1) {
+          this.currentPage = this.pageTotal
+        }
+        this.firstInPage = 0
+      }
       // const urlParams = this.urlParse();
       const patientInfo = this.$route.query
       let data = {
@@ -1289,8 +1296,8 @@ export default {
       }
       if (!this.useMockData && !this.isPrintAll) {
         getNurseExchangeInfoByTime(data).then((res) => {
-          this.adtLog = res.data.data.adtLog // 转科
-          this.bedExchangeLog = res.data.data.bedExchangeLog // 转床
+          this.adtLog = res?.data?.data?.adtLog // 转科
+          this.bedExchangeLog = res?.data?.data?.bedExchangeLog // 转床
         })
       }
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
@@ -1595,8 +1602,8 @@ export default {
         let value = x.value
         if (x.value.endsWith('|')) {
           value = `${x.value}${this.toChinesNum(
-            new Date(x.time).getHours(),
-          )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`
+            moment(x.time).hour(),
+          )}时${this.toChinesNum(moment(x.time).minute())}分`
         }
         const bottomText = this.bottomSheetNote.map((x) => {
           return x.value
@@ -1834,7 +1841,7 @@ export default {
     },
     /* 获取时间戳 */
     getTimeStamp(timeStr) {
-      return new Date(timeStr).getTime()
+      return moment(timeStr).valueOf()
     },
     addHover(el, config, x, y, shapeOn, shapeOut) {
       const domTips = document.getElementsByClassName('tips')
@@ -2122,9 +2129,12 @@ export default {
     },
     // 计算天数间隔
     dayInterval(end, start) {
+      if (!end || !start) {
+        return 0
+      }
       return (
-        (new Date(`${end.slice(0, 10)} 00:00:00`).getTime() -
-          new Date(`${start.slice(0, 10)} 00:00:00`).getTime()) /
+        (moment(`${end.slice(0, 10)} 00:00:00`).valueOf() -
+          moment(`${start.slice(0, 10)} 00:00:00`).valueOf()) /
         (24 * 60 * 60 * 1000)
       )
     },
@@ -2152,7 +2162,7 @@ export default {
         if (typeof time === 'number' && time.toString().length === 10) {
           time = time * 1000
         }
-        date = new Date(time)
+        date = moment(time).toDate()
       }
       const formatObj = {
         y: date.getFullYear(),
@@ -2175,7 +2185,7 @@ export default {
     },
     // 获取时间戳
     getTimeNum(time) {
-      return new Date(time).getTime()
+      return moment(time).valueOf()
     },
     urlParse() {
       let obj = {}
@@ -2599,6 +2609,8 @@ export default {
       align-items: center;
       justify-content: center;
       height: 100%;
+      white-space: nowrap;
+      overflow: hidden;
       .increase {
         color: red;
         display: inline-block;
