@@ -464,7 +464,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -782,7 +782,7 @@ export default {
           }
           apart.splice(0, 1);
         }
-        console.log(9999,apart)
+        console.log(9999,apart, days, index, operationNum)
         if (days[index] <= 14) {
           return index === 0 || !apart.length
             ? days[index] === 0 && operationNum
