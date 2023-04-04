@@ -1,20 +1,17 @@
 <template>
+  <!--     :style="{ width: `${leftWidth + areaWidth}px`, transform: `scale(${scaleData})`, transformOrigin: '0 0' }">   -->
   <div @dblclick="dblclick" class="main-view" v-if="apiData"
-    :style="{ width: `${leftWidth + areaWidth}px`, transform: `scale(${scaleData})`, transformOrigin: '0 0' }">
-    <div>
+       :style="{ width: `${leftWidth + areaWidth}px`, transform: `scale(${scaleData})`, transformOrigin: 'top' }">
+  <div>
       <div class="head-hos"><img :src="imgUrl" alt=""></div>
       <div class="head-title">体温单</div>
       <div class="head-info-1">
         <div class="item">
           科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
         </div>
-        <div class="item"/>
-        <div class="item"/>
-        <div class="item"/>
-        <div class="item" style="margin-left: 24px">
-          病区：<span class="value">{{ adtLog || patInfo.ward_name }}</span>
+        <div class="item" style="padding: 0 60px 5px 5px">
+          病区：<span class="value">{{ adtLog || patInfo.ward_name||'2号楼19楼东区' }}</span>
         </div>
-        <div class="item">
         </div>
       </div>
       <div class="head-info">
@@ -37,11 +34,11 @@
           }}</span>
         </div>
         <div class="item">
-          住院号：<span class="value">{{ patInfo.inpNo }}</span>
+          住院号：<span class="value">{{ patInfo.inp_no }}</span>
         </div>
         <div class="item" style="text-align: right">
           床号：<span class="value">{{
-            bedExchangeLog || patInfo.bedLabel
+            bedExchangeLog || patInfo.bed_label
           }}</span>
         </div>
       </div>
@@ -147,7 +144,7 @@
                 <span>{{ item }}</span>
               </div>
               <div class="pain-area">
-                疼<br />痛<br />评<br />分
+                疼<br/>痛<br/>评<br/>分
               </div>
               <div class="bottom-area" :style="`height: ${bottomAreaHeight + 5}px`"></div>
             </div>
@@ -209,19 +206,9 @@
                 @click="() => clickDateChangeTime(item)" :key="index" v-html="item.value"></div>
             </div>
           </div>
-          <div class="row font-14" :style="{ height: `${trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-              大便(次)
-            </div>
-            <div class="value-item-box">
-              <div class="value-item font-14" v-for="(item, index) in getFormatList({ tList: shitList })"
-                   @click="() => clickDateChangeTime(item)" :key="index">
-                {{ item.value }}
-              </div>
-            </div>
-          </div>
+
           <div>
-            <div class="left_box" :style="{ height: `${trHeight *4}px` }">
+            <div class="left_box" :style="{ height: `${trHeight *5}px` }">
               排<br />出<br />量
             </div>
             <div class="row font-14" :style="{ height: `${trHeight}px` }">
@@ -235,8 +222,18 @@
             </div>
             <div class="row font-14" :style="{ height: `${trHeight}px` }">
               <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-<!--                {{ outCustomList.label || "" }}-->
-                排出自定义1
+                大便(次)
+              </div>
+              <div class="value-item-box">
+                <div class="value-item font-14" v-for="(item, index) in getFormatList({ tList: shitList })"
+                     @click="() => clickDateChangeTime(item)" :key="index">
+                  {{ item.value }}
+                </div>
+              </div>
+            </div>
+            <div class="row font-14" :style="{ height: `${trHeight}px` }">
+              <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+                {{ outCustomList.label || "排出自定义1" }}
               </div>
               <div class="value-item-box">
                 <div class="value-item font-14" :style="{ 'font-size': scaleFont(item.value) }"
@@ -246,7 +243,7 @@
             </div>
             <div class="row font-14" :style="{ height: `${trHeight}px` }">
               <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-                排出自定义2
+                {{ outCustomList1.label || "排出自定义2" }}
               </div>
               <div class="value-item-box">
                 <div class="value-item font-14" :style="{ 'font-size': scaleFont(item.value) }"
@@ -256,7 +253,7 @@
             </div>
             <div class="row font-14" :style="{ height: `${trHeight}px` }">
               <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-                排出自定义3
+                {{ outCustomList2.label || "排出自定义3" }}
               </div>
               <div class="value-item-box">
                 <div class="value-item font-14" :style="{ 'font-size': scaleFont(item.value) }"
@@ -2358,12 +2355,16 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 5mm 10mm 0mm 13mm; // 页面的边距
+    margin: 0mm 0mm -60mm 0mm; // 页面的边距
+    orientation:landscape
   }
-
-  .pain-area :nth-child(5) {
-    margin-bottom: 4px;
+  .main-view{
+    transform: scale(0.83);
+    transform-origin:0 0;
   }
+  //.pain-area :nth-child(5) {
+  //  margin-bottom: 4px;
+  //}
 }
 
 .main-view {
@@ -2414,7 +2415,7 @@ export default {
     .item {
       text-align: left;
       padding: 0 5px 5px 5px;
-      //margin-right: 80px;
+ flex:1;
 
       .value {
         font-weight: normal;
