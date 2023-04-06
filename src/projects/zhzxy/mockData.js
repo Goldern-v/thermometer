@@ -145,13 +145,19 @@ export const mockData = {
     {
       "temperature_type": "表顶注释",
       "value": "分娩|十一时",
-      "time_point": "2022-12-27 11:00:00",
+      "time_point": "2022-12-27 15:00:00",
+      "vital_code": "3"
+    },
+    {
+      "temperature_type": "表顶注释",
+      "value": "手术",
+      "time_point": "2022-12-27 07:00:00",
       "vital_code": "3"
     },
     {
       "temperature_type": "表顶注释",
       "value": "出院|十一时",
-      "time_point": "2022-12-29 11:00:00",
+      "time_point": "2023-01-29 11:00:00",
       "vital_code": "3"
     },
     {
