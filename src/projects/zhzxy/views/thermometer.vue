@@ -784,7 +784,7 @@ export default {
         }
         console.log(9999,apart, days, index, operationNum)
         if (days[index] <= 14) {
-          return operationNum ? apart[0] === 0 ? '' : apart[0] : ''
+          return days[index] === 0 ? '' : days[index]
           // return index === 0 || !apart.length
           //   ? days[index] === 0 && operationNum
           //     ? `(${operationNum + 1})`
