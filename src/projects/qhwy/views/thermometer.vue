@@ -402,7 +402,7 @@ export default {
     const FahrenheitListRange = [95, 108];
     const FahrenheitRange = [0, 65];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1361,7 +1361,7 @@ export default {
       notes.forEach((x, i) => {
         let value = x.value;
         if (x.value.includes("|")) {
-          value = `${x.value.replace("|", "于")}`;
+          value = `${x.value.replace("|", "")}`;
         }
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
