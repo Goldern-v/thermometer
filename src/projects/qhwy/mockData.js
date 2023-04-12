@@ -173,6 +173,12 @@ export const mockData = {
       vital_code: '5'
     },
     {
+      temperature_type: '表顶注释',
+      value: '死亡于||八时六分',
+      time_point: '2022-06-09 15:06:15',
+      vital_code: '5'
+    },
+    {
       temperature_type: '呼吸',
       value: '18',
       time_point: '2022-06-03 15:00:00',
