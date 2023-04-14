@@ -47,6 +47,12 @@ export const mockData = {
       vital_code: "14"
     },
     {
+      temperature_type: "血压部位",
+      value: "下肢",
+      time_point: "2022-08-29 12:00:00",
+      vital_code: "0621"
+    },
+    {
       temperature_type: "血压",
       value: "142/102",
       time_point: "2022-08-29 12:01:00",

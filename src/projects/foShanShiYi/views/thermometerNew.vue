@@ -556,6 +556,7 @@ export default {
         // { time: '2019-05-18 03:12:00', value: '20' }
       ], // 呼吸
       pressureList: [], // 血压
+      pressureSiteList: [], // 血压部位
       weightList: [], // 体重
       heightList: [], // 身高
       inputList: [], // 液体入量
@@ -648,17 +649,27 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const pressureList = [...this.pressureList];
+      const pressureSiteList = [...this.pressureSiteList];
+      const halfDay = 3 * 4 * 60 * 60 * 1000;
       for (
         let i = timeNumRange[0];
         i < timeNumRange[1]-1;
-        i += 3 * 4 * 60 * 60 * 1000
+        i += halfDay
       ) {
         const item = { timeNum: i, value: "" };
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum >= i && timeNum < i + 3 * 4 * 60 * 60 * 1000) {
+          if (timeNum >= i && timeNum < i + halfDay) {
             item.value = pressureList[j].value;
             pressureList.splice(j, 1);
+            break;
+          }
+        }
+        for (let j = pressureSiteList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(pressureSiteList[j].time);
+          if (timeNum >= i && timeNum < i + halfDay) {
+            item.value += pressureSiteList[j].value;
+            pressureSiteList.splice(j, 1);
             break;
           }
         }
@@ -1042,6 +1053,7 @@ export default {
       this.topPulseNote = [];
       this.breatheList = [];
       this.pressureList = [];
+      this.pressureSiteList = [];
       this.weightList = [];
       this.heightList = [];
       this.inputList = [];
@@ -1285,6 +1297,9 @@ export default {
             break;
           case "094":
             this.heightList.push(item);
+            break;
+          case "0621":
+            this.pressureSiteList.push(item);
             break;
           default:
             break;
