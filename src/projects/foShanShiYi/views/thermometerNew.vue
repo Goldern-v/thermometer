@@ -1298,7 +1298,7 @@ export default {
           case "094":
             this.heightList.push(item);
             break;
-          case "0621":
+          case "141":
             this.pressureSiteList.push(item);
             break;
           default:

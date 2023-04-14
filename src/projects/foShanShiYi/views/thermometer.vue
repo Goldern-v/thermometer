@@ -1299,7 +1299,7 @@ export default {
           case "ttgy":
             this.ttgyList.push(item);
             break;
-          case "0621":
+          case "141":
             this.pressureSiteList.push(item);
             break;
           default:
