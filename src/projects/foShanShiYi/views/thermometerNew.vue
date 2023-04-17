@@ -219,8 +219,9 @@
               :style="middleTdStyle(index)"
               v-for="(item, index) in formatPressureList"
               :key="index"
+              v-html="item.value"
             >
-              {{ item.value }}
+              <!-- {{ item.value }} -->
             </div>
           </div>
         </div>
@@ -668,7 +669,7 @@ export default {
         for (let j = pressureSiteList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureSiteList[j].time);
           if (timeNum >= i && timeNum < i + halfDay) {
-            item.value += pressureSiteList[j].value;
+            item.value += ('<br/>' + pressureSiteList[j].value);
             pressureSiteList.splice(j, 1);
             break;
           }
