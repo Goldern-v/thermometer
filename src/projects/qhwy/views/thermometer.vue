@@ -1361,7 +1361,7 @@ export default {
       notes.forEach((x, i) => {
         let value = x.value;
         if (x.value.includes("|")) {
-          value = `${x.value.replace("|", "于")}`;
+          value = `${x.value.replace("|", "")}`;
         }
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,

@@ -464,7 +464,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -784,13 +784,17 @@ export default {
         }
         console.log(9999,apart, days, index, operationNum)
         if (days[index] <= 14) {
-          return index === 0 || !apart.length
-            ? days[index] === 0 && operationNum
-              ? `(${operationNum + 1})`
-              : days[index]==0 ? '':days[index]
-            : days[index] === 0
-              ? `${apart.join("/")}`
-              : `${days[index]}/${apart.join("/")}`
+          const daysSet = [...new Set(days)].filter(v => v > 0);
+          let result = ''
+          daysSet.map(v => result ? result += `/${v}` : result = v);
+          return result
+          // return index === 0 || !apart.length
+          //   ? days[index] === 0 && operationNum
+          //     ? `(${operationNum + 1})`
+          //     : days[index]==0 ? '':days[index]
+          //   : days[index] === 0
+          //     ? `${apart.join("/")}`
+          //     : `${days[index]}/${apart.join("/")}`
         } else {
           return "";
         }
