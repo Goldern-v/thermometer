@@ -108,7 +108,8 @@
               v-for="(item, index) in formatOperateDateList"
               :key="index"
             >
-              {{ item == 0 ? "" : item }}
+              {{item}}
+<!--              {{ item == 0 ? "" : item }}-->
             </div>
           </div>
         </div>
