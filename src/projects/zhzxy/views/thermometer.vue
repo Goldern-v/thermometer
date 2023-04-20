@@ -94,7 +94,7 @@
               v-for="(item, index) in formatOperateDateList"
               :key="index"
             >
-              {{ item }}
+              {{item}}
             </div>
           </div>
         </div>
@@ -110,7 +110,7 @@
               v-for="(item, index) in maTds"
               :key="index"
             >
-              {{ item }}
+              {{ item  }}
             </div>
           </div>
         </div>
@@ -745,6 +745,7 @@ export default {
         .map((x) => x.time_point);
     },
     formatOperateDateList() {
+      // return ['14/1','35/1','22','14','11/2']
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
           return "";
@@ -787,7 +788,7 @@ export default {
           const daysSet = [...new Set(days)].filter(v => v > 0);
           let result = ''
           daysSet.map(v => result ? result += `/${v}` : result = v);
-          return result
+          return this.getFilterItem(result)
           // return index === 0 || !apart.length
           //   ? days[index] === 0 && operationNum
           //     ? `(${operationNum + 1})`
@@ -861,6 +862,7 @@ export default {
         }
     },
   },
+
   created() {
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
@@ -869,6 +871,23 @@ export default {
     window.removeEventListener("message", this.messageHandle, false);
   },
   methods: {
+    getFilterItem(i){
+      let item =i.toString()
+      if(item.length > 0){
+         if( item.length == 2){
+           return item > 14 ? '':item
+         }
+           if(item.indexOf('/')>0){
+           let list = item.split('/')
+           let a =list[0]>14?'':`${list[0]}/`
+           let b =list[1]
+           return `${a}${b}`
+         }
+         return  item
+      }else{
+        return  item
+      }
+    },
     smallTdStyle(index) {
       return {
         width: `${this.xSpace + ((index - 5) % 6 === 0 ? 3 : 2)}px`,
@@ -881,7 +900,6 @@ export default {
       };
     },
     clickDateChangeTime(dateTime){
-      console.log('点击======》dateTime',dateTime)
       if(dateTime.time)
       window.parent.postMessage(
           { type: 'clickDateTime', value: dateTime.time },
