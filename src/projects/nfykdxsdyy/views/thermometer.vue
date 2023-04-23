@@ -364,7 +364,7 @@
       <span class="pagination" v-else>第{{ currentPage }}页</span>
     </div>
 
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -1364,7 +1364,7 @@ export default {
         // 生成表底注释
         this.createNote(
           this.bottomSheetNote,
-          this.areaHeight - (this.ySpace + 2) * 14,
+          this.areaHeight - (this.ySpace + 2) * 11,
           "black"
         );
       });
@@ -2572,9 +2572,9 @@ export default {
       }
     }
 
-    .temp {
+    /* .temp {
       .text {}
-    }
+    } */
 
     .temp :nth-child(2)>span {
       margin-top: 7px;
