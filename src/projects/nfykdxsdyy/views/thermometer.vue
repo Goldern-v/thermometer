@@ -233,7 +233,7 @@
             </div>
             <div class="row font-14" :style="{ height: `${trHeight}px` }">
               <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-                {{ outCustomList.label || "" }}
+                {{ outCustomList.label || "排出自定义1" }}
               </div>
               <div class="value-item-box">
                 <div class="value-item font-14" :style="{ 'font-size': scaleFont(item.value) }"
@@ -243,7 +243,7 @@
             </div>
             <div class="row font-14" :style="{ height: `${trHeight}px` }">
               <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-                {{ outCustomList1.label || "" }}
+                {{ outCustomList1.label || "排出自定义2" }}
               </div>
               <div class="value-item-box">
                 <div class="value-item font-14" :style="{ 'font-size': scaleFont(item.value) }"
@@ -252,7 +252,8 @@
               </div>
             </div>
             <div class="row font-14" :style="{ height: `${trHeight}px` }">
-                {{ outCustomList2.label || "" }}
+              <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+                {{ outCustomList2.label || "排出自定义3" }}
               </div>
               <div class="value-item-box">
                 <div class="value-item font-14" :style="{ 'font-size': scaleFont(item.value) }"
@@ -363,7 +364,7 @@
       <span class="pagination" v-else>第{{ currentPage }}页</span>
     </div>
 
-  <!-- </div> -->
+  </div>
 </template>
 
 <script>
@@ -2571,9 +2572,9 @@ export default {
       }
     }
 
-    /* .temp {
+    .temp {
       .text {}
-    } */
+    }
 
     .temp :nth-child(2)>span {
       margin-top: 7px;
