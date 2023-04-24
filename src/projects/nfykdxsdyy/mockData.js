@@ -409,6 +409,12 @@ export const mockData = {
       time_point: "2022-08-29 11:11:08",
       vital_code: "3",
     },
+    {
+      temperature_type: "表底注释",
+      value: "外出",
+      time_point: "2022-08-29 11:11:08",
+      vital_code: "31",
+    },
   ],
 };
 
