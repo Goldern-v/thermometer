@@ -718,6 +718,9 @@ export default {
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
+            if (['R', 'r'].includes(breatheList[j].value)) {
+              breatheList[j].value = '®'
+            }
             item.value = breatheList[j].value;
             breatheList.splice(j, 1);
             break;

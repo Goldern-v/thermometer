@@ -8,7 +8,7 @@ export const mockData = {
           "dept_name": "乳腺外科病房",
           "bed_label": "加35",
           "visit_id": "1",
-          "admission_date": "2023-04-01 01:41:00",
+          "admission_date": "2022-12-07 01:41:00",
           "age": "46岁",
           "inp_no": "902865",
           "sex": "女"
