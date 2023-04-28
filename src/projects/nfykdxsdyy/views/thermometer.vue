@@ -1390,9 +1390,9 @@ export default {
               let noteTime = `${notes[j].value}${this.toChinesNum(
                   new Date(notes[j].time).getHours()
               )}时${this.toChinesNum(new Date(notes[j].time).getMinutes())}分`;
-              yNew += (noteTime.length + 2) * this.ySpace - 3;
+              yNew +=( (noteTime.length + 1) * this.ySpace - 3) + 12;
             } else {
-              yNew += (notes[j].value.length + 1) * this.ySpace + (notes[j].value.length + 1) * 2 - 3;
+              yNew += ((notes[j].value.length ) * this.ySpace + (notes[j].value.length + 1) * 2 - 3) + 8;
             }
           } else {
             break;
@@ -1406,6 +1406,7 @@ export default {
           y: bottomValu.includes(value) ? y + 5 + yNew : yNew,
           value: this.addn(value),
           color,
+          border:true,
           textLineHeight: this.ySpace + 1,
           fontWeight: "bold",
           fontFamily: "SimHei",
@@ -1432,7 +1433,7 @@ export default {
           x2: this.areaWidth - 1,
           y2: preSpace,
           lineWidth,
-          color: isBreak ? "#000" : isboundary ? "transparent" : redBreak ? "red" : "skyblue",
+          color: isBreak ? "#000" : isboundary ? "transparent" : redBreak ? "red" : "#4F94CD",
         };
         preSpace += lineWidth + this.ySpace;
         this.createLine(params);
@@ -1454,7 +1455,7 @@ export default {
           x2: preSpace,
           y2: this.areaHeight,
           lineWidth,
-          color: isBreak ? "red" : "skyblue",
+          color: isBreak ? "red" : "#4F94CD",
         };
         preSpace += lineWidth + this.xSpace;
         this.createLine(params);
