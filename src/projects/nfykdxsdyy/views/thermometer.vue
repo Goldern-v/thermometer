@@ -1363,37 +1363,51 @@ export default {
         this.createNote(this.topSheetNote, 0, "red");
         // 生成表底注释
         this.createNote(
-          this.bottomSheetNote,
-          this.areaHeight - (this.ySpace + 2) * 11,
-          "black"
+            this.bottomSheetNote,
+            this.areaHeight - (this.ySpace + 2) * 11,
+            "black"
         );
       });
     },
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
       const xaxis = notes.map((x) =>
-        this.getXaxis(this.getLocationTime(x.time))
+          this.getXaxis(this.getLocationTime(x.time))
       );
-      const xaxisNew = this.handleNoteXaxis(xaxis);
+      // const xaxisNew = this.handleNoteXaxis([...xaxis], notes);
       notes.forEach((x, i) => {
         let value = x.value;
         if (x.value.endsWith("|")) {
           value = `${x.value}${this.toChinesNum(
-            new Date(x.time).getHours()
+              new Date(x.time).getHours()
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`;
         }
-        const bottomText = this.bottomSheetNote.map((x) => {
+        // 从第二项开始，和前面的x判断是否相同，相同则需处理y
+        let yNew = 0;
+        for (let j = i - 1; j >= 0; j--) {
+          if (Math.abs(xaxis[j] - xaxis[i]) <= 1) {
+            if (notes[j].value.endsWith("|")) {
+              let noteTime = `${notes[j].value}${this.toChinesNum(
+                  new Date(notes[j].time).getHours()
+              )}时${this.toChinesNum(new Date(notes[j].time).getMinutes())}分`;
+              yNew +=( (noteTime.length + 1) * this.ySpace - 3) + 12;
+            } else {
+              yNew += ((notes[j].value.length ) * this.ySpace + (notes[j].value.length + 1) * 2 - 3) + 8;
+            }
+          } else {
+            break;
+          }
+        }
+        let bottomValu = this.bottomSheetNote.map((x) => {
           return x.value;
-        });
+        })
         this.createText({
-          // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-          x: xaxisNew[i],
-          y: bottomText.includes(value) ? y - 3 : y + 1,
+          x: xaxis[i],
+          y: bottomValu.includes(value) ? y + 5 + yNew : yNew,
           value: this.addn(value),
           color,
-          border: true,
-          time: x.time,
-          textLineHeight: this.ySpace + 2,
+          border:true,
+          textLineHeight: this.ySpace + 1,
           fontWeight: "bold",
           fontFamily: "SimHei",
         });
@@ -1419,7 +1433,7 @@ export default {
           x2: this.areaWidth - 1,
           y2: preSpace,
           lineWidth,
-          color: isBreak ? "#000" : isboundary ? "transparent" : redBreak ? "red" : "skyblue",
+          color: isBreak ? "#000" : isboundary ? "transparent" : redBreak ? "red" : "#4F94CD",
         };
         preSpace += lineWidth + this.ySpace;
         this.createLine(params);
@@ -1441,7 +1455,7 @@ export default {
           x2: preSpace,
           y2: this.areaHeight,
           lineWidth,
-          color: isBreak ? "red" : "skyblue",
+          color: isBreak ? "red" : "#4F94CD",
         };
         preSpace += lineWidth + this.xSpace;
         this.createLine(params);
