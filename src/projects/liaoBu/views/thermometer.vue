@@ -1623,7 +1623,7 @@ export default {
             });
           });
           //每次遍历数据的时候，调整自定义的显示位置
-          this.handleCustomList();
+          // this.handleCustomList();
         });
         /*  画心率和脉搏的多边形，连线已经用折线画了，
             这里用多边形是为了生成阴影，多边形的边框颜色设为透明，
