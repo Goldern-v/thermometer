@@ -1348,14 +1348,26 @@ export default {
             let dataArray = this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data;
             dataArray.forEach((y, index) => {
               if (index >= 1 && this.getLocationTime(y.time) == this.getLocationTime(dataArray[index - 1].time)) {
-                if (this.getTimeNum(y.time) > this.getTimeNum(dataArray[index - 1].time)) {
-                  // if(!nomalTime.includes(dataArray[index-1].time.slice(11,19))){
-                  dataArray.splice(index - 1, 1)
-                  // }
+                const hasTopRuleItem = this.pickTopRule(y.time);
+                if (
+                  !!hasTopRuleItem && 
+                  (hasTopRuleItem.time === y.time || hasTopRuleItem.time === dataArray[index - 1].time)
+                ) {
+                  if (hasTopRuleItem.time === y.time) {
+                    dataArray.splice(index - 1, 1);
+                  } else if (hasTopRuleItem.time === dataArray[index - 1].time) {
+                    dataArray.splice(index, 1);
+                  }
                 } else {
-                  // if(!nomalTime.includes(dataArray[index-1].time.slice(11,19))){
+                  if (this.getTimeNum(y.time) > this.getTimeNum(dataArray[index - 1].time)) {
+                    // if(!nomalTime.includes(dataArray[index-1].time.slice(11,19))){
+                    dataArray.splice(index - 1, 1)
+                    // }
+                  } else {
+                    // if(!nomalTime.includes(dataArray[index-1].time.slice(11,19))){
                     dataArray.splice(index, 1)
-                  // }
+                    // }
+                  }
                 }
               }
             })
@@ -1417,6 +1429,15 @@ export default {
       if (!this.showChildrenPage) {
         this.init();
       }
+    },
+    // 禅道：19366 根据规则显示：需要体温单需要显示入院、转入、手术等这些有节点的时间点的生命体征
+    pickTopRule(time) {
+      const hasTopRuleItem = this.topSheetNote.find(
+        top => 
+          this.getLocationTime(top.time) == this.getLocationTime(time) && 
+          (top.value.includes('入院') || top.value.includes('转入') || top.value.includes('手术'))
+      );
+      return hasTopRuleItem;
     },
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
@@ -2499,6 +2520,10 @@ export default {
           window.parent.postMessage(
             { type: "pageTotal", value: this.pageTotal },
 
+            "*"
+          );
+          window.parent.postMessage(
+            { type: "isFirst", value: !this.apiData.vitalSigns || !this.apiData.vitalSigns.length },
             "*"
           );
           this.reset()
