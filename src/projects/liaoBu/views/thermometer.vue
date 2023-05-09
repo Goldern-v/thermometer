@@ -869,7 +869,9 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
-        if (days[index] <= 7) {
+        // console.log("days==",days,index)
+        // (days[index] <= 7)
+        if (days[index] <= 14) {
           //体温单手术超过15天归零显示
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
           return index === 0
@@ -1069,7 +1071,7 @@ export default {
       };
     },
     clickDateChangeTime(dateTime){
-      console.log('点击======》dateTime',dateTime)
+      // console.log('点击======》dateTime',dateTime)
       if(dateTime.time)
       window.parent.postMessage(
           { type: 'clickDateTime', value: dateTime.time },
@@ -2074,7 +2076,7 @@ export default {
             const item = this.physicsCoolList[i];
             const coolX = this.getXaxis(this.getLocationTime(item.time));
             const coolY = this.getYaxis(yRange, item.value, vitalCode);
-            console.log(coolX ,cx)
+            // console.log(coolX ,cx)
             if (Math.floor(coolX) === Math.floor(cx)) {
               this.createCircle({
                 cx: coolX,
