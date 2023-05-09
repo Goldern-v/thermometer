@@ -143,7 +143,7 @@
               <div class="index" v-for="item in pulseList" :key="item">
                 <span>{{ item }}</span>
               </div>
-              <div class="pain-area">
+              <div class="pain-area" style="font-size: 16px">
                 疼<br/>痛<br/>评<br/>分
               </div>
               <div class="bottom-area" :style="`height: ${bottomAreaHeight + 5}px`"></div>
@@ -594,6 +594,7 @@ export default {
     },
     painList() {
       const list = [];
+      console.log("painRange===",this.painRange)
       for (let i = this.painRange[1]; i > this.painRange[0]; i -= 2) {
         list.push(i);
       }
@@ -627,7 +628,8 @@ export default {
     },
 
     painAreaHeight() {
-      return this.ySpace * 5 + 13;
+      // return this.ySpace * 5 + 13;
+      return this.ySpace * 4 + 8;
     },
     indexAreaHeight() {
       return this.ySpace * 5;
@@ -1364,7 +1366,7 @@ export default {
         // 生成表底注释
         this.createNote(
             this.bottomSheetNote,
-            this.areaHeight - (this.ySpace + 2) * 11,
+            this.areaHeight - (this.ySpace + 2) * 10,
             "black"
         );
       });
@@ -1424,7 +1426,8 @@ export default {
       for (let i = 0; i < totalLine; i++) {
         const isBreak =
           i % 5 === 0 && i > 0 && i < totalLine - 1 && i !== 40 && i < 40
-        const redBreak = i === 44 || i === 40;
+        // const redBreak = i === 44 || i === 40;
+        const redBreak = i === 40
         const isboundary = i === 0 || i === totalLine - 1;
         const lineWidth = isBreak ? 3 : 2;
         const params = {
@@ -1466,9 +1469,9 @@ export default {
         this.yRange[1] -
         this.yRange[0] +
         1 +
-        (this.yRange[1] - this.yRange[0]) * 4 +
-        1;
+        (this.yRange[1] - this.yRange[0]) * 4 ;
       let preSpace = 0;
+      console.log('totalLine==',totalLine)
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1;
         const lineWidth = isBreak ? 3 : 2;
@@ -2720,36 +2723,43 @@ export default {
       }
 
       .pain-icon {
-        font-size: 28px;
+        font-size: 26px;
         position: absolute;
-        left: 31px;
+        left: 29px;
         color: blue;
-        top: 116px;
+        top: 119px;
         display: inline-block;
         z-index: 2;
       }
 
       .ear-temperature {
+        //border-width: 0px 12px 14px;
+        //border-bottom: 23px solid red;
+        //left: 35px;
+        //top: -2px;
         width: 0;
         height: 0;
         border-style: solid;
-        border-width: 0px 12px 14px;
-        border-bottom: 23px solid red;
+        border-width: 0px 9px 10px;
+        border-bottom: 18.3px solid red;
         border-color: transparent transparent blue;
         position: absolute;
-        left: 35px;
-        top: -2px;
+        left: 42px;
+        top: 0px;
       }
 
       .ear-temperature:after {
+        //border-width: 4px 9px 17px;
+        //border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #fff;
+        //left: -9px;
         content: "";
         border-style: solid;
         border-width: 4px 9px 17px;
         border-bottom: 17px solid red;
-        border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #fff;
+        border-color: rgba(0,0,0,0) rgba(0,0,0,0) #fff;
         position: absolute;
         top: 0px;
-        left: -9px;
+        left: -507px;
       }
 
 
