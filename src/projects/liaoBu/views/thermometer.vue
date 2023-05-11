@@ -871,7 +871,7 @@ export default {
         }
         // console.log("days==",days,index)
         // (days[index] <= 7)
-        if (days[index] <= 14) {
+        if (days[index] <= 10) {
           //体温单手术超过15天归零显示
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
           return index === 0
