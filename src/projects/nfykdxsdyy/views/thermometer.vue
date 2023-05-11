@@ -1,6 +1,7 @@
 <template>
   <!--     :style="{ width: `${leftWidth + areaWidth}px`, transform: `scale(${scaleData})`, transformOrigin: '0 0' }">   -->
   <div @dblclick="dblclick" class="main-view" v-if="apiData"
+        :class="{isPDF}"
        :style="{ width: `${leftWidth + areaWidth}px`, transform: `scale(${scaleData})`, transformOrigin: 'top' }">
   <div>
       <div class="head-hos"><img :src="imgUrl" alt=""></div>
@@ -576,6 +577,9 @@ export default {
     };
   },
   computed: {
+    isPDF(){
+      return !!this.$route.query.isPDF
+    },
     timeTds() {
       const list = [2, 6, 10, 2, 6, 10];
       const tds = [];
@@ -2392,7 +2396,13 @@ export default {
   font-weight: 900;
   font-family: Simsun;
   width: fit-content;
-
+  &.isPDF{
+    transform: scaleY(0.69) scaleX(0.78);
+      margin: 0 0 0 -90px;
+      padding-top: 35px;
+      overflow: hidden;
+      vertical-align: top ;
+  }
   .head-hos {
     font-family: SimHei;
     font-size: 38px;
