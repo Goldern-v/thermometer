@@ -471,7 +471,7 @@ export default {
       areaHeight: 0, // 网格区域的高度
       xSpace: 19, // 纵向网格的间距
       ySpace: 15, //  横向网格的间距
-      leftWidth: 160, // 左侧内容宽度
+      leftWidth: 160, // 左侧内容宽度å
       xRange: [1, 8],
       yRange,
       pulseRange,
@@ -783,19 +783,20 @@ export default {
           }
           apart.splice(0, 1);
         }
-        console.log(9999,apart, days, index, operationNum)
+        console.log(apart, days, index, operationNum)
         if (days[index] <= 14) {
           const daysSet = [...new Set(days)].filter(v => v > 0);
           let result = ''
           daysSet.map(v => result ? result += `/${v}` : result = v);
-          return this.getFilterItem(result)
-          // return index === 0 || !apart.length
-          //   ? days[index] === 0 && operationNum
-          //     ? `(${operationNum + 1})`
-          //     : days[index]==0 ? '':days[index]
-          //   : days[index] === 0
-          //     ? `${apart.join("/")}`
-          //     : `${days[index]}/${apart.join("/")}`
+          let count =index === 0 || !apart.length
+              ? days[index] === 0 && operationNum
+                  ? `(${operationNum + 1})`
+                  : days[index]==0 ? '':days[index]
+              : days[index] === 0
+                  ? `${apart.join("/")}`
+                  : `${days[index]}/${apart.join("/")}`
+          console.log("count===",count)
+          return this.getFilterItem(count)
         } else {
           return "";
         }
@@ -872,21 +873,30 @@ export default {
   },
   methods: {
     getFilterItem(i){
-      let item =i.toString()
-      if(item.length > 0){
-         if( item.length == 2){
-           return item > 14 ? '':item
-         }
-           if(item.indexOf('/')>0){
-           let list = item.split('/')
-           let a =list[0]>14?'':`${list[0]}/`
-           let b =list[1]
-           return `${a}${b}`
-         }
-         return  item
+      if(!i){
+        return  ''
       }else{
-        return  item
+        let item =i.toString()
+        if(item.length > 0){
+          console.log(typeof  i,typeof item,item)
+          let matchLength =(item.match(/\//g)||[]).length
+          if( item.length == 2){
+            return item > 14 ? '':item
+          }
+          if(item.indexOf('/')>0 && matchLength !==2){
+            let list = item.split('/')
+            let a =list[0]>14?'':`${list[0]}/`
+            let b =list[1]
+            return `${a}${b}`
+          }
+
+          if(matchLength == 2){
+            return  item
+          }
+          return  item
+        }
       }
+
     },
     smallTdStyle(index) {
       return {
