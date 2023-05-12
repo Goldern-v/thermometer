@@ -464,7 +464,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -786,6 +786,7 @@ export default {
         console.log(apart, days, index, operationNum)
         if (days[index] <= 14) {
           const daysSet = [...new Set(days)].filter(v => v > 0);
+          console.log("daysSet==",daysSet)
           let result = ''
           daysSet.map(v => result ? result += `/${v}` : result = v);
           let count =index === 0 || !apart.length
@@ -795,7 +796,6 @@ export default {
               : days[index] === 0
                   ? `${apart.join("/")}`
                   : `${days[index]}/${apart.join("/")}`
-          console.log("count===",count)
           return this.getFilterItem(count)
         } else {
           return "";
@@ -878,19 +878,18 @@ export default {
       }else{
         let item =i.toString()
         if(item.length > 0){
-          console.log(typeof  i,typeof item,item)
-          let matchLength =(item.match(/\//g)||[]).length
+          let minch =/^\/[^\/]*$/.test(item)
+          let match =/\/.*\/.*\//.test(item)
           if( item.length == 2){
             return item > 14 ? '':item
           }
-          if(item.indexOf('/')>0 && matchLength !==2){
+          if(minch ){
             let list = item.split('/')
             let a =list[0]>14?'':`${list[0]}/`
             let b =list[1]
             return `${a}${b}`
           }
-
-          if(matchLength == 2){
+          if(match){
             return  item
           }
           return  item
