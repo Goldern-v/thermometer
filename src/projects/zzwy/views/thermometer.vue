@@ -280,6 +280,7 @@
                 class="value-item font-12"
                 v-for="(item, index) in getFormatList({ tList: skinTest })"
                 :key="index"
+                style="transform: scale(0.8)"
                 @click="()=>clickDateChangeTime(item)"
                 v-html="item.value"
               ></div>
