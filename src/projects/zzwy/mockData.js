@@ -35,8 +35,14 @@ export const mockData = {
       vital_code: '092'
     },
     {
-      temperature_type: '体温',
+      temperature_type: '升温',
       value: '41',
+      time_point: '2021-11-03 03:00:00',
+      vital_code: '05'
+    },
+    {
+      temperature_type: '体温',
+      value: '37',
       time_point: '2021-11-03 03:00:00',
       vital_code: '01'
     },
@@ -53,8 +59,14 @@ export const mockData = {
       vital_code: '3'
     },
     {
-      temperature_type: '体温',
+      temperature_type: '物理降温',
       value: '40',
+      time_point: '2021-11-03 09:00:00',
+      vital_code: '3'
+    },
+    {
+      temperature_type: '体温',
+      value: '38',
       time_point: '2021-11-03 09:00:00',
       vital_code: '01'
     },
@@ -225,6 +237,12 @@ export const mockData = {
       value: '2',
       time_point: '2021-11-03 15:00:00',
       vital_code: '092'
+    },
+    {
+      temperature_type: '疼痛干预',
+      value: '0',
+      time_point: '2021-11-03 15:00:00',
+      vital_code: '093'
     },
     {
       temperature_type: '表顶注释',

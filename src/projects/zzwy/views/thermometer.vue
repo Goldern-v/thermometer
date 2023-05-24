@@ -509,9 +509,11 @@ export default {
         pain: {
           vitalCode: "092",
           label: "疼痛",
-          color: "red",
+          // color: "red",
+          color: "blue",
           solid: true,
-          dotType: "Isogon",
+          // dotType: "Isogon",
+          dotType: "Circle",
           range: painRange,
           data: [
             // { time: '2019-05-15 07:10:00', value: 2},
@@ -1535,7 +1537,7 @@ export default {
               const feverX = this.getXaxis(this.getLocationTime(x.time));
               const feverY = this.getYaxis(this.yRange, x.value);
               this.createCircle({
-                cx: feverX,
+                cx: feverX + this.xSpace / 2,
                 cy: feverY,
                 r: 7,
                 color: "blue",
@@ -1546,7 +1548,7 @@ export default {
               this.createLine({
                 x1: itemX,
                 y1: itemY,
-                x2: feverX,
+                x2: feverX + this.xSpace / 2,
                 y2: feverY,
                 lineWidth: 2,
                 color: "blue",
@@ -1976,7 +1978,7 @@ export default {
             const coolY = this.getYaxis(yRange, item.value, vitalCode);
             if (coolX === cx) {
               this.createCircle({
-                cx: coolX,
+                cx: coolX + this.xSpace / 2,
                 cy: coolY,
                 r: 4,
                 color: "red",
@@ -1984,16 +1986,37 @@ export default {
                 tips: `${item.time} 降温：${item.value}`,
                 dotSolid: false,
               });
-              this.createLine({
-                x1: cx,
-                y1: cy,
-                x2: coolX,
-                y2: coolY,
-                lineWidth: 1,
-                color: "red",
-                zlevel: 1,
-                lineDash: [3, 3],
-              });
+              // 发热 => 物理降温
+              const fever = this.feverList.find(
+                c => this.getLocationTime(item.time) === this.getLocationTime(c.time)
+              );
+              if (fever) {
+                const fx = this.getXaxis(this.getLocationTime(fever.time));
+                const fy = this.getYaxis(this.yRange, fever.value);
+                const tx = this.getXaxis(this.getLocationTime(item.time));
+                const ty = this.getYaxis(this.yRange, item.value);
+                this.createLine({
+                  x1: fx + this.xSpace / 2,
+                  y1: fy,
+                  x2: tx + this.xSpace / 2,
+                  y2: ty,
+                  lineWidth: 2,
+                  color: "red",
+                  zlevel: 1,
+                  lineDash: [3, 3],
+                });
+              }
+              // 物理降温 => 体温
+              // this.createLine({
+              //   x1: cx,
+              //   y1: cy,
+              //   x2: coolX + this.xSpace / 2,
+              //   y2: coolY,
+              //   lineWidth: 1,
+              //   color: "red",
+              //   zlevel: 1,
+              //   lineDash: [3, 3],
+              // });
               this.coolList.splice(i, 1);
             }
           }
@@ -2071,16 +2094,25 @@ export default {
             const ttgyX = this.getXaxis(this.getLocationTime(item.time));
             const ttgyY = this.getYaxis(yRange, item.value, vitalCode);
             if (ttgyX === cx) {
-              this.createIsogon({
-                x: ttgyX,
-                y: ttgyY,
+              // this.createIsogon({
+              //   x: ttgyX,
+              //   y: ttgyY,
+              //   r: 4,
+              //   n: 3,
+              //   color: "red",
+              //   zlevel: 10,
+              //   tips: `${item.time} 疼痛干预：${item.value}`,
+              //   dotSolid: false,
+              // });
+              this.createCircle({
+                cx: ttgyX,
+                cy: ttgyY,
                 r: 4,
-                n: 3,
                 color: "red",
                 zlevel: 10,
                 tips: `${item.time} 疼痛干预：${item.value}`,
                 dotSolid: false,
-              });
+              })
               this.createLine({
                 x1: cx,
                 y1: cy,
