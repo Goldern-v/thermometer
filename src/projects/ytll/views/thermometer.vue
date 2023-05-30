@@ -2044,7 +2044,7 @@ export default {
                 color: "red",
                 zlevel: 10,
                 tips: `${item.time} 疼痛干预：${item.value}`,
-                dotSolid: false,
+                dotSolid:ttgyY ==cy? true :false,
               });
               this.createLine({
                 x1: cx,
