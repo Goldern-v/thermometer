@@ -104,7 +104,7 @@
             手术后天数
           </div>
           <div class="value-item-box">
-            <div class="value-item" v-for="(item, index) in formatOperateDateList" :key="index">
+            <div class="value-item" style="color:red" v-for="(item, index) in formatOperateDateList" :key="index">
               {{ item }}
             </div>
           </div>
@@ -280,6 +280,7 @@
                 class="value-item font-12"
                 v-for="(item, index) in getFormatList({ tList: skinTest })"
                 :key="index"
+                style="transform: scale(0.8)"
                 @click="()=>clickDateChangeTime(item)"
                 v-html="item.value"
               ></div>
@@ -439,7 +440,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -509,9 +510,11 @@ export default {
         pain: {
           vitalCode: "092",
           label: "疼痛",
-          color: "red",
+          // color: "red",
+          color: "blue",
           solid: true,
-          dotType: "Isogon",
+          // dotType: "Isogon",
+          dotType: "Circle",
           range: painRange,
           data: [
             // { time: '2019-05-15 07:10:00', value: 2},
@@ -753,32 +756,56 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
+        console.log("index====",index)
         let apart = []; // 存储当天和前面手术的天数间隔
         for (let i = 0; i < index; i++) {
           apart.unshift(days[i]);
         }
+        console.log("days====",days)
+        console.log("apart====",apart)
         const operationNum = apart.length; // 记录此日之前所有的手术次数，不考虑间隔大于7天
         // 间隔大于7天的手术，分子分母的写法要重置
         if (apart.length) {
           apart.unshift(days[index]);
           for (let i = 1; i < apart.length; i++) {
-            if (apart[i] - apart[i - 1] > 7) {
+            if (apart[i] - apart[i - 1] > 14) {
               apart = apart.slice(0, i); // 将间隔大于7天的之前的所有手术切割
               break;
             }
           }
           apart.splice(0, 1);
         }
-        if (days[index] <= 7) {
+        // if(days[index] <= 14){
+        //   if(index === 0 || !apart.length){
+        //     if(operationNum){
+        //       return `手术(${operationNum + 1})`
+        //     }
+        //     if(days[index] === 0){
+        //       return `手术(${days[index]+1})`
+        //     }else{
+        //       return  days[index]
+        //     }
+        //   }else {
+        //     if(days[index] === 0){
+        //       return  `手术(${operationNum + 1})/${apart.join("/")}`
+        //     }
+        //     return  apart[0] == days[index] ?  days[index] : `${days[index]}/${apart.join("/")}`
+        //   }
+        // }else{
+        //   return ""
+        // }
+        //
+        //
+        if (days[index] <= 14) {
           return index === 0 || !apart.length
             ? days[index] === 0 && operationNum
-              ? `(${operationNum + 1})`
-              : days[index]
+                  ? `手术(${operationNum + 1})`
+                  : (days[index]==0?`手术(${days[index]+1})`:days[index])
             : days[index] === 0
-              ? `${apart.join("/")}(${operationNum + 1})`
+                  ? `手术(${operationNum + 1})/${apart.join("/")}`
               : apart[0] == days[index]
-                ? days[index]
-                : `${days[index]}/${apart.join("/")}`;
+                      ? days[index]
+                      : `${days[index]}/${apart.join("/")}`;
         } else {
           return "";
         }
@@ -1535,7 +1562,7 @@ export default {
               const feverX = this.getXaxis(this.getLocationTime(x.time));
               const feverY = this.getYaxis(this.yRange, x.value);
               this.createCircle({
-                cx: feverX,
+                cx: feverX + this.xSpace / 2,
                 cy: feverY,
                 r: 7,
                 color: "blue",
@@ -1546,7 +1573,7 @@ export default {
               this.createLine({
                 x1: itemX,
                 y1: itemY,
-                x2: feverX,
+                x2: feverX + this.xSpace / 2,
                 y2: feverY,
                 lineWidth: 2,
                 color: "blue",
@@ -1976,7 +2003,7 @@ export default {
             const coolY = this.getYaxis(yRange, item.value, vitalCode);
             if (coolX === cx) {
               this.createCircle({
-                cx: coolX,
+                cx: coolX + this.xSpace / 2,
                 cy: coolY,
                 r: 4,
                 color: "red",
@@ -1984,16 +2011,37 @@ export default {
                 tips: `${item.time} 降温：${item.value}`,
                 dotSolid: false,
               });
-              this.createLine({
-                x1: cx,
-                y1: cy,
-                x2: coolX,
-                y2: coolY,
-                lineWidth: 1,
-                color: "red",
-                zlevel: 1,
-                lineDash: [3, 3],
-              });
+              // 发热 => 物理降温
+              const fever = this.feverList.find(
+                c => this.getLocationTime(item.time) === this.getLocationTime(c.time)
+              );
+              if (fever) {
+                const fx = this.getXaxis(this.getLocationTime(fever.time));
+                const fy = this.getYaxis(this.yRange, fever.value);
+                const tx = this.getXaxis(this.getLocationTime(item.time));
+                const ty = this.getYaxis(this.yRange, item.value);
+                this.createLine({
+                  x1: fx + this.xSpace / 2,
+                  y1: fy,
+                  x2: tx + this.xSpace / 2,
+                  y2: ty,
+                  lineWidth: 2,
+                  color: "red",
+                  zlevel: 1,
+                  lineDash: [3, 3],
+                });
+              }
+              // 物理降温 => 体温
+              // this.createLine({
+              //   x1: cx,
+              //   y1: cy,
+              //   x2: coolX + this.xSpace / 2,
+              //   y2: coolY,
+              //   lineWidth: 1,
+              //   color: "red",
+              //   zlevel: 1,
+              //   lineDash: [3, 3],
+              // });
               this.coolList.splice(i, 1);
             }
           }
@@ -2071,16 +2119,25 @@ export default {
             const ttgyX = this.getXaxis(this.getLocationTime(item.time));
             const ttgyY = this.getYaxis(yRange, item.value, vitalCode);
             if (ttgyX === cx) {
-              this.createIsogon({
-                x: ttgyX,
-                y: ttgyY,
+              // this.createIsogon({
+              //   x: ttgyX,
+              //   y: ttgyY,
+              //   r: 4,
+              //   n: 3,
+              //   color: "red",
+              //   zlevel: 10,
+              //   tips: `${item.time} 疼痛干预：${item.value}`,
+              //   dotSolid: false,
+              // });
+              this.createCircle({
+                cx: ttgyX,
+                cy: ttgyY,
                 r: 4,
-                n: 3,
                 color: "red",
                 zlevel: 10,
                 tips: `${item.time} 疼痛干预：${item.value}`,
                 dotSolid: false,
-              });
+              })
               this.createLine({
                 x1: cx,
                 y1: cy,

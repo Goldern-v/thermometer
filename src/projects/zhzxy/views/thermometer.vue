@@ -94,7 +94,7 @@
               v-for="(item, index) in formatOperateDateList"
               :key="index"
             >
-              {{ item }}
+              {{item}}
             </div>
           </div>
         </div>
@@ -110,7 +110,7 @@
               v-for="(item, index) in maTds"
               :key="index"
             >
-              {{ item }}
+              {{ item  }}
             </div>
           </div>
         </div>
@@ -464,14 +464,14 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
       areaHeight: 0, // 网格区域的高度
       xSpace: 19, // 纵向网格的间距
       ySpace: 15, //  横向网格的间距
-      leftWidth: 160, // 左侧内容宽度
+      leftWidth: 160, // 左侧内容宽度å
       xRange: [1, 8],
       yRange,
       pulseRange,
@@ -745,6 +745,7 @@ export default {
         .map((x) => x.time_point);
     },
     formatOperateDateList() {
+      // return ['14/1','35/1','22','14','11/2']
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
           return "";
@@ -782,16 +783,20 @@ export default {
           }
           apart.splice(0, 1);
         }
-        console.log(9999,apart, days, index, operationNum)
+        console.log(apart, days, index, operationNum)
         if (days[index] <= 14) {
-          return days[index] === 0 ? '' : days[index]
-          // return index === 0 || !apart.length
-          //   ? days[index] === 0 && operationNum
-          //     ? `(${operationNum + 1})`
-          //     : days[index]==0 ? '':days[index]
-          //   : days[index] === 0
-          //     ? `${apart.join("/")}`
-          //     : `${days[index]}/${apart.join("/")}`
+          const daysSet = [...new Set(days)].filter(v => v > 0);
+          console.log("daysSet==",daysSet)
+          let result = ''
+          daysSet.map(v => result ? result += `/${v}` : result = v);
+          let count =index === 0 || !apart.length
+              ? days[index] === 0 && operationNum
+                  ? `(${operationNum + 1})`
+                  : days[index]==0 ? '':days[index]
+              : days[index] === 0
+                  ? `${apart.join("/")}`
+                  : `${days[index]}/${apart.join("/")}`
+          return this.getFilterItem(count)
         } else {
           return "";
         }
@@ -858,6 +863,7 @@ export default {
         }
     },
   },
+
   created() {
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
@@ -866,6 +872,31 @@ export default {
     window.removeEventListener("message", this.messageHandle, false);
   },
   methods: {
+    getFilterItem(i){
+      if(!i){
+        return  ''
+      }else{
+        let item =i.toString()
+        if(item.length > 0){
+          let minch =/^\/[^\/]*$/.test(item)
+          let match =/\/.*\/.*\//.test(item)
+          if( item.length == 2){
+            return item > 14 ? '':item
+          }
+          if(minch ){
+            let list = item.split('/')
+            let a =list[0]>14?'':`${list[0]}/`
+            let b =list[1]
+            return `${a}${b}`
+          }
+          if(match){
+            return  item
+          }
+          return  item
+        }
+      }
+
+    },
     smallTdStyle(index) {
       return {
         width: `${this.xSpace + ((index - 5) % 6 === 0 ? 3 : 2)}px`,
@@ -878,7 +909,6 @@ export default {
       };
     },
     clickDateChangeTime(dateTime){
-      console.log('点击======》dateTime',dateTime)
       if(dateTime.time)
       window.parent.postMessage(
           { type: 'clickDateTime', value: dateTime.time },

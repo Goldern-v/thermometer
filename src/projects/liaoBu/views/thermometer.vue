@@ -108,7 +108,8 @@
               v-for="(item, index) in formatOperateDateList"
               :key="index"
             >
-              {{ item == 0 ? "" : item }}
+              {{item}}
+<!--              {{ item == 0 ? "" : item }}-->
             </div>
           </div>
         </div>
@@ -639,6 +640,8 @@ export default {
       ttgyList: [], // 疼痛干预
       BMIList: [], // BMI
       dateRangeList: [], // 数组长度决定页数
+      physicsCoolList: [], // 物理降温
+      heartRateBreaken:[],
       patInfo: {
         inp_no: "",
         name: "",
@@ -648,6 +651,8 @@ export default {
         visit_id: "",
         admission_date: this.parseTime(new Date()),
         age: "",
+        wardCode: '',
+        isBaby: '0',
       },
       vitalSigns: [],
       typeMap: {
@@ -864,7 +869,9 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
-        if (days[index] <= 7) {
+        // console.log("days==",days,index)
+        // (days[index] <= 7)
+        if (days[index] <= 10) {
           //体温单手术超过15天归零显示
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
           return index === 0
@@ -1017,6 +1024,16 @@ export default {
       }
       return [];
     },
+    // crossHeartAndPulse() {
+    //   const settingMap = this.settingMap;
+    //   const heartPoint = settingMap.heart.data.filter(item => {
+    //     return !settingMap.pulse.data.find(p => p.time === item.time);
+    //   })
+    //   const pulsePoint = settingMap.pulse.data.filter(item => {
+    //     return !settingMap.heart.data.find(h => h.time === item.time);
+    //   })
+    //   return heartPoint.length && pulsePoint.length ? [...heartPoint, ...pulsePoint] : [];
+    // }
   },
   watch: {
     // 因为分页可能在体温单外面，所以给父页面传递pageTotal
@@ -1054,7 +1071,7 @@ export default {
       };
     },
     clickDateChangeTime(dateTime){
-      console.log('点击======》dateTime',dateTime)
+      // console.log('点击======》dateTime',dateTime)
       if(dateTime.time)
       window.parent.postMessage(
           { type: 'clickDateTime', value: dateTime.time },
@@ -1196,6 +1213,7 @@ export default {
       this.dateRangeList = [];
       this.afterColoclyster = [];
       this.coloclyster = [];
+      this.physicsCoolList = [];
       for (let i = 0; i < 6; i++) {
         this[`customList${i}`] = [];
       }
@@ -1443,6 +1461,9 @@ export default {
           case "36":
             this.BMIList.push(item);
             break;
+          case "27":
+            this.physicsCoolList.push(item);
+            break;
           default:
             break;
         }
@@ -1485,6 +1506,16 @@ export default {
         });
       });
     },
+    //找到表底/表顶存在外出不升拒测的日期
+    getNotTemTime(sheetNote = []) {
+      let outTime = [];
+      sheetNote.forEach((y) => {
+        if (['转科', '外出', '拒测', '请假'].includes(y.value)) {
+          outTime.push(y.time);
+        }
+      });
+      return outTime;
+    },
     init() {
       this.getAreaHeight(); // 遍历一遍获取高度
       this.getAreaWidth(); // 遍历一遍获取宽度
@@ -1499,7 +1530,7 @@ export default {
         // 画折线
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data];
-          if (['1',"2", "3", "19"].includes(x.vitalCode)) {
+          if (['1',"2", "3", "19", '20'].includes(x.vitalCode)) {
             // 体温为不升时，折线需要断开
             data = [[]];
             x.data.forEach((y, index) => {
@@ -1515,6 +1546,36 @@ export default {
                   24 * 60 * 60 * 1000 * 2
                 ) {
                   data.push([x.data[index + 1]]);
+                }
+                // 产科新生儿
+                if (this.patInfo.wardCode === '1040102002' && this.patInfo.isBaby == '1') {
+                  //如果存在：转科/外出/拒测/请假 的情况，中间断开
+                  const bottomNode = this.getNotTemTime(this.bottomSheetNote)
+                  const topNode = this.getNotTemTime(this.topSheetNote)
+                  if (bottomNode.length > 0) {
+                    for (let item of bottomNode) {
+                      if (
+                        this.getTimeNum(x.data[index + 1].time) >=
+                          this.getTimeNum(item) &&
+                        this.getTimeNum(y.time) <= this.getTimeNum(item)
+                        // item.slice(0, 10) === y.time.slice(0, 10)
+                      ) {
+                        data.push([x.data[index + 1]]);
+                      }
+                    }
+                  }
+                  if (topNode.length > 0) {
+                    for (let item of topNode) {
+                      if (
+                        this.getTimeNum(x.data[index + 1].time) >=
+                          this.getTimeNum(item) &&
+                        this.getTimeNum(y.time) <= this.getTimeNum(item)
+                        // item.slice(0, 10) === y.time.slice(0, 10)
+                      ) {
+                        data.push([x.data[index + 1]]);
+                      }
+                    }
+                  }
                 }
               } else {
                 const list = data[data.length - 1];
@@ -1564,7 +1625,7 @@ export default {
             });
           });
           //每次遍历数据的时候，调整自定义的显示位置
-          this.handleCustomList();
+          // this.handleCustomList();
         });
         /*  画心率和脉搏的多边形，连线已经用折线画了，
             这里用多边形是为了生成阴影，多边形的边框颜色设为透明，
@@ -2008,6 +2069,37 @@ export default {
             break;
           default:
             break;
+        }
+        if (["1", "2", "19", "20"].includes(vitalCode)) {
+          // 画物理降温
+          for (let i = this.physicsCoolList.length - 1; i >= 0; i--) {            
+            const item = this.physicsCoolList[i];
+            const coolX = this.getXaxis(this.getLocationTime(item.time));
+            const coolY = this.getYaxis(yRange, item.value, vitalCode);
+            // console.log(coolX ,cx)
+            if (Math.floor(coolX) === Math.floor(cx)) {
+              this.createCircle({
+                cx: coolX,
+                cy: coolY,
+                r: 7,
+                color: "red",
+                zlevel: 10,
+                tips: `${item.time} 物理降温：${item.value}`,
+                dotSolid: false,
+              });
+              this.createLine({
+                x1: cx,
+                y1: cy,
+                x2: coolX,
+                y2: coolY,
+                lineWidth: 2,
+                color: "red",
+                zlevel: 1,
+                lineDash: [3, 3],
+              });
+              this.physicsCoolList.splice(i, 1);
+            }
+          }
         }
         if (["1", "2", "3"].includes(vitalCode)) {
           // 画降温
@@ -2873,12 +2965,12 @@ export default {
         border-radius: 50px;
       }
     }
-    .notes :nth-child(3) {
+    /* .notes :nth-child(3) { */
       /* margin-bottom: -10px; */
-    }
-    .notes :nth-child(4) {
+    /* } */
+    /* .notes :nth-child(4) { */
       /* margin-top: 30px; */
-    }
+    /* } */
     .times {
       overflow: hidden;
       flex: 1.7;

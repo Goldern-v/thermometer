@@ -1,5 +1,5 @@
 <template>
-  <div v-if="printData">
+  <div v-if="printData" :style="[isPDF && {height:'inherit'}]">
     <Thermometer ref="thermometer" :printData="printData" :isPrintAll="isPrintAll" v-for="(item, index) in pageTotal"
       :printPage="index + 1" :key="index" :class="index + 1 <= pageTotal ? 'printBreak' : ''" />
   </div>
@@ -55,6 +55,11 @@ export default {
   created() {
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
+  },
+  computed:{
+    isPDF(){
+      return !!this.$route.query.isPDF
+    },
   },
   mounted() {
     const urlParams = this.urlParse();

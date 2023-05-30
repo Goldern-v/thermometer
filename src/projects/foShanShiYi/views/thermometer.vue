@@ -269,7 +269,7 @@
           </div>
         </div>
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">总输入量</div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">总输入量(ml)</div>
           <div class="value-item-box">
             <div
               class="value-item font-14"
@@ -281,7 +281,7 @@
           </div>
         </div>
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">总排出量</div>
+          <div class="label" :style="{ width: `${leftWidth}px` }">总排出量(ml)</div>
           <div class="value-item-box">
             <div
               class="value-item font-14"
@@ -568,7 +568,8 @@ export default {
           dotType: 'Isogon',
           range: yRange,
           data: [
-            // { time: '2019-05-15 07:10:00', value: 2},
+            // { time: '2023-05-05 07:10:00', value: 36},
+            // { time: '2023-05-05 07:30:00', value: 37},
           ],
         },
         pulse: {
@@ -580,6 +581,8 @@ export default {
           range: pulseRange,
           data: [
             // { time: '2019-05-15 07:10:00', value: 120},
+            // { time: '2023-05-05 07:10:00', value: 130},
+            // { time: '2023-05-05 07:30:00', value: 120},
           ],
         },
         heart: {
@@ -1984,7 +1987,7 @@ export default {
               color: dotColor || "#000",
               zlevel: 10,
               tips: `${x.time} ${label}：${x.value}`,
-              dotSolid,
+              dotSolid: false,
             });
             break;
           default:
@@ -2689,7 +2692,7 @@ export default {
         border-color: #fff;
         transform: translate(-4px, 2px);
       }
-      .ear-temperature {
+      /* .ear-temperature {
         position: absolute;
         left: 37px;
         top: 1px;
@@ -2698,7 +2701,29 @@ export default {
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
         border-bottom: 18px solid blue;
+      } */
+      .ear-temperature {
+        width: 0;
+        height: 0;
+        border-style:solid;
+        border-width: 0 10px 18px;
+        border-color: transparent transparent blue;
+        position: absolute;
+        left: 41px;
+        top: 1px;
+        display: inline-block;
+        z-index: 2;
       }
+      .ear-temperature:after{
+        content: '';
+        border-style: solid;
+        border-width: 0 7px 13.5px;
+        border-color: transparent transparent #fff;
+        position: absolute;
+        top: 3px;
+        left: -7px;
+      }
+
       .axillary {
         font-family: SimHei;
         position: absolute;

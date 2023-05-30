@@ -1,6 +1,7 @@
 <template>
   <!--     :style="{ width: `${leftWidth + areaWidth}px`, transform: `scale(${scaleData})`, transformOrigin: '0 0' }">   -->
   <div @dblclick="dblclick" class="main-view" v-if="apiData"
+        :class="{isPDF}"
        :style="{ width: `${leftWidth + areaWidth}px`, transform: `scale(${scaleData})`, transformOrigin: 'top' }">
   <div>
       <div class="head-hos"><img :src="imgUrl" alt=""></div>
@@ -143,7 +144,7 @@
               <div class="index" v-for="item in pulseList" :key="item">
                 <span>{{ item }}</span>
               </div>
-              <div class="pain-area">
+              <div class="pain-area" style="font-size: 16px">
                 疼<br/>痛<br/>评<br/>分
               </div>
               <div class="bottom-area" :style="`height: ${bottomAreaHeight + 5}px`"></div>
@@ -576,6 +577,9 @@ export default {
     };
   },
   computed: {
+    isPDF(){
+      return !!this.$route.query.isPDF
+    },
     timeTds() {
       const list = [2, 6, 10, 2, 6, 10];
       const tds = [];
@@ -594,6 +598,7 @@ export default {
     },
     painList() {
       const list = [];
+      console.log("painRange===",this.painRange)
       for (let i = this.painRange[1]; i > this.painRange[0]; i -= 2) {
         list.push(i);
       }
@@ -627,7 +632,8 @@ export default {
     },
 
     painAreaHeight() {
-      return this.ySpace * 5 + 13;
+      // return this.ySpace * 5 + 13;
+      return this.ySpace * 4 + 8;
     },
     indexAreaHeight() {
       return this.ySpace * 5;
@@ -1363,37 +1369,51 @@ export default {
         this.createNote(this.topSheetNote, 0, "red");
         // 生成表底注释
         this.createNote(
-          this.bottomSheetNote,
-          this.areaHeight - (this.ySpace + 2) * 14,
-          "black"
+            this.bottomSheetNote,
+            this.areaHeight - (this.ySpace + 2) * 10,
+            "black"
         );
       });
     },
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
       const xaxis = notes.map((x) =>
-        this.getXaxis(this.getLocationTime(x.time))
+          this.getXaxis(this.getLocationTime(x.time))
       );
-      const xaxisNew = this.handleNoteXaxis(xaxis);
+      // const xaxisNew = this.handleNoteXaxis([...xaxis], notes);
       notes.forEach((x, i) => {
         let value = x.value;
         if (x.value.endsWith("|")) {
           value = `${x.value}${this.toChinesNum(
-            new Date(x.time).getHours()
+              new Date(x.time).getHours()
           )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`;
         }
-        const bottomText = this.bottomSheetNote.map((x) => {
+        // 从第二项开始，和前面的x判断是否相同，相同则需处理y
+        let yNew = 0;
+        for (let j = i - 1; j >= 0; j--) {
+          if (Math.abs(xaxis[j] - xaxis[i]) <= 1) {
+            if (notes[j].value.endsWith("|")) {
+              let noteTime = `${notes[j].value}${this.toChinesNum(
+                  new Date(notes[j].time).getHours()
+              )}时${this.toChinesNum(new Date(notes[j].time).getMinutes())}分`;
+              yNew +=( (noteTime.length + 1) * this.ySpace - 3) + 12;
+            } else {
+              yNew += ((notes[j].value.length ) * this.ySpace + (notes[j].value.length + 1) * 2 - 3) + 8;
+            }
+          } else {
+            break;
+          }
+        }
+        let bottomValu = this.bottomSheetNote.map((x) => {
           return x.value;
-        });
+        })
         this.createText({
-          // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
-          x: xaxisNew[i],
-          y: bottomText.includes(value) ? y - 3 : y + 1,
+          x: xaxis[i],
+          y: bottomValu.includes(value) ? y + 5 + yNew : yNew,
           value: this.addn(value),
           color,
-          border: true,
-          time: x.time,
-          textLineHeight: this.ySpace + 2,
+          border:true,
+          textLineHeight: this.ySpace + 1,
           fontWeight: "bold",
           fontFamily: "SimHei",
         });
@@ -1410,7 +1430,8 @@ export default {
       for (let i = 0; i < totalLine; i++) {
         const isBreak =
           i % 5 === 0 && i > 0 && i < totalLine - 1 && i !== 40 && i < 40
-        const redBreak = i === 44 || i === 40;
+        // const redBreak = i === 44 || i === 40;
+        const redBreak = i === 40
         const isboundary = i === 0 || i === totalLine - 1;
         const lineWidth = isBreak ? 3 : 2;
         const params = {
@@ -1419,7 +1440,7 @@ export default {
           x2: this.areaWidth - 1,
           y2: preSpace,
           lineWidth,
-          color: isBreak ? "#000" : isboundary ? "transparent" : redBreak ? "red" : "skyblue",
+          color: isBreak ? "#000" : isboundary ? "transparent" : redBreak ? "red" : "#4F94CD",
         };
         preSpace += lineWidth + this.ySpace;
         this.createLine(params);
@@ -1441,7 +1462,7 @@ export default {
           x2: preSpace,
           y2: this.areaHeight,
           lineWidth,
-          color: isBreak ? "red" : "skyblue",
+          color: isBreak ? "red" : "#4F94CD",
         };
         preSpace += lineWidth + this.xSpace;
         this.createLine(params);
@@ -1452,9 +1473,9 @@ export default {
         this.yRange[1] -
         this.yRange[0] +
         1 +
-        (this.yRange[1] - this.yRange[0]) * 4 +
-        1;
+        (this.yRange[1] - this.yRange[0]) * 4 ;
       let preSpace = 0;
+      console.log('totalLine==',totalLine)
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1;
         const lineWidth = isBreak ? 3 : 2;
@@ -2375,7 +2396,13 @@ export default {
   font-weight: 900;
   font-family: Simsun;
   width: fit-content;
-
+  &.isPDF{
+    transform: scaleY(0.69) scaleX(0.78);
+      margin: 0 0 0 -90px;
+      padding-top: 35px;
+      overflow: hidden;
+      vertical-align: top ;
+  }
   .head-hos {
     font-family: SimHei;
     font-size: 38px;
@@ -2706,36 +2733,43 @@ export default {
       }
 
       .pain-icon {
-        font-size: 28px;
+        font-size: 26px;
         position: absolute;
-        left: 31px;
+        left: 29px;
         color: blue;
-        top: 116px;
+        top: 119px;
         display: inline-block;
         z-index: 2;
       }
 
       .ear-temperature {
+        //border-width: 0px 12px 14px;
+        //border-bottom: 23px solid red;
+        //left: 35px;
+        //top: -2px;
         width: 0;
         height: 0;
         border-style: solid;
-        border-width: 0px 12px 14px;
-        border-bottom: 23px solid red;
+        border-width: 0px 9px 10px;
+        border-bottom: 18.3px solid red;
         border-color: transparent transparent blue;
         position: absolute;
-        left: 35px;
-        top: -2px;
+        left: 42px;
+        top: 0px;
       }
 
       .ear-temperature:after {
+        //border-width: 4px 9px 17px;
+        //border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #fff;
+        //left: -9px;
         content: "";
         border-style: solid;
         border-width: 4px 9px 17px;
         border-bottom: 17px solid red;
-        border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #fff;
+        border-color: rgba(0,0,0,0) rgba(0,0,0,0) #fff;
         position: absolute;
         top: 0px;
-        left: -9px;
+        left: -507px;
       }
 
 

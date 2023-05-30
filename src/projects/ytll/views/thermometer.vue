@@ -758,6 +758,7 @@ export default {
             heart: {
               value: x.value,
               y: this.getYaxis(settingMap.heart.range, x.value),
+              time: x.time,
             },
           });
         } else {
@@ -765,6 +766,7 @@ export default {
             heart: {
               value: x.value,
               y: this.getYaxis(settingMap.heart.range, x.value),
+              time: x.time,
             },
             pulse: null,
           });
@@ -778,6 +780,7 @@ export default {
             pulse: {
               value: x.value,
               y: this.getYaxis(settingMap.pulse.range, x.value),
+              time: x.time,
             },
           });
         } else {
@@ -785,26 +788,45 @@ export default {
             pulse: {
               value: x.value,
               y: this.getYaxis(settingMap.pulse.range, x.value),
+              time: x.time,
             },
             heart: null,
           });
         }
       });
       const allList = [...xyMap.entries()].sort((a, b) => a[0] - b[0]);
+      console.log('allList: ', allList);
       if (allList.length) {
         let data = [[]];
-        allList.forEach((x) => {
+        allList.forEach((x, index) => {
+          let breakShadow = false;
+          if (this.getNotTemTime4Shadow().length) {
+            for (const item of this.getNotTemTime4Shadow()) {
+              if (
+                index > 0 && 
+                this.getTimeNum(allList[index - 1][1].heart.time) <= this.getTimeNum(item) &&
+                this.getTimeNum(x[1].heart.time) >= this.getTimeNum(item)
+              ) {
+                breakShadow = true;
+              }
+            }
+          }
           if (
             !x[1].heart ||
             !x[1].pulse ||
-            (x[1].heart && x[1].heart.value > this.pulseRange[1])
+            (x[1].heart && x[1].heart.value > this.pulseRange[1]) || 
+            breakShadow
           ) {
             // 断点
             data.push([]);
           } else {
             data[data.length - 1].push(x[0]);
           }
+          if (breakShadow) {
+            data.push([x[0]]);
+          }
         });
+        console.log('data', data)
         data = data.map((x) => {
           return [
             ...x.map((y) => [`${y+2} ${xyMap.get(y).heart.y}`]),
@@ -814,6 +836,7 @@ export default {
             return acc.concat(cur);
           }, []);;
         }).filter((item) => item.length)
+        console.log('data22', data)
         return data;
       }
       return [];
@@ -835,7 +858,7 @@ export default {
     // 实现外部分页和打印
     const patientInfo = this.$route.query;
     this.showInnerPage = patientInfo.showInnerPage == 1;
-    http://192.168.254.92:9091/temperature/?PatientId=99463&VisitId=2&StartTime=2022-12-01&showInnerPage=1
+    // http://192.168.254.92:9091/temperature/?PatientId=99463&VisitId=2&StartTime=2022-12-01&showInnerPage=1
     if (this.isPrintAll) {
       // 批量打印
       this.apiData = this.printData;
@@ -903,7 +926,7 @@ export default {
         flex: "auto",
         "flex-grow": 0,
         "flex-shrink": 0,
-        "border-right-style": "solid",
+        // "border-right-style": "solid",
         "border-width": `${(index - 1) % 2 === 0 ? 2 : 1}px`,
         "border-color": `${(index - 1) % 2 === 0 ? "transparent" : "#000"}`,
         transform: "translateX(1px)",
@@ -943,7 +966,7 @@ export default {
         }
       });
     },
-    //找到表底存在不升的日期
+    //找到存在不升的日期
     getNotTemTime() {
       let outTime = [];
       this.bottomSheetNote.forEach((y) => {
@@ -958,11 +981,21 @@ export default {
       });
       return outTime;
     },
-     //找到表底存在不在的日期
-     getNotTemTime1() {
+    // 处理阴影表顶注释断开
+    getNotTemTime4Shadow() {
       let outTime = [];
       this.topSheetNote.forEach((y) => {
-        if (y.value.includes("不在")) {
+        if (['不在', '拒测'].includes(y.value)) {
+          outTime.push(y.time);
+        }
+      });
+      return outTime;
+    },
+    //找到表顶存在不在的日期
+    getNotTemTime1() {
+      let outTime = [];
+      this.topSheetNote.forEach((y) => {
+        if (['不在'].includes(y.value)) {
           outTime.push(y.time);
         }
       });

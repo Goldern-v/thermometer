@@ -1,5 +1,6 @@
 <template>
-  <div v-if="printData" style="height:100%">
+  <!-- <div v-if="printData" style="height:100%"> -->
+  <div v-if="printData">
     <Thermometer
       ref="thermometer"
       :printData="printData"
@@ -102,13 +103,13 @@ export default {
 </script>
 
 <style>
-@media print {
+/* @media print {
   @page {
     size: a4; 
     margin: 8mm 5mm 8mm 5mm; 
   }
 
-}
+} */
 .printBreak {
   page-break-after: always;
 }

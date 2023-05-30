@@ -213,14 +213,32 @@ export const mockData = {
     },
     {
       temperature_type: "表顶注释",
-      value: "拒测",
-      time_point: "2022-09-03 10:00:00",
+      value: "拒测1",
+      time_point: "2022-09-03 10:59:00",
       vital_code: "3",
     },
     {
       temperature_type: "表顶注释",
-      value: "转入||五时零分",
-      time_point: "2022-09-02 17:00:00",
+      value: "拒测2",
+      time_point: "2022-09-03 11:59:00",
+      vital_code: "3",
+    },
+    {
+      temperature_type: "表顶注释",
+      value: "拒测4",
+      time_point: "2022-09-03 10:59:00",
+      vital_code: "3",
+    },
+    {
+      temperature_type: "表顶注释",
+      value: "转入1",
+      time_point: "2022-09-03 17:00:00",
+      vital_code: "3",
+    },
+    {
+      temperature_type: "表顶注释",
+      value: "转入2",
+      time_point: "2022-09-03 18:00:00",
       vital_code: "3",
     },
     {
@@ -408,6 +426,36 @@ export const mockData = {
       value: "入院|",
       time_point: "2022-08-29 11:11:08",
       vital_code: "3",
+    },
+    {
+      temperature_type: "表顶注释",
+      value: "入1|",
+      time_point: "2022-08-29 11:11:08",
+      vital_code: "3",
+    },
+    {
+      temperature_type: "表底注释",
+      value: "外1外1",
+      time_point: "2022-08-29 10:11:08",
+      vital_code: "31",
+    },
+    {
+      temperature_type: "表底注释",
+      value: "外2外2",
+      time_point: "2022-08-29 10:11:08",
+      vital_code: "31",
+    },
+    {
+      temperature_type: "表底注释",
+      value: "外3",
+      time_point: "2022-08-30 10:11:08",
+      vital_code: "31",
+    },
+    {
+      temperature_type: "表底注释",
+      value: "外4",
+      time_point: "2022-08-30 10:11:08",
+      vital_code: "31",
     },
   ],
 };
