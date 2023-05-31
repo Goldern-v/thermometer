@@ -104,7 +104,7 @@
             手术后天数
           </div>
           <div class="value-item-box">
-            <div class="value-item" v-for="(item, index) in formatOperateDateList" :key="index">
+            <div class="value-item" style="color:red" v-for="(item, index) in formatOperateDateList" :key="index">
               {{ item }}
             </div>
           </div>
@@ -440,7 +440,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -756,32 +756,56 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
+        console.log("index====",index)
         let apart = []; // 存储当天和前面手术的天数间隔
         for (let i = 0; i < index; i++) {
           apart.unshift(days[i]);
         }
+        console.log("days====",days)
+        console.log("apart====",apart)
         const operationNum = apart.length; // 记录此日之前所有的手术次数，不考虑间隔大于7天
         // 间隔大于7天的手术，分子分母的写法要重置
         if (apart.length) {
           apart.unshift(days[index]);
           for (let i = 1; i < apart.length; i++) {
-            if (apart[i] - apart[i - 1] > 7) {
+            if (apart[i] - apart[i - 1] > 14) {
               apart = apart.slice(0, i); // 将间隔大于7天的之前的所有手术切割
               break;
             }
           }
           apart.splice(0, 1);
         }
-        if (days[index] <= 7) {
+        // if(days[index] <= 14){
+        //   if(index === 0 || !apart.length){
+        //     if(operationNum){
+        //       return `手术(${operationNum + 1})`
+        //     }
+        //     if(days[index] === 0){
+        //       return `手术(${days[index]+1})`
+        //     }else{
+        //       return  days[index]
+        //     }
+        //   }else {
+        //     if(days[index] === 0){
+        //       return  `手术(${operationNum + 1})/${apart.join("/")}`
+        //     }
+        //     return  apart[0] == days[index] ?  days[index] : `${days[index]}/${apart.join("/")}`
+        //   }
+        // }else{
+        //   return ""
+        // }
+        //
+        //
+        if (days[index] <= 14) {
           return index === 0 || !apart.length
             ? days[index] === 0 && operationNum
-              ? `(${operationNum + 1})`
-              : days[index]
+                  ? `手术(${operationNum + 1})`
+                  : (days[index]==0?`手术(${days[index]+1})`:days[index])
             : days[index] === 0
-              ? `${apart.join("/")}(${operationNum + 1})`
+                  ? `手术(${operationNum + 1})/${apart.join("/")}`
               : apart[0] == days[index]
-                ? days[index]
-                : `${days[index]}/${apart.join("/")}`;
+                      ? days[index]
+                      : `${days[index]}/${apart.join("/")}`;
         } else {
           return "";
         }
