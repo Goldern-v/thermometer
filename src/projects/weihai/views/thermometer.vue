@@ -2176,7 +2176,9 @@ export default {
                 zlevel: 1,
                 lineDash: [3, 3],
               });
-              this.ttgyList.splice(i, 1);
+              this.$nextTick(() => {
+                this.ttgyList.splice(i, 1);
+              })
             }
           }
         }
