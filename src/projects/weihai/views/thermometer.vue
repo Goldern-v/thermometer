@@ -2525,7 +2525,7 @@ export default {
             "*"
           );
           window.parent.postMessage(
-            { type: "isFirst", value: !this.apiData.vitalSigns || !this.apiData.vitalSigns.length },
+            { type: "isFirst", value: this.apiData.vitalSigns && this.apiData.vitalSigns.length },
             "*"
           );
           this.reset()
