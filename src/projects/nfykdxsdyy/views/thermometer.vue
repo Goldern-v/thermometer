@@ -7,8 +7,9 @@
     :class="{ isPDF }"
     :style="{
       width: `${leftWidth + areaWidth}px`,
-      transform: `scale(${scaleData})`,
-      transformOrigin: 'top center',
+      overflow: 'hidden',
+      transform: `scale(${scaleData}) translatex(${translaData})`,
+      transformOrigin: 'top',
     }"
   >
     <div class="head-hos"><img :src="imgUrl" alt="" /></div>
@@ -566,6 +567,7 @@ export default {
       leftWidth: 160, // 左侧内容宽度
       xRange: [1, 8],
       scaleData: this.getScale(),
+      translaData: this.getTranslatex(),
       yRange,
       pulseRange,
       painRange,
@@ -1021,6 +1023,31 @@ export default {
         transform: "translateX(1.5px)",
         "font-family": "SimHei",
       };
+    },
+    getTranslatex() {
+      let version = navigator.userAgent;
+      if (this.isPrintAll) return "";
+      if (
+        version.indexOf("Windows NT 10") != -1 ||
+        version.indexOf("Intel Mac OS") != -1
+      ) {
+        return "";
+      } else if (version.indexOf("Windows NT 5") != -1) {
+        return "";
+      } else {
+        let headEle = document.querySelector("head");
+        let styleEle = document.createElement("style");
+        styleEle.innerHTML = `
+        @media print {
+          @page {
+            size: a4; 
+            margin: 0mm 0mm 0mm 0mm; 
+          }
+        }
+        `;
+        headEle.appendChild(styleEle);
+        return "-12%";
+      }
     },
     getScale() {
       let version = navigator.userAgent;
@@ -2571,6 +2598,7 @@ export default {
   }
   .main-view {
     transform: scale(0.83);
+    transform-origin: top;
   }
   //.pain-area :nth-child(5) {
   //  margin-bottom: 4px;

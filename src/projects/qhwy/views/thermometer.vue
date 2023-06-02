@@ -605,7 +605,7 @@ export default {
     const FahrenheitListRange = [95, 108];
     const FahrenheitRange = [0, 65];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1859,21 +1859,21 @@ export default {
               this.monitoringInterval = [];
             }
           });
-          if (pulseRateCon.length && heartRateCon.length) {
-            const params4 = {
-              x1: this.getXaxis(heartRateCon[heartRateCon.length - 1].time),
-              y1: this.getYaxis(
-                this.pulseRange,
-                heartRateCon[heartRateCon.length - 1].value,
-                "02"
-              ),
-              x2: this.getXaxis(pulseRateCon[0].time),
-              y2: this.getYaxis(this.pulseRange, pulseRateCon[0].value, "20"),
-              lineWidth: 1,
-              color: "red",
-            };
-            this.createLine(params4);
-          }
+          // if (pulseRateCon.length && heartRateCon.length) {
+          //   const params4 = {
+          //     x1: this.getXaxis(heartRateCon[heartRateCon.length - 1].time),
+          //     y1: this.getYaxis(
+          //       this.pulseRange,
+          //       heartRateCon[heartRateCon.length - 1].value,
+          //       "02"
+          //     ),
+          //     x2: this.getXaxis(pulseRateCon[0].time),
+          //     y2: this.getYaxis(this.pulseRange, pulseRateCon[0].value, "20"),
+          //     lineWidth: 1,
+          //     color: "red",
+          //   };
+          //   this.createLine(params4);
+          // }
         }
       });
     },
