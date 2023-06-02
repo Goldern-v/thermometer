@@ -605,7 +605,7 @@ export default {
     const FahrenheitListRange = [95, 108];
     const FahrenheitRange = [0, 65];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1808,6 +1808,11 @@ export default {
               //找到中间存在心率监听器数值的数组，然后首首尾尾相连
               const lastIndex = heartIcon.length - 1;
               const lastPlueIndex = pluseRateCon.length - 1;
+              // 如果是存在两个脉搏之间的心率，从总心率上去除，剩下的在重新心率和脉搏相连
+              const heartList = heartRateCon.filter(
+                (pulseItem) =>
+                  pulseItem.timeNum !== heartIcon[lastIndex].timeNum
+              );
               const params1 = {
                 x1: this.getXaxis(interval[0].time),
                 y1: this.getYaxis(this.pulseRange, interval[0].value, "20"),
@@ -1828,6 +1833,25 @@ export default {
                 lineWidth: 1,
                 color: index != lastPlueIndex ? "red" : "transparent",
               };
+              if (pulseRateCon.length && heartList.length) {
+                const params3 = {
+                  x1: this.getXaxis(heartList[heartList.length - 1].time),
+                  y1: this.getYaxis(
+                    this.pulseRange,
+                    heartList[heartList.length - 1].value,
+                    "02"
+                  ),
+                  x2: this.getXaxis(pulseRateCon[0].time),
+                  y2: this.getYaxis(
+                    this.pulseRange,
+                    pulseRateCon[0].value,
+                    "20"
+                  ),
+                  lineWidth: 1,
+                  color: "red",
+                };
+                this.createLine(params3);
+              }
 
               this.createLine(params1);
               this.createLine(params2);
@@ -1836,7 +1860,7 @@ export default {
             }
           });
           if (pulseRateCon.length && heartRateCon.length) {
-            const params3 = {
+            const params4 = {
               x1: this.getXaxis(heartRateCon[heartRateCon.length - 1].time),
               y1: this.getYaxis(
                 this.pulseRange,
@@ -1848,7 +1872,7 @@ export default {
               lineWidth: 1,
               color: "red",
             };
-            this.createLine(params3);
+            this.createLine(params4);
           }
         }
       });

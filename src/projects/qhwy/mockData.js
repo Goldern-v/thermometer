@@ -277,7 +277,7 @@ export const mockData = {
     // {
     //   temperature_type: "脉搏",
     //   value: "100",
-    //   time_point: "2022-06-04 15:00:00",
+    //   time_point: "2022-06-04 21:00:00",
     //   vital_code: "02",
     // },
     {
