@@ -18,29 +18,29 @@
       class="head-info"
       :style="{ width: `${leftWidth + areaWidth + 60}px` }"
     >
-      <div class="item" style="flex: 1">
+      <div class="item">
         姓名:<span class="value">{{ patInfo.name }}</span>
       </div>
-      <div class="item" style="flex: 0.7">
+      <div class="item">
         年龄：<span class="value">{{ patInfo.age }}</span>
       </div>
-      <div class="item" style="flex: 0.7">
+      <div class="item">
         性别：<span class="value">{{ patInfo.sex }}</span>
       </div>
-      <div class="item" style="flex: 1.7">
+      <div class="item">
         科别:<span class="value">{{ adtLog || patInfo.dept_name }}</span>
       </div>
-      <div class="item" style="flex: 0.7">
+      <div class="item">
         床号:<span class="value">{{
           bedExchangeLog || patInfo.bed_label
         }}</span>
       </div>
-      <div class="item" style="flex: 1.5">
+      <div class="item">
         入院日期<span class="value">{{
           patInfo.admission_date.slice(0, 10)
         }}</span>
       </div>
-      <div class="item" style="flex: 1.7">
+      <div class="item">
         住院号:<span class="value">{{ patInfo.patient_id }}</span>
       </div>
     </div>
@@ -349,12 +349,13 @@
               :style="{
                 ...smallTdStyle(index, formatBreatheList.length),
                 ...item.style,
-                color: '#000',
+                color: 'red',
               }"
               v-for="(item, index) in formatBreatheList"
               :key="index"
             >
-              {{ item.value }}
+            <span v-if="item.value && item.code == 666" style="border-radius: 50%;border: 1px solid;">{{ item.value }}</span>
+            <span v-else>{{ item.value }}</span>
             </div>
           </div>
         </div>
@@ -366,7 +367,7 @@
             <div
               class="value-item"
               v-for="(item, index) in formatPressureList"
-              :style="middleTdStyle(index, formatBreatheList.length)"
+              :style="middleTdStyle(index, formatPressureList.length)"
               :key="index"
             >
               {{ item.value }}
@@ -459,6 +460,18 @@
             </div>
           </div>
         </div>
+         <div class="row" :style="{ height: `${bottomTrHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth}px` }">跌倒评分</div>
+          <div class="value-item-box">
+            <div
+              class="value-item"
+              v-for="(item, index) in getFormatList({ tList: diedaoList })"
+              :key="index"
+            >
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
           <div
             class="label"
@@ -466,7 +479,7 @@
               width: `${leftWidth}px`,
             }"
           >
-            血氧饱和度%
+            血氧饱和度(%)
           </div>
           <div class="value-item-box font-14">
             <div
@@ -620,6 +633,7 @@ export default {
       FahrenheitListRange,
       FahrenheitRange,
       monitoringInterval: [], //心电监护的区间 ，也就是前后脉搏间隔24小时的数组
+      heartorginInter: [], //心电监护的区间 ，也就是前后脉搏间隔24小时的数组
       settingMap: {
         oralTemperature: {
           vitalCode: "041",
@@ -708,6 +722,7 @@ export default {
       inputList: [], // 液体入量
       shitList: [], // 大便次数 大便失禁者用“※”表示，人工肛门用“☆”表示，灌肠“E”表示。
       yinliuList: [], // 引流量
+      diedaoList: [], // 引流量
       urineList: [], // 尿量
       outputList: [], // 出量
       allergyList: [], // 过敏药物
@@ -877,10 +892,11 @@ export default {
           : 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
-        const item = { timeNum: i, value: "" };
+        const item = { timeNum: i, value: "",code:null };
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
+            item.code = breatheList[j].code || null
             typeof parseInt(breatheList[j].value) === "number" &&
             !isNaN(breatheList[j].value)
               ? (item.value = breatheList[j].value)
@@ -1381,6 +1397,7 @@ export default {
       this.inputList = [];
       this.shitList = [];
       this.yinliuList = [];
+      this.diedaoList = [];
       this.urineList = [];
       this.outputList = [];
       this.coolList = [];
@@ -1569,6 +1586,9 @@ export default {
           case "10":
             this.yinliuList.push(item);
             break;
+          case "49":
+            this.diedaoList.push(item);
+            break;
           case "12":
             this.urineList.push(item);
             break;
@@ -1586,6 +1606,10 @@ export default {
             break;
           case "11":
             this.bloodOxygenList.push(item);
+            break;
+          case "666": // 机械通气
+            item.code = 666;
+            this.breatheList.push(item);
             break;
           default:
             break;
@@ -1670,6 +1694,11 @@ export default {
                       x.data[index],
                       x.data[index + 1],
                     ]);
+
+                  x.vitalCode == "20" && this.heartorginInter.push([
+                      x.data[index],
+                      x.data[index + 1],
+                  ])
                   //如果脉搏或者心率 中间区间没有数据  而且相邻两个脉搏有心率  或者相邻两个心率中间有脉搏  则断开
                   if (x.vitalCode == "02") {
                     this.settingMap.heart.data.forEach((heartItem, ind) => {
@@ -1721,6 +1750,11 @@ export default {
                       list[list.length - 1],
                       lastDate,
                     ]);
+                  x.vitalCode == "20" &&
+                    this.heartorginInter.push([
+                      list[list.length - 1],
+                      lastDate,
+                    ]);
                 }
               }
             });
@@ -1767,8 +1801,15 @@ export default {
           "red"
         );
         if (this.monitoringInterval.length) {
-          //返回中间断层的脉搏数组
-          const pluseRateCon = this.monitoringInterval.map((list) => {
+          this.handleHPBetween(this.monitoringInterval, this.settingMap.heart.data, '20')
+        }
+        if(this.heartorginInter.length){
+          this.handleHPBetween(this.heartorginInter, this.settingMap.pulse.data, '02')
+        }
+      });
+    },
+    handleHPBetween(HPValue,settingHP, vitalCode){
+          const HPValueCon = HPValue.map((list) => {
             return list.map((item) => {
               return {
                 time: this.getLocationTime(item.time),
@@ -1777,24 +1818,17 @@ export default {
               };
             });
           });
-          const heartRateCon = this.settingMap.heart.data.map((item) => {
+          const settingValue = settingHP.map((item) => {
             return {
               time: this.getLocationTime(item.time),
               timeNum: this.getTimeNum(this.getLocationTime(item.time)),
               value: item.value,
             };
           });
-          const pulseRateCon = this.settingMap.pulse.data.map((item) => {
-            return {
-              time: this.getLocationTime(item.time),
-              timeNum: this.getTimeNum(this.getLocationTime(item.time)),
-              value: item.value,
-            };
-          });
-          const heartInterval = [];
-          pluseRateCon.forEach((interval, index) => {
+          const heartIntervals = [];
+          HPValueCon.forEach((interval, index) => {
             const intervalList = [];
-            heartRateCon.forEach((heartItem) => {
+            settingValue.forEach((heartItem) => {
               if (
                 heartItem.timeNum > interval[0].timeNum &&
                 heartItem.timeNum < interval[1].timeNum
@@ -1802,80 +1836,39 @@ export default {
                 intervalList.push(heartItem);
               }
             });
-            heartInterval.push(intervalList);
-            const heartIcon = heartInterval[index];
+            heartIntervals.push(intervalList);
+            const heartIcon = heartIntervals[index];
             if (heartIcon.length) {
               //找到中间存在心率监听器数值的数组，然后首首尾尾相连
               const lastIndex = heartIcon.length - 1;
-              const lastPlueIndex = pluseRateCon.length - 1;
-              // 如果是存在两个脉搏之间的心率，从总心率上去除，剩下的在重新心率和脉搏相连
-              const heartList = heartRateCon.filter(
-                (pulseItem) =>
-                  pulseItem.timeNum !== heartIcon[lastIndex].timeNum
-              );
+              const lastPlueIndex = HPValueCon.length - 1;
               const params1 = {
                 x1: this.getXaxis(interval[0].time),
-                y1: this.getYaxis(this.pulseRange, interval[0].value, "20"),
+                y1: this.getYaxis(this.pulseRange, interval[0].value, vitalCode),
                 x2: this.getXaxis(heartIcon[0].time),
-                y2: this.getYaxis(this.pulseRange, heartIcon[0].value, "20"),
+                y2: this.getYaxis(this.pulseRange, heartIcon[0].value, vitalCode),
                 lineWidth: 1,
                 color: "red",
               };
               const params2 = {
                 x1: this.getXaxis(interval[1].time),
-                y1: this.getYaxis(this.pulseRange, interval[1].value, "20"),
+                y1: this.getYaxis(this.pulseRange, interval[1].value, vitalCode),
                 x2: this.getXaxis(heartIcon[lastIndex].time),
                 y2: this.getYaxis(
                   this.pulseRange,
                   heartIcon[lastIndex].value,
-                  "20"
+                  vitalCode
                 ),
                 lineWidth: 1,
                 color: index != lastPlueIndex ? "red" : "transparent",
               };
-              if (pulseRateCon.length && heartList.length) {
-                const params3 = {
-                  x1: this.getXaxis(heartList[heartList.length - 1].time),
-                  y1: this.getYaxis(
-                    this.pulseRange,
-                    heartList[heartList.length - 1].value,
-                    "02"
-                  ),
-                  x2: this.getXaxis(pulseRateCon[0].time),
-                  y2: this.getYaxis(
-                    this.pulseRange,
-                    pulseRateCon[0].value,
-                    "20"
-                  ),
-                  lineWidth: 1,
-                  color: "red",
-                };
-                this.createLine(params3);
-              }
-
               this.createLine(params1);
               this.createLine(params2);
 
-              this.monitoringInterval = [];
+             this.monitoringInterval = [];
+             this.heartorginInter = [];
             }
           });
-          // if (pulseRateCon.length && heartRateCon.length) {
-          //   const params4 = {
-          //     x1: this.getXaxis(heartRateCon[heartRateCon.length - 1].time),
-          //     y1: this.getYaxis(
-          //       this.pulseRange,
-          //       heartRateCon[heartRateCon.length - 1].value,
-          //       "02"
-          //     ),
-          //     x2: this.getXaxis(pulseRateCon[0].time),
-          //     y2: this.getYaxis(this.pulseRange, pulseRateCon[0].value, "20"),
-          //     lineWidth: 1,
-          //     color: "red",
-          //   };
-          //   this.createLine(params4);
-          // }
-        }
-      });
     },
     yLine() {
       const totalLine =
@@ -2750,9 +2743,10 @@ export default {
   .head-info {
     font-size: 16px;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 
     .item {
-      flex: 1;
       text-align: center;
       padding: 0 0 5px 5px;
 
