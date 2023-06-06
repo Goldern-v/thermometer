@@ -2714,7 +2714,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 8mm 8mm 5mm 8mm;
+    margin: 8mm 8mm 1mm 8mm;
   }
 
   .main-view {
