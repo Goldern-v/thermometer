@@ -1825,6 +1825,35 @@ export default {
               value: item.value,
             };
           });
+          if(settingHP == this.settingMap.heart.data) {
+             const pulseObje = this.settingMap.pulse.data.map((item) => {
+            return {
+              time: this.getLocationTime(item.time),
+              timeNum: this.getTimeNum(this.getLocationTime(item.time)),
+              value: item.value,
+            };
+          });
+            if (pulseObje.length && settingValue.length && settingValue[settingValue.length - 1].time < pulseObje[0].time) {
+              const params3 = {
+                x1: this.getXaxis(settingValue[settingValue.length - 1].time),
+                y1: this.getYaxis(
+                  this.pulseRange,
+                  settingValue[settingValue.length - 1].value,
+                  "02"
+                ),
+                x2: this.getXaxis(pulseObje[0].time),
+                y2: this.getYaxis(
+                  this.pulseRange,
+                  pulseObje[0].value,
+                  "20"
+                ),
+                lineWidth: 1,
+                color: "red",
+              };
+              this.createLine(params3);
+            }
+          }
+
           const heartIntervals = [];
           HPValueCon.forEach((interval, index) => {
             const intervalList = [];
@@ -1868,6 +1897,7 @@ export default {
              this.monitoringInterval = [];
              this.heartorginInter = [];
             }
+            
           });
     },
     yLine() {
