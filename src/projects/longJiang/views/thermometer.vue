@@ -519,7 +519,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1397,8 +1397,10 @@ export default {
             // 心率或脉搏过快时，折线需要断开
             data = [[]];
             x.data.forEach((y, index) => {
-              if (y.value <= this.pulseRange[1]) {
-                data[data.length - 1].push(y);
+              // 最大值250 跟180 同行
+              let newYValue =y.value > this.pulseRange[1] ? this.pulseRange[1] : y.value
+              if (newYValue <= this.pulseRange[1]) {
+                data[data.length - 1].push({...y,value:newYValue});
               } else {
                 data.push([]);
               }
