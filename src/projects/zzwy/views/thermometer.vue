@@ -615,7 +615,7 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [2,6,10,2,6,10];
+      const list = [2,6,10,14,18,22];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
@@ -670,13 +670,9 @@ export default {
         };
       });
       const timeAdd = (i) => {
-        return timeNumList.some((x) => x.start === i)
-          ? 5 * 60 * 60 * 1000
-          : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
-            ? 3 * 60 * 60 * 1000
-            : 4 * 60 * 60 * 1000;
+        return 4 * 60 * 60 * 1000
       };
-      for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1] -1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
@@ -2213,16 +2209,27 @@ export default {
     //   return `${time.slice(0, -8)}${splitHour}:00:00`
     // },
     // 计算用来定位描点的时间，医院特殊要求用这个方法定位
+    // 2点：0点到3点59分
+
+    // 6点：4点到7点59分
+
+    // 10点：8点到11点59分
+
+    // 14点：12点到15点59分
+
+    // 18点：16点到19点59分
+
+    // 22点：20点到23点59分
     getLocationTime(time) {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "05:00:59"],
-        "06:00:00": ["05:01:00", "9:00:59"],
-        "10:00:00": ["9:01:00", "13:00:59"],
-        "14:00:00": ["13:01:00", "17:00:59"],
-        "18:00:00": ["17:01:00", "21:00:59"],
-        "22:00:00": ["21:01:00", "23:59:59"],
+        "02:00:00": ["00:00:00", "03:59:59"],
+        "06:00:00": ["04:00:00", "07:59:59"],
+        "10:00:00": ["08:00:00", "11:59:59"],
+        "14:00:00": ["12:00:00", "15:59:59"],
+        "18:00:00": ["16:00:00", "19:59:59"],
+        "22:00:00": ["20:00:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
