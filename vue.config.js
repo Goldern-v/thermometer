@@ -63,18 +63,20 @@ const projectName = (() => {
       return "广东同江医院";
     case "qhwy": // 青海省第五人民医院
       return "青海省第五人民医院";
-    case "ytll": // 
+    case "ytll": //
       return "烟台玲珑英诚医院";
-    case "925": // 
+    case "925": //
       return "中国人民解放军联勤保障部队第九二五医院";
-    case "fssd": // 
+    case "fssd": //
       return "南方医科大学顺德医院";
-    case "liaoBu": // 
+    case "liaoBu": //
       return "东莞市寮步医院";
-    case "dghm": // 
+    case "dghm": //
       return "东莞市虎门医院";
-    case "songTao": // 
+    case "songTao": //
       return "松桃苗族自治区人民医院";
+    case "zjhj": // 湛江海军医院
+      return "湛江海军医院";
     case "common": // 可配置的通用版本
       return "配置通用版本";
     default:
@@ -90,7 +92,16 @@ const packageName = `${projectName}体温单_${today.getFullYear()}年${today.ge
   1}月${today.getDate()}日${today.getHours()}时${today.getMinutes()}分${today.getSeconds()}秒`;
 console.log(packageName);
 module.exports = {
-  publicPath: ["huaDu", "linYi", "yiZhou",'zhzxy','ytll','songTao','zzwy','wuhanhankou'].includes(project)
+  publicPath: [
+    "huaDu",
+    "linYi",
+    "yiZhou",
+    "zhzxy",
+    "ytll",
+    "songTao",
+    "zzwy",
+    "wuhanhankou",
+  ].includes(project)
     ? "/temperature/"
     : "./",
   outputDir: packageName,
@@ -150,7 +161,7 @@ module.exports = {
           return "./src/projects/zhongXi/main.js";
         case "foShanShiYi": // 佛山市一
           return "./src/projects/foShanShiYi/main.js";
-        case "zzwy": 
+        case "zzwy":
           return "./src/projects/zzwy/main.js";
         case "nfykdxsdyy": // 佛山市一
           return "./src/projects/nfykdxsdyy/main.js";
@@ -188,6 +199,8 @@ module.exports = {
           return "./src/projects/dghm/main.js";
         case "songTao": // 松桃苗族自治区人民医院
           return "./src/projects/songTao/main.js";
+        case "zjhj": // 松桃苗族自治区人民医院
+          return "./src/projects/zjhj/main.js";
         case "common": // 可配置的通用版本
           return "./src/projects/common/main.js";
         default:
@@ -260,11 +273,12 @@ module.exports = {
               return "http://218.107.37.134:9093";
             case "qhwy":
               return "http://218.107.37.134:9093";
+            case "zjhj":
+              return "http://218.107.37.134:9093";
             case "common":
               return "http://172.17.5.41:9091";
             default:
               return "http://218.14.180.38:9091";
-              break;
           }
         })(),
         changeOrigin: true, // 如果接口跨域，需要进行这个参数配置

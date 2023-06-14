@@ -308,7 +308,7 @@
             ></div>
           </div>
         </div>
-        <div class="left_box" :style="{ height: `${trHeight * 5}px` }">
+        <div class="left_box" :style="{ height: `${trHeight * 3}px` }">
           排<br />出<br />量
         </div>
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
@@ -349,36 +349,6 @@
               class="value-item font-14"
               :style="{ 'font-size': scaleFont(item.value) }"
               v-for="(item, index) in getFormatList({ tList: outCustomList })"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            {{ outCustomList1.label || "排出自定义2" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: outCustomList1 })"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            {{ outCustomList2.label || "排出自定义3" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: outCustomList2 })"
               @click="() => clickDateChangeTime(item)"
               :key="index"
               v-html="item.value"
@@ -462,7 +432,7 @@
 
         <div
           class="left_box"
-          :style="{ height: `${trHeight * 2}px`, paddingTop: 0 }"
+          :style="{ height: `${trHeight * 4}px`, paddingTop:'25px'}"
         >
           其<br />它<br />
         </div>
@@ -496,6 +466,36 @@
             ></div>
           </div>
         </div>
+        <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+            {{ customList3.label || "" }}
+          </div>
+          <div class="value-item-box">
+            <div
+              class="value-item font-14"
+              :style="{ 'font-size': scaleFont(item.value) }"
+              v-for="(item, index) in getFormatList({ tList: customList3 })"
+              :key="index"
+              @click="() => clickDateChangeTime(item)"
+              v-html="item.value"
+            ></div>
+          </div>
+        </div>
+        <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+            {{ customList4.label || "" }}
+          </div>
+          <div class="value-item-box">
+            <div
+              class="value-item font-14"
+              :style="{ 'font-size': scaleFont(item.value) }"
+              v-for="(item, index) in getFormatList({ tList: customList4 })"
+              :key="index"
+              @click="() => clickDateChangeTime(item)"
+              v-html="item.value"
+            ></div>
+          </div>
+        </div>
         <div class="clear"></div>
         <div
           class="vtline"
@@ -509,9 +509,7 @@
         ></div>
       </div>
     </div>
-    <!-- <div class="pagination"> -->
     <span class="pagination" v-if="showInnerPage">
-      <!-- <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i> -->
       <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">
         上一页
       </button>
@@ -523,7 +521,6 @@
       >
         下一页
       </button>
-      <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
     </span>
     <span class="pagination" v-else>第{{ currentPage }}页</span>
   </div>
@@ -531,7 +528,7 @@
 
 <script>
 import zrender from "zrender";
-import { mockData } from "src/projects/nfykdxsdyy/mockData.js";
+import { mockData } from "src/projects/zjhj/mockData.js";
 import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
 import moment from "moment"; //导入文件
 export default {
@@ -556,7 +553,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [2, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       imgUrl: require("../assets/hosptialName.png"),
       apiData: "", // 接口数据
       zr: "",
@@ -680,6 +677,7 @@ export default {
       customList1: [], // 自定义3
       customList2: [], // 自定义4
       customList3: [], // 自定义4
+      customList4: [], // 自定义4
       dateRangeList: [], // 数组长度决定页数
       patInfo: {
         patient_id: "",
@@ -721,6 +719,7 @@ export default {
         41: "自定义1",
         42: "自定义2",
         43: "自定义3",
+        44: "自定义3",
       }, // vital_code是null的时候，是自定义字段，显示在体温表后面
       lineMap: {
         2: "oralTemperature",
@@ -1322,6 +1321,13 @@ export default {
                 value: vitalSigns[i].value,
               });
               this.customList3.label = sign;
+              break;
+            case "45":
+              this.customList4.push({
+                time: vitalSigns[i].time_point,
+                value: vitalSigns[i].value,
+              });
+              this.customList4.label = sign;
               break;
             default:
               break;
@@ -2692,7 +2698,6 @@ export default {
     border-left: none;
     border-bottom: 2px solid black;
     border-top: none;
-    padding-top: 19px;
   }
 
   .row {

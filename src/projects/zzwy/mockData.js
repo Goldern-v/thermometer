@@ -35,10 +35,52 @@ export const mockData = {
         "expand2": null
     }, {
         "temperature_type": "呼吸",
-        "value": "20",
-        "time_point": "2023-05-11 15:00:00",
+        "value": "25",
+        "time_point": "2023-04-19 15:00:00",
         "vital_code": "04",
         "expand2": null
+    }, {
+      "temperature_type": "呼吸",
+      "value": "23",
+      "time_point": "2023-04-20 11:00:00",
+      "vital_code": "04",
+      "expand2": null
+    }, {
+      "temperature_type": "呼吸",
+      "value": "22",
+      "time_point": "2023-04-21 11:00:00",
+      "vital_code": "04",
+      "expand2": null
+    },{
+      "temperature_type": "呼吸",
+      "value": "22",
+      "time_point": "2023-04-22 11:00:00",
+      "vital_code": "04",
+      "expand2": null
+    }, {
+      "temperature_type": "呼吸机",
+      "value": "R",
+      "time_point": "2023-04-19 15:00:00",
+      "vital_code": "06",
+      "expand2": null
+    }, {
+      "temperature_type": "呼吸机",
+      "value": "R",
+      "time_point": "2023-04-20 11:00:00",
+      "vital_code": "06",
+      "expand2": null
+    }, {
+      "temperature_type": "呼吸机",
+      "value": "R",
+      "time_point": "2023-04-23 11:00:00",
+      "vital_code": "06",
+      "expand2": null
+    },{
+      "temperature_type": "呼吸机",
+      "value": "R",
+      "time_point": "2023-04-24 11:00:00",
+      "vital_code": "06",
+      "expand2": null
     }, {
         "temperature_type": "表顶注释",
         "value": "手术",
@@ -60,13 +102,13 @@ export const mockData = {
     }, {
         "temperature_type": "发热",
         "value": "38.5",
-        "time_point": "2023-05-15 11:00:00",
+        "time_point": "2023-04-18 19:18:20",
         "vital_code": "05",
         "expand2": null
     }, {
         "temperature_type": "呼吸",
         "value": "20",
-        "time_point": "2023-05-15 11:00:00",
+        "time_point": "2023-04-18 19:18:20",
         "vital_code": "04",
         "expand2": null
     }, {
@@ -78,7 +120,7 @@ export const mockData = {
     }, {
         "temperature_type": "体温",
         "value": "36.7",
-        "time_point": "2023-05-15 11:00:00",
+        "time_point": "2023-04-18 08:18:20",
         "vital_code": "01",
         "expand2": null
     }, {
@@ -90,7 +132,7 @@ export const mockData = {
     }, {
         "temperature_type": "表顶注释",
         "value": "入院|九时二十五分",
-        "time_point": "2023-04-18 09:25:20",
+        "time_point": "2023-04-18 08:18:20",
         "vital_code": "5",
         "expand2": null
     }]
