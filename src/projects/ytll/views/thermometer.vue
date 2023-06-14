@@ -126,10 +126,12 @@
                   </pattern>
                 </defs>
                 <g v-for="(item, index) in polygonPoints" :key="index">
-                  <!-- <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke="red" stroke-width="1.5px">
-                  </polygon> -->
-                  <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke-width="1.5px">
+                  <!-- 阴影描边 -->
+                  <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke="red" stroke-width="1.5px">
                   </polygon>
+                  <!-- 不描边 -->
+                  <!-- <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke-width="1.5px">
+                  </polygon> -->
                 </g>
 
               </svg>
