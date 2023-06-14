@@ -804,6 +804,7 @@ export default {
             for (const item of this.getNotTemTime4Shadow()) {
               if (
                 index > 0 && 
+                allList[index - 1][1].heart &&
                 this.getTimeNum(allList[index - 1][1].heart.time) <= this.getTimeNum(item) &&
                 this.getTimeNum(x[1].heart.time) >= this.getTimeNum(item)
               ) {
