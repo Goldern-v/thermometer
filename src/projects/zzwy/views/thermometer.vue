@@ -126,7 +126,15 @@
           }"></i>
           <div class="item times">
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
-              <div>脉搏<br />次/分</div>
+              <div>呼吸<br />n/min</div>
+            </div>
+            <div class="index" v-for="item in breatheYaxisList" :key="item">
+              <span>{{ item }}</span>
+            </div>
+          </div>
+          <div class="item times">
+            <div class="text" :style="`height: ${indexTextAreaHeight}px`">
+              <div>脉搏<br />n/min</div>
             </div>
             <div class="index" v-for="item in pulseList" :key="item">
               <span>{{ item }}</span>
@@ -182,7 +190,7 @@
           left: `${leftWidth + item * (6 * xSpace + 7) - 1}px`,
           'border-color': '#000',
         }" v-for="item in 6" :key="item"></div>
-        <div class="row border-top-red-2" :style="{ height: `${trHeight * 2 - 10}px` }">
+        <!-- <div class="row border-top-red-2" :style="{ height: `${trHeight * 2 - 10}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             呼吸(次/分)
           </div>
@@ -196,8 +204,8 @@
               <div :style="{fontSize:!isNaN(item.value) ?'':'large'}">{{ item.value}}</div>
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        </div> -->
+        <div class="row border-top-red-2" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             大便(次/日)
           </div>
@@ -439,19 +447,21 @@ export default {
     const yRange = [34, 42];
     const pulseRange = [20, 180];
     const painRange = [0, 10];
+    const breatheRange = [0, 80]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
       areaHeight: 0, // 网格区域的高度
       xSpace: 18, // 纵向网格的间距
       ySpace: 16, //  横向网格的间距
-      leftWidth: 90, // 左侧内容宽度 
+      leftWidth: 100, // 左侧内容宽度 
       xRange: [1, 8],
       yRange,
       pulseRange,
       painRange,
+      breatheRange,
       showChildrenPage: false,
       settingMap: {
         oralTemperature: {
@@ -520,6 +530,16 @@ export default {
             // { time: '2019-05-15 07:10:00', value: 2},
           ],
         },
+        breathe: {
+          vitalCode: "04",
+          label: "呼吸",
+          color: "black",
+          dotType: "Circle",
+          range: breatheRange,
+          data: [
+            // { time: '2019-05-15 07:10:00', value: 2},
+          ],
+        },
       }, // 折线部分
       topSheetNote: [
         // { time: '2019-05-15 07:10:00', value: '入院|' },
@@ -536,6 +556,7 @@ export default {
       breatheList: [
         // { time: '2019-05-18 03:12:00', value: '20' }
       ], // 呼吸
+      ventilator: [], // 呼吸机
       pressureList: [], // 血压
       weightList: [], // 体重
       heightList: [], // 身高
@@ -605,6 +626,7 @@ export default {
         20: "heart",
         "02": "pulse",
         "092": "pain",
+        '04': 'breathe'
       },
       pageTotal: 1,
       currentPage: 1,
@@ -833,6 +855,13 @@ export default {
       }
       return list;
     },
+    breatheYaxisList() {
+      const list = [];
+      for (let i = this.breatheRange[1]; i > this.breatheRange[0]; i = i - 10) {
+        list.push(i);
+      }
+      return list;
+    },
     pulseList() {
       const list = [];
       for (let i = this.pulseRange[1]; i > this.pulseRange[0]; i = i - 20) {
@@ -939,6 +968,28 @@ export default {
       }
       return [];
     },
+    ventilatorList() {
+      const list = [[]];
+      this.ventilator = this.ventilator.sort((a, b) => this.getTimeNum(a.time) > this.getTimeNum(b.time));
+      for (let i = 0; i < this.ventilator.length; i++) {
+        const lastList = list[list.length - 1];
+        if (lastList.length) {
+          const lastVentilator = lastList[lastList.length - 1];
+          // 断开使用呼吸机超过1天，重新计算使用呼吸机天数
+          if (
+            lastVentilator && 
+            moment(this.ventilator[i].time).diff(moment(lastVentilator.time), 'days') > 1
+          ) {
+            list.push([this.ventilator[i]]);
+          } else {
+            list[list.length - 1].push(this.ventilator[i]);
+          }
+        } else {
+          list[list.length - 1].push(this.ventilator[i]);
+        }
+      }
+      return list;
+    }
   },
   watch: {
     // 因为分页可能在体温单外面，所以给父页面传递pageTotal
@@ -1089,6 +1140,7 @@ export default {
       this.coolList = [];
       this.ttgyList = [];
       this.dateRangeList = [];
+      this.ventilator = [];
       for (let i = 0; i < 6; i++) {
         this[`customList${i}`] = [];
       }
@@ -1327,6 +1379,10 @@ export default {
             break;
           case "05":
             this.feverList.push(item);
+            break;
+          case "06":
+            this.ventilator.push(item);
+            break;
           default:
             break;
         }
@@ -1499,6 +1555,19 @@ export default {
             //   }
             // })
           }
+          // 呼吸，不是数字断开
+          if (["04"].includes(x.vitalCode)) {
+            data = [[]];
+            x.data.sort(
+              (a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time)
+            ).forEach((y, index) => {
+              if (isNaN(y.value)) {
+                data.push([]);
+              } else {
+                data[data.length - 1].push(y);
+              }
+            })
+          }
           data.forEach((z) => {
             this.createBrokenLine({
               vitalCode: x.vitalCode,
@@ -1591,6 +1660,24 @@ export default {
           5 * (this.ySpace + 1),
           "black"
         );
+        // 呼吸机：如果断开使用呼吸机超过 1 天，例如：1号，2号，4号这种情况，1，2号显示MR(1), (2)，4号重新显示MR(1)
+        // y：呼吸为10的位置
+        const by = this.getYaxis(this.breatheRange, 10);
+        this.ventilatorList.forEach((ventilator) => {
+          ventilator.forEach((item, index) => {
+            this.createText({
+              // 横坐标整体往右移动 5 ，他们那边显示电脑问题
+              x: index == 0 ? this.getXaxis(item.time) + 9 : this.getXaxis(item.time),
+              y: by - this.ySpace - 1,
+              value: index === 0 ? `MR (${index + 1})` : `(${index + 1})`,
+              color: 'black',
+              tips: `${item.time} 呼吸机`,
+              textLineHeight: this.ySpace + 1,
+              fontSize: 10,
+              fontWeight: 'bold',
+            });
+          })
+        })
       });
     },
     yLine() {
