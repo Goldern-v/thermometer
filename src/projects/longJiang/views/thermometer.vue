@@ -1825,7 +1825,7 @@ export default {
       // }
         dots.push({ x: cx, y: cy, time: x.time });
         let vital_11 = 0
-        if(x.vital_code == 11 && x.diferencia >=0){
+        if(["11","12"].includes(x.vital_code)&& x.diferencia >=0){
           vital_11 =x.diferencia + this.pulseRange[1]
         }
         let params = {
@@ -1835,7 +1835,7 @@ export default {
           color: dotColor || "#000",
           zlevel: 10,
           /*脉搏超过180按照最大值展示*/
-          tips: `${x.time} ${label}：${(x.vital_code == 11 && x.diferencia >=0 ) ? vital_11 : x.value }`,
+          tips: `${x.time} ${label}：${(["11","12"].includes(x.vital_code) && x.diferencia >=0 ) ? vital_11 : x.value }`,
           dotSolid,
         };
         switch (dotType) {
