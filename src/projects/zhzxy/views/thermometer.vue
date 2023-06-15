@@ -817,7 +817,8 @@ export default {
           if(this.filterFenmian){
             let day = moment(this.filterFenmian).format("YYYY-MM-DD")
             const diff = moment(x).diff(moment(day), 'days')    
-            if(diff>=0) count = count?count.split("")[0]:""
+            if(diff==0) count = ""
+            else if(diff>0) count = count?count.split("")[0]:""
           }
           // console.log("this.getFilterItem(count)",this.getFilterItem(count))
           return this.getFilterItem(count)
