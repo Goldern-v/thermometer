@@ -1666,7 +1666,8 @@ export default {
         this.ventilatorList.forEach((ventilator) => {
           ventilator.forEach((item, index) => {
             this.createText({
-              x: index == 0 ? this.getXaxis(item.time) + 4 : this.getXaxis(item.time) - 5,
+              // 横坐标整体往右移动 5 ，他们那边显示电脑问题
+              x: index == 0 ? this.getXaxis(item.time) + 9 : this.getXaxis(item.time),
               y: by - this.ySpace - 1,
               value: index === 0 ? `MR (${index + 1})` : `(${index + 1})`,
               color: 'black',
