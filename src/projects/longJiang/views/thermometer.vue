@@ -1275,6 +1275,7 @@ export default {
           this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
             time: vitalSigns[i].time_point,
             value: Number(vitalSigns[i].value),
+            vital_code:vitalSigns[i].vital_code
           });
           // let dataArray = this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data;
           // dataArray.forEach((y, index) => {
@@ -1291,6 +1292,7 @@ export default {
         const item = {
           time:vitalSigns[i].time_point,
           value: vitalSigns[i].value,
+          vital_code:vitalSigns[i].vital_code
         };
         switch (vitalSigns[i].vital_code) {
           case "3":
@@ -1398,9 +1400,9 @@ export default {
             data = [[]];
             x.data.forEach((y, index) => {
               // 最大值250 跟180 同行
-              let newYValue =y.value > this.pulseRange[1] ? this.pulseRange[1] : y.value
-              if (newYValue <= this.pulseRange[1]) {
-                data[data.length - 1].push({...y,value:newYValue});
+              let diferencia =y.value > this.pulseRange[1] ? this.pulseRange[1] : y.value
+              if (diferencia <= this.pulseRange[1]) {
+                data[data.length - 1].push({...y,value:diferencia,diferencia:y.value-this.pulseRange[1]});
               } else {
                 data.push([]);
               }
@@ -1822,13 +1824,18 @@ export default {
       //   cx = xaxisNew[sameIndex]
       // }
         dots.push({ x: cx, y: cy, time: x.time });
+        let vital_11 = 0
+        if(x.vital_code == 11 && x.diferencia >=0){
+          vital_11 =x.diferencia + this.pulseRange[1]
+        }
         let params = {
           cx,
           cy,
           r: 7,
           color: dotColor || "#000",
           zlevel: 10,
-          tips: `${x.time} ${label}：${x.value}`,
+          /*脉搏超过180按照最大值展示*/
+          tips: `${x.time} ${label}：${(x.vital_code == 11 && x.diferencia >=0 ) ? vital_11 : x.value }`,
           dotSolid,
         };
         switch (dotType) {
