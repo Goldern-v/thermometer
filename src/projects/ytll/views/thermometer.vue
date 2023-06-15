@@ -126,8 +126,12 @@
                   </pattern>
                 </defs>
                 <g v-for="(item, index) in polygonPoints" :key="index">
+                  <!-- 阴影描边 -->
                   <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke="red" stroke-width="1.5px">
                   </polygon>
+                  <!-- 不描边 -->
+                  <!-- <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke-width="1.5px">
+                  </polygon> -->
                 </g>
 
               </svg>
@@ -1484,6 +1488,18 @@ export default {
                   24 * 60 * 60 * 1000 * 2
                 ) {
                   data.push([x.data[index + 1]]);
+                }
+                //如果存在中间不在的情况，中间断开
+                if (this.getNotTemTime1() && this.getNotTemTime1().length) {
+                  for (let item of this.getNotTemTime1()) {
+                    if (
+                      this.getTimeNum(x.data[index+1].time) >=
+                        this.getTimeNum(item) &&
+                      this.getTimeNum(y.time) <= this.getTimeNum(item)
+                    ) {
+                      data.push([x.data[index+1]]);
+                    }
+                  }
                 }
               } else {
                 const list = data[data.length - 1];
