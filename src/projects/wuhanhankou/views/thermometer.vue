@@ -1064,11 +1064,11 @@ export default {
           '*',
         )
     },
-    //找到表底存在不升的日期
+    //找到表底存在不升、外出、拒测的日期
     bottomSheetNoteBusheng() {
       let outTime = []
       this.bottomSheetNote.forEach((y) => {
-        if (y.value.includes('不升')) {
+        if (['不升', '外出', '拒测'].includes(y.value)) {
           outTime.push(y.time)
         }
       })
@@ -1131,6 +1131,7 @@ export default {
       })
       return outTime
     },
+    
     //找到存在出院的日期
     getLeaveTime() {
       let outTime = ''
@@ -1497,7 +1498,7 @@ export default {
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data]
           if (['041', '01', '043'].includes(x.vitalCode)) {
-            // 体温为不升时，折线需要断开
+            // 体温为不升/拒测/外出时，折线需要断开
             data = [[]]
             x.data.forEach((y, index) => {
               if (y.value > 35) {
@@ -1518,7 +1519,7 @@ export default {
                 ) {
                   data.push([x.data[index + 1]])
                 }
-                //如果存在中间不升的情况，中间断开
+                //如果存在中间不升/拒测/外出的情况，中间断开
                 if (this.bottomSheetNoteBusheng() !== []) {
                   for (let item of this.bottomSheetNoteBusheng()) {
                     if (
@@ -1583,7 +1584,7 @@ export default {
                 ) {
                   data.push([x.data[index + 1]])
                 }
-                //如果存在中间不升的情况，中间断开
+                //如果存在：不升/拒测/外出 的情况，中间断开
                 if (this.bottomSheetNoteBusheng() !== []) {
                   for (let item of this.bottomSheetNoteBusheng()) {
                     if (
