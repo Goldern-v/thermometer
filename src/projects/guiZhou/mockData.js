@@ -10,7 +10,7 @@ export const mockData = {
       bed_label: '012',
       visit_id: '4',
       // "admission_date": "2020-12-02 08:12:30.0",
-      admission_date: '2021-10-18 11:15:24.0',
+      admission_date: '2021-10-25 11:15:24.0',
       age: '54',
       inp_no: '1568587'
     }
@@ -536,11 +536,32 @@ export const mockData = {
     },
     {
       temperature_type: '腋温',
-      value: '36.1',
+      value: '38.1',
       time_point: '2021-10-27 06:00:00',
       vital_code: 'yeTemperature',
       expand2: null
     },
+    {
+      temperature_type: '腋温',
+      value: '38.6',
+      time_point: '2021-10-27 07:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    // {
+    //   temperature_type: '降温后',
+    //   value: '37',
+    //   time_point: '2021-10-27 06:00:00',
+    //   vital_code: 'downTemperature',
+    //   expand2: null
+    // },
+    // {
+    //   temperature_type: '降温后',
+    //   value: '37',
+    //   time_point: '2021-10-27 07:00:00',
+    //   vital_code: 'downTemperature',
+    //   expand2: null
+    // },
     {
       temperature_type: '病人事件',
       value: '手术',
@@ -577,6 +598,20 @@ export const mockData = {
       expand2: null
     },
     {
+      temperature_type: '降温后',
+      value: '37.5',
+      time_point: '2021-10-29 14:30:00',
+      vital_code: 'downTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '降温后',
+      value: '37',
+      time_point: '2021-10-29 15:00:00',
+      vital_code: 'downTemperature',
+      expand2: null
+    },
+    {
       temperature_type: '心率',
       value: '180',
       time_point: '2021-10-29 14:00:00',
@@ -587,6 +622,20 @@ export const mockData = {
       temperature_type: '腋温',
       value: '38.6',
       time_point: '2021-10-29 14:00:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '39',
+      time_point: '2021-10-29 14:30:00',
+      vital_code: 'yeTemperature',
+      expand2: null
+    },
+    {
+      temperature_type: '腋温',
+      value: '39.6',
+      time_point: '2021-10-29 15:00:00',
       vital_code: 'yeTemperature',
       expand2: null
     },
