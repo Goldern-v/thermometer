@@ -600,6 +600,7 @@ export default {
       customList4: [], // 自定义5
       customList5: [], // 自定义6
       coolList: [], // 降温
+      copyCoolList: [], // 复制一份降温
       ttgyList: [], // 疼痛干预
       nounList: [], // 腹围
       dateRangeList: [], // 数组长度决定页数
@@ -1162,6 +1163,7 @@ export default {
       this.urineList = [];
       this.outputList = [];
       this.coolList = [];
+      this.copyCoolList = [];
       this.ttgyList = [];
       this.nounList = [];
       this.dateRangeList = [];
@@ -1358,7 +1360,11 @@ export default {
             this.outputList.push(item);
             break;
           case "downTemperature":
-            this.coolList.push(item);
+            // 每个区间降温最多只画一个
+            if (!this.hasCoolInTimeRange(item.time)) {
+              this.coolList.push(item);
+              this.copyCoolList.push(item);
+            }
             break;
           case "jtpf":
             this.ttgyList.push(item);
@@ -1788,6 +1794,15 @@ export default {
         );
       });
     },
+    hasCoolInTimeRange(time) {
+      if (time) {
+        const cool = this.copyCoolList.find(
+          item => this.getLocationTime(item.time) == this.getLocationTime(time)
+        );
+        return !!cool;
+      } 
+      return false;
+    },
     createBrokenLine({
       vitalCode,
       data,
@@ -1799,7 +1814,24 @@ export default {
       dotType,
     }) {
       const dots = [];
+      let tempCount = {};
       data.forEach((x) => {
+        if (["yeTemperature", "gangTemperature", "kouTemperature"].includes(vitalCode)) {
+          const locationTime = this.getLocationTime(x.time);
+          // 有降温情况，一个时间区间只能有一个体温一个降温
+          if (
+            this.hasCoolInTimeRange(x.time) && 
+            tempCount[locationTime] && 
+            tempCount[locationTime] >= 1
+          ) {
+            return;
+          } else { // 无降温情况，一个时间区间最多有两个体温
+            tempCount[locationTime] = tempCount[locationTime] ? ++tempCount[locationTime] : 1;
+            if (tempCount[locationTime] > 2) {
+              return;
+            }
+          }
+        }
         const cx = this.getXaxis(this.getLocationTime(x.time));
         let cy = this.getYaxis(yRange, x.value, vitalCode);
         let params = {

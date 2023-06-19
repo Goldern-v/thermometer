@@ -464,7 +464,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -744,6 +744,21 @@ export default {
         )
         .map((x) => x.time_point);
     },
+    filterFenmian() {
+      let arr = this.vitalSigns
+        .filter((x) =>{
+          if(x.vital_code === "3" && x.value.includes("手术")) return x
+        })
+      let fenmian = this.vitalSigns
+        .find((x) => x.vital_code === "3" && x.value.includes("分娩|"))
+      let end = false
+      if(fenmian){
+        end = arr.some( y =>{
+          return y.time_point.split(" ")[0] == fenmian.time_point.split(" ")[0]
+        })
+      }
+        return end?fenmian.time_point:''
+    },
     formatOperateDateList() {
       // return ['14/1','35/1','22','14','11/2']
       return this.dateList.map((x) => {
@@ -767,6 +782,7 @@ export default {
         for (let i = 0; i < index; i++) {
           apart.unshift(days[i]);
         }
+        // console.log([...apart],'apart-1111',index);
         const operationNum = apart.length; // 记录此日之前所有的手术次数，不考虑间隔大于7天
         // 间隔大于7天的手术，分子分母的写法要重置
         if (apart.length) {
@@ -783,10 +799,11 @@ export default {
           }
           apart.splice(0, 1);
         }
-        console.log(apart, days, index, operationNum)
+        // console.log([...apart],'apart-222222');
+        // console.log(apart, days, index, operationNum)
         if (days[index] <= 14) {
           const daysSet = [...new Set(days)].filter(v => v > 0);
-          console.log("daysSet==",daysSet)
+          // console.log("daysSet==",daysSet)
           let result = ''
           daysSet.map(v => result ? result += `/${v}` : result = v);
           let count =index === 0 || !apart.length
@@ -796,6 +813,14 @@ export default {
               : days[index] === 0
                   ? `${apart.join("/")}`
                   : `${days[index]}/${apart.join("/")}`
+          // console.log("count",count,this.filterFenmian,x)
+          if(this.filterFenmian){
+            let day = moment(this.filterFenmian).format("YYYY-MM-DD")
+            const diff = moment(x).diff(moment(day), 'days')    
+            if(diff==0) count = ""
+            else if(diff>0) count = count?count.split("")[0]:""
+          }
+          // console.log("this.getFilterItem(count)",this.getFilterItem(count))
           return this.getFilterItem(count)
         } else {
           return "";
