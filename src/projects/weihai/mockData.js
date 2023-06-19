@@ -8,7 +8,7 @@ export const mockData = {
           "dept_name": "乳腺外科病房",
           "bed_label": "加35",
           "visit_id": "1",
-          "admission_date": "2022-12-07 01:41:00",
+          "admission_date": "2022-12-02 01:41:00",
           "age": "46岁",
           "inp_no": "902865",
           "sex": "女"
@@ -26,6 +26,24 @@ export const mockData = {
           "value": "出院|十三时四十八分",
           "time_point": "2022-12-03 13:48:00",
           "vital_code": "5"
+      },
+      {
+        "temperature_type": "体温",
+        "value": "36",
+        "time_point": "2022-12-02 11:10:00",
+        "vital_code": "01"
+      },
+      {
+        "temperature_type": "体温",
+        "value": "36",
+        "time_point": "2022-12-02 10:50:00",
+        "vital_code": "01"
+      },
+      {
+        "temperature_type": "体温",
+        "value": "36",
+        "time_point": "2022-12-02 11:37:00",
+        "vital_code": "01"
       },
       {
           "temperature_type": "体温",
