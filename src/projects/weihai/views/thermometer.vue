@@ -1346,7 +1346,13 @@ export default {
             // 按条件筛选
             const nomalTime = ["03:00:00","07:00:00","11:00:00","15:00:00","19:00:00","23:00:00"]
             let dataArray = this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data;
+            // <update>：保存vitalCode对应相同locatioTime的最小时间差
+            const vitalCodeMinMap = {};
+            const vitalCode = this.lineMap[vitalSigns[i].vital_code];
             dataArray.forEach((y, index) => {
+              const locationTime = this.getLocationTime(y.time);
+              const locationTimeNum = this.getTimeNum(locationTime);
+              const timeNum = this.getTimeNum(y.time);
               if (index >= 1 && this.getLocationTime(y.time) == this.getLocationTime(dataArray[index - 1].time)) {
                 const hasTopRuleItem = this.pickTopRule(y.time);
                 if (
@@ -1359,16 +1365,24 @@ export default {
                     dataArray.splice(index, 1);
                   }
                 } else {
-                  if (this.getTimeNum(y.time) > this.getTimeNum(dataArray[index - 1].time)) {
-                    // if(!nomalTime.includes(dataArray[index-1].time.slice(11,19))){
-                    dataArray.splice(index - 1, 1)
-                    // }
+                  // <update>现在逻辑：相同locationTime时间，比较哪个时间更接近locationTime，如果一样接近，取时间小的
+                  const timeNumDiff = Math.abs(timeNum - locationTimeNum);
+                  // 由于数据经过时间排序，大的时间肯定是在后面的，不需要判断时间大小，只需判断差值大小
+                  if (timeNumDiff >= vitalCodeMinMap[`${vitalCode}${locationTime}`]) {
+                    dataArray.splice(index, 1);
                   } else {
-                    // if(!nomalTime.includes(dataArray[index-1].time.slice(11,19))){
-                    dataArray.splice(index, 1)
-                    // }
+                    dataArray.splice(index - 1, 1);
+                    vitalCodeMinMap[`${vitalCode}${locationTime}`] = timeNumDiff;
                   }
+                  // 原来逻辑：相同locationTime时间，比较时间大小，大的覆盖小的
+                  // if (this.getTimeNum(y.time) > this.getTimeNum(dataArray[index - 1].time)) {
+                  //   dataArray.splice(index - 1, 1)
+                  // } else {
+                  //   dataArray.splice(index, 1)
+                  // }
                 }
+              } else if (index === 0) {
+                vitalCodeMinMap[`${vitalCode}${locationTime}`] = Math.abs(timeNum - locationTimeNum);
               }
             })
           }
