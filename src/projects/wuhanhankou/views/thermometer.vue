@@ -5,7 +5,7 @@
       :style="{ width: `${leftWidth + areaWidth}px` }"
       v-if="apiData"
     >
-      <div class="head-hos">武汉汉口医院</div>
+      <div class="head-hos">武汉市汉口医院</div>
       <div class="head-title">体温单</div>
       <div class="head-info">
         <div class="item">
