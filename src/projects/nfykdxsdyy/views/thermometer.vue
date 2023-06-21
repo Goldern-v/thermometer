@@ -419,7 +419,7 @@
           "
         >
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            BMI(kg/m2）)
+            BMI(kg/m2）
           </div>
           <div class="value-item-box">
             <div
