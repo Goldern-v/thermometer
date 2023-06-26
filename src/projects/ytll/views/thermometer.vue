@@ -754,7 +754,8 @@ export default {
       */
       const settingMap = this.settingMap;
       const xyMap = new Map();
-      settingMap.heart.data.forEach((x) => {
+      if(settingMap.heart.data.length>1&&settingMap.pulse.data.length>1){
+        settingMap.heart.data.forEach((x) => {
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
         if (xyMap.has(xAxis)) {
           xyMap.set(xAxis, {
@@ -797,7 +798,8 @@ export default {
             heart: null,
           });
         }
-      });
+       });
+      }
       const allList = [...xyMap.entries()].sort((a, b) => a[0] - b[0]);
       console.log('allList: ', allList);
       if (allList.length) {
