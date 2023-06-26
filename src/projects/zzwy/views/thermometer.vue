@@ -551,7 +551,7 @@ export default {
         // { time: '2019-05-19 20:10:00', value: '不升' },
       ], // 表底注释  体温低于或等于35度则剔除，在体温单下面标注"不升"
       topPulseNote: [
-        // { time: '2019-05-16 17:10:00', value: '过快' }
+        // { time: '2019-05-1d6 17:10:00', value: '过快' }
       ], // 心率和脉搏过快超出体温单上限则剔除，在体温单上面标注"过快"
       breatheList: [
         // { time: '2019-05-18 03:12:00', value: '20' }
@@ -774,13 +774,10 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
-        console.log("index====",index)
         let apart = []; // 存储当天和前面手术的天数间隔
         for (let i = 0; i < index; i++) {
           apart.unshift(days[i]);
         }
-        console.log("days====",days)
-        console.log("apart====",apart)
         const operationNum = apart.length; // 记录此日之前所有的手术次数，不考虑间隔大于7天
         // 间隔大于7天的手术，分子分母的写法要重置
         if (apart.length) {
@@ -1441,6 +1438,7 @@ export default {
         // 画折线
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data];
+          // console.log("data===",x)
           if (["041", "01", "043"].includes(x.vitalCode)) {
             // 体温为不升时，折线需要断开
             data = [[]];
@@ -1515,7 +1513,7 @@ export default {
               if (y.value <= this.pulseRange[1]) {
                 data[data.length - 1].push(y);
               } else {
-                data.push([]);
+                data.push({...y});
               }
               // if (this.getBreakPoint(x.data).includes(index)) {
               //   data.push([]);
@@ -1560,18 +1558,23 @@ export default {
             data = [[]];
             x.data.sort(
               (a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time)
-            ).forEach((y, index) => {
+            ).forEach((y) => {
               if (isNaN(y.value)) {
                 data.push([]);
               } else {
                 data[data.length - 1].push(y);
               }
             })
+            // console.log("data===",data)
+
           }
+
+          //如果表底注释包含不在则跳过
           data.forEach((z) => {
+            // console.log("z===",z)
             this.createBrokenLine({
               vitalCode: x.vitalCode,
-              data: z,
+              data: (z.length > 0 && this.bottomSheetNote.length > 0) ? this.handleBreakLine(z):z,
               yRange: x.range,
               lineColor: x.lineColor || x.color,
               label: x.label,
@@ -1651,7 +1654,7 @@ export default {
         });
       
         // 生成表顶注释
-        this.createNote(this.topSheetNote, this.indexTextAreaHeight + 2, "red");
+        this.createNote(this.handleTopSort(), this.indexTextAreaHeight + 2, "red");
         // 生成表底注释
         this.createNote(
           this.bottomSheetNote,
@@ -2005,8 +2008,7 @@ export default {
       data.forEach((x, index) => {
         const cx = this.getXaxis(this.getLocationTime(x.time));
         const cy = this.getYaxis(yRange, x.value, vitalCode);
-        dots.push({ x: cx, y: cy });
-
+        dots.push({ x: cx, y: cy ,isBreak:x.isBreak});
         let params = {
           cx,
           cy,
@@ -2236,17 +2238,21 @@ export default {
           }
         }
       });
+      // console.log("dots===",dots)
       //图标连接的折线路部分
       for (let i = 0; i < dots.length - 1; i++) {
-        this.createLine({
-          x1: dots[i].x,
-          y1: dots[i].y,
-          x2: dots[i + 1].x,
-          y2: dots[i + 1].y,
-          lineWidth: 2,
-          color: lineColor || "red",
-          zlevel: 1,
-        });
+        if(!dots[i].isBreak){
+          // console.log(".isBrea=====",dots[i].isBreak)
+          this.createLine({
+            x1: dots[i].x,
+            y1: dots[i].y,
+            x2: dots[i + 1].x,
+            y2: dots[i + 1].y,
+            lineWidth: 2,
+            color: lineColor || "red",
+            zlevel: 1,
+          });
+        }
       }
     },
     // 根据值计算纵坐标
@@ -2523,7 +2529,54 @@ export default {
       }
       return xaxisNew;
     },
-    
+    //表顶注释排序修改
+    handleTopSort(){
+    return   this.topSheetNote.sort((a, b)=> {
+        let timeA = new Date(a.time);
+        let timeB = new Date(b.time);
+        return timeA - timeB;
+      });
+    },
+    //当表底注释存在不在关键字需要将当前折线断开 data 为1，不需要连线，为2判断不在的日期是否在两个日期之间，3个以上判断第n个与第n+1之间是否存在
+    //
+    handleBreakLine(data){
+      let aLength = data.length;
+      let bLength = this.bottomSheetNote.length;
+      for (let i = 0; i < bLength; i++) {
+        // 获取当前B数组对象的时间值
+        let bTime = new Date(this.bottomSheetNote[i].time);
+        // 遍历A数组
+        for (let j = 0; j < aLength - 1; j++) {
+          // 获取当前A数组对象和下一个对象的时间值
+          let aTime1 = new Date(data[j].time);
+          let aTime2 = new Date(data[j + 1].time);
+          // 判断B数组的时间值是否在A数组的时间范围内
+          if (this.bottomSheetNote[i].value =='不在' && (bTime >= aTime1 && bTime <= aTime2)) {
+            data[j]['isBreak']=true
+            break; // 可根据实际需求决定是否跳出循环
+          }
+        }
+      }
+
+      // let list =[]
+      // list =  data.map(i=>{
+      //   this.bottomSheetNote.map(item=>{
+      //     if(item.value == '不在'){
+      //         const date1 = new Date(i.time.replace(/-/g, "/"));
+      //         const date2 = new Date(item.time.replace(/-/g, "/"));
+      //         // 将时间部分设置为相同的时间（时、分、秒设为0）
+      //         date1.setHours(0, 0, 0, 0);
+      //         date2.setHours(0, 0, 0, 0);
+      //         i.isBreak = date1.getTime() == date2.getTime()
+      //         return i
+      //     }
+      //   })
+      //   return  i
+      // })
+
+      // console.log("data===",data)
+      return data
+    }
   },
   mounted() {
     const patientInfo = this.$route.query
