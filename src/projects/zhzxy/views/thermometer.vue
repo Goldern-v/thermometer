@@ -1159,14 +1159,11 @@ export default {
           }
         }
         if (this.lineMap[vitalSigns[i].vital_code]) {
-        if (
-            ["2", "1", "19"].includes(vitalSigns[i].vital_code) &&
-            Number(vitalSigns[i].value) <= 35
-          ) {
-            this.bottomSheetNote.push({
-              time: vitalSigns[i].time_point,
-              value: "冰敷",
-            });
+        if (["2", "1", "19"].includes(vitalSigns[i].vital_code) && Number(vitalSigns[i].value) <= 35) {
+            // this.bottomSheetNote.push({
+            //   time: vitalSigns[i].time_point,
+            //   value: "冰敷",
+            // });
           } else {
             this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
               time: vitalSigns[i].time_point,
