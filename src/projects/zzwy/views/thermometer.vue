@@ -126,7 +126,15 @@
           }"></i>
           <div class="item times">
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
-              <div>脉搏<br />次/分</div>
+              <div>呼吸<br />n/min</div>
+            </div>
+            <div class="index" v-for="item in breatheYaxisList" :key="item">
+              <span>{{ item }}</span>
+            </div>
+          </div>
+          <div class="item times">
+            <div class="text" :style="`height: ${indexTextAreaHeight}px`">
+              <div>脉搏<br />n/min</div>
             </div>
             <div class="index" v-for="item in pulseList" :key="item">
               <span>{{ item }}</span>
@@ -182,7 +190,7 @@
           left: `${leftWidth + item * (6 * xSpace + 7) - 1}px`,
           'border-color': '#000',
         }" v-for="item in 6" :key="item"></div>
-        <div class="row border-top-red-2" :style="{ height: `${trHeight * 2 - 10}px` }">
+        <!-- <div class="row border-top-red-2" :style="{ height: `${trHeight * 2 - 10}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             呼吸(次/分)
           </div>
@@ -196,8 +204,8 @@
               <div :style="{fontSize:!isNaN(item.value) ?'':'large'}">{{ item.value}}</div>
             </div>
           </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
+        </div> -->
+        <div class="row border-top-red-2" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             大便(次/日)
           </div>
@@ -439,19 +447,21 @@ export default {
     const yRange = [34, 42];
     const pulseRange = [20, 180];
     const painRange = [0, 10];
+    const breatheRange = [0, 80]
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
       areaHeight: 0, // 网格区域的高度
       xSpace: 18, // 纵向网格的间距
       ySpace: 16, //  横向网格的间距
-      leftWidth: 90, // 左侧内容宽度 
+      leftWidth: 100, // 左侧内容宽度 
       xRange: [1, 8],
       yRange,
       pulseRange,
       painRange,
+      breatheRange,
       showChildrenPage: false,
       settingMap: {
         oralTemperature: {
@@ -520,6 +530,16 @@ export default {
             // { time: '2019-05-15 07:10:00', value: 2},
           ],
         },
+        breathe: {
+          vitalCode: "04",
+          label: "呼吸",
+          color: "black",
+          dotType: "Circle",
+          range: breatheRange,
+          data: [
+            // { time: '2019-05-15 07:10:00', value: 2},
+          ],
+        },
       }, // 折线部分
       topSheetNote: [
         // { time: '2019-05-15 07:10:00', value: '入院|' },
@@ -531,11 +551,12 @@ export default {
         // { time: '2019-05-19 20:10:00', value: '不升' },
       ], // 表底注释  体温低于或等于35度则剔除，在体温单下面标注"不升"
       topPulseNote: [
-        // { time: '2019-05-16 17:10:00', value: '过快' }
+        // { time: '2019-05-1d6 17:10:00', value: '过快' }
       ], // 心率和脉搏过快超出体温单上限则剔除，在体温单上面标注"过快"
       breatheList: [
         // { time: '2019-05-18 03:12:00', value: '20' }
       ], // 呼吸
+      ventilator: [], // 呼吸机
       pressureList: [], // 血压
       weightList: [], // 体重
       heightList: [], // 身高
@@ -605,6 +626,7 @@ export default {
         20: "heart",
         "02": "pulse",
         "092": "pain",
+        '04': 'breathe'
       },
       pageTotal: 1,
       currentPage: 1,
@@ -615,7 +637,7 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [2,6,10,2,6,10];
+      const list = [2,6,10,14,18,22];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
@@ -670,13 +692,9 @@ export default {
         };
       });
       const timeAdd = (i) => {
-        return timeNumList.some((x) => x.start === i)
-          ? 5 * 60 * 60 * 1000
-          : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
-            ? 3 * 60 * 60 * 1000
-            : 4 * 60 * 60 * 1000;
+        return 4 * 60 * 60 * 1000
       };
-      for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1] -1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
@@ -756,13 +774,10 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
-        console.log("index====",index)
         let apart = []; // 存储当天和前面手术的天数间隔
         for (let i = 0; i < index; i++) {
           apart.unshift(days[i]);
         }
-        console.log("days====",days)
-        console.log("apart====",apart)
         const operationNum = apart.length; // 记录此日之前所有的手术次数，不考虑间隔大于7天
         // 间隔大于7天的手术，分子分母的写法要重置
         if (apart.length) {
@@ -833,6 +848,13 @@ export default {
     temperaturelist() {
       const list = [];
       for (let i = this.yRange[1]; i > this.yRange[0]; i--) {
+        list.push(i);
+      }
+      return list;
+    },
+    breatheYaxisList() {
+      const list = [];
+      for (let i = this.breatheRange[1]; i > this.breatheRange[0]; i = i - 10) {
         list.push(i);
       }
       return list;
@@ -943,6 +965,28 @@ export default {
       }
       return [];
     },
+    ventilatorList() {
+      const list = [[]];
+      this.ventilator = this.ventilator.sort((a, b) => this.getTimeNum(a.time) > this.getTimeNum(b.time));
+      for (let i = 0; i < this.ventilator.length; i++) {
+        const lastList = list[list.length - 1];
+        if (lastList.length) {
+          const lastVentilator = lastList[lastList.length - 1];
+          // 断开使用呼吸机超过1天，重新计算使用呼吸机天数
+          if (
+            lastVentilator && 
+            moment(this.ventilator[i].time).diff(moment(lastVentilator.time), 'days') > 1
+          ) {
+            list.push([this.ventilator[i]]);
+          } else {
+            list[list.length - 1].push(this.ventilator[i]);
+          }
+        } else {
+          list[list.length - 1].push(this.ventilator[i]);
+        }
+      }
+      return list;
+    }
   },
   watch: {
     // 因为分页可能在体温单外面，所以给父页面传递pageTotal
@@ -1093,6 +1137,7 @@ export default {
       this.coolList = [];
       this.ttgyList = [];
       this.dateRangeList = [];
+      this.ventilator = [];
       for (let i = 0; i < 6; i++) {
         this[`customList${i}`] = [];
       }
@@ -1331,6 +1376,10 @@ export default {
             break;
           case "05":
             this.feverList.push(item);
+            break;
+          case "06":
+            this.ventilator.push(item);
+            break;
           default:
             break;
         }
@@ -1389,6 +1438,7 @@ export default {
         // 画折线
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data];
+          // console.log("data===",x)
           if (["041", "01", "043"].includes(x.vitalCode)) {
             // 体温为不升时，折线需要断开
             data = [[]];
@@ -1463,7 +1513,7 @@ export default {
               if (y.value <= this.pulseRange[1]) {
                 data[data.length - 1].push(y);
               } else {
-                data.push([]);
+                data.push({...y});
               }
               // if (this.getBreakPoint(x.data).includes(index)) {
               //   data.push([]);
@@ -1503,10 +1553,28 @@ export default {
             //   }
             // })
           }
+          // 呼吸，不是数字断开
+          if (["04"].includes(x.vitalCode)) {
+            data = [[]];
+            x.data.sort(
+              (a, b) => this.getTimeNum(a.time) - this.getTimeNum(b.time)
+            ).forEach((y) => {
+              if (isNaN(y.value)) {
+                data.push([]);
+              } else {
+                data[data.length - 1].push(y);
+              }
+            })
+            // console.log("data===",data)
+
+          }
+
+          //如果表底注释包含不在则跳过
           data.forEach((z) => {
+            // console.log("z===",z)
             this.createBrokenLine({
               vitalCode: x.vitalCode,
-              data: z,
+              data: (z.length > 0 && this.bottomSheetNote.length > 0) ? this.handleBreakLine(z):z,
               yRange: x.range,
               lineColor: x.lineColor || x.color,
               label: x.label,
@@ -1586,7 +1654,7 @@ export default {
         });
       
         // 生成表顶注释
-        this.createNote(this.topSheetNote, this.indexTextAreaHeight + 2, "red");
+        this.createNote(this.handleTopSort(), this.indexTextAreaHeight + 2, "red");
         // 生成表底注释
         this.createNote(
           this.bottomSheetNote,
@@ -1595,6 +1663,24 @@ export default {
           5 * (this.ySpace + 1),
           "black"
         );
+        // 呼吸机：如果断开使用呼吸机超过 1 天，例如：1号，2号，4号这种情况，1，2号显示MR(1), (2)，4号重新显示MR(1)
+        // y：呼吸为10的位置
+        const by = this.getYaxis(this.breatheRange, 10);
+        this.ventilatorList.forEach((ventilator) => {
+          ventilator.forEach((item, index) => {
+            this.createText({
+              // 横坐标整体往右移动 5 ，他们那边显示电脑问题
+              x: index == 0 ? this.getXaxis(item.time) + 9 : this.getXaxis(item.time),
+              y: by - this.ySpace - 1,
+              value: index === 0 ? `MR (${index + 1})` : `(${index + 1})`,
+              color: 'black',
+              tips: `${item.time} 呼吸机`,
+              textLineHeight: this.ySpace + 1,
+              fontSize: 10,
+              fontWeight: 'bold',
+            });
+          })
+        })
       });
     },
     yLine() {
@@ -1922,8 +2008,7 @@ export default {
       data.forEach((x, index) => {
         const cx = this.getXaxis(this.getLocationTime(x.time));
         const cy = this.getYaxis(yRange, x.value, vitalCode);
-        dots.push({ x: cx, y: cy });
-
+        dots.push({ x: cx, y: cy ,isBreak:x.isBreak});
         let params = {
           cx,
           cy,
@@ -2153,17 +2238,21 @@ export default {
           }
         }
       });
+      // console.log("dots===",dots)
       //图标连接的折线路部分
       for (let i = 0; i < dots.length - 1; i++) {
-        this.createLine({
-          x1: dots[i].x,
-          y1: dots[i].y,
-          x2: dots[i + 1].x,
-          y2: dots[i + 1].y,
-          lineWidth: 2,
-          color: lineColor || "red",
-          zlevel: 1,
-        });
+        if(!dots[i].isBreak){
+          // console.log(".isBrea=====",dots[i].isBreak)
+          this.createLine({
+            x1: dots[i].x,
+            y1: dots[i].y,
+            x2: dots[i + 1].x,
+            y2: dots[i + 1].y,
+            lineWidth: 2,
+            color: lineColor || "red",
+            zlevel: 1,
+          });
+        }
       }
     },
     // 根据值计算纵坐标
@@ -2213,16 +2302,27 @@ export default {
     //   return `${time.slice(0, -8)}${splitHour}:00:00`
     // },
     // 计算用来定位描点的时间，医院特殊要求用这个方法定位
+    // 2点：0点到3点59分
+
+    // 6点：4点到7点59分
+
+    // 10点：8点到11点59分
+
+    // 14点：12点到15点59分
+
+    // 18点：16点到19点59分
+
+    // 22点：20点到23点59分
     getLocationTime(time) {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "05:00:59"],
-        "06:00:00": ["05:01:00", "9:00:59"],
-        "10:00:00": ["9:01:00", "13:00:59"],
-        "14:00:00": ["13:01:00", "17:00:59"],
-        "18:00:00": ["17:01:00", "21:00:59"],
-        "22:00:00": ["21:01:00", "23:59:59"],
+        "02:00:00": ["00:00:00", "03:59:59"],
+        "06:00:00": ["04:00:00", "07:59:59"],
+        "10:00:00": ["08:00:00", "11:59:59"],
+        "14:00:00": ["12:00:00", "15:59:59"],
+        "18:00:00": ["16:00:00", "19:59:59"],
+        "22:00:00": ["20:00:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -2429,7 +2529,54 @@ export default {
       }
       return xaxisNew;
     },
-    
+    //表顶注释排序修改
+    handleTopSort(){
+    return   this.topSheetNote.sort((a, b)=> {
+        let timeA = new Date(a.time);
+        let timeB = new Date(b.time);
+        return timeA - timeB;
+      });
+    },
+    //当表底注释存在不在关键字需要将当前折线断开 data 为1，不需要连线，为2判断不在的日期是否在两个日期之间，3个以上判断第n个与第n+1之间是否存在
+    //
+    handleBreakLine(data){
+      let aLength = data.length;
+      let bLength = this.bottomSheetNote.length;
+      for (let i = 0; i < bLength; i++) {
+        // 获取当前B数组对象的时间值
+        let bTime = new Date(this.bottomSheetNote[i].time);
+        // 遍历A数组
+        for (let j = 0; j < aLength - 1; j++) {
+          // 获取当前A数组对象和下一个对象的时间值
+          let aTime1 = new Date(data[j].time);
+          let aTime2 = new Date(data[j + 1].time);
+          // 判断B数组的时间值是否在A数组的时间范围内
+          if (this.bottomSheetNote[i].value =='不在' && (bTime >= aTime1 && bTime <= aTime2)) {
+            data[j]['isBreak']=true
+            break; // 可根据实际需求决定是否跳出循环
+          }
+        }
+      }
+
+      // let list =[]
+      // list =  data.map(i=>{
+      //   this.bottomSheetNote.map(item=>{
+      //     if(item.value == '不在'){
+      //         const date1 = new Date(i.time.replace(/-/g, "/"));
+      //         const date2 = new Date(item.time.replace(/-/g, "/"));
+      //         // 将时间部分设置为相同的时间（时、分、秒设为0）
+      //         date1.setHours(0, 0, 0, 0);
+      //         date2.setHours(0, 0, 0, 0);
+      //         i.isBreak = date1.getTime() == date2.getTime()
+      //         return i
+      //     }
+      //   })
+      //   return  i
+      // })
+
+      // console.log("data===",data)
+      return data
+    }
   },
   mounted() {
     const patientInfo = this.$route.query

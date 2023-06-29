@@ -126,8 +126,12 @@
                   </pattern>
                 </defs>
                 <g v-for="(item, index) in polygonPoints" :key="index">
+                  <!-- 阴影描边 -->
                   <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke="red" stroke-width="1.5px">
                   </polygon>
+                  <!-- 不描边 -->
+                  <!-- <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke-width="1.5px">
+                  </polygon> -->
                 </g>
 
               </svg>
@@ -750,7 +754,8 @@ export default {
       */
       const settingMap = this.settingMap;
       const xyMap = new Map();
-      settingMap.heart.data.forEach((x) => {
+      if(settingMap.heart.data.length>1&&settingMap.pulse.data.length>1){
+        settingMap.heart.data.forEach((x) => {
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
         if (xyMap.has(xAxis)) {
           xyMap.set(xAxis, {
@@ -793,7 +798,8 @@ export default {
             heart: null,
           });
         }
-      });
+       });
+      }
       const allList = [...xyMap.entries()].sort((a, b) => a[0] - b[0]);
       console.log('allList: ', allList);
       if (allList.length) {
@@ -804,6 +810,7 @@ export default {
             for (const item of this.getNotTemTime4Shadow()) {
               if (
                 index > 0 && 
+                allList[index - 1][1].heart &&
                 this.getTimeNum(allList[index - 1][1].heart.time) <= this.getTimeNum(item) &&
                 this.getTimeNum(x[1].heart.time) >= this.getTimeNum(item)
               ) {
@@ -1483,6 +1490,18 @@ export default {
                   24 * 60 * 60 * 1000 * 2
                 ) {
                   data.push([x.data[index + 1]]);
+                }
+                //如果存在中间不在的情况，中间断开
+                if (this.getNotTemTime1() && this.getNotTemTime1().length) {
+                  for (let item of this.getNotTemTime1()) {
+                    if (
+                      this.getTimeNum(x.data[index+1].time) >=
+                        this.getTimeNum(item) &&
+                      this.getTimeNum(y.time) <= this.getTimeNum(item)
+                    ) {
+                      data.push([x.data[index+1]]);
+                    }
+                  }
                 }
               } else {
                 const list = data[data.length - 1];

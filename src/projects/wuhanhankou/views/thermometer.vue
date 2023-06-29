@@ -5,7 +5,7 @@
       :style="{ width: `${leftWidth + areaWidth}px` }"
       v-if="apiData"
     >
-      <div class="head-hos">武汉汉口医院</div>
+      <div class="head-hos">武汉市汉口医院</div>
       <div class="head-title">体温单</div>
       <div class="head-info">
         <div class="item">
@@ -1064,11 +1064,11 @@ export default {
           '*',
         )
     },
-    //找到表底存在不升的日期
+    //找到表底存在不升、外出、拒测的日期
     bottomSheetNoteBusheng() {
       let outTime = []
       this.bottomSheetNote.forEach((y) => {
-        if (y.value.includes('不升')) {
+        if (['不升', '外出', '拒测'].includes(y.value)) {
           outTime.push(y.time)
         }
       })
@@ -1131,6 +1131,7 @@ export default {
       })
       return outTime
     },
+    
     //找到存在出院的日期
     getLeaveTime() {
       let outTime = ''
@@ -1385,6 +1386,12 @@ export default {
         }
         switch (vitalSigns[i].vital_code) {
           case '5':
+            // out_day = 0则当天出院，否则出院事件应显示在开嘱+outday的天数 所在位置。
+            if (vitalSigns[i].out_day) {
+              item.time = moment(
+                moment(vitalSigns[i].time_point).add(+vitalSigns[i].out_day, 'days')
+              ).format('YYYY-MM-DD HH:mm:ss');
+            }
             this.topSheetNote.push(item)
             break
           case '4':
@@ -1491,7 +1498,7 @@ export default {
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data]
           if (['041', '01', '043'].includes(x.vitalCode)) {
-            // 体温为不升时，折线需要断开
+            // 体温为不升/拒测/外出时，折线需要断开
             data = [[]]
             x.data.forEach((y, index) => {
               if (y.value > 35) {
@@ -1512,7 +1519,7 @@ export default {
                 ) {
                   data.push([x.data[index + 1]])
                 }
-                //如果存在中间不升的情况，中间断开
+                //如果存在中间不升/拒测/外出的情况，中间断开
                 if (this.bottomSheetNoteBusheng() !== []) {
                   for (let item of this.bottomSheetNoteBusheng()) {
                     if (
@@ -1577,7 +1584,7 @@ export default {
                 ) {
                   data.push([x.data[index + 1]])
                 }
-                //如果存在中间不升的情况，中间断开
+                //如果存在：不升/拒测/外出 的情况，中间断开
                 if (this.bottomSheetNoteBusheng() !== []) {
                   for (let item of this.bottomSheetNoteBusheng()) {
                     if (
@@ -2238,13 +2245,21 @@ export default {
     getLocationTime(time) {
       const sec = this.getTotalSeconds(time.slice(-8))
       let str = ''
+      // const timeAreasMap = {
+      //   '02:00:00': ['00:00:00', '05:00:59'],
+      //   '06:00:00': ['05:01:00', '9:00:59'],
+      //   '10:00:00': ['9:01:00', '13:00:59'],
+      //   '14:00:00': ['13:01:00', '17:00:59'],
+      //   '18:00:00': ['17:01:00', '21:00:59'],
+      //   '22:00:00': ['21:01:00', '23:59:59'],
+      // }
       const timeAreasMap = {
-        '02:00:00': ['00:00:00', '05:00:59'],
-        '06:00:00': ['05:01:00', '9:00:59'],
-        '10:00:00': ['9:01:00', '13:00:59'],
-        '14:00:00': ['13:01:00', '17:00:59'],
-        '18:00:00': ['17:01:00', '21:00:59'],
-        '22:00:00': ['21:01:00', '23:59:59'],
+        "02:00:00": ["00:00:00", "03:59:59"],
+        "06:00:00": ["04:00:00", "07:59:59"],
+        "10:00:00": ["08:00:00", "11:59:59"],
+        "14:00:00": ["12:00:00", "15:59:59"],
+        "18:00:00": ["16:00:00", "19:59:59"],
+        "22:00:00": ["20:00:00", "23:59:59"],
       }
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {

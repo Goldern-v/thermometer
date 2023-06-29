@@ -4,7 +4,7 @@
     @dblclick="dblclick"
     class="main-view"
     v-if="apiData"
-    :class="{ isPDF }"
+    :class="[{ isPDF },expecialNavigator]"
     :style="{
       width: `${leftWidth + areaWidth}px`,
       overflow: 'hidden',
@@ -12,520 +12,522 @@
       transformOrigin: 'top',
     }"
   >
-    <div class="head-hos"><img :src="imgUrl" alt="" /></div>
-    <div class="head-title">体温单</div>
-    <div class="head-info-1">
-      <div class="item">
-        科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
+    <div>
+      <div class="head-hos"><img :src="imgUrl" alt="" /></div>
+      <div class="head-title">体温单</div>
+      <div class="head-info-1">
+        <div class="item">
+          科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
+        </div>
+        <div class="item" style="padding: 0 60px 5px 5px">
+          病区：<span class="value">{{
+            adtLog || patInfo.ward_name || "2号楼19楼东区"
+          }}</span>
+        </div>
       </div>
-      <div class="item" style="padding: 0 60px 5px 5px">
-        病区：<span class="value">{{
-          adtLog || patInfo.ward_name || "2号楼19楼东区"
-        }}</span>
+      <div class="head-info">
+        <div class="item">
+          姓名：<span class="value">{{ patInfo.name }}</span>
+        </div>
+        <div class="item">
+          年龄：<span class="value">{{
+            typeof parseInt(patInfo.age) === "number" && !isNaN(patInfo.age)
+              ? patInfo.age + "岁"
+              : patInfo.age
+          }}</span>
+        </div>
+        <div class="item">
+          性别：<span class="value">{{ patInfo.sex }}</span>
+        </div>
+        <div class="item">
+          入院日期：<span class="value">{{
+            patInfo.admission_date.slice(0, 10)
+          }}</span>
+        </div>
+        <div class="item">
+          住院号：<span class="value">{{ patInfo.inp_no }}</span>
+        </div>
+        <div class="item" style="text-align: right">
+          床号：<span class="value">{{
+            bedExchangeLog || patInfo.bed_label
+          }}</span>
+        </div>
       </div>
-    </div>
-    <div class="head-info">
-      <div class="item">
-        姓名：<span class="value">{{ patInfo.name }}</span>
-      </div>
-      <div class="item">
-        年龄：<span class="value">{{
-          typeof parseInt(patInfo.age) === "number" && !isNaN(patInfo.age)
-            ? patInfo.age + "岁"
-            : patInfo.age
-        }}</span>
-      </div>
-      <div class="item">
-        性别：<span class="value">{{ patInfo.sex }}</span>
-      </div>
-      <div class="item">
-        入院日期：<span class="value">{{
-          patInfo.admission_date.slice(0, 10)
-        }}</span>
-      </div>
-      <div class="item">
-        住院号：<span class="value">{{ patInfo.inp_no }}</span>
-      </div>
-      <div class="item" style="text-align: right">
-        床号：<span class="value">{{
-          bedExchangeLog || patInfo.bed_label
-        }}</span>
-      </div>
-    </div>
-    <div class="table-area">
-      <div class="vline" :style="{ left: '-0.5px' }"></div>
-      <div class="vline" :style="{ left: `${leftWidth}px` }"></div>
-      <div class="vline" :style="{ right: '1px' }"></div>
-      <div class="table-box" style="transform: translateY(0.5px)">
-        <div
-          class="vtline"
-          :style="{
-            left: `${leftWidth + item * (6 * xSpace + 13)}px`,
-            transform: 'translateX(-1.5px)',
-            'border-color': '#000',
-          }"
-          v-for="item in 6"
-          :key="item"
-        ></div>
-        <div
-          class="row border-top-black-2"
-          :style="{ height: `${trHeight}px` }"
-        >
+      <div class="table-area">
+        <div class="vline" :style="{ left: '-0.5px' }"></div>
+        <div class="vline" :style="{ left: `${leftWidth}px` }"></div>
+        <div class="vline" :style="{ right: '1px' }"></div>
+        <div class="table-box" style="transform: translateY(0.5px)">
           <div
-            class="label"
-            :style="{ width: `${leftWidth}px` }"
-            v-html="`日&emsp;&emsp;期`"
-          ></div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in formatDateList"
-              :key="index"
-            >
-              {{ item }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">住院日数</div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              v-for="(item, index) in formatStayDayList"
-              :key="index"
-            >
-              {{ item }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            手术或产后日数
-          </div>
-          <div class="value-item-box" style="color: red">
-            <div
-              class="value-item"
-              v-for="(item, index) in formatOperateDateList"
-              :key="index"
-            >
-              {{ item }}
-            </div>
-          </div>
-        </div>
-        <div
-          class="row border-bottom-black-2"
-          :style="{ height: `${trHeight}px` }"
-        >
-          <div class="label" :style="{ width: `${leftWidth}px` }"></div>
-          <div class="value-item-box">
-            <div
-              class="value-item"
-              :style="middleTdStyle(index)"
-              v-for="(item, index) in maTds"
-              :key="index"
-            >
-              {{ item }}
-            </div>
-          </div>
-        </div>
-        <div class="row" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            <span
-              class="time-label"
-              :style="`transform: translateY(-${trHeight / 2}px);`"
-              v-html="`时&emsp;&emsp;间`"
-            ></span>
-          </div>
-          <div class="value-item-box font-18">
-            <div
-              class="value-item"
-              :style="smallTdStyle(index, timeTds.length)"
-              v-for="(item, index) in timeTds"
-              :key="index"
-            >
-              {{ item }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="info-box">
-        <div
-          class="index-box"
-          :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
-        >
-          <i
-            class="split-line"
+            class="vtline"
             :style="{
-              bottom: `${painAreaHeight + bottomAreaHeight}px`,
+              left: `${leftWidth + item * (6 * xSpace + 13)}px`,
+              transform: 'translateX(-1.5px)',
+              'border-color': '#000',
             }"
-          ></i>
-          <div class="notes">
+            v-for="item in 6"
+            :key="item"
+          ></div>
+          <div
+            class="row border-top-black-2"
+            :style="{ height: `${trHeight}px` }"
+          >
             <div
-              v-for="(value, key) in settingMap"
-              :key="key"
-              class="note-item"
-            >
-              {{ value.label }}
-              <template v-if="key === 'axillaryTemperature'">
-                <span class="axillary">x</span>
-                <i class="note-icon"></i>
-              </template>
-              <template v-else-if="key === 'pain'">
-                <span class="pain-icon"> ⊕ </span>
-                <i class="note-icon"></i>
-              </template>
-              <template v-else-if="key === 'oralTemperature'">
-                <span class="oralTemperature-icon"></span>
-                <i class="note-icon"></i>
-              </template>
-              <template v-else-if="key === 'earTemperature'">
-                <span class="pain-icon ear-temperature"></span>
-                <i class="note-icon"></i>
-              </template>
-              <template v-else-if="key === 'pulse'">
-                <span class="pulse-icon"></span>
-                <i class="note-icon"></i>
-              </template>
-              <i
-                v-else
-                class="note-icon"
-                :style="{
-                  'border-color': value.color,
-                  background: value.solid ? value.color : '#fff',
-                }"
-              ></i>
-            </div>
-          </div>
-          <div class="item times">
-            <div class="text" :style="`height: ${indexAreaHeight}px`">
-              <div class="p-r-5" style="color: red">脉搏</div>
-              <div style="color: red">(次/分)</div>
-            </div>
-            <div class="index" v-for="item in pulseList" :key="item">
-              <span>{{ item }}</span>
-            </div>
-            <div class="pain-area" style="font-size: 16px">
-              疼<br />痛<br />评<br />分
-            </div>
-            <div
-              class="bottom-area"
-              :style="`height: ${bottomAreaHeight + 5}px`"
+              class="label"
+              :style="{ width: `${leftWidth}px` }"
+              v-html="`日&emsp;&emsp;期`"
             ></div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in formatDateList"
+                :key="index"
+              >
+                {{ item }}
+              </div>
+            </div>
           </div>
-          <div class="item temp">
-            <div class="text" :style="`height: ${indexAreaHeight}px`">
-              <div class="p-r-5">体温</div>
-              <div>(℃)</div>
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">住院日数</div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                v-for="(item, index) in formatStayDayList"
+                :key="index"
+              >
+                {{ item }}
+              </div>
             </div>
-            <div class="index" v-for="item in temperaturelist" :key="item">
-              <span>{{ item }}</span>
+          </div>
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              手术或产后日数
             </div>
-            <div class="pain-area" :style="`height: ${painAreaHeight}px`">
-              <div class="pain-index" v-for="item in painList" :key="item">
+            <div class="value-item-box" style="color: red">
+              <div
+                class="value-item"
+                v-for="(item, index) in formatOperateDateList"
+                :key="index"
+              >
+                {{ item }}
+              </div>
+            </div>
+          </div>
+          <div
+            class="row border-bottom-black-2"
+            :style="{ height: `${trHeight}px` }"
+          >
+            <div class="label" :style="{ width: `${leftWidth}px` }"></div>
+            <div class="value-item-box">
+              <div
+                class="value-item"
+                :style="middleTdStyle(index)"
+                v-for="(item, index) in maTds"
+                :key="index"
+              >
+                {{ item }}
+              </div>
+            </div>
+          </div>
+          <div class="row" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              <span
+                class="time-label"
+                :style="`transform: translateY(-${trHeight / 2}px);`"
+                v-html="`时&emsp;&emsp;间`"
+              ></span>
+            </div>
+            <div class="value-item-box font-18">
+              <div
+                class="value-item"
+                :style="smallTdStyle(index, timeTds.length)"
+                v-for="(item, index) in timeTds"
+                :key="index"
+              >
+                {{ item }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div
+            class="index-box"
+            :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
+          >
+            <i
+              class="split-line"
+              :style="{
+                bottom: `${painAreaHeight + bottomAreaHeight}px`,
+              }"
+            ></i>
+            <div class="notes">
+              <div
+                v-for="(value, key) in settingMap"
+                :key="key"
+                class="note-item"
+              >
+                {{ value.label }}
+                <template v-if="key === 'axillaryTemperature'">
+                  <span class="axillary">x</span>
+                  <i class="note-icon"></i>
+                </template>
+                <template v-else-if="key === 'pain'">
+                  <span class="pain-icon"> ⊕ </span>
+                  <i class="note-icon"></i>
+                </template>
+                <template v-else-if="key === 'oralTemperature'">
+                  <span class="oralTemperature-icon"></span>
+                  <i class="note-icon"></i>
+                </template>
+                <template v-else-if="key === 'earTemperature'">
+                  <span class="pain-icon ear-temperature"></span>
+                  <i class="note-icon"></i>
+                </template>
+                <template v-else-if="key === 'pulse'">
+                  <span class="pulse-icon"></span>
+                  <i class="note-icon"></i>
+                </template>
+                <i
+                  v-else
+                  class="note-icon"
+                  :style="{
+                    'border-color': value.color,
+                    background: value.solid ? value.color : '#fff',
+                  }"
+                ></i>
+              </div>
+            </div>
+            <div class="item times">
+              <div class="text" :style="`height: ${indexAreaHeight}px`">
+                <div class="p-r-5" style="color: red">脉搏</div>
+                <div style="color: red">(次/分)</div>
+              </div>
+              <div class="index" v-for="item in pulseList" :key="item">
                 <span>{{ item }}</span>
               </div>
-              <div class="s-index"><span>2</span></div>
+              <div class="pain-area" style="font-size: 16px">
+                疼<br />痛<br />评<br />分
+              </div>
+              <div
+                class="bottom-area"
+                :style="`height: ${bottomAreaHeight + 5}px`"
+              ></div>
             </div>
-            <div
-              class="bottom-area"
-              :style="`height: ${bottomAreaHeight}px`"
-            ></div>
+            <div class="item temp">
+              <div class="text" :style="`height: ${indexAreaHeight}px`">
+                <div class="p-r-5">体温</div>
+                <div>(℃)</div>
+              </div>
+              <div class="index" v-for="item in temperaturelist" :key="item">
+                <span>{{ item }}</span>
+              </div>
+              <div class="pain-area" :style="`height: ${painAreaHeight}px`">
+                <div class="pain-index" v-for="item in painList" :key="item">
+                  <span>{{ item }}</span>
+                </div>
+                <div class="s-index"><span>2</span></div>
+              </div>
+              <div
+                class="bottom-area"
+                :style="`height: ${bottomAreaHeight}px`"
+              ></div>
+            </div>
           </div>
-        </div>
-        <div
-          ref="main"
-          :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
-        ></div>
-      </div>
-      <div class="table-box" style="transform: translateY(-0.5px)">
-        <div class="row font-14" :style="{ height: `${trHeight + 10}px` }">
           <div
-            class="label"
-            :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
-          >
-            呼吸(次/分)
-          </div>
-          <div class="value-item-box font-14">
+            ref="main"
+            :style="{ width: `${areaWidth}px`, height: `${areaHeight}px` }"
+          ></div>
+        </div>
+        <div class="table-box" style="transform: translateY(-0.5px)">
+          <div class="row font-14" :style="{ height: `${trHeight + 10}px` }">
             <div
-              class="value-item font-14"
-              :style="{
-                ...smallTdStyle(index, formatBreatheList.length),
-                ...item.style,
-              }"
-              v-for="(item, index) in formatBreatheList"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
+              class="label"
+              :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
             >
-              {{ item.value }}
+              呼吸(次/分)
+            </div>
+            <div class="value-item-box font-14">
+              <div
+                class="value-item font-14"
+                :style="{
+                  ...smallTdStyle(index, formatBreatheList.length),
+                  ...item.style,
+                }"
+                v-for="(item, index) in formatBreatheList"
+                @click="() => clickDateChangeTime(item)"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div
+              class="label"
+              :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
+            >
+              血压(mmHg)
+            </div>
+            <div class="value-item-box font-14" style="color: blue">
+              <div
+                class="value-item font-14"
+                :style="middleTdStyle(index, formatPressureList.length)"
+                v-for="(item, index) in formatPressureList"
+                @click="() => clickDateChangeTime(item)"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              总输入量(ml)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                v-for="(item, index) in getFormatList({ tList: inputList })"
+                :key="index"
+                @click="() => clickDateChangeTime(item)"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              总排出量(ml)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                v-for="(item, index) in getFormatList({ tList: outputList })"
+                @click="() => clickDateChangeTime(item)"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="left_box" :style="{ height: `${trHeight * 5}px` }">
+            排<br />出<br />量
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+              尿量(ml)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                v-for="(item, index) in getFormatList({ tList: urineList })"
+                @click="() => clickDateChangeTime(item)"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+              大便(次)
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                v-for="(item, index) in getFormatList({ tList: shitList })"
+                @click="() => clickDateChangeTime(item)"
+                :key="index"
+              >
+                {{ item.value }}
+              </div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+              {{ outCustomList.label || "排出自定义1" }}
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                :style="{ 'font-size': scaleFont(item.value) }"
+                v-for="(item, index) in getFormatList({ tList: outCustomList })"
+                @click="() => clickDateChangeTime(item)"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+              {{ outCustomList1.label || "排出自定义2" }}
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                :style="{ 'font-size': scaleFont(item.value) }"
+                v-for="(item, index) in getFormatList({ tList: outCustomList1 })"
+                @click="() => clickDateChangeTime(item)"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+              {{ outCustomList2.label || "排出自定义3" }}
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                :style="{ 'font-size': scaleFont(item.value) }"
+                v-for="(item, index) in getFormatList({ tList: outCustomList2 })"
+                @click="() => clickDateChangeTime(item)"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="clear"></div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">体重(Kg)</div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                v-for="(item, index) in getFormatList({ tList: weightList })"
+                @click="() => clickDateChangeTime(item)"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">身高(cm)</div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                v-for="(item, index) in getFormatList({ tList: heightList })"
+                @click="() => clickDateChangeTime(item)"
+                :key="index"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
           <div
-            class="label"
-            :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
+            class="row font-14"
+            :style="{ height: `${trHeight}px` }"
+            v-if="
+              !isNaN(patInfo.age.replace('岁', '')) &&
+              Number(patInfo.age.replace('岁', '')) >= 14
+            "
           >
-            血压(mmHg)
-          </div>
-          <div class="value-item-box font-14" style="color: blue">
-            <div
-              class="value-item font-14"
-              :style="middleTdStyle(index, formatPressureList.length)"
-              v-for="(item, index) in formatPressureList"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
-            >
-              {{ item.value }}
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              BMI(kg/m2）
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                v-for="(item, index) in getFormatListBmi({ tList: BMIList })"
+                @click="() => clickDateChangeTime(item)"
+                :key="index"
+                v-html="item.value"
+              ></div>
             </div>
           </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            总输入量(ml)
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              v-for="(item, index) in getFormatList({ tList: inputList })"
-              :key="index"
-              @click="() => clickDateChangeTime(item)"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            总排出量(ml)
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              v-for="(item, index) in getFormatList({ tList: outputList })"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="left_box" :style="{ height: `${trHeight * 5}px` }">
-          排<br />出<br />量
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            尿量(ml)
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              v-for="(item, index) in getFormatList({ tList: urineList })"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            大便(次)
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              v-for="(item, index) in getFormatList({ tList: shitList })"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
-            >
-              {{ item.value }}
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">皮试</div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-12"
+                v-for="(item, index) in getFormatList({ tList: skinTest })"
+                :key="index"
+                @click="() => clickDateChangeTime(item)"
+                v-html="item.value"
+              ></div>
             </div>
           </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            {{ outCustomList.label || "排出自定义1" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: outCustomList })"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            {{ outCustomList1.label || "排出自定义2" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: outCustomList1 })"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            {{ outCustomList2.label || "排出自定义3" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: outCustomList2 })"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="clear"></div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">体重(Kg)</div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              v-for="(item, index) in getFormatList({ tList: weightList })"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">身高(cm)</div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              v-for="(item, index) in getFormatList({ tList: heightList })"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div
-          class="row font-14"
-          :style="{ height: `${trHeight}px` }"
-          v-if="
-            !isNaN(patInfo.age.replace('岁', '')) &&
-            Number(patInfo.age.replace('岁', '')) >= 14
-          "
-        >
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            BMI(kg/m2）)
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              v-for="(item, index) in getFormatListBmi({ tList: BMIList })"
-              @click="() => clickDateChangeTime(item)"
-              :key="index"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">皮试</div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-12"
-              v-for="(item, index) in getFormatList({ tList: skinTest })"
-              :key="index"
-              @click="() => clickDateChangeTime(item)"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
 
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList0.label || "" }}
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth}px` }">
+              {{ customList0.label || "" }}
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                :style="{ 'font-size': scaleFont(item.value) }"
+                v-for="(item, index) in getFormatList({ tList: customList0 })"
+                :key="index"
+                @click="() => clickDateChangeTime(item)"
+                v-html="item.value"
+              ></div>
+            </div>
           </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: customList0 })"
-              :key="index"
-              @click="() => clickDateChangeTime(item)"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
 
-        <div
-          class="left_box"
-          :style="{ height: `${trHeight * 2}px`, paddingTop: 0 }"
-        >
-          其<br />它<br />
+          <div
+            class="left_box"
+            :style="{ height: `${trHeight * 2}px`, paddingTop: 0 }"
+          >
+            其<br />它<br />
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+              {{ customList1.label || "" }}
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                :style="{ 'font-size': scaleFont(item.value) }"
+                v-for="(item, index) in getFormatList({ tList: customList1 })"
+                :key="index"
+                @click="() => clickDateChangeTime(item)"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="row font-14" :style="{ height: `${trHeight}px` }">
+            <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+              {{ customList2.label || "" }}
+            </div>
+            <div class="value-item-box">
+              <div
+                class="value-item font-14"
+                :style="{ 'font-size': scaleFont(item.value) }"
+                v-for="(item, index) in getFormatList({ tList: customList2 })"
+                :key="index"
+                @click="() => clickDateChangeTime(item)"
+                v-html="item.value"
+              ></div>
+            </div>
+          </div>
+          <div class="clear"></div>
+          <div
+            class="vtline"
+            :style="{
+              left: `${leftWidth + item * (6 * xSpace + 13)}px`,
+              transform: 'translateX(-1.5px)',
+              'border-color': '#000',
+            }"
+            v-for="item in 6"
+            :key="item"
+          ></div>
         </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            {{ customList1.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: customList1 })"
-              :key="index"
-              @click="() => clickDateChangeTime(item)"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            {{ customList2.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: customList2 })"
-              :key="index"
-              @click="() => clickDateChangeTime(item)"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="clear"></div>
-        <div
-          class="vtline"
-          :style="{
-            left: `${leftWidth + item * (6 * xSpace + 13)}px`,
-            transform: 'translateX(-1.5px)',
-            'border-color': '#000',
-          }"
-          v-for="item in 6"
-          :key="item"
-        ></div>
       </div>
+      <!-- <div class="pagination"> -->
+      <span class="pagination" v-if="showInnerPage">
+        <!-- <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i> -->
+        <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">
+          上一页
+        </button>
+        <span>第{{ currentPage }}页/共{{ pageTotal }}页</span>
+        <button
+          :disabled="currentPage === pageTotal"
+          @click="toNext"
+          class="next-btn"
+        >
+          下一页
+        </button>
+        <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
+      </span>
+      <span class="pagination" v-else>第{{ currentPage }}页</span>
     </div>
-    <!-- <div class="pagination"> -->
-    <span class="pagination" v-if="showInnerPage">
-      <!-- <i :disabled="currentPage === 1" @click="toPre" class="pre-icon"></i> -->
-      <button :disabled="currentPage === 1" @click="toPre" class="pre-btn">
-        上一页
-      </button>
-      <span>第{{ currentPage }}页/共{{ pageTotal }}页</span>
-      <button
-        :disabled="currentPage === pageTotal"
-        @click="toNext"
-        class="next-btn"
-      >
-        下一页
-      </button>
-      <!-- <i :disabled="currentPage === pageTotal" @click="toNext" class="next-icon"></i> -->
-    </span>
-    <span class="pagination" v-else>第{{ currentPage }}页</span>
   </div>
 </template>
 
@@ -534,6 +536,7 @@ import zrender from "zrender";
 import { mockData } from "src/projects/nfykdxsdyy/mockData.js";
 import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
 import moment from "moment"; //导入文件
+import {getBrowserNameVersion} from '../assets/root/navigator'
 export default {
   props: {
     isPrintAll: {
@@ -739,6 +742,13 @@ export default {
     };
   },
   computed: {
+    expecialNavigator(){
+      let navigator = getBrowserNameVersion()
+       if(navigator.navigator =='Chrome'){
+        if(parseInt(navigator.banben)<=95) return 'lowChrome'
+       }
+      return  ""
+    },
     isPDF() {
       return !!this.$route.query.isPDF;
     },
@@ -2600,6 +2610,15 @@ export default {
     transform: scale(0.83);
     transform-origin: top;
   }
+  .main-view.lowChrome{
+    height: 1120px;
+    transform-origin: top;
+    transform: scaleX(0.75) translateX(-110px);
+  }
+  .main-view.lowChrome > div{
+    transform-origin: center top;
+    transform: scaleY(0.71);
+  }
   //.pain-area :nth-child(5) {
   //  margin-bottom: 4px;
   //}
@@ -2614,11 +2633,17 @@ export default {
   font-family: Simsun;
   width: fit-content;
   &.isPDF {
-    transform: scaleY(0.69) scaleX(0.78);
-    margin: 0 0 0 -90px;
-    padding-top: 35px;
-    overflow: hidden;
-    vertical-align: top;
+    height: 1120px;
+    transform-origin: top;
+    transform: scaleX(0.75) translateX(-110px);
+    // transform: scaleY(0.69) scaleX(0.78) !important;
+    // margin: 0 0 0 -90px !important;
+    // padding-top: 35px !important;
+    &>div{
+      // transform: scaleY(1) !important;
+      transform-origin: center top;
+      transform: scaleY(0.71);
+    }
   }
   .head-hos {
     font-family: SimHei;
