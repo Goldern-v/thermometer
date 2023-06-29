@@ -618,7 +618,7 @@ export default {
     const FahrenheitListRange = [95, 108];
     const FahrenheitRange = [0, 65];
     return {
-      useMockData: false,
+      useMockData: false ,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -792,7 +792,8 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [3, 7, 11, 15, 19, 23];
+      const patientId = (this.apiData.patientInfo&& this.apiData.patientInfo.patInfo && this.apiData.patientInfo.patInfo.patient_id )|| this.$route.query.PatientId || '';
+      const list = patientId.includes('B')?[2, 6, 10, 14, 18, 22]: [3, 7, 11, 15, 19, 23];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
