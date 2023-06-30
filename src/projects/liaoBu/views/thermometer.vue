@@ -619,6 +619,9 @@ export default {
         // { time: '2019-05-18 03:12:00', value: '6' }
       ], // 呼吸
       pressureList: [], // 血压
+      pulseArr: [], // 脉搏
+      haertArr: [], // 心率
+      pressureList: [], // 血压
       weightList: [], // 体重
       heightList: [], // 身高
       inputList: [], // 液体入量
@@ -1214,6 +1217,8 @@ export default {
       this.afterColoclyster = [];
       this.coloclyster = [];
       this.physicsCoolList = [];
+      this.haertArr = []
+      this.pulseArr = []
       for (let i = 0; i < 6; i++) {
         this[`customList${i}`] = [];
       }
@@ -1350,6 +1355,17 @@ export default {
           }
           continue;
         }
+        if(vitalSigns[i].vital_code == '11'){
+          this.pulseArr.push({
+            time: vitalSigns[i].time_point,
+            value: vitalSigns[i].value,
+          });
+        }else if(vitalSigns[i].vital_code == '12'){
+           this.haertArr.push({
+            time: vitalSigns[i].time_point,
+            value: vitalSigns[i].value,
+          });
+        }
         if (this.lineMap[vitalSigns[i].vital_code]) {
           if (
             ["1", "2", "20",'12'].includes(vitalSigns[i].vital_code) &&
@@ -1361,65 +1377,9 @@ export default {
               value: Number(vitalSigns[i].value),
             });
           }
-          // let dataArray =this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data;
-          // let vitalCode = vitalSigns[i].vital_code
-          // const inTime = this.getBeHospitalized();
-          // dataArray.forEach((y, index) => {
-          //   if (
-          //     index >= 1 &&
-          //     this.getLocationTime(y.time) ==
-          //       this.getLocationTime(dataArray[index - 1].time)
-          //   ) {
-          //     if (!inTime.includes(this.getLocationTime(y.time))) {
-          //       if(['1','2','20','12'].includes(vitalCode)){
-          //                         if (y.value >= 35) {
-          //         if (y.value > dataArray[index - 1].value) {
-          //           dataArray.splice(index - 1, 1);
-          //         } else {
-          //           dataArray.splice(index, 1);
-          //         }
-          //       } else {
-          //         if (
-          //           y.value < dataArray[index - 1].value &&
-          //           dataArray[index - 1].value < 35
-          //         ) {
-          //           dataArray.splice(index - 1, 1);
-          //         } else {
-          //           dataArray.splice(index, 1);
-          //         }
-          //       }
-          //       }else{
-          //           if (y.value >= 60) {
-          //         if (y.value > dataArray[index - 1].value) {
-          //           dataArray.splice(index - 1, 1);
-          //         } else {
-          //           dataArray.splice(index, 1);
-          //         }
-          //       } else {
-          //         if (
-          //           y.value < dataArray[index - 1].value &&
-          //           dataArray[index - 1].value < 60
-          //         ) {
-          //           dataArray.splice(index - 1, 1);
-          //         } else {
-          //           dataArray.splice(index, 1);
-          //         }
-          //       }
-          //       }
-          //     } else {
-          //       if (
-          //         this.getTimeNum(y.time) <
-          //         this.getTimeNum(dataArray[index - 1].time)
-          //       ) {
-          //         dataArray.splice(index - 1, 1);
-          //       } else {
-          //         dataArray.splice(index, 1);
-          //       }
-          //     }
-          //   }
-          // });
           continue;
         }
+       
         const item = {
           time: vitalSigns[i].time_point,
           value: vitalSigns[i].value,
@@ -1530,7 +1490,7 @@ export default {
         // 画折线
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data];
-          if (['1',"2", "3", "19", '20'].includes(x.vitalCode)) {
+          if (['1',"2", "3", "19", '20', '11', '12'].includes(x.vitalCode)) {
             // 体温为不升时，折线需要断开
             data = [[]];
             x.data.forEach((y, index) => {
@@ -1547,6 +1507,14 @@ export default {
                 ) {
                   data.push([x.data[index + 1]]);
                 }
+                if(x.vitalCode == '11'){
+                 let isHaer = this.haertArr.length && this.haertArr.some(hItem => this.getTimeNum(hItem.time) < this.getTimeNum(x.data[index + 1].time) && this.getTimeNum(hItem.time) > this.getTimeNum(x.data[index].time))
+                 if(isHaer){
+                  data.push([x.data[index + 1]]);
+                 }
+                }
+                  
+
                 // 产科新生儿
                 if (this.patInfo.wardCode === '1040102002' && this.patInfo.isBaby == '1') {
                   //如果存在：转科/外出/拒测/请假 的情况，中间断开
@@ -1612,6 +1580,8 @@ export default {
               }
             });
           }
+        
+         
           data.forEach((z) => {
             this.createBrokenLine({
               vitalCode: x.vitalCode,

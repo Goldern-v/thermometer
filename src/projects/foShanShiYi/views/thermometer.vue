@@ -264,7 +264,6 @@
               style="font-size: 13px;word-break: break-all;"
               v-html="item.value"
             >
-              <!-- {{ item.value }} -->
             </div>
           </div>
         </div>
@@ -618,6 +617,8 @@ export default {
       breatheList: [
         // { time: '2019-05-18 03:12:00', value: '20' }
       ], // 呼吸
+      pulseArr: [], // 脉搏
+      haertArr: [], // 心率
       pressureList: [], // 血压
       pressureSiteList: [], // 血压部位
       weightList: [], // 体重
@@ -1112,6 +1113,8 @@ export default {
       this.dateRangeList = [];
       this.outCustomList = []
       this.outCustomList1 = []
+      this.haertArr = []
+      this.pulseArr = []
 
       for (let i = 0; i < 4; i++) {
         this[`customList${i}`] = [];
@@ -1239,6 +1242,17 @@ export default {
               break;
           }
         }
+         if(vitalSigns[i].vital_code == '11'){
+          this.pulseArr.push({
+            time: vitalSigns[i].time_point,
+            value: vitalSigns[i].value,
+          });
+        }else if(vitalSigns[i].vital_code == '12'){
+           this.haertArr.push({
+            time: vitalSigns[i].time_point,
+            value: vitalSigns[i].value,
+          });
+        }
         /* 获取各个体征数组对象 */
         if (this.lineMap[vitalSigns[i].vital_code]) {
           this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
@@ -1347,6 +1361,20 @@ export default {
               //   data.push([]);
               // }
               if (index < x.data.length - 1) {
+                // 脉搏中间存在心率，中间断开， 心率如此
+               if(x.vitalCode == '11'){
+                 let isHaer = this.haertArr.length && this.haertArr.some(hItem => this.getTimeNum(hItem.time) < this.getTimeNum(x.data[index + 1].time) && this.getTimeNum(hItem.time) > this.getTimeNum(x.data[index].time))
+                 if(isHaer){
+                  data.push([x.data[index + 1]]);
+                 }
+                }
+               if(x.vitalCode == '12'){
+                 let isPulse = this.haertArr.length && this.haertArr.some(hItem => this.getTimeNum(hItem.time) < this.getTimeNum(x.data[index + 1].time) && this.getTimeNum(hItem.time) > this.getTimeNum(x.data[index].time))
+                 if(isPulse){
+                  data.push([x.data[index + 1]]);
+                 }
+                }
+
                 //超过一天的时间点，中间断开
                 if (
                   this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
@@ -1354,6 +1382,7 @@ export default {
                 ) {
                   data.push([x.data[index + 1]]);
                 }
+          
                 //如果存在：不升/拒测/外出 的情况，中间断开
                 const bottomNode = this.getNotTemTime(this.bottomSheetNote)
                 const topNode = this.getNotTemTime(this.topSheetNote)
@@ -1389,7 +1418,18 @@ export default {
               }
             });
           }
-          console.log('data', data)
+            // this.pulseArr.forEach((hItem, hIndex) => {
+            //     if(!this.heartArr.length || !this.pulseArr[hIndex-1]) return
+            //     let isPulse = []
+            //     this.heartArr.forEach((eItem)=> {
+            //       if(this.getTimeNum(eItem.time) >= this.getTimeNum(this.pulseArr[hIndex].time) &&  this.getTimeNum(eItem.time) <= this.getTimeNum(this.pulseArr[hIndex+1].time)){
+            //         isPulse = [this.pulseArr[hIndex],this.pulseArr[hIndex+1]]
+            //       }
+            //     })
+            //     if(!isPulse.length) return
+            //     data.push(isPulse)
+            //   })
+            
           data.forEach((z) => {
             this.createBrokenLine({
               vitalCode: x.vitalCode,
