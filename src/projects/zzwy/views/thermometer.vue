@@ -423,6 +423,8 @@ import { mockData } from "src/projects/zzwy/mockData.js";
 import moment from "moment";
 import { mockDataError } from "src/projects/zzwy/mockDataError.js";
 import ChildrenChartVue from "./childrenChart.vue";
+import { getNurseExchangeInfoByTime } from "src/api/index.js";
+
 export default {
   components: {
     ChildrenChartVue,
@@ -1205,7 +1207,19 @@ export default {
       }
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
-
+      const urlParams = this.urlParse();
+      let data = {
+        startLogDateTime: this.timeRange[0],
+        endLogDateTime: this.timeRange[1],
+        visitId: this.$route.query.VisitId,
+        patientId: this.$route.query.PatientId,
+      };
+      if (!this.useMockData && !this.isPrintAll) {
+        getNurseExchangeInfoByTime(data).then((res) => {
+          this.adtLog = res.data.data.adtLog; // 转科
+          this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+        });
+      }
       // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
       window.parent.postMessage(
         {
@@ -2603,7 +2617,7 @@ export default {
     } else {
       this.$http({
         method: "post",
-        url: "/crHesb/hospital/common",
+        url: "http://120.24.240.231:16093/crHesb/hospital/common",
         data: {
           tradeCode: "nurse_getPatientVitalSigns",
           PatientId: patientInfo.PatientId,
