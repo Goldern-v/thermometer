@@ -650,6 +650,26 @@ export default {
             // { time: '2019-05-15 07:10:00', value: 2},
           ],
         },
+        // 脉搏心率一起连
+        pulse_heart: {  
+          vitalCode: "ph",
+          label: "",
+          color: "red",
+          lineColor: "red",
+          dotType: "",
+          range: pulseRange,
+          data: [],
+        },
+        // 所有体温一起连，口温，腋温，肛温，耳温
+        allTemperatrue: {
+          vitalCode: "all",
+          label: "",
+          color: "blue",
+          lineColor: "blue",
+          dotType: "",
+          range: yRange,
+          data: [],
+        } 
       }, // 折线部分
       topSheetNote: [
         // { time: '2019-05-15 07:10:00', value: '入院|' },
@@ -1339,10 +1359,17 @@ export default {
         }
         /* 获取各个体征数组对象 */
         if (this.lineMap[vitalSigns[i].vital_code]) {
-          this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
+          const point = {
             time: vitalSigns[i].time_point,
             value: Number(vitalSigns[i].value),
-          });
+          }
+          this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push(point);
+          if (['11', '12'].includes(vitalSigns[i].vital_code)) {
+            this.settingMap.pulse_heart.data.push(point);
+          }
+          if (['1', '2', '19', '20'].includes(vitalSigns[i].vital_code)) {
+            this.settingMap.allTemperatrue.data.push(point);
+          }
           continue;
         }
         const item = {
@@ -1411,7 +1438,7 @@ export default {
     getNotTemTime(sheetNote = []) {
       let outTime = [];
       sheetNote.forEach((y) => {
-        if (["不升", "外出", "拒测"].includes(y.value)) {
+        if (["不升", "外出", "拒测", "手术|"].includes(y.value) || y.value.includes('手术')) {
           outTime.push(y.time);
         }
       });
@@ -1431,8 +1458,8 @@ export default {
         this.xLine(); //生成X轴坐标
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data];
-          // 体温、脉搏、心率、口温、肛温、耳温 1、11、12、2、19、20
-          if (["1", "11", "12", "2", "19", "20"].includes(x.vitalCode)) {
+          // 体温、脉搏、心率、口温、肛温、耳温、脉搏心率、所有体温 1、11、12、2、19、20、ph、all(ph、all是自定义的code)
+          if (["1", "11", "12", "2", "19", "20", 'ph', 'all'].includes(x.vitalCode)) {
             data = [[]];
             x.data.forEach((y, index) => {
               // if (y.value > 35) {
@@ -1442,11 +1469,14 @@ export default {
               //   data.push([]);
               // }
               if (index < x.data.length - 1) {
-                //超过一天的时间点，中间断开
+                // 超过一天的时间点，中间断开
+                // ['11', '12'].includes(x.vitalCode)脉搏心率只画点，脉搏心率的画线由pulse_heart负责
+                // ['1', '2', '19', '20'].includes(x.vitalCode)所有体温只画点，体温画线由allTemperatrue负责
                 if (
                   this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
                     this.getTimeNum(y.time.slice(0, 10)) >=
                   24 * 60 * 60 * 1000 * 2
+                  || ['11', '12', '1', '2', '19', '20'].includes(x.vitalCode)
                 ) {
                   data.push([x.data[index + 1]]);
                 }
@@ -1580,6 +1610,7 @@ export default {
           this.areaHeight - (this.ySpace + 2) * 10,
           "black"
         );
+
       });
     },
     createNote(notes, y, color) {
@@ -2273,7 +2304,7 @@ export default {
             this.timesTempAreaHeight +
             this.ySpace
         : ((yRange[1] - value) /
-            (yRange[1] - (["11", "12"].includes(vitalCode) ? 20 : 34))) *
+            (yRange[1] - (["11", "12", 'ph'].includes(vitalCode) ? 20 : 34))) *
             (this.timesTempAreaHeight + 4 * this.ySpace) -
             7;
     },
@@ -2836,11 +2867,6 @@ export default {
         color: blue;
         position: absolute;
         bottom: -6px;
-      }
-    }
-
-    .temp {
-      .text {
       }
     }
 
