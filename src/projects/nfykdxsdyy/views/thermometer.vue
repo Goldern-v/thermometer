@@ -8,8 +8,8 @@
     :style="{
       width: `${leftWidth + areaWidth}px`,
       overflow: 'hidden',
-      transform: `scale(${scaleData}) translatex(${translaData})`,
-      transformOrigin: 'top',
+      transform: expecialNavigator=='lowChrome'? '' : `scale(${scaleData}) translatex(${translaData})`,
+      transformOrigin: expecialNavigator=='lowChrome'? '' : 'top',
     }"
   >
     <div>
@@ -2635,20 +2635,20 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 0mm 0mm -60mm 0mm; // 页面的边距
+    margin: 5mm 0mm -40mm 0mm; // 页面的边距
   }
   .main-view {
     transform: scale(0.83);
     transform-origin: top;
   }
   .main-view.lowChrome{
-    height: 1120px;
+    height: 1080px;
     transform-origin: top;
     transform: scaleX(0.75) translateX(-110px);
   }
   .main-view.lowChrome > div{
     transform-origin: center top;
-    transform: scaleY(0.71);
+    transform: scaleY(0.68);
   }
   //.pain-area :nth-child(5) {
   //  margin-bottom: 4px;
