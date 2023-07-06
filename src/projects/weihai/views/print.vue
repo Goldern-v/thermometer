@@ -33,7 +33,8 @@ export default {
       if (e && e.data) {
         switch (e.data.type) {
           case 'printingAll':
-            window.print()
+            // window.print()
+            this.getDataAndPrint();
             break
           default:
             break
@@ -52,6 +53,37 @@ export default {
         obj[key] = val
       })
       return obj
+    },
+    getDataAndPrint() {
+      const urlParams = this.urlParse()
+      if (this.useMockData) {
+        this.printData = mockData
+        setTimeout(() => {
+          this.pageTotal = this.$refs.thermometer[0].pageTotal
+          setTimeout(() => {
+            window.print()
+          }, 1000)
+        }, 0)
+      } else {
+        this.$http({
+          method: 'post',
+          url: '/crHesb/hospital/common',
+          data: {
+            tradeCode: 'nurse_getPatientVitalSigns',
+            PatientId: urlParams.PatientId,
+            VisitId: urlParams.VisitId,
+            StartTime: urlParams.StartTime
+          }
+        }).then((res) => {
+          this.printData = res.data
+          setTimeout(() => {
+            this.pageTotal = this.$refs.thermometer[0].pageTotal
+            setTimeout(() => {
+              window.print()
+            }, 0)
+          }, 0)
+        })
+      }
     }
   },
   created() {
@@ -59,35 +91,7 @@ export default {
     window.addEventListener('message', this.messageHandle, false)
   },
   mounted() {
-    const urlParams = this.urlParse()
-    if (this.useMockData) {
-      this.printData = mockData
-      setTimeout(() => {
-        this.pageTotal = this.$refs.thermometer[0].pageTotal
-        // setTimeout(() => {
-        //   window.print()
-        // }, 1000)
-      }, 0)
-    } else {
-      this.$http({
-        method: 'post',
-        url: '/crHesb/hospital/common',
-        data: {
-          tradeCode: 'nurse_getPatientVitalSigns',
-          PatientId: urlParams.PatientId,
-          VisitId: urlParams.VisitId,
-          StartTime: urlParams.StartTime
-        }
-      }).then((res) => {
-        this.printData = res.data
-        setTimeout(() => {
-          this.pageTotal = this.$refs.thermometer[0].pageTotal
-          // setTimeout(() => {
-          //   window.print()
-          // }, 1500)
-        }, 0)
-      })
-    }
+    
   },
   watch: {
     // 因为分页可能在体温单外面，所以给父页面传递pageTotal
