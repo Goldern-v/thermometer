@@ -1353,6 +1353,7 @@ export default {
               const locationTime = this.getLocationTime(y.time);
               const locationTimeNum = this.getTimeNum(locationTime);
               const timeNum = this.getTimeNum(y.time);
+              console.log(y.time)
               if (index >= 1 && this.getLocationTime(y.time) == this.getLocationTime(dataArray[index - 1].time)) {
                 const hasTopRuleItem = this.pickTopRule(y.time);
                 if (
@@ -1381,9 +1382,9 @@ export default {
                   //   dataArray.splice(index, 1)
                   // }
                 }
-              } else if (index === 0) {
+              } else  {
                 vitalCodeMinMap[`${vitalCode}${locationTime}`] = Math.abs(timeNum - locationTimeNum);
-              }
+              } 
             })
           }
           continue;
