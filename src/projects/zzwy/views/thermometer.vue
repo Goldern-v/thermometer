@@ -2617,7 +2617,7 @@ export default {
     } else {
       this.$http({
         method: "post",
-        url: "http://120.24.240.231:16093/crHesb/hospital/common",
+        url: "/crHesb/hospital/common",
         data: {
           tradeCode: "nurse_getPatientVitalSigns",
           PatientId: patientInfo.PatientId,
