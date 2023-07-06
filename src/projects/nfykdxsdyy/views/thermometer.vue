@@ -188,14 +188,28 @@
                   <span class="pulse-icon"></span>
                   <i class="note-icon"></i>
                 </template>
-                <i
+                <template v-else-if="key === 'heart'">
+                  <!-- <span class="pulse-icon"></span> -->
+                  <i class="note-icon" :style="{
+                    'border-color': value.color,
+                    background: value.solid ? value.color : '#fff',
+                  }"></i>
+                </template>
+                <template v-else-if="key === 'analTemperature'">
+                  <!-- <span class="pulse-icon"></span> -->
+                  <i class="note-icon" :style="{
+                    'border-color': value.color,
+                    background: value.solid ? value.color : '#fff',
+                  }"></i>
+                </template>
+                <!-- <i
                   v-else
                   class="note-icon"
                   :style="{
                     'border-color': value.color,
                     background: value.solid ? value.color : '#fff',
                   }"
-                ></i>
+                ></i> -->
               </div>
             </div>
             <div class="item times">
@@ -559,7 +573,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [2, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       imgUrl: require("../assets/hosptialName.png"),
       apiData: "", // 接口数据
       zr: "",
@@ -2635,7 +2649,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 5mm 0mm -40mm 0mm; // 页面的边距
+    margin: 5mm 0mm -60mm 0mm; // 页面的边距
   }
   .main-view {
     transform: scale(0.83);
