@@ -747,6 +747,7 @@ export default {
           (x) =>
             x.vital_code === "5" &&
             (x.value.includes("手术") ||
+              x.value.includes("分娩|") ||
               x.value.includes("手术入院|"))
         )
         .map((x) => x.time_point);
@@ -1184,6 +1185,8 @@ export default {
           vital_code: "19",
         });
       }
+      let vital = vitalSigns.find(item=>item.value.split("|")[0]==="手术分娩")
+      vital && (vital.value=vital.value.replace("手术分娩","分娩"))
       this.vitalSigns = vitalSigns;
       // 计算最大标识时间
       const maxTimeNum = Math.max.apply(
