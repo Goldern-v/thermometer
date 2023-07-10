@@ -95,7 +95,7 @@
           <div class="label" :style="{ width: `${leftWidth}px` }">住院天数</div>
           <div class="value-item-box">
             <div class="value-item" v-for="(item, index) in formatStayDayList" :key="index">
-              {{ item }}
+              {{  item }}
             </div>
           </div>
         </div>
@@ -755,7 +755,7 @@ export default {
       return this.dateList.map((x) => {
         // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
         //   return "";
-        // if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
         if (!this.operateDateList.length) return "";
         // 构造天数差数组，有相同天数差的说明在同一天，所以要去重
         // const days = [
@@ -833,6 +833,7 @@ export default {
       return this.dateList.map((x) => {
         // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
         //   return "";
+         if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
         return this.dayInterval(x, this.patInfo.admission_date) + 1;
       });
     },
@@ -1668,7 +1669,7 @@ export default {
         });
       
         // 生成表顶注释
-        this.createNote(this.handleTopSort(), this.indexTextAreaHeight + 2, "red");
+        this.createNote(this.handleTopSort(), this.indexTextAreaHeight + 2, "blue");
         // 生成表底注释
         this.createNote(
           this.bottomSheetNote,
@@ -2034,6 +2035,16 @@ export default {
         };
         switch (dotType) {
           case "Text":
+            
+            this.createCircle({
+                cx: cx,
+                cy: cy - 1.5,
+                r: 6,
+                color: dotColor,
+                zlevel: 10,
+                tips: `${x.time} ${label}：${x.value}`,
+                dotSolid: false,
+              })
             this.createText({
               x: cx,
               y: cy - 10.5,
@@ -2042,7 +2053,7 @@ export default {
               fontSize: 18,
               tips: `${x.time} ${label}：${x.value}`,
               zlevel: 10,
-              fontWeight: "bold",
+              // fontWeight: "bold",
             });
             break;
           case "Circle":
@@ -2272,11 +2283,11 @@ export default {
     // 根据值计算纵坐标
     getYaxis(yRange, value, vitalCode) {
       return vitalCode === "092"
-        ? ((this.painRange[1] - value) / (this.painRange[1] - yRange[0])) *
-        this.painAreaHeight +
-        this.indexTextAreaHeight +
-        this.timesTempAreaHeight -
-        2 * this.ySpace
+        ? ((yRange[1] - (value - (value * 0.145))) / (yRange[1] - yRange[0])) *
+            this.painAreaHeight +
+            this.indexTextAreaHeight +
+            this.timesTempAreaHeight -
+            2 * this.ySpace - 1 
         : ((yRange[1] - value) / (yRange[1] - yRange[0])) *
         (this.timesTempAreaHeight - this.ySpace) +
         this.indexTextAreaHeight;
