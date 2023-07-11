@@ -747,7 +747,7 @@ export default {
           (x) =>
             x.vital_code === "5" &&
             (x.value.includes("手术") ||
-              x.value.includes("分娩|") ||
+              x.typeFen ||
               x.value.includes("手术入院|"))
         )
         .map((x) => x.time_point);
@@ -1185,8 +1185,12 @@ export default {
           vital_code: "19",
         });
       }
-      let vital = vitalSigns.find(item=>item.value.split("|")[0]==="手术分娩")
-      vital && (vital.value=vital.value.replace("手术分娩","分娩"))
+      let vital = vitalSigns.find(item=>item.value.indexOf("手术分娩")>-1)
+      if(vital){
+        vital.value = vital.value.replace("手术分娩","分娩")
+        //因为替换之后变成了和分娩一样的显示 但区分选择分娩的时候
+        vital.typeFen = true
+      }
       this.vitalSigns = vitalSigns;
       // 计算最大标识时间
       const maxTimeNum = Math.max.apply(
