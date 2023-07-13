@@ -158,6 +158,20 @@ export const mockData = {
     },
     {
       temperature_type: "表顶注释",
+      value: "分娩",
+      time_point: "2023-06-16 14:00:00",
+      vital_code: "5",
+      expand2: "2023-06-20 14:17:00",
+    },
+    {
+      temperature_type: "表顶注释",
+      value: "手术",
+      time_point: "2023-06-18 14:00:00",
+      vital_code: "5",
+      expand2: "2023-06-20 14:17:00",
+    },
+    {
+      temperature_type: "表顶注释",
       value: "手术",
       time_point: "2023-06-20 14:00:00",
       vital_code: "5",
@@ -198,13 +212,13 @@ export const mockData = {
       vital_code: "01",
       expand2: null,
     },
-    {
-      temperature_type: "表顶注释",
-      value: "出院",
-      time_point: "2023-06-16 15:52:45",
-      vital_code: "5",
-      expand2: null,
-    },
+    // {
+    //   temperature_type: "表顶注释",
+    //   value: "出院",
+    //   time_point: "2023-06-16 15:52:45",
+    //   vital_code: "5",
+    //   expand2: null,
+    // },
   ],
 };
 

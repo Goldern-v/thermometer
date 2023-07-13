@@ -743,14 +743,17 @@ export default {
     },
     operateDateList() {
       return this.vitalSigns
-        .filter(
-          (x) =>
-            x.vital_code === "5" &&
-            (x.value.includes("手术") ||
-              x.typeFen ||
-              x.value.includes("手术入院|"))
+        .filter((x) =>
+          x.vital_code === "5" 
+          && ( 
+            x.value.includes("手术") 
+            || x.typeFen 
+            || x.value.includes("手术入院|")
+            || x.value.includes('分娩')
+            || x.value.includes('分娩|')
+          )
         )
-        .map((x) => x.time_point);
+        // .map((x) => x.time_point);
     },
     formatOperateDateList() {
       return this.dateList.map((x) => {
@@ -766,25 +769,36 @@ export default {
         //     })
         //   )
         // ]
+        // typeFen：手术分娩，画线显示分娩，表头当作手术
         const days = [
           ...this.operateDateList.map((y) => {
-            return this.dayInterval(x, y);
+            return {
+              diff: this.dayInterval(x, y.time_point),
+              name: y.value,
+              typeFen: y.typeFen
+            };
           }),
         ];
-        if (days.every((z) => z < 0)) return "";
+        if (days.every((z) => z.diff < 0)) return "";
         // 找到前一次手术（最后一次天数差是正整数或者0的地方）
         let index = 0;
         for (let i = 0; i < days.length; i++) {
-          if (days[i] >= 0) index = i;
+          if (days[i].diff >= 0 && (days[i].name.includes('手术') || days[i].typeFen)) {
+            index = i;
+          }
         }
         let apart = []; // 存储当天和前面手术的天数间隔
         for (let i = 0; i < index; i++) {
-          apart.unshift(days[i]);
+          if (days[i].name.includes('手术') || days[i].typeFen) {
+            apart.unshift(days[i].diff);
+          }
         }
         const operationNum = apart.length; // 记录此日之前所有的手术次数，不考虑间隔大于7天
         // 间隔大于7天的手术，分子分母的写法要重置
         if (apart.length) {
-          apart.unshift(days[index]);
+          if (days[index].name.includes('手术') || days[index].typeFen) {
+            apart.unshift(days[index].diff);
+          }
           for (let i = 1; i < apart.length; i++) {
             if (apart[i] - apart[i - 1] > 14) {
               apart = apart.slice(0, i); // 将间隔大于7天的之前的所有手术切割
@@ -814,16 +828,22 @@ export default {
         // }
         //
         //
-        if (days[index] <= 14) {
-          return index === 0 || !apart.length
-            ? days[index] === 0 && operationNum
+        if (days[index].diff <= 14) {
+          // 先分娩后手术
+          if (days[index].name.includes('分娩') && !days[index].typeFen) {
+            return days[index].diff === 0 ? '分娩' : days[index].diff;
+          } else {
+            // 先手术后分娩，按照手术规则
+            return index === 0 || !apart.length
+              ? days[index].diff === 0 && operationNum
                   ? `手术(${operationNum + 1})`
-                  : (days[index]==0?`手术(${days[index]+1})`:days[index])
-            : days[index] === 0
+                  : (days[index].diff==0?`手术(${days[index].diff+1})`:days[index].diff)
+              : days[index].diff === 0
                   ? `手术(${operationNum + 1})/${apart.join("/")}`
-              : apart[0] == days[index]
-                      ? days[index]
-                      : `${days[index]}/${apart.join("/")}`;
+                  : apart[0] == days[index].diff
+                    ? days[index].diff
+                    : `${days[index].diff}/${apart.join("/")}`;
+          }
         } else {
           return "";
         }
