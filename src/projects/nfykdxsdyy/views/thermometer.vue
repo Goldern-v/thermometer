@@ -573,7 +573,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [2, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       imgUrl: require("../assets/hosptialName.png"),
       apiData: "", // 接口数据
       zr: "",
@@ -1500,9 +1500,8 @@ export default {
                 if (bottomNode.length > 0) {
                   for (let item of bottomNode) {
                     if (
-                      this.getTimeNum(x.data[index + 1].time) >=
-                        this.getTimeNum(item) &&
-                      this.getTimeNum(y.time) <= this.getTimeNum(item)
+                      this.getTimeNum(x.data[index + 1].time) >= this.getTimeNum(item) 
+                      && this.getTimeNum(y.time) <= this.getTimeNum(item)
                       // item.slice(0, 10) === y.time.slice(0, 10)
                     ) {
                       data.push([x.data[index + 1]]);
@@ -1512,10 +1511,8 @@ export default {
                 if (topNode.length > 0) {
                   for (let item of topNode) {
                     if (
-                      this.getTimeNum(x.data[index + 1].time) >=
-                        this.getTimeNum(item) &&
-                      this.getTimeNum(y.time) <= this.getTimeNum(item)
-                      // item.slice(0, 10) === y.time.slice(0, 10)
+                      this.getTimeNum(x.data[index + 1].time) > this.getTimeNum(item) 
+                      && this.getTimeNum(y.time) <= this.getTimeNum(item)
                     ) {
                       data.push([x.data[index + 1]]);
                     }
