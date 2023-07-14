@@ -1500,7 +1500,7 @@ export default {
                 if (bottomNode.length > 0) {
                   for (let item of bottomNode) {
                     if (
-                      this.getTimeNum(x.data[index + 1].time) >= this.getTimeNum(item) 
+                      this.getTimeNum(x.data[index + 1].time) > this.getTimeNum(item) 
                       && this.getTimeNum(y.time) <= this.getTimeNum(item)
                       // item.slice(0, 10) === y.time.slice(0, 10)
                     ) {
