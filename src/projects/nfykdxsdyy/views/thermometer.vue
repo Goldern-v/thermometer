@@ -2677,14 +2677,14 @@ export default {
   &.isPDF {
     height: 1120px;
     transform-origin: top;
-    transform: scaleX(0.75) translateX(-110px);
+    transform: scaleX(0.75) translateX(-110px) translateY(-10px);
     // transform: scaleY(0.69) scaleX(0.78) !important;
     // margin: 0 0 0 -90px !important;
     // padding-top: 35px !important;
     &>div{
       // transform: scaleY(1) !important;
       transform-origin: center top;
-      transform: scaleY(0.71);
+      transform: scaleY(0.70);
     }
   }
   .head-hos {
