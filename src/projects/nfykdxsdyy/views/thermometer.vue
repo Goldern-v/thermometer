@@ -21,7 +21,7 @@
         </div>
         <div class="item" style="padding: 0 60px 5px 5px">
           病区：<span class="value">{{
-            adtLog || patInfo.ward_name || "2号楼19楼东区"
+            adtLogWardName || patInfo.ward_name || "2号楼19楼东区"
           }}</span>
         </div>
       </div>
@@ -775,6 +775,7 @@ export default {
       currentPage: 1,
       showInnerPage: true, // 是否显示内部分页
       adtLog: "", // 转科
+      adtLogWardName: "", // 转病区
       bedExchangeLog: "", // 转床
     };
   },
@@ -1070,7 +1071,10 @@ export default {
           visitId: urlParams.VisitId
       }
       updateBedExchangeInfo(datas).then((res)=>{
-        console.log(res);
+         window.parent.postMessage(
+          { type: "tipMessage", value: '' },
+          "*"
+        );
       })
 
     },
@@ -1324,9 +1328,10 @@ export default {
       if (!this.useMockData && !this.isPrintAll) {
         getNurseExchangeInfoByTime(data).then((res) => {
           this.adtLog = res.data.data.adtLog; // 转科
+          this.adtLogWardName = res.data.data.adtLogWardName; // 转科
         });
         getBedExchangeInfo(datas).then((res )=>{
-          this.bedExchangeLog = res.data.data.bedExchangeLog
+          this.bedExchangeLog = res.data.data.bedExchangeLog || this.patInfo.bed_label
         })
       }
 
