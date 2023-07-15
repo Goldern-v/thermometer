@@ -48,9 +48,12 @@
           住院号：<span class="value">{{ patInfo.inp_no }}</span>
         </div>
         <div class="item" style="text-align: right">
-          床号：<span class="value">{{
+          床号：<span class="value">
+            <input type="text" v-model="bedExchangeLog" style="width:128px;" @blur="onbedblur">
+            <!-- {{
             bedExchangeLog || patInfo.bed_label
-          }}</span>
+          }} -->
+          </span>
         </div>
       </div>
       <div class="table-area">
@@ -548,7 +551,7 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/nfykdxsdyy/mockData.js";
-import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
+import { common, getNurseExchangeInfoByTime, getBedExchangeInfo, updateBedExchangeInfo } from "src/api/index.js";
 import moment from "moment"; //导入文件
 import {getBrowserNameVersion} from '../assets/root/navigator'
 export default {
@@ -1057,6 +1060,20 @@ export default {
     window.removeEventListener("message", this.messageHandle, false);
   },
   methods: {
+    onbedblur(e){
+       const urlParams = this.urlParse();
+       let datas = {
+          bedLabelNew: e.target.value,
+          moduleCode: 'temperature',
+          pageNo: this.currentPage,
+          patientId: urlParams.PatientId,
+          visitId: urlParams.VisitId
+      }
+      updateBedExchangeInfo(datas).then((res)=>{
+        console.log(res);
+      })
+
+    },
     smallTdStyle(index) {
       return {
         width: `${this.xSpace + ((index - 5) % 6 === 0 ? 3 : 2)}px`,
@@ -1296,12 +1313,23 @@ export default {
         visitId: urlParams.VisitId,
         patientId: urlParams.PatientId,
       };
+
+      let datas = {
+          bedLabelNew: this.bedExchangeLog || this.patInfo.bed_label,
+          moduleCode: 'temperature',
+          pageNo: this.currentPage,
+          patientId: urlParams.PatientId,
+          visitId: urlParams.VisitId
+      }
       if (!this.useMockData && !this.isPrintAll) {
         getNurseExchangeInfoByTime(data).then((res) => {
           this.adtLog = res.data.data.adtLog; // 转科
-          this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
         });
+        getBedExchangeInfo(datas).then((res )=>{
+          this.bedExchangeLog = res.data.data.bedExchangeLog
+        })
       }
+
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const customSigns = []; // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
@@ -2168,9 +2196,9 @@ export default {
                 (x) =>
                   //由于有些微小的偏差，比如存在一px左右的数据偏差，就写个区间
                   Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
-                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 5 &&
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 12 &&
                   Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
-                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 5
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 15
               );
               if (sameAxisItem) {
                 params = {
@@ -2714,6 +2742,11 @@ export default {
 
       .value {
         font-weight: normal;
+        input{
+          outline: none;
+          resize: none;
+          border: none;
+        }
       }
     }
   }
