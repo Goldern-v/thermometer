@@ -1323,7 +1323,9 @@ export default {
           moduleCode: 'temperature',
           pageNo: this.currentPage,
           patientId: urlParams.PatientId,
-          visitId: urlParams.VisitId
+          visitId: urlParams.VisitId,
+          startLogDateTime: this.timeRange[0],
+          endLogDateTime: this.timeRange[1],
       }
       if (!this.useMockData && !this.isPrintAll) {
         getNurseExchangeInfoByTime(data).then((res) => {
