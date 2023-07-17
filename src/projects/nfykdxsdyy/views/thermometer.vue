@@ -2131,7 +2131,7 @@ export default {
               color: dotColor,
               fontSize: 28,
               tips: `${x.time} ${label}：${x.value}`,
-              zlevel: 10,
+              zlevel: 12,
               fontWeight: "bold",
             });
             break;
@@ -2201,15 +2201,15 @@ export default {
                 (x) =>
                   //由于有些微小的偏差，比如存在一px左右的数据偏差，就写个区间
                   Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
-                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 12 &&
-                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
-                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 15
+                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 5 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 4 &&
+                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 5
               );
               if (sameAxisItem) {
                 params = {
                   cx,
                   cy,
-                  r: 10,
+                  r: 8,
                   color: "red",
                   zlevel: 9,
                   tips: `${x.time} ${label}：${x.value}`,
