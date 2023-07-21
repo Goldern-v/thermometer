@@ -2199,13 +2199,20 @@ export default {
                   dotSolid: dotSolid,
                 };
               }
+              // 需求：如果脉搏与体温的覆盖面积超过70%，则脉搏心率实心圆变为空心圆
+              // 方案：体温点到脉搏实心圆圆心的距离的平方与实心圆半径平方比 <= 0.3(超过70%面积)
               const sameAxisItem = tList.find(
                 (x) =>
                   //由于有些微小的偏差，比如存在一px左右的数据偏差，就写个区间
-                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
-                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 5 &&
-                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 4 &&
-                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 5
+                  // Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  // Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 5 &&
+                  // Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 4 &&
+                  // Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 5
+                  {
+                    // dist：体温点到脉搏实心圆圆心的距离的平方，(3是体温点的y轴的偏移量)
+                    const dist = Math.pow((cx - x.x), 2) + Math.pow((cy - x.y + 3), 2);
+                    return dist / Math.pow(params.r, 2) <= 0.3;
+                  }
               );
               if (sameAxisItem) {
                 params = {
