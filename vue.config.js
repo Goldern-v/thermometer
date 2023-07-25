@@ -250,7 +250,7 @@ module.exports = {
             case "zzwy":
               return "https://cr.fsyyy.com:9094";
             case "nfykdxsdyy":
-              return "https://cr.fsyyy.com:9094";
+              return "http://192.168.5.127:9091";
             case "wuHanFeiKe":
               return "http://218.107.37.134:9093/";
             case "wuHanYaXin":
@@ -323,7 +323,7 @@ module.exports = {
             case "zzwy":
               return "http://219.159.198.37:9091";
             case "nfykdxsdyy":
-              return "http://219.159.198.37:9091";
+              return "http://192.168.20.47:9092";
             case "wuHanFeiKe":
               return "http://218.107.37.134:9093";
             case "wuHanYaXin":

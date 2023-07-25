@@ -21,7 +21,7 @@
         </div>
         <div class="item" style="padding: 0 60px 5px 5px">
           病区：<span class="value">{{
-            adtLog || patInfo.ward_name || "2号楼19楼东区"
+            adtLogWardName || patInfo.ward_name || "2号楼19楼东区"
           }}</span>
         </div>
       </div>
@@ -48,9 +48,12 @@
           住院号：<span class="value">{{ patInfo.inp_no }}</span>
         </div>
         <div class="item" style="text-align: right">
-          床号：<span class="value">{{
+          床号：<span class="value">
+            <input type="text" v-model="bedExchangeLog" style="width:128px;" @blur="onbedblur">
+            <!-- {{
             bedExchangeLog || patInfo.bed_label
-          }}</span>
+          }} -->
+          </span>
         </div>
       </div>
       <div class="table-area">
@@ -548,7 +551,7 @@
 <script>
 import zrender from "zrender";
 import { mockData } from "src/projects/nfykdxsdyy/mockData.js";
-import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
+import { common, getNurseExchangeInfoByTime, getBedExchangeInfo, updateBedExchangeInfo } from "src/api/index.js";
 import moment from "moment"; //导入文件
 import {getBrowserNameVersion} from '../assets/root/navigator'
 export default {
@@ -573,7 +576,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [2, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       imgUrl: require("../assets/hosptialName.png"),
       apiData: "", // 接口数据
       zr: "",
@@ -772,6 +775,7 @@ export default {
       currentPage: 1,
       showInnerPage: true, // 是否显示内部分页
       adtLog: "", // 转科
+      adtLogWardName: "", // 转病区
       bedExchangeLog: "", // 转床
     };
   },
@@ -1057,6 +1061,23 @@ export default {
     window.removeEventListener("message", this.messageHandle, false);
   },
   methods: {
+    onbedblur(e){
+       const urlParams = this.urlParse();
+       let datas = {
+          bedLabelNew: e.target.value,
+          moduleCode: 'temperature',
+          pageNo: this.currentPage,
+          patientId: urlParams.PatientId,
+          visitId: urlParams.VisitId
+      }
+      updateBedExchangeInfo(datas).then((res)=>{
+         window.parent.postMessage(
+          { type: "tipMessage", value: '' },
+          "*"
+        );
+      })
+
+    },
     smallTdStyle(index) {
       return {
         width: `${this.xSpace + ((index - 5) % 6 === 0 ? 3 : 2)}px`,
@@ -1296,12 +1317,26 @@ export default {
         visitId: urlParams.VisitId,
         patientId: urlParams.PatientId,
       };
+
+      let datas = {
+          bedLabelNew: this.bedExchangeLog || this.patInfo.bed_label,
+          moduleCode: 'temperature',
+          pageNo: this.currentPage,
+          patientId: urlParams.PatientId,
+          visitId: urlParams.VisitId,
+          startLogDateTime: this.timeRange[0],
+          endLogDateTime: this.timeRange[1],
+      }
       if (!this.useMockData && !this.isPrintAll) {
         getNurseExchangeInfoByTime(data).then((res) => {
           this.adtLog = res.data.data.adtLog; // 转科
-          this.bedExchangeLog = res.data.data.bedExchangeLog; // 转床
+          this.adtLogWardName = res.data.data.adtLogWardName; // 转科
         });
+        getBedExchangeInfo(datas).then((res )=>{
+          this.bedExchangeLog = res.data.data.bedExchangeLog || this.patInfo.bed_label
+        })
       }
+
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const customSigns = []; // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
@@ -1500,9 +1535,8 @@ export default {
                 if (bottomNode.length > 0) {
                   for (let item of bottomNode) {
                     if (
-                      this.getTimeNum(x.data[index + 1].time) >=
-                        this.getTimeNum(item) &&
-                      this.getTimeNum(y.time) <= this.getTimeNum(item)
+                      this.getTimeNum(x.data[index + 1].time) > this.getTimeNum(item) 
+                      && this.getTimeNum(y.time) <= this.getTimeNum(item)
                       // item.slice(0, 10) === y.time.slice(0, 10)
                     ) {
                       data.push([x.data[index + 1]]);
@@ -1512,10 +1546,8 @@ export default {
                 if (topNode.length > 0) {
                   for (let item of topNode) {
                     if (
-                      this.getTimeNum(x.data[index + 1].time) >=
-                        this.getTimeNum(item) &&
-                      this.getTimeNum(y.time) <= this.getTimeNum(item)
-                      // item.slice(0, 10) === y.time.slice(0, 10)
+                      this.getTimeNum(x.data[index + 1].time) > this.getTimeNum(item) 
+                      && this.getTimeNum(y.time) <= this.getTimeNum(item)
                     ) {
                       data.push([x.data[index + 1]]);
                     }
@@ -2101,7 +2133,7 @@ export default {
               color: dotColor,
               fontSize: 28,
               tips: `${x.time} ${label}：${x.value}`,
-              zlevel: 10,
+              zlevel: 12,
               fontWeight: "bold",
             });
             break;
@@ -2167,19 +2199,26 @@ export default {
                   dotSolid: dotSolid,
                 };
               }
+              // 需求：如果脉搏与体温的覆盖面积超过70%，则脉搏心率实心圆变为空心圆
+              // 方案：体温点到脉搏实心圆圆心的距离的平方与实心圆半径平方比 <= 0.3(超过70%面积)
               const sameAxisItem = tList.find(
                 (x) =>
                   //由于有些微小的偏差，比如存在一px左右的数据偏差，就写个区间
-                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
-                  Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 5 &&
-                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
-                  Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 5
+                  // Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  // Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 5 &&
+                  // Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 4 &&
+                  // Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 5
+                  {
+                    // dist：体温点到脉搏实心圆圆心的距离的平方，(3是体温点的y轴的偏移量)
+                    const dist = Math.pow((cx - x.x), 2) + Math.pow((cy - x.y + 3), 2);
+                    return dist / Math.pow(params.r, 2) <= 0.3;
+                  }
               );
               if (sameAxisItem) {
                 params = {
                   cx,
                   cy,
-                  r: 10,
+                  r: 8,
                   color: "red",
                   zlevel: 9,
                   tips: `${x.time} ${label}：${x.value}`,
@@ -2717,6 +2756,11 @@ export default {
 
       .value {
         font-weight: normal;
+        input{
+          outline: none;
+          resize: none;
+          border: none;
+        }
       }
     }
   }

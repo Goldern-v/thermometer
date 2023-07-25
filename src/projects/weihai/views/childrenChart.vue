@@ -803,22 +803,22 @@ export default {
           case "061":
             this.shitList.push(item);
             break;
-          case "breast":
+          case "28":
             this.breastMilk.push(item);
             break;
-          case "milk":
+          case "29":
             this.milkList.push(item);
             break;
             case "12":
             this.urineList.push(item);
             break;
-          case "aurigo":
+          case "30":
             this.aurigoList.push(item);
             break;
           case "3":
             this.coolList.push(item);
             break;
-            case "funicle":
+            case "32":
             this.funicleList.push(item);
             break;
             case "31":
@@ -856,9 +856,25 @@ export default {
             )}时${this.toChinesNum(new Date(x.time).getMinutes())}分`;
           }
         }
+         let yNew = 0;
+        for (let j = i - 1; j >= 0; j--) {
+          if (Math.abs(xaxisNew[j] - xaxisNew[i]) <= 1) {
+            if (notes[j].value.endsWith("|")) {
+              let noteTime = `${notes[j].value}${this.toChinesNum(
+                new Date(notes[j].time).getHours()
+              )}时${this.toChinesNum(new Date(notes[j].time).getMinutes())}分`;
+              yNew += (noteTime.length + 3) * this.ySpace - 11;
+            } else {
+              yNew += (notes[j].value.length + 1) * this.ySpace + (notes[j].value.length+1)*1+1;
+              
+            }
+          } else {
+            break;
+          }
+        }
         this.createText({
           x: xaxisNew[i],
-          y: value !== "不升" ? 0 : this.areaHeight - 6 * this.ySpace + 7,
+          y: value !== "不升" ? yNew + 2 * this.ySpace + 4 : this.areaHeight - 6 * this.ySpace + 7,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
