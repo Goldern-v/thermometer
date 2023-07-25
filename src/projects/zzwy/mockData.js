@@ -47,14 +47,49 @@ export const mockData = {
     {
       temperature_type: "体温",
       value: "36.5",
+      time_point: "2023-06-16 06:00:00",
+      vital_code: "01",
+      expand2: null,
+    },
+    {
+      temperature_type: "体温",
+      value: "37.0",
+      time_point: "2023-06-16 10:00:00",
+      vital_code: "01",
+      expand2: null,
+    },
+    {
+      temperature_type: "体温",
+      value: "35.0",
       time_point: "2023-06-16 14:00:00",
       vital_code: "01",
       expand2: null,
     },
     {
       temperature_type: "体温",
-      value: "35.6",
-      time_point: "2023-06-17 14:00:00",
+      value: "35.0",
+      time_point: "2023-06-16 18:00:00",
+      vital_code: "01",
+      expand2: null,
+    },
+    {
+      temperature_type: "体温",
+      value: "37.0",
+      time_point: "2023-06-16 22:00:00",
+      vital_code: "01",
+      expand2: null,
+    },
+    {
+      temperature_type: "体温",
+      value: "37.5",
+      time_point: "2023-06-18 02:00:00",
+      vital_code: "01",
+      expand2: null,
+    },
+    {
+      temperature_type: "体温",
+      value: "38.0",
+      time_point: "2023-06-1 14:00:00",
       vital_code: "01",
       expand2: null,
     },
@@ -148,6 +183,20 @@ export const mockData = {
       time_point: "2023-06-20 10:00:00",
       vital_code: "04",
       expand2: null,
+    },
+    {
+    temperature_type: "发热",
+    value: "37",
+    time_point: "2023-06-20 10:00:00",
+    vital_code: "05",
+    expand2: null
+    },
+    {
+      temperature_type: "复试体温",
+      value: "是",
+      time_point: "2023-06-20 10:00:00",
+      vital_code: "07",
+      expand2: null
     },
     {
       temperature_type: "血压",
