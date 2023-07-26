@@ -264,7 +264,7 @@ module.exports = {
             case "yiZhou":
               return "http://112.233.241.99:8092";
             case "wuhanhankou":
-              return "http://112.233.241.99:8092";
+              return "http://192.168.9.98:8092";
             case "weihai":
               return "http://221.2.154.22:9091";
             case "zhzxy":
@@ -337,7 +337,7 @@ module.exports = {
             case "yiZhou":
               return "http://218.107.37.134:9093"; //无可用外网
             case "wuhanhankou":
-              return "http://218.107.37.134:9093"; //无可用外网
+              return "http://192.168.9.98:9093"; //无可用外网
             case "weihai":
               return "http://218.107.37.134:9093";
             case "zhzxy":
