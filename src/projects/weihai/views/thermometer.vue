@@ -1357,7 +1357,7 @@ export default {
               if (index >= 1 && this.getLocationTime(y.time) == this.getLocationTime(dataArray[index - 1].time)) {
                 const hasTopRuleItem = this.pickTopRule(y.time);
                 if (
-                  !!hasTopRuleItem && 
+                  !!hasTopRuleItem &&
                   (hasTopRuleItem.time === y.time || hasTopRuleItem.time === dataArray[index - 1].time)
                 ) {
                   if (hasTopRuleItem.time === y.time) {
@@ -1384,7 +1384,7 @@ export default {
                 }
               } else  {
                 vitalCodeMinMap[`${vitalCode}${locationTime}`] = Math.abs(timeNum - locationTimeNum);
-              } 
+              }
             })
           }
           continue;
@@ -1448,8 +1448,8 @@ export default {
     // 禅道：19366 根据规则显示：需要体温单需要显示入院、转入、手术等这些有节点的时间点的生命体征
     pickTopRule(time) {
       const hasTopRuleItem = this.topSheetNote.find(
-        top => 
-          this.getLocationTime(top.time) == this.getLocationTime(time) && 
+        top =>
+          this.getLocationTime(top.time) == this.getLocationTime(time) &&
           (top.value.includes('入院') || top.value.includes('转入') || top.value.includes('手术'))
       );
       return hasTopRuleItem;
@@ -1484,7 +1484,7 @@ export default {
               yNew += (noteTime.length + 3) * this.ySpace - 11;
             } else {
               yNew += (notes[j].value.length + 1) * this.ySpace + (notes[j].value.length+1)*1+1;
-              
+
             }
           } else {
             break;
@@ -1500,9 +1500,10 @@ export default {
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
-          fontWeight: "bold",
-          fontSize:12,
+          fontWeight: "normal",
+          // fontSize:12,
           textHeight: 30,
+          fontFamily: "SimHei",
         });
       });
     },
