@@ -1484,7 +1484,7 @@ export default {
     getNotTemTime(sheetNote = []) {
       let outTime = [];
       sheetNote.forEach((y) => {
-        if (["不升", "外出", "拒测"].includes(y.value)) {
+        if (["不升", "外出", "拒测", '手术', '手术|'].includes(y.value)) {
           outTime.push(y.time);
         }
       });
@@ -1540,16 +1540,18 @@ export default {
                     }
                   }
                 }
+                
                 if (topNode.length > 0) {
                   for (let item of topNode) {
                     if (
-                      this.getTimeNum(x.data[index + 1].time) > this.getTimeNum(item) 
-                      && this.getTimeNum(y.time) <= this.getTimeNum(item)
+                      this.getTimeNum(this.getLocationTime(x.data[index + 1].time)) > this.getTimeNum(this.getLocationTime(item))
+                      && this.getTimeNum(this.getLocationTime(y.time)) <= this.getTimeNum(this.getLocationTime(item))
                     ) {
                       data.push([x.data[index + 1]]);
                     }
                   }
                 }
+                
               } else {
                 const list = data[data.length - 1];
                 if (!(list.length && list[list.length - 1].time === y.time)) {
@@ -2378,7 +2380,7 @@ export default {
       let str = "";
       const timeAreasMap = {
         "02:00:00": ["00:00:00", "04:00:59"],
-        "06:00:00": ["04:01:00", "8:00:59"],
+        "06:00:00": ["04:01:00", "08:00:59"],
         "10:00:00": ["08:01:00", "12:00:59"],
         "14:00:00": ["12:01:00", "16:00:59"],
         "18:00:00": ["16:01:00", "20:00:59"],
