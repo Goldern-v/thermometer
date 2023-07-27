@@ -554,7 +554,7 @@ export default {
     const painRange = [2, 10];
     return {
       useMockData: true,
-      imgUrl: require("../assets/hosptialName.png"),
+      imgUrl: require("../assets/logo_zjhj.jpg"),
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -2632,7 +2632,7 @@ export default {
     font-weight: bold;
 
     img {
-      width: 260px;
+      width: 380px;
       height: 50px;
     }
   }

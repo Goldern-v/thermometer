@@ -3,7 +3,7 @@ export const mockData = {
          ErrorMsg: "查询成功",
          patientInfo: {
            patInfo: {
-             patient_id: "902865_1",
+             patient_id: "902865_A",
              name: "测试预入院3",
              dept_name: "乳腺外科病房",
              bed_label: "加35",

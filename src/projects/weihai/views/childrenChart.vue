@@ -874,7 +874,7 @@ export default {
         }
         this.createText({
           x: xaxisNew[i],
-          y: value !== "不升" ? yNew + 2 * this.ySpace + 4 : this.areaHeight - 6 * this.ySpace + 7,
+          y: value !== "不升" ? yNew + 2 * this.ySpace + 55 : this.areaHeight - 6 * this.ySpace + 58,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
