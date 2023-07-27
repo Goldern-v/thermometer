@@ -51,6 +51,8 @@
     "build:yiZhou": "vue-cli-service build --project=yiZhou",
     "dev:zzwy": "vue-cli-service serve --project=zzwy",
     "build:zzwy": "vue-cli-service build --project=zzwy",
+    "dev:yeDa": "vue-cli-service serve --project=yeDa",
+    "build:yeDa": "vue-cli-service build --project=yeDa",
     "dev:wuhanhankou": "vue-cli-service serve --project=wuhanhankou",
     "build:wuhanhankou": "vue-cli-service build --project=wuhanhankou",
     "dev:zhzxy": "vue-cli-service serve --project=zhzxy",

@@ -88,7 +88,7 @@
           <div class="label" :style="{ width: `${leftWidth}px` }" v-html="`日期`"></div>
           <div class="value-item-box">
             <div class="value-item" v-for="(item, index) in formatDateList" :key="index">
-              {{ item }}
+              {{ item | filterDate(index) }}
             </div>
           </div>
         </div>   <div class="row" :style="{ height: `${trHeight}px` }">
@@ -561,6 +561,7 @@ export default {
       ventilator: [], // 呼吸机
       pressureList: [], // 血压
       weightList: [], // 体重
+      retestTemperature: [], // 复试体温
       heightList: [], // 身高
       inputList: [], // 液体入量
       shitList: [], // 大便次数
@@ -577,6 +578,7 @@ export default {
       customList5: [], // 自定义6
       coolList: [], // 降温
       ttgyList: [], // 疼痛干预
+      bottomLowTemplate:[], //低温<=35℃
       dateRangeList: [], // 数组长度决定页数
       patInfo: {
         patient_id: "",
@@ -1041,13 +1043,7 @@ export default {
     },
     //找到表底存在不升的日期
     bottomSheetNoteBusheng() {
-      let outTime = [];
-      this.bottomSheetNote.forEach((y) => {
-        if (y.value.includes("不升")) {
-          outTime.push(y.time);
-        }
-      });
-      return outTime;
+      return this.bottomLowTemplate.map((y) =>y[0].time);
     },
     smallTdStyle(index) {
       return {
@@ -1153,6 +1149,8 @@ export default {
       this.skinTest = [];
       this.feverList = [];
       this.heightList = [];
+      this.retestTemperature = [];
+      this.bottomLowTemplate = [];
       this.inputList = [];
       this.shitList = [];
       this.yinliuList = [];
@@ -1355,10 +1353,20 @@ export default {
             ["041", "01", "043"].includes(vitalSigns[i].vital_code) &&
             Number(vitalSigns[i].value) <= 35
           ) {
-            this.bottomSheetNote.push({
-              time: vitalSigns[i].time_point,
-              value: "不升",
-            });
+            this.bottomLowTemplate.push([
+              {
+                time: vitalSigns[i].time_point,
+                value:35
+              },
+              {
+                time: vitalSigns[i].time_point,
+                value:34.6
+              },
+            ])
+            // this.bottomSheetNote.push({
+            //   time: vitalSigns[i].time_point,
+            //   value: "不升",
+            // });
           } else {
             this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
               time: vitalSigns[i].time_point,
@@ -1422,6 +1430,9 @@ export default {
           case "06":
             this.ventilator.push(item);
             break;
+          case "07":
+            this.retestTemperature.push(item);
+            break;
           default:
             break;
         }
@@ -1430,6 +1441,73 @@ export default {
       if (!this.showChildrenPage) {
         this.init();
       }
+    },
+    initPolylineData(notes){
+      if(notes.length>0){
+        notes.forEach(note=>{
+          let nowX1 = this.getXaxis(this.getLocationTime(note[0].time)),
+              nowX2 = this.getXaxis(this.getLocationTime(note[1].time)),
+              nowY1 = this.getYaxis(this.yRange, note[0].value),
+              nowY2 = this.getYaxis(this.yRange, note[1].value),
+              config = {
+                x1:nowX1,
+                y1:nowY1,
+                x2:nowX2,
+                y2:nowY2,
+                lineWidth:1,
+                stroke:'blue',
+                type:"arrow",
+                leftArrow:[-3,-5],
+                rightArrow:[3,-5],
+                usecirCle:{
+                  r: 7,
+                  color: "blue",
+                  zlevel: 10,
+                  tips: `${note[0].time} 发热体温：${note[0].value}`,
+                  dotSolid: true,
+                }
+              }
+              this.createPolyline(config)
+        })
+        
+      }
+    },
+    initRetestTemperature(notes){
+      let tiwen = this.vitalSigns.filter(item=>item.vital_code==="01")
+      notes.forEach(note=>{
+        let fever = this.feverList.find(fever=>fever.time===note.time),
+            tw = tiwen.find(tw=>tw.time_point===note.time),
+            config = {
+                  lineWidth:2,
+                  stroke:'blue',
+                  type:"arrow",
+                  leftArrow:[-3,-10],
+                  rightArrow:[3,-10],
+                }
+        if(fever){
+          const feverX = this.getXaxis(this.getLocationTime(fever.time)),
+                feverY = this.getYaxis(this.yRange, fever.value);
+                config = {
+                  ...config,
+                  x1:feverX+ this.xSpace / 2,
+                  y1:feverY-(this.xSpace /2),
+                  x2:feverX+ this.xSpace / 2,
+                  y2:feverY-(this.xSpace /2),
+                }
+                this.createPolyline(config)
+        }else if(tw){
+          const twX = this.getXaxis(this.getLocationTime(tw.time_point)),
+                twY = this.getYaxis(this.yRange, tw.value);
+                config = {
+                  ...config,
+                  x1:twX,
+                  y1:twY-this.xSpace,
+                  x2:twX,
+                  y2:twY-this.xSpace,
+                }
+                this.createPolyline(config)
+        }
+      })
     },
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
@@ -1484,13 +1562,19 @@ export default {
           if (["041", "01", "043"].includes(x.vitalCode)) {
             // 体温为不升时，折线需要断开
             data = [[]];
+            if(["01"].includes(x.vitalCode)){
+              if (this.bottomLowTemplate.length>0) {
+                let lowTemplateList = this.bottomLowTemplate.map(item=>item[0])
+                x.data = [...x.data,...lowTemplateList].sort((pre,next)=>moment(pre.time).diff(moment(next.time)))
+              } 
+            }
             x.data.forEach((y, index) => {
-              if (y.value > 35) {
+              // if (y.value > 35) {
                 data[data.length - 1].push(y);
-              }
-              if (y.value <= 35) {
-                data.push([]);
-              }
+              // }
+              // if (y.value <= 35) {
+              //   data.push([]);
+              // }
               // if (this.getBreakPoint(x.data).includes(index)) {
               //   data.push([]);
               // }
@@ -1504,18 +1588,17 @@ export default {
                   data.push([x.data[index + 1]]);
                 }
                 //如果存在中间不升的情况，中间断开
-                if (this.bottomSheetNoteBusheng() !== []) {
-                  for (let item of this.bottomSheetNoteBusheng()) {
-                    if (
-                      this.getTimeNum(x.data[index + 1].time) >=
-                      this.getTimeNum(item) &&
-                      this.getTimeNum(y.time) <= this.getTimeNum(item)
-                      // item.slice(0, 10) === y.time.slice(0, 10)
-                    ) {
-                      data.push([x.data[index + 1]]);
-                    }
-                  }
-                }
+                // if (this.bottomSheetNoteBusheng() !== []) {
+                    // if (
+                    //   this.getTimeNum(x.data[index + 1].time) >= this.getTimeNum(this.bottomSheetNoteBusheng()[0]) &&
+                    //   this.getTimeNum(y.time) <= this.getTimeNum(this.bottomSheetNoteBusheng()[0])
+                    // ) {
+                    //   return console.log("11111",[...data]);
+                    //   data[0]
+                    //   data.push([this.getTimeNum(y.time),this.bottomSheetNoteBusheng()[0]]);
+                    // }
+                    //   console.log("222222",[...data]);
+                // }
               } else {
                 const list = data[data.length - 1];
                 if (!(list.length && list[list.length - 1].time === y.time)) {
@@ -1610,7 +1693,6 @@ export default {
             // console.log("data===",data)
 
           }
-
           //如果表底注释包含不在则跳过
           data.forEach((z) => {
             // console.log("z===",z)
@@ -1705,6 +1787,8 @@ export default {
           5 * (this.ySpace + 1),
           "black"
         );
+        this.initPolylineData(this.bottomLowTemplate);
+        this.initRetestTemperature(this.retestTemperature);
         // 呼吸机：如果断开使用呼吸机超过 1 天，例如：1号，2号，4号这种情况，1，2号显示MR(1), (2)，4号重新显示MR(1)
         // y：呼吸为10的位置
         const by = this.getYaxis(this.breatheRange, 10);
@@ -1902,6 +1986,36 @@ export default {
       });
 
       this.zr.add(polygon);
+    },
+    createPolyline(config) {
+      let { type,lineWidth,stroke } = config,points=[[]]
+      if(type==="arrow"){
+        //线箭头
+        let {x1,y1,x2,y2,leftArrow,rightArrow} = config
+        points = [[x1,y1],[x2,y2],[x2+leftArrow[0],y2+leftArrow[1]],[x2,y2],[x2+rightArrow[0],y2+rightArrow[1]]]
+        if(config.usecirCle){
+          let {dotSolid,tips,zlevel,color,r} = config.usecirCle
+          this.createCircle({
+            cx: x1,
+            cy: y1,
+            r,
+            color,
+            zlevel,
+            tips,
+            dotSolid,
+          })
+        }
+      } 
+      let polyline=new zrender.Polyline({
+        style:{
+            stroke,       //线的颜色
+            lineWidth,        //线宽
+        },
+        shape:{
+            points     //点集
+        }
+      })
+      this.zr.add(polyline)
     },
     createLine({
       x1,
@@ -2202,7 +2316,7 @@ export default {
               x.value - data[index - 1].value >= 1.5 ||
               x.value - data[index - 1].value <= -2
             ) {
-              createRepeatTest();
+              // createRepeatTest();
             }
           } else if (index === 0) {
             // 入院首次体温≥38℃
@@ -2680,6 +2794,18 @@ export default {
       });
     }
   },
+  filters:{
+    filterDate(val,index){
+      if(index==0){
+        let arr = val.split("-")
+        return arr.map((item,index)=>{
+          if(index>=1){
+            return parseInt(item)
+          }else return item
+        }).join(".")
+      }else return parseInt(val)
+    }
+  }
 };
 </script>
 

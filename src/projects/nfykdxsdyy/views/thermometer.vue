@@ -468,8 +468,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-14"
-                :style="{ 'font-size': scaleFont(item.value) }"
+                class="value-item font-12"
                 v-for="(item, index) in getFormatList({ tList: customList0 })"
                 :key="index"
                 @click="() => clickDateChangeTime(item)"
@@ -490,8 +489,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-14"
-                :style="{ 'font-size': scaleFont(item.value) }"
+                class="value-item font-12"
                 v-for="(item, index) in getFormatList({ tList: customList1 })"
                 :key="index"
                 @click="() => clickDateChangeTime(item)"
@@ -505,8 +503,7 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-14"
-                :style="{ 'font-size': scaleFont(item.value) }"
+                class="value-item font-12"
                 v-for="(item, index) in getFormatList({ tList: customList2 })"
                 :key="index"
                 @click="() => clickDateChangeTime(item)"
@@ -1487,7 +1484,7 @@ export default {
     getNotTemTime(sheetNote = []) {
       let outTime = [];
       sheetNote.forEach((y) => {
-        if (["不升", "外出", "拒测", "手术|"].includes(y.value) || y.value.includes('手术')) {
+        if (["不升", "外出", "拒测"].includes(y.value)) {
           outTime.push(y.time);
         }
       });
