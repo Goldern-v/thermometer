@@ -15,12 +15,12 @@
     <div class="head-hos"><img :src="imgUrl" alt="" /></div>
     <div class="head-title">体温单</div>
     <div class="head-info-1">
-      <div class="item">
-        科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
+      <div class="item" style="width: 313px;">
+        科室：<span class="value">{{ adtLog || patInfo.wardName }}</span>
       </div>
       <div class="item" style="padding: 0 60px 5px 5px">
         病区：<span class="value">{{
-          adtLog || patInfo.ward_name || "2号楼19楼东区"
+          adtLog || patInfo.dept_name 
         }}</span>
       </div>
     </div>
@@ -553,7 +553,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [2, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       imgUrl: require("../assets/logo_zjhj.jpg"),
       apiData: "", // 接口数据
       zr: "",
@@ -2659,12 +2659,10 @@ export default {
 
   .head-info-1 {
     display: flex;
-    justify-content: space-between;
 
     .item {
       text-align: left;
       padding: 0 5px 5px 5px;
-      flex: 1;
 
       .value {
         font-weight: normal;

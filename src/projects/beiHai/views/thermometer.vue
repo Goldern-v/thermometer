@@ -1129,6 +1129,7 @@ export default {
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
       const xaxis = notes.map((item) => {
+        console.log(this.getXaxis(this.getLocationTime(item.time)),item.time);
         return {
           x: this.getXaxis(this.getLocationTime(item.time)),
           y,
@@ -1996,6 +1997,9 @@ export default {
         if (
           JSON.stringify(xaxisNew).indexOf(JSON.stringify(xaxisList[i])) == -1
         ) {
+          if(i > 0 &&( (xaxisList[i].x - xaxisList[i-1].x) <= this.xSpace)){
+            xaxisList[i].x  += this.xSpace;
+          }
           xaxisNew.push(xaxisList[i]);
         } else {
           while (
@@ -2032,7 +2036,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.isPrintAll,'ssss')
     document.title = "北海市人民医院";
     const urlParams = this.urlParse();
     this.showInnerPage = urlParams.showInnerPage === "1";
