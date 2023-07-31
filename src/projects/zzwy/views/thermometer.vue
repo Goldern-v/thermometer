@@ -88,7 +88,7 @@
           <div class="label" :style="{ width: `${leftWidth}px` }" v-html="`日期`"></div>
           <div class="value-item-box">
             <div class="value-item" v-for="(item, index) in formatDateList" :key="index">
-              {{ item | filterDate(index) }}
+              {{ item | filterDate(index, formatDateList[0]) }}
             </div>
           </div>
         </div>   <div class="row" :style="{ height: `${trHeight}px` }">
@@ -1084,15 +1084,10 @@ export default {
         }
       }
     },
-        getNotTemTime() {
+    getNotTemTime() {
       let outTime = [];
-      this.topSheetNote.forEach((y) => {
-        if (y.value.includes("转入")||y.value.includes("请假")||y.value.includes("返院")) {
-          outTime.push(y.time);
-        }
-      });
       this.bottomSheetNote.forEach((y) => {
-        if (y.value.includes("外出")) {
+        if (['手术', '外出', '请假', '检查', '拒测'].includes(y.value)) {
           outTime.push(y.time);
         }
       });
@@ -1261,10 +1256,17 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       // const customSigns = [] // 记录自定义字段的名字
       for (let i = 0; i < vitalSigns.length; i++) {
+        if (vitalSigns[i].vital_code == '06') {
+          const item = {
+            time: vitalSigns[i].time_point,
+            value: vitalSigns[i].value,
+          };
+          this.ventilator.push(item);
+        }
         if (
           this.getTimeNum(vitalSigns[i].time_point) < timeNumRange[0] ||
           this.getTimeNum(vitalSigns[i].time_point) > timeNumRange[1] - 1
-        ) {
+        ) {          
           // 超出时间范围的抛弃
           continue;
         }
@@ -1426,9 +1428,6 @@ export default {
             break;
           case "05":
             this.feverList.push(item);
-            break;
-          case "06":
-            this.ventilator.push(item);
             break;
           case "07":
             this.retestTemperature.push(item);
@@ -1693,6 +1692,22 @@ export default {
             // console.log("data===",data)
 
           }
+          if (this.getNotTemTime().length) {
+            data = [[]];
+            x.data.forEach((y, index) => {
+              data[data.length - 1].push(y);
+              for (let item of this.getNotTemTime()) {
+                if (
+                  index < x.data.length - 1 &&
+                  this.getTimeNum(x.data[index + 1].time) >=
+                  this.getTimeNum(item) &&
+                  this.getTimeNum(y.time) <= this.getTimeNum(item)
+                ) {
+                  data.push([x.data[index + 1]]);
+                }
+              }
+            })
+          }
           //如果表底注释包含不在则跳过
           data.forEach((z) => {
             // console.log("z===",z)
@@ -1794,11 +1809,14 @@ export default {
         const by = this.getYaxis(this.breatheRange, 10);
         this.ventilatorList.forEach((ventilator) => {
           ventilator.forEach((item, index) => {
+            // 每周第一天
+            const isFirstDayOfWeek = this.timeRange[0].slice(0, 10) === item.time.slice(0, 10);
+            const hasMRLabel = index === 0 || isFirstDayOfWeek;
             this.createText({
               // 横坐标整体往右移动 5 ，他们那边显示电脑问题
-              x: index == 0 ? this.getXaxis(item.time) + 9 : this.getXaxis(item.time),
+              x: hasMRLabel ? this.getXaxis(item.time) + 9 : this.getXaxis(item.time),
               y: by - this.ySpace - 1,
-              value: index === 0 ? `MR (${index + 1})` : `(${index + 1})`,
+              value: hasMRLabel ? `MR (${index + 1})` : `(${index + 1})`,
               color: 'black',
               tips: `${item.time} 呼吸机`,
               textLineHeight: this.ySpace + 1,
@@ -2795,15 +2813,17 @@ export default {
     }
   },
   filters:{
-    filterDate(val,index){
-      if(index==0){
-        let arr = val.split("-")
-        return arr.map((item,index)=>{
-          if(index>=1){
-            return parseInt(item)
-          }else return item
-        }).join(".")
-      }else return parseInt(val)
+    filterDate(val, index, first) {
+      // `${val}`.includes('-') 只有跨月和跨年才会满足
+      if (index == 0 || `${val}`.includes('-')) {
+        // 比较年份是否一样
+        const isNextMonth = index !== 0 && first.slice(0, 4) === val.slice(0, 4);
+        // val.slice(5)是去掉年份：跨月只显示月日，跨年重新显示年月日
+        let arr = isNextMonth ? val.slice(5).split('-') : val.split("-")
+        return arr.map((item, index) => parseInt(item)).join(".")
+      } else {
+        return parseInt(val)
+      }
     }
   }
 };
@@ -2835,7 +2855,7 @@ export default {
 
   .head-hos {
     padding-top: 10px;
-    font-size: 18px;
+    font-size: 24px;
   }
 
   .head-title {
@@ -2921,7 +2941,7 @@ export default {
     border-left: none;
     border-right: none;
     transform: translateX(-0.5px);
-
+    font-size: 14px;
     &:not(:first-child) {
       border-top: none;
     }
