@@ -787,7 +787,7 @@ export default {
       })
       const timeAdd = (i) => {
         return timeNumList.some((x) => x.start === i)
-          ? 5 * 60 * 60 * 1000
+          ? 4 * 60 * 60 * 1000
           : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
           ? 3 * 60 * 60 * 1000
           : 4 * 60 * 60 * 1000
