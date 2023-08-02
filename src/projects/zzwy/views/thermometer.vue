@@ -1840,7 +1840,7 @@ export default {
         const isBreak =
           (((i - 2) % 5 === 0 && i < 40) ||
             isPainBreak ||
-            i === 43 || i === 46) &&
+            i === 42 || i === 47) &&
           i > 0 &&
           i < totalLine - 1;
         const isboundary = i === 0 || i === totalLine - 1;
@@ -2441,8 +2441,9 @@ export default {
     },
     // 根据值计算纵坐标
     getYaxis(yRange, value, vitalCode) {
+      // (value - (value * 0.145))
       return vitalCode === "092"
-        ? ((yRange[1] - (value - (value * 0.145))) / (yRange[1] - yRange[0])) *
+        ? ((yRange[1] - (value - (value * 0.17) + 0.15)) / (yRange[1] - yRange[0])) *
             this.painAreaHeight +
             this.indexTextAreaHeight +
             this.timesTempAreaHeight -
