@@ -532,6 +532,7 @@ export default {
       return this.dateList.map((x) => {
         // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
         //   return "";
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
         return this.dayInterval(x, this.patInfo.admission_date) + 1
       })
     },
