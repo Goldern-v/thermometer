@@ -46,6 +46,17 @@ export const getNurseExchangeInfoBatch = (data) => {
     },
   });
 };
+export const getNurseExchangeInfoBatchSDRY = (config) => {
+  return axios({
+    method: "post",
+    url: `${apiPath}nurseLog/getNurseExchangeInfoBatch`,
+    data:config.exchangData,
+    headers: {
+      "App-Token-Nursing": appToken,
+      "Auth-Token-Nursing": config.authToken,
+    },
+  });
+};
 
 // 患者：按时间获取转科转床记录
 export const getNurseExchangeInfoByTime2 = (config) => {

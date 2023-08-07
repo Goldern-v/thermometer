@@ -8,7 +8,7 @@
 <script>
 import Thermometer from "./thermometer.vue";
 import { mockData } from "src/projects/nfykdxsdyy/mockData.js";
-import { common, getNurseExchangeInfoBatch } from "src/api/index.js"
+import { common, getNurseExchangeInfoBatchSDRY } from "src/api/index.js"
 
 export default {
   components: {
@@ -86,7 +86,11 @@ export default {
             visitId: urlParams.VisitId,
             patientId: urlParams.PatientId,
           }
-          getNurseExchangeInfoBatch(exchangData).then((res) => {
+          let config = {
+            exchangData,
+            authToken:this.$route.query['authTokenNursing'] || this.$route.query['Auth-Token-Nursing']
+          }
+          getNurseExchangeInfoBatchSDRY(config).then((res) => {
             let nurseExchangeInfo = res.data.data.exchangeInfos
             this.$nextTick(() => {
               for (let i = 0; i < this.$refs.thermometer.length; i++) {
