@@ -787,7 +787,7 @@ export default {
       })
       const timeAdd = (i) => {
         return timeNumList.some((x) => x.start === i)
-          ? 5 * 60 * 60 * 1000
+          ? 4 * 60 * 60 * 1000
           : timeNumList.some((x) => x.end - 3 * 60 * 60 * 1000 === i)
           ? 3 * 60 * 60 * 1000
           : 4 * 60 * 60 * 1000
@@ -1068,7 +1068,7 @@ export default {
     bottomSheetNoteBusheng() {
       let outTime = []
       this.bottomSheetNote.forEach((y) => {
-        if (['不升', '外出', '拒测'].includes(y.value)) {
+        if (['不升', '外出', '拒测','手术'].includes(y.value)) {
           outTime.push(y.time)
         }
       })
@@ -1646,8 +1646,9 @@ export default {
         // 生成表顶注释
         this.createNote(this.topSheetNote, this.indexTextAreaHeight + 2, 'red')
         // 生成表底注释
+        let bottomSheetilterNote = this.bottomSheetNote.filter(x=>x.value!=="手术")
         this.createNote(
-          this.bottomSheetNote,
+          bottomSheetilterNote,
           this.indexTextAreaHeight +
             this.timesTempAreaHeight -
             5 * (this.ySpace + 1),

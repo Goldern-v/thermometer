@@ -85,7 +85,7 @@
               v-for="(item, index) in formatDateList"
               :key="index"
             >
-              {{ item }}
+              {{ item | filterDate(index, formatDateList[0]) }}
             </div>
           </div>
         </div>
@@ -532,6 +532,7 @@ export default {
       return this.dateList.map((x) => {
         // if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
         //   return "";
+        if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
         return this.dayInterval(x, this.patInfo.admission_date) + 1
       })
     },
@@ -698,6 +699,15 @@ export default {
         'border-color': `${(index - 1) % 2 === 0 ? 'transparent' : '#000'}`,
         transform: 'translateX(1px)',
       }
+    },
+    getNotTemTime() {
+      let outTime = [];
+      this.bottomSheetNote.forEach((y) => {
+        if (['手术', '外出', '请假', '检查', '拒测'].includes(y.value)) {
+          outTime.push(y.time);
+        }
+      });
+      return outTime;
     },
     //找到表底存在不升的日期
     bottomSheetNoteBusheng() {
@@ -1085,6 +1095,22 @@ export default {
             //     data[data.length - 1].push(y)
             //   }
             // })
+          }
+          if (this.getNotTemTime().length) {
+            data = [[]];
+            x.data.forEach((y, index) => {
+              data[data.length - 1].push(y);
+              for (let item of this.getNotTemTime()) {
+                if (
+                  index < x.data.length - 1 &&
+                  this.getTimeNum(x.data[index + 1].time) >=
+                  this.getTimeNum(item) &&
+                  this.getTimeNum(y.time) <= this.getTimeNum(item)
+                ) {
+                  data.push([x.data[index + 1]]);
+                }
+              }
+            })
           }
           data.forEach((z) => {
             this.createBrokenLine({
@@ -1900,6 +1926,20 @@ export default {
       })
     }
   },
+  filters:{
+    filterDate(val, index, first) {
+      // `${val}`.includes('-') 只有跨月和跨年才会满足
+      if (index == 0 || `${val}`.includes('-')) {
+        // 比较年份是否一样
+        const isNextMonth = index !== 0 && first.slice(0, 4) === val.slice(0, 4);
+        // val.slice(5)是去掉年份：跨月只显示月日，跨年重新显示年月日
+        let arr = isNextMonth ? val.slice(5).split('-') : val.split("-")
+        return arr.map((item, index) => parseInt(item)).join(".")
+      } else {
+        return parseInt(val)
+      }
+    }
+  }
 }
 </script>
 
@@ -1927,7 +1967,7 @@ export default {
 
   .head-hos {
     padding-top: 10px;
-    font-size: 18px;
+    font-size: 24px;
   }
 
   .head-title {
@@ -2027,7 +2067,7 @@ export default {
     border-left: none;
     border-right: none;
     transform: translateX(-0.5px);
-
+    font-size: 14px;
     &:not(:first-child) {
       border-top: none;
     }
