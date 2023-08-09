@@ -802,7 +802,6 @@ export default {
                 ? { "align-items": "flex-start" }
                 : { "align-items": "flex-end" })
         );
-      console.log(list)
       return list;
     },
     formatWeightHeight() {
@@ -912,6 +911,7 @@ export default {
       return listNew.map((x) => x.time_point);
     },
     formatOperateDateList() {
+      let operate = []
       return this.dateList.map((x) => {
         if (this.dayInterval(x, this.parseTime(new Date(), "{y}-{m}-{d}")) > 0)
           return "";
@@ -922,6 +922,15 @@ export default {
             return this.dayInterval(x, y);
           }),
         ];
+        let slist = []
+        this.operateDateList.map(s=>{
+          if(moment(s).format('YYYY-MM-DD') == x){
+            slist.push(s)
+          }
+        })
+        if(slist.length){
+          operate.push(slist)
+        }
         if (days.every((z) => z < 0)) return "";
         // 找到前一次手术（最后一次天数差是正整数或者0的地方）
         let index = 0;
@@ -944,14 +953,37 @@ export default {
           }
           apart.splice(0, 1);
         }
+        
         if (days[index] <= 14) {
-          return index === 0 || !apart.length
-            ? days[index] === 0 && operationNum
-              ? `(${operationNum + 1})`
-              : days[index]
-            :apart[0] == days[index]
-            ? days[index]
-            : `${days[index]}/${apart.join("/")}`;
+          if(index === 0 || !apart.length){
+            if(days[index] === 0 && operationNum){
+              return  `(${operationNum + 1})`
+            }else{
+              return  days[index]
+            }
+          }else{
+            if(apart[0] == days[index] ){
+              if(operate.length){
+                let operateStr = ''
+                operate.map(item => {
+                  let str = ''
+                  item.map(yitem => {
+                    if( moment(yitem).format('YYYY-MM-DD') == x ){
+                      str +=  `${days[index]}/`
+                    }else{
+                      str +=  `${days[index]}/`
+                    }
+                  })
+                  operateStr = str
+                })
+                return operateStr.slice(0 , -1)
+              }else{
+                return days[index]
+              }
+            }else{
+              return  `${days[index]}/${apart.join("/")}`
+            }
+          }
         } else {
           return "";
         }
@@ -1022,12 +1054,6 @@ export default {
   created() {
     // 实现外部分页和打印
     window.addEventListener("message", this.messageHandle, false);
-    // window.addEventListener("afterprint", () => {
-    //   console.log("打印处理中");
-    //   console.log(12312312);
-    //   this.reset();
-    //   this.handleData();
-    // });
   },
   beforeDestroy() {
     window.removeEventListener("message", this.messageHandle, false);
@@ -1925,7 +1951,6 @@ export default {
             const item = this.physicsCoolList[i];
             const coolX = this.getXaxis(this.getLocationTime(item.time));
             const coolY = this.getYaxis(yRange, item.value, vitalCode);
-            console.log(coolX ,cx)
             if (Math.floor(coolX) === Math.floor(cx)) {
               this.createCircle({
                 cx: coolX,

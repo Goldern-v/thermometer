@@ -266,13 +266,32 @@
             class="label"
             :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
           >
-            血压(mmHg)
+            血压(mmHg)(上午)
           </div>
           <div class="value-item-box font-14" style="color: blue">
             <div
               class="value-item font-14"
-              :style="middleTdStyle(index, formatPressureList.length)"
-              v-for="(item, index) in formatPressureList"
+              :style="middleTdStyle(index, formatPressureListAM.length)"
+              v-for="(item, index) in formatPressureListAM"
+              @click="() => clickDateChangeTime(item)"
+              :key="index"
+            >
+              {{ item.value }}
+            </div>
+          </div>
+        </div>
+        <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div
+            class="label"
+            :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
+          >
+            血压(mmHg)(下午)
+          </div>
+          <div class="value-item-box font-14" style="color: blue">
+            <div
+              class="value-item font-14"
+              :style="middleTdStyle(index, formatPressureListPM.length)"
+              v-for="(item, index) in formatPressureListPM"
               @click="() => clickDateChangeTime(item)"
               :key="index"
             >
@@ -768,26 +787,65 @@ export default {
     trHeight() {
       return this.ySpace * 2 - 10;
     },
-    formatPressureList() {
+    formatPressureListAM() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const pressureList = [...this.pressureList];
       for (
         let i = timeNumRange[0];
         i < timeNumRange[1] - 1;
-        i += 3 * 4 * 60 * 60 * 1000
+        i += 24 * 60 * 60 * 1000
       ) {
-        const item = { timeNum: i, value: "" };
+        const item1 = { timeNum: i, value: "" };
+        const item2 = { timeNum: i, value: "" };
+        let dataStart = [this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 04:00:00'), this.getTimeNum(moment(i).format('YYYY-MM-DD') + ' 08:00:00')] 
+        let dataEnd = [this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 08:00:01'), this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 12:00:00')] 
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum >= i && timeNum <= i + 3 * 4 * 60 * 60 * 1000) {
-            item.value = pressureList[j].value;
-            item.time = `${pressureList[j].time}`;
+          if (dataStart[0] <= timeNum && dataStart[1] >= timeNum ) {
+            item1.value = pressureList[j].value;
+            item1.time = `${pressureList[j].time}`;
             pressureList.splice(j, 1);
-            break;
+          }
+          if (dataEnd[0] <= timeNum && dataEnd[1] >= timeNum ) {
+            item2.value = pressureList[j].value;
+            item2.time = `${pressureList[j].time}`;
+            pressureList.splice(j, 1);
           }
         }
-        list.push(item);
+        list.push(item1);
+        list.push(item2);
+      }
+      return list;
+    },
+    formatPressureListPM() {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const pressureList = [...this.pressureList];
+      for (
+        let i = timeNumRange[0];
+        i < timeNumRange[1] - 1;
+        i += 24 * 60 * 60 * 1000
+      ) {
+       const item1 = { timeNum: i, value: "" };
+        const item2 = { timeNum: i, value: "" };
+        let dataStart = [this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 12:00:01'), this.getTimeNum(moment(i).format('YYYY-MM-DD') + ' 16:00:00')] 
+        let dataEnd = [this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 16:00:01'), this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 20:00:00')] 
+        for (let j = pressureList.length - 1; j >= 0; j--) {
+          const timeNum = this.getTimeNum(pressureList[j].time);
+          if (dataStart[0] <= timeNum && dataStart[1] >= timeNum ) {
+            item1.value = pressureList[j].value;
+            item1.time = `${pressureList[j].time}`;
+            pressureList.splice(j, 1);
+          }
+          if (dataEnd[0] <= timeNum && dataEnd[1] >= timeNum ) {
+            item2.value = pressureList[j].value;
+            item2.time = `${pressureList[j].time}`;
+            pressureList.splice(j, 1);
+          }
+        }
+        list.push(item1);
+        list.push(item2);
       }
       return list;
     },
