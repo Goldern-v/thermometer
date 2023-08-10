@@ -1554,7 +1554,7 @@ export default {
           this.indexTextAreaHeight +
           this.timesTempAreaHeight -
           5 * (this.ySpace + 1),
-          "black"
+          this.bottomSheetNote.some((y) => y.value.includes("不升")) ? "blue" : "black"
         );
       });
     },
