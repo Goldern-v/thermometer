@@ -173,9 +173,9 @@
                     left: `${leftWidth}px`,
                   }">
             <defs>
-              <pattern :id="`pattern`" width="10" height="10" patternUnits="userSpaceOnUse">
+              <!-- <pattern :id="`pattern`" width="10" height="10" patternUnits="userSpaceOnUse">
                 <line x1="0" y1="10" x2="10" y2="0" stroke="red" stroke-width="1"  />
-              </pattern>
+              </pattern> -->
             </defs>
             <g v-for="(item, index) in polygonPoints" :key="index" style="z-index:10000">
               <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke="red" stroke-width="1.5px">
@@ -2235,6 +2235,7 @@ export default {
                   Math.abs(x.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
                   Math.abs(x.y.toFixed(2) - cy.toFixed(2)) <= 2
               );
+              
               if (sameAxisItem) {
                 params = {
                   cx,
@@ -2245,6 +2246,26 @@ export default {
                   tips: `${x.time} ${label}：${x.value}`,
                   dotSolid: false,
                 };
+              }
+            }
+            // 呼吸与脉搏重叠，放大呼吸空心圆的半径，包裹脉搏实心圆
+            if (vitalCode === '04') {
+              const pList = [...this.settingMap.pulse.data].map((x) => {
+                return {
+                  x: this.getXaxis(this.getLocationTime(x.time)),
+                  y: this.getYaxis(this.pulseRange, x.value),
+                }
+              });
+              const sameBreathePoint = pList.find((p) => {
+                return (
+                  Math.abs(p.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
+                  Math.abs(p.x.toFixed(2) - cx.toFixed(2)) <= 2 &&
+                  Math.abs(p.y.toFixed(2) - cy.toFixed(2)) >= 0 &&
+                  Math.abs(p.y.toFixed(2) - cy.toFixed(2)) <= 2
+                )
+              });
+              if (sameBreathePoint) {
+                params = { ...params, r: 7, zlevel: 9 }
               }
             }
             this.createCircle(params);
@@ -2271,15 +2292,7 @@ export default {
             const coolX = this.getXaxis(this.getLocationTime(item.time));
             const coolY = this.getYaxis(yRange, item.value, vitalCode);
             if (coolX === cx) {
-              this.createCircle({
-                cx: coolX + this.xSpace / 2,
-                cy: coolY,
-                r: 4,
-                color: "red",
-                zlevel: 10,
-                tips: `${item.time} 降温：${item.value}`,
-                dotSolid: false,
-              });
+              let circlex = coolX + this.xSpace / 2;
               // 发热 => 物理降温
               const fever = this.feverList.find(
                 c => this.getLocationTime(item.time) === this.getLocationTime(c.time)
@@ -2299,18 +2312,29 @@ export default {
                   zlevel: 1,
                   lineDash: [3, 3],
                 });
+              } else {
+                circlex = coolX;
+                // 物理降温 => 体温
+                this.createLine({
+                  x1: cx,
+                  y1: cy,
+                  x2: coolX,
+                  y2: coolY,
+                  lineWidth: 1,
+                  color: "red",
+                  zlevel: 1,
+                  lineDash: [3, 3],
+                });
               }
-              // 物理降温 => 体温
-              // this.createLine({
-              //   x1: cx,
-              //   y1: cy,
-              //   x2: coolX + this.xSpace / 2,
-              //   y2: coolY,
-              //   lineWidth: 1,
-              //   color: "red",
-              //   zlevel: 1,
-              //   lineDash: [3, 3],
-              // });
+              this.createCircle({
+                cx: circlex,
+                cy: coolY,
+                r: 4,
+                color: "red",
+                zlevel: 10,
+                tips: `${item.time} 降温：${item.value}`,
+                dotSolid: false,
+              });
               this.coolList.splice(i, 1);
             }
           }
