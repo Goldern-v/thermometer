@@ -172,15 +172,15 @@
                     position: 'absolute',
                     left: `${leftWidth}px`,
                   }">
-            <defs>
-              <!-- <pattern :id="`pattern`" width="10" height="10" patternUnits="userSpaceOnUse">
+            <!-- <defs>
+              <pattern :id="`pattern`" width="10" height="10" patternUnits="userSpaceOnUse">
                 <line x1="0" y1="10" x2="10" y2="0" stroke="red" stroke-width="1"  />
-              </pattern> -->
-            </defs>
-            <g v-for="(item, index) in polygonPoints" :key="index" style="z-index:10000">
+              </pattern>
+            </defs> -->
+            <!-- <g v-for="(item, index) in polygonPoints" :key="index" style="z-index:10000">
               <polygon :fill="`url(#pattern)`" :points="item" :key="index" stroke="red" stroke-width="1.5px">
               </polygon>
-            </g>
+            </g> -->
 
           </svg>
         </div>
@@ -637,6 +637,7 @@ export default {
       showInnerPage: false, // 是否显示内部分页
       adtLog: "", // 转科
       bedExchangeLog: "", // 转床
+      heartPulseXyMap: new Map(), // 心率脉搏相同 x 坐标数据集
     };
   },
   computed: {
@@ -924,49 +925,8 @@ export default {
         构造xyMap，结构为以x轴坐标作为key，{heart: {value, y}，pulse: {value, y}}作为value
         心率heart/脉搏pulse有一个为空时记为一个多边形断点， 同时心率过快也作为一个断点
       */
-      const settingMap = this.settingMap;
-      const xyMap = new Map();
-      settingMap.heart.data.forEach((x) => {
-        const xAxis = this.getXaxis(this.getLocationTime(x.time));
-        if (xyMap.has(xAxis)) {
-          xyMap.set(xAxis, {
-            ...xyMap.get(xAxis),
-            heart: {
-              value: x.value,
-              y: this.getYaxis(settingMap.heart.range, x.value),
-            },
-          });
-        } else {
-          xyMap.set(xAxis, {
-            heart: {
-              value: x.value,
-              y: this.getYaxis(settingMap.heart.range, x.value),
-            },
-            pulse: null,
-          });
-        }
-      });
-      settingMap.pulse.data.forEach((x) => {
-        const xAxis = this.getXaxis(this.getLocationTime(x.time));
-        if (xyMap.has(xAxis)) {
-          xyMap.set(xAxis, {
-            ...xyMap.get(xAxis),
-            pulse: {
-              value: x.value,
-              y: this.getYaxis(settingMap.pulse.range, x.value),
-            },
-          });
-        } else {
-          xyMap.set(xAxis, {
-            pulse: {
-              value: x.value,
-              y: this.getYaxis(settingMap.pulse.range, x.value),
-            },
-            heart: null,
-          });
-        }
-      });
-      const allList = [...xyMap.entries()].sort((a, b) => a[0] - b[0]);
+      // 由于代码冗余， this.heartPulseXyMap 抽取到 this.lineHeartAndPulse 方法中处理
+      const allList = [...this.heartPulseXyMap.entries()].sort((a, b) => a[0] - b[0]);
       if (allList.length) {
         let data = [[]];
         allList.forEach((x) => {
@@ -983,8 +943,8 @@ export default {
         });
         data = data.map((x) => {
           return [
-            ...x.map((y) => [y, xyMap.get(y).heart.y]),
-            ...x.map((y) => [y, xyMap.get(y).pulse.y]).reverse(),
+            ...x.map((y) => [y, this.heartPulseXyMap.get(y).heart.y]),
+            ...x.map((y) => [y, this.heartPulseXyMap.get(y).pulse.y]).reverse(),
           ];
         });
         return data;
@@ -1324,22 +1284,6 @@ export default {
             default:
               break;
           }
-
-          // if (index < 0) {
-          //   customSigns.push(sign)
-          //   this[`customList${customSigns.length - 1}`].push({
-          //     time: vitalSigns[i].time_point,
-          //     value: vitalSigns[i].value
-          //   })
-          //   this[`customList${customSigns.length - 1}`].label = sign
-          // } else {
-          //   this[`customList${index}`].push({
-          //     time: vitalSigns[i].time_point,
-          //     value: vitalSigns[i].value
-          //   })
-          //   this[`customList${index}`].label = sign
-          // }
-          // continue
         }
 
         if (this.lineMap[vitalSigns[i].vital_code]) {
@@ -1541,6 +1485,59 @@ export default {
           textLineHeight: this.ySpace + 1,
           fontWeight: "bold",
         });
+      });
+    },
+    lineHeartAndPulse() {
+      this.settingMap.heart.data.forEach((x) => {
+        const xAxis = this.getXaxis(this.getLocationTime(x.time));
+        if (this.heartPulseXyMap.has(xAxis)) {
+          this.heartPulseXyMap.set(xAxis, {
+            ...this.heartPulseXyMap.get(xAxis),
+            heart: {
+              value: x.value,
+              y: this.getYaxis(this.settingMap.heart.range, x.value),
+            },
+          });
+        } else {
+          this.heartPulseXyMap.set(xAxis, {
+            heart: {
+              value: x.value,
+              y: this.getYaxis(this.settingMap.heart.range, x.value),
+            },
+            pulse: null,
+          });
+        }
+      });
+      this.settingMap.pulse.data.forEach((x) => {
+        const xAxis = this.getXaxis(this.getLocationTime(x.time));
+        if (this.heartPulseXyMap.has(xAxis)) {
+          const y = this.getYaxis(this.settingMap.pulse.range, x.value);
+          this.heartPulseXyMap.set(xAxis, {
+            ...this.heartPulseXyMap.get(xAxis),
+            pulse: {
+              value: x.value,
+              y,
+            },
+          });
+          // 相同 x 坐标的心率脉搏连线
+          this.createLine({
+            x1: xAxis,
+            y1: this.heartPulseXyMap.get(xAxis).heart.y,
+            x2: xAxis,
+            y2: y,
+            lineWidth: 2,
+            color: "red",
+            zlevel: 1,
+          });
+        } else {
+          this.heartPulseXyMap.set(xAxis, {
+            pulse: {
+              value: x.value,
+              y: this.getYaxis(this.settingMap.pulse.range, x.value),
+            },
+            heart: null,
+          });
+        }
       });
     },
     init() {
@@ -1825,6 +1822,7 @@ export default {
             });
           })
         })
+        this.lineHeartAndPulse();
       });
     },
     yLine() {
