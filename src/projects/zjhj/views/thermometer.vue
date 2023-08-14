@@ -4,23 +4,23 @@
     @dblclick="dblclick"
     class="main-view"
     v-if="apiData"
-    :class="{ isPDF }"
+    :class="[{ isPDF },expecialNavigator]"
     :style="{
       width: `${leftWidth + areaWidth}px`,
       overflow: 'hidden',
-      transform: `scale(${scaleData}) translatex(${translaData})`,
-      transformOrigin: 'top',
+      transform: expecialNavigator=='lowChrome'? '' : `scale(${scaleData}) translatex(${translaData})`,
+      transformOrigin: expecialNavigator=='lowChrome'? '' : 'top',
     }"
   >
     <div class="head-hos"><img :src="imgUrl" alt="" /></div>
     <div class="head-title">体温单</div>
     <div class="head-info-1">
-      <div class="item" style="width: 313px;">
+      <!-- <div class="item" style="width: 313px;">
         科室：<span class="value">{{ adtLog || patInfo.wardName }}</span>
-      </div>
+      </div> -->
       <div class="item" style="padding: 0 60px 5px 5px">
         病区：<span class="value">{{
-          adtLog || patInfo.dept_name 
+          adtLog || patInfo.dept_name
         }}</span>
       </div>
     </div>
@@ -550,6 +550,7 @@ import zrender from "zrender";
 import { mockData } from "src/projects/zjhj/mockData.js";
 import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
 import moment from "moment"; //导入文件
+import {getBrowserNameVersion} from '../assets/root/navigator'
 export default {
   props: {
     isPrintAll: {
@@ -757,11 +758,18 @@ export default {
     };
   },
   computed: {
+        expecialNavigator(){
+      let navigator = getBrowserNameVersion()
+       if(navigator.navigator =='Chrome'){
+        if(parseInt(navigator.banben)<=95) return 'lowChrome'
+       }
+      return  ""
+    },
     isPDF() {
       return !!this.$route.query.isPDF;
     },
     timeTds() {
-      const list = [2, 6, 10, 2, 6, 10];
+      const list = [2, 6, 10, 14, 18, 22];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
@@ -798,8 +806,8 @@ export default {
       ) {
         const item1 = { timeNum: i, value: "" };
         const item2 = { timeNum: i, value: "" };
-        let dataStart = [this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 04:00:00'), this.getTimeNum(moment(i).format('YYYY-MM-DD') + ' 08:00:00')] 
-        let dataEnd = [this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 08:00:01'), this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 12:00:00')] 
+        let dataStart = [this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 04:00:00'), this.getTimeNum(moment(i).format('YYYY-MM-DD') + ' 08:00:00')]
+        let dataEnd = [this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 08:00:01'), this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 12:00:00')]
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
           if (dataStart[0] <= timeNum && dataStart[1] >= timeNum ) {
@@ -829,8 +837,8 @@ export default {
       ) {
        const item1 = { timeNum: i, value: "" };
         const item2 = { timeNum: i, value: "" };
-        let dataStart = [this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 12:00:01'), this.getTimeNum(moment(i).format('YYYY-MM-DD') + ' 16:00:00')] 
-        let dataEnd = [this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 16:00:01'), this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 20:00:00')] 
+        let dataStart = [this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 12:00:01'), this.getTimeNum(moment(i).format('YYYY-MM-DD') + ' 16:00:00')]
+        let dataEnd = [this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 16:00:01'), this.getTimeNum( moment(i).format('YYYY-MM-DD') + ' 20:00:00')]
         for (let j = pressureList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(pressureList[j].time);
           if (dataStart[0] <= timeNum && dataStart[1] >= timeNum ) {
@@ -1097,8 +1105,8 @@ export default {
         styleEle.innerHTML = `
         @media print {
           @page {
-            size: a4; 
-            margin: 0mm 0mm 0mm 0mm; 
+            size: a4;
+            margin: 0mm 0mm 0mm 0mm;
           }
         }
         `;
@@ -2658,11 +2666,20 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 0mm 0mm -60mm 0mm; // 页面的边距
+    margin: 0mm 0mm -40mm 0mm; // 页面的边距
   }
   .main-view {
     transform: scale(0.83);
     transform-origin: top;
+  }
+   .main-view.lowChrome{
+    height: 1080px;
+    transform-origin: top;
+    transform: scaleX(0.75) translateX(-110px);
+  }
+  .main-view.lowChrome > div{
+    transform-origin: center top;
+    transform: scaleY(0.65);
   }
   //.pain-area :nth-child(5) {
   //  margin-bottom: 4px;
