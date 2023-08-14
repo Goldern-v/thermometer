@@ -511,6 +511,7 @@ import { mockData } from 'src/projects/wuhanhankou/mockData.js'
 import moment from 'moment'
 import { mockDataError } from 'src/projects/wuhanhankou/mockDataError.js'
 import ChildrenChartVue from './childrenChart.vue'
+import { getNurseExchangeInfoByTime} from "src/api/index.js";
 export default {
   components: {
     ChildrenChartVue,
@@ -1159,12 +1160,6 @@ export default {
           case 'dateChangePage':
             this.handleChangePage(e.data.value)
             break
-          case 'nurseExchangeInfo':
-            if (e.data.value) {
-              this.adtLog = e.data.value.adtLog || '' // 转科
-              this.bedExchangeLog = e.data.value.bedExchangeLog || '' // 转床
-            }
-            break
           default:
             break
         }
@@ -1258,18 +1253,21 @@ export default {
       }
       this.dateRangeList = dateRangeList
       this.pageTotal = dateRangeList.length
+      const urlParams =  this.$route.query;
+      let data = {
+        startLogDateTime: this.timeRange[0],
+        endLogDateTime: this.timeRange[1],
+        visitId: urlParams.VisitId,
+        patientId: urlParams.PatientId,
+      };
 
-      // 和iframe外部通信，传当前页起止时间段，用来获取转科和转床信息的
-      window.parent.postMessage(
-        {
-          type: 'getNurseExchangeInfo',
-          value: {
-            startLogDateTime: this.timeRange[0],
-            endLogDateTime: this.timeRange[1],
-          },
-        },
-        '*',
-      )
+      if (!this.useMockData && !this.isPrintAll) {
+        getNurseExchangeInfoByTime(data).then((res) => {
+          this.adtLog = res.data.data.adtLog; // 转科
+          this.adtLogWardName = res.data.data.adtLogWardName; // 转科
+        });
+      }
+
 
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x))
       // const customSigns = [] // 记录自定义字段的名字
@@ -1713,6 +1711,7 @@ export default {
           color: isBreak ? 'red' : '#000',
         }
         preSpace += lineWidth + this.xSpace
+        console.log(params);
         this.createLine(params)
       }
     },
@@ -1745,6 +1744,7 @@ export default {
         1 +
         (this.xRange[1] - this.xRange[0]) * 5
       let preSpace = 0
+      console.log(totalLine, 'totalline');
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 6 === 0 && i > 0 && i < totalLine - 1
         const lineWidth = isBreak ? 2 : i === 0 ? 2 : 1
@@ -2568,7 +2568,6 @@ export default {
     font-size: 14px;
     display: flex;
     justify-content: space-between;
-
     .item {
       padding: 0 0 5px 5px;
       .value {
