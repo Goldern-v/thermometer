@@ -15,9 +15,9 @@
     <div class="head-hos"><img :src="imgUrl" alt="" /></div>
     <div class="head-title">体温单</div>
     <div class="head-info-1">
-      <div class="item" style="width: 313px;">
+      <!-- <div class="item" style="width: 313px;">
         科室：<span class="value">{{ adtLog || patInfo.wardName }}</span>
-      </div>
+      </div> -->
       <div class="item" style="padding: 0 60px 5px 5px">
         病区：<span class="value">{{
           adtLog || patInfo.dept_name
@@ -769,7 +769,7 @@ export default {
       return !!this.$route.query.isPDF;
     },
     timeTds() {
-      const list = [2, 6, 10, 2, 6, 10];
+      const list = [2, 6, 10, 14, 18, 22];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
