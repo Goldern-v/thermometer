@@ -453,6 +453,7 @@ import { mockData } from "src/projects/weihai/mockData.js";
 import childrenChart from "./childrenChart.vue";
 
 import { common, getNurseExchangeInfoByTime } from "src/api/index.js";
+import moment from 'moment';
 
 export default {
   components: {
@@ -664,34 +665,57 @@ export default {
     },
     formatPressureList() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
-      // console.log('timeNumRange', this.timeRange, this.pressureList, this.pressureSiteList)
-      const list = [];
+      const list = new Array(14).fill({ timeNum: '', value: '' });
       const pressureList = [...this.pressureList];
       const pressureSiteList = [...this.pressureSiteList];
       const halfDay = 3 * 4 * 60 * 60 * 1000;
       for (
-        let i = timeNumRange[0];
+        let i = timeNumRange[0], k = 0;
         i < timeNumRange[1] - 1;
-        i += halfDay
+        i += halfDay, k++
       ) {
+        // 当天的表顶注释，k % 2 == 0 是因为 timeNum >= 零点 < 24点
+        const dayTopNode = this.topSheetNote.filter(node => {
+          const timeNum = this.getTimeNum(node.time);
+          return timeNum >= i && timeNum < (i + halfDay * 2) && k % 2 == 0;
+        });
+        // 当天表顶注释为手术
+        const hasOperate = dayTopNode.find(node => node.value.includes('手术'));
         const item = { timeNum: i, value: "" };
-        for (let j = pressureList.length - 1; j >= 0; j--) {
-          const timeNum = this.getTimeNum(pressureList[j].time);
-          if (timeNum >= i && timeNum < i + halfDay) {
-            item.value = pressureList[j].value;
-            pressureList.splice(j, 1);
-            break;
+        // 当天存在手术，左侧血压为小于手术时间且最接近手术时间的血压值，右侧为大于手术时间且最接近手术时间的血压值
+        if (hasOperate) {
+          const left = JSON.parse(JSON.stringify(pressureList)).reverse().find(
+            p => this.getTimeNum(p.time) < this.getTimeNum(hasOperate.time)
+          );
+          const right = pressureList.find(p => this.getTimeNum(p.time) > this.getTimeNum(hasOperate.time));
+          if (!list[k].value) {
+            list[k] = { timeNum: i, value: left.value };
+          }
+          if (!list[k + 1].value) {
+            list[k + 1] = { timeNum: i, value: right.value };
+          }
+          continue;
+        } else {
+          for (let j = pressureList.length - 1; j >= 0; j--) {
+            const timeNum = this.getTimeNum(pressureList[j].time);
+            if (timeNum >= i && timeNum < i + halfDay) {
+              item.value = pressureList[j].value;
+              pressureList.splice(j, 1);
+              break;
+            }
+          }
+          for (let j = pressureSiteList.length - 1; j >= 0; j--) {
+            const timeNum = this.getTimeNum(pressureSiteList[j].time);
+            if (timeNum >= i && timeNum < i + halfDay) {
+              item.value += pressureSiteList[j].value;
+              pressureSiteList.splice(j, 1);
+              break;
+            }
+          }
+          if (!list[k].value) {
+            list[k] = item
           }
         }
-        for (let j = pressureSiteList.length - 1; j >= 0; j--) {
-          const timeNum = this.getTimeNum(pressureSiteList[j].time);
-          if (timeNum >= i && timeNum < i + halfDay) {
-            item.value += pressureSiteList[j].value;
-            pressureSiteList.splice(j, 1);
-            break;
-          }
-        }
-        list.push(item);
       }
       return list;
     },
@@ -706,6 +730,12 @@ export default {
           end: this.getTimeNum(`${x} 24:00:00`),
         };
       });
+      // 体温数据
+      const tList = [
+        ...this.settingMap.oralTemperature.data,
+        ...this.settingMap.axillaryTemperature.data,
+        ...this.settingMap.analTemperature.data,
+      ]
       const timeAdd = (i) => {
         return timeNumList.some((x) => x.start === i)
           ? 5 * 60 * 60 * 1000
@@ -715,6 +745,9 @@ export default {
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
+        const date = moment(i).format('YYYY-MM-DD');
+        const hasTemperaturePoint = tList.find(item => moment(item.time).format('YYYY-MM-DD') === date);
+        if (!hasTemperaturePoint) continue;
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
@@ -892,13 +925,25 @@ export default {
         心率heart/脉搏pulse有一个为空时记为一个多边形断点， 同时心率过快也作为一个断点
       */
       const settingMap = this.settingMap;
+      // 体温数据
+      const tList = [
+        ...settingMap.oralTemperature.data,
+        ...settingMap.axillaryTemperature.data,
+        ...settingMap.analTemperature.data,
+      ]
       const xyMap = new Map();
       settingMap.heart.data.forEach((x) => {
+        // 相同日期没有体温点脉搏心率呼吸不画线
+        const hasTemperaturePoint = tList.find(
+          item => moment(item.time).format('YYYY-MM-DD') === moment(x.time).format('YYYY-MM-DD')
+        );
+        if (!hasTemperaturePoint) return;
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
         if (xyMap.has(xAxis)) {
           xyMap.set(xAxis, {
             ...xyMap.get(xAxis),
             heart: {
+              time: x.time,
               value: x.value,
               y: this.getYaxis(settingMap.heart.range, x.value),
             },
@@ -906,6 +951,7 @@ export default {
         } else {
           xyMap.set(xAxis, {
             heart: {
+              time: x.time,
               value: x.value,
               y: this.getYaxis(settingMap.heart.range, x.value),
             },
@@ -914,11 +960,17 @@ export default {
         }
       });
       settingMap.pulse.data.forEach((x) => {
+        // 相同日期没有体温点脉搏心率呼吸不画线
+        const hasTemperaturePoint = tList.find(
+          item => moment(item.time).format('YYYY-MM-DD') === moment(x.time).format('YYYY-MM-DD')
+        );
+        if (!hasTemperaturePoint) return;
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
         if (xyMap.has(xAxis)) {
           xyMap.set(xAxis, {
             ...xyMap.get(xAxis),
             pulse: {
+              time: x.time,
               value: x.value,
               y: this.getYaxis(settingMap.pulse.range, x.value),
             },
@@ -926,6 +978,7 @@ export default {
         } else {
           xyMap.set(xAxis, {
             pulse: {
+              time: x.time,
               value: x.value,
               y: this.getYaxis(settingMap.pulse.range, x.value),
             },
@@ -1353,7 +1406,6 @@ export default {
               const locationTime = this.getLocationTime(y.time);
               const locationTimeNum = this.getTimeNum(locationTime);
               const timeNum = this.getTimeNum(y.time);
-              console.log(y.time)
               if (index >= 1 && this.getLocationTime(y.time) == this.getLocationTime(dataArray[index - 1].time)) {
                 const hasTopRuleItem = this.pickTopRule(y.time);
                 if (
@@ -1517,6 +1569,12 @@ export default {
         this.$refs.main.appendChild(div);
         this.yLine(); //生成Y轴坐标
         this.xLine(); //生成X轴坐标
+        // 体温数据
+        const tList = [
+          ...this.settingMap.oralTemperature.data,
+          ...this.settingMap.axillaryTemperature.data,
+          ...this.settingMap.analTemperature.data,
+        ]
         // 画折线
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data];
@@ -1591,6 +1649,12 @@ export default {
             // 心率或脉搏过快时，折线需要断开
             data = [[]];
             x.data.forEach((y, index) => {
+              // 相同日期没有体温点脉搏心率呼吸不画线
+              const hasTemperaturePoint = tList.find(
+                item => moment(item.time).format('YYYY-MM-DD') === moment(y.time).format('YYYY-MM-DD')
+              );
+              if (!hasTemperaturePoint) return;
+
               if (y.value <= this.pulseRange[1]) {
                 data[data.length - 1].push(y);
               } else {
@@ -2318,7 +2382,6 @@ export default {
             time = parseInt(time);
           } else {
             time = time.replace(new RegExp(/-/gm), "/");
-            console.log(time, "time");
           }
         }
 
