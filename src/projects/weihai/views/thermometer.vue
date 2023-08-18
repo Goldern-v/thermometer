@@ -688,10 +688,10 @@ export default {
             p => this.getTimeNum(p.time) < this.getTimeNum(hasOperate.time)
           );
           const right = pressureList.find(p => this.getTimeNum(p.time) > this.getTimeNum(hasOperate.time));
-          if (!list[k].value) {
+          if (!list[k].value && left) {
             list[k] = { timeNum: i, value: left.value };
           }
-          if (!list[k + 1].value) {
+          if (!list[k + 1].value && right) {
             list[k + 1] = { timeNum: i, value: right.value };
           }
           continue;
@@ -2075,13 +2075,19 @@ export default {
                 ...this.settingMap.oralTemperature.data,
                 ...this.settingMap.axillaryTemperature.data,
                 ...this.settingMap.analTemperature.data,
-              ].map((x) => {
+              ]
+              // 相同日期没有体温点脉搏心率呼吸不画线
+              const date = moment(x.time).format('YYYY-MM-DD');
+              const hasTemperaturePoint = tList.find(item => moment(item.time).format('YYYY-MM-DD') === date);
+              if (!hasTemperaturePoint) break;
+
+              const tPointList = tList.map((x) => {
                 return {
                   x: this.getXaxis(this.getLocationTime(x.time)),
                   y: this.getYaxis(this.yRange, x.value),
                 };
               });
-              const sameAxisItem = tList.find(
+              const sameAxisItem = tPointList.find(
                 (x) =>
                   Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
                   Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 4 &&
