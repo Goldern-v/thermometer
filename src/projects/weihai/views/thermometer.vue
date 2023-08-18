@@ -684,10 +684,18 @@ export default {
         const item = { timeNum: i, value: "" };
         // 当天存在手术，左侧血压为小于手术时间且最接近手术时间的血压值，右侧为大于手术时间且最接近手术时间的血压值
         if (hasOperate) {
-          const left = JSON.parse(JSON.stringify(pressureList)).reverse().find(
-            p => this.getTimeNum(p.time) < this.getTimeNum(hasOperate.time)
-          );
-          const right = pressureList.find(p => this.getTimeNum(p.time) > this.getTimeNum(hasOperate.time));
+          const left = JSON.parse(JSON.stringify(pressureList)).reverse().find(p => {
+            return (
+              this.getTimeNum(p.time) < this.getTimeNum(hasOperate.time) 
+              && moment(p.time).format('YYYY-MM-DD') === moment(hasOperate.time).format('YYYY-MM-DD')
+            )
+          });
+          const right = pressureList.find(p => {
+            return (
+              this.getTimeNum(p.time) > this.getTimeNum(hasOperate.time)
+              && moment(p.time).format('YYYY-MM-DD') === moment(hasOperate.time).format('YYYY-MM-DD')
+            )
+          });
           if (!list[k].value && left) {
             list[k] = { timeNum: i, value: left.value };
           }
