@@ -435,13 +435,13 @@
 
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList0.label || "" }}
+            {{ outCustomList1.label || "" }}
           </div>
           <div class="value-item-box">
             <div
               class="value-item font-14"
               :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: customList0 })"
+              v-for="(item, index) in getFormatList({ tList: outCustomList1 })"
               :key="index"
               @click="() => clickDateChangeTime(item)"
               v-html="item.value"
@@ -454,6 +454,36 @@
           :style="{ height: `${trHeight * 4}px`, paddingTop:'25px'}"
         >
           其<br />它<br />
+        </div>
+        <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+            {{ outCustomList2.label || "" }}
+          </div>
+          <div class="value-item-box">
+            <div
+              class="value-item font-14"
+              :style="{ 'font-size': scaleFont(item.value) }"
+              v-for="(item, index) in getFormatList({ tList: outCustomList2 })"
+              :key="index"
+              @click="() => clickDateChangeTime(item)"
+              v-html="item.value"
+            ></div>
+          </div>
+        </div>
+        <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+            {{ customList0.label || "" }}
+          </div>
+          <div class="value-item-box">
+            <div
+              class="value-item font-14"
+              :style="{ 'font-size': scaleFont(item.value) }"
+              v-for="(item, index) in getFormatList({ tList: customList0 })"
+              :key="index"
+              @click="() => clickDateChangeTime(item)"
+              v-html="item.value"
+            ></div>
+          </div>
         </div>
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth - 40}px` }">
@@ -479,36 +509,6 @@
               class="value-item font-14"
               :style="{ 'font-size': scaleFont(item.value) }"
               v-for="(item, index) in getFormatList({ tList: customList2 })"
-              :key="index"
-              @click="() => clickDateChangeTime(item)"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            {{ customList3.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: customList3 })"
-              :key="index"
-              @click="() => clickDateChangeTime(item)"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            {{ customList4.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: customList4 })"
               :key="index"
               @click="() => clickDateChangeTime(item)"
               v-html="item.value"
@@ -573,7 +573,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [2, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       imgUrl: require("../assets/logo_zjhj.jpg"),
       apiData: "", // 接口数据
       zr: "",
@@ -691,11 +691,11 @@ export default {
       BMIList: [], // BMI
       ttgyList: [], // 疼痛干预
       outCustomList: [], // 自定义1
-      outCustomList1: [], // 排出自定义2
-      outCustomList2: [], // 排出自定义3
-      customList0: [], // 自定义2
-      customList1: [], // 自定义3
-      customList2: [], // 自定义4
+      outCustomList1: [], // 自定义2
+      outCustomList2: [], // 自定义3
+      customList0: [], // 自定义4
+      customList1: [], // 自定义5
+      customList2: [], // 自定义6
       customList3: [], // 自定义4
       customList4: [], // 自定义4
       dateRangeList: [], // 数组长度决定页数
@@ -734,11 +734,12 @@ export default {
         28: "呕吐量",
         29: "在线降温",
         ttpf: "疼痛评分",
-        4: "排出自定义",
-        6: "排出自定义3",
-        41: "自定义1",
-        42: "自定义2",
-        43: "自定义3",
+        4: "自定义1",
+        5: "自定义2",
+        6: "自定义3",
+        41: "自定义4",
+        42: "自定义5",
+        43: "自定义6",
         44: "自定义3",
       }, // vital_code是null的时候，是自定义字段，显示在体温表后面
       lineMap: {
@@ -1335,7 +1336,7 @@ export default {
         }
 
         if (
-          ["4", "41", "42", "43", "5", "6"].includes(vitalSigns[i].vital_code)
+          ["4","5", "6", "41", "42", "43", '44'].includes(vitalSigns[i].vital_code)
         ) {
           const sign = vitalSigns[i].temperature_type;
           switch (vitalSigns[i].vital_code) {
@@ -1381,20 +1382,20 @@ export default {
               });
               this.customList2.label = sign;
               break;
-            case "44":
-              this.customList3.push({
-                time: vitalSigns[i].time_point,
-                value: vitalSigns[i].value,
-              });
-              this.customList3.label = sign;
-              break;
-            case "45":
-              this.customList4.push({
-                time: vitalSigns[i].time_point,
-                value: vitalSigns[i].value,
-              });
-              this.customList4.label = sign;
-              break;
+            // case "44":
+            //   this.customList3.push({
+            //     time: vitalSigns[i].time_point,
+            //     value: vitalSigns[i].value,
+            //   });
+            //   this.customList3.label = sign;
+            //   break;
+            // case "45":
+            //   this.customList4.push({
+            //     time: vitalSigns[i].time_point,
+            //     value: vitalSigns[i].value,
+            //   });
+            //   this.customList4.label = sign;
+            //   break;
             default:
               break;
           }
