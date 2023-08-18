@@ -573,7 +573,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [2, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       imgUrl: require("../assets/logo_zjhj.jpg"),
       apiData: "", // 接口数据
       zr: "",
