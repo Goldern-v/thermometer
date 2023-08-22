@@ -94,7 +94,7 @@
           class="index-box"
           :style="{ height: `${areaHeight}px`, width: `${leftWidth}px` }"
         >
-          <div class="notes" style="flex:none">
+          <!-- <div class="notes" style="flex:none">
             <div
               v-for="(value, key) in settingMap"
               :key="key"
@@ -105,7 +105,7 @@
                 <span class="axillary">x</span>
               </template>
             </div>
-          </div>
+          </div> -->
           <div class="item tempC">
             <div class="text" :style="`height: ${indexTextAreaHeight}px`">
               <div>体温<br />(℃)</div>
@@ -823,7 +823,7 @@ export default {
         }
         this.createText({
           x: xaxisNew[i],
-          y: value !== "不升" ? 0 : this.areaHeight - 6 * this.ySpace + 7,
+          y: value !== "不升" ? this.ySpace * 5 + 7 : this.areaHeight - 6 * this.ySpace + 7,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
