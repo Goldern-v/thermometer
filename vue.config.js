@@ -77,6 +77,8 @@ const projectName = (() => {
       return "松桃苗族自治区人民医院";
     case "zjhj": // 湛江海军医院
       return "湛江海军医院";
+    case "sdhpwk": // 顺德和平外科
+      return "顺德和平外科医院";
     case "common": // 可配置的通用版本
       return "配置通用版本";
     default:
@@ -201,6 +203,8 @@ module.exports = {
           return "./src/projects/songTao/main.js";
         case "zjhj": // 松桃苗族自治区人民医院
           return "./src/projects/zjhj/main.js";
+        case "sdhpwk": // 顺德和平外科医院
+          return "./src/projects/sdhpwk/main.js";
         case "common": // 可配置的通用版本
           return "./src/projects/common/main.js";
         default:
