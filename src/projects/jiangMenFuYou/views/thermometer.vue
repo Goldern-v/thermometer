@@ -243,7 +243,7 @@
         </div>
         <div class="row" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            输入总量(ml)
+            输入液量(ml)
           </div>
           <div class="value-item-box">
             <div
