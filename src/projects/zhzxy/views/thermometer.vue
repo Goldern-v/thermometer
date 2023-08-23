@@ -2268,6 +2268,7 @@ export default {
     const patientInfo = this.$route.query
     document.title='珠海市中西医结合医院体温单'
     this.showInnerPage = patientInfo.showInnerPage === "1";
+    console.log(this.isPrintAll, 'isPrintAll', this.useMockData , 'useMockData');
     if (this.isPrintAll) {
       // 批量打印
       this.apiData = this.printData;
