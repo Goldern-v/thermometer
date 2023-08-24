@@ -17,12 +17,18 @@
       <div class="head-title">体温单</div>
       <div class="head-info-1">
         <div class="item">
-          科室：<span class="value">{{ adtLog || patInfo.dept_name }}</span>
+          科室：<span class="value">
+             <input type="text" v-model="adtLog" style="width:85%;" @blur="onbedblur($event, 'adtLog')"> 
+            <!-- {{ adtLog || patInfo.dept_name }} -->
+          </span>
         </div>
         <div class="item" style="padding: 0 60px 5px 5px">
-          病区：<span class="value">{{
+          病区：<span class="value">  
+            <input type="text" v-model="adtLogWardName" style="width:85%;" @blur="onbedblur($event, 'adtLogWardName')"> 
+          </span>
+          <!-- 病区：<span class="value">{{
             adtLogWardName || patInfo.ward_name || "2号楼19楼东区"
-          }}</span>
+          }}</span> -->
         </div>
       </div>
       <div class="head-info">
@@ -49,7 +55,7 @@
         </div>
         <div class="item" style="text-align: right">
           床号：<span class="value">
-            <input type="text" v-model="bedExchangeLog" style="width:128px;" @blur="onbedblur">
+            <input type="text" v-model="bedExchangeLog" style="width:128px;" @blur="onbedblur($event, 'bedExchangeLog')">
             <!-- {{
             bedExchangeLog || patInfo.bed_label
           }} -->
@@ -1058,10 +1064,12 @@ export default {
     window.removeEventListener("message", this.messageHandle, false);
   },
   methods: {
-    onbedblur(e){
+    onbedblur(e, key){
        const urlParams = this.urlParse();
        let datas = {
-          bedLabelNew: e.target.value,
+          bedLabelNew: key == 'bedLabelNew' ? e.target.value : this.bedExchangeLog,
+          deptName: key == 'adtLog' ? e.target.value : this.adtLog,
+          wardName: key == 'adtLogWardName' ? e.target.value : this.adtLogWardName,
           moduleCode: 'temperature',
           pageNo: this.currentPage,
           patientId: urlParams.PatientId,
@@ -1308,15 +1316,17 @@ export default {
       this.dateRangeList = dateRangeList;
       this.pageTotal = dateRangeList.length;
       const urlParams = this.urlParse();
-      let data = {
-        startLogDateTime: this.timeRange[0],
-        endLogDateTime: this.timeRange[1],
-        visitId: urlParams.VisitId,
-        patientId: urlParams.PatientId,
-      };
+      // let data = {
+      //   startLogDateTime: this.timeRange[0],
+      //   endLogDateTime: this.timeRange[1],
+      //   visitId: urlParams.VisitId,
+      //   patientId: urlParams.PatientId,
+      // };
 
       let datas = {
           bedLabelNew: this.bedExchangeLog || this.patInfo.bed_label,
+          deptName: this.adtLog || this.patInfo.dept_name,
+          wardName: this.adtLogWardName || this.patInfo.ward_name,
           moduleCode: 'temperature',
           pageNo: this.currentPage,
           patientId: urlParams.PatientId,
@@ -1325,12 +1335,14 @@ export default {
           endLogDateTime: this.timeRange[1],
       }
       if (!this.useMockData && !this.isPrintAll) {
-        getNurseExchangeInfoByTime(data).then((res) => {
-          this.adtLog = res.data.data.adtLog; // 转科
-          this.adtLogWardName = res.data.data.adtLogWardName; // 转科
-        });
+        // getNurseExchangeInfoByTime(data).then((res) => {
+        //   this.adtLog = res.data.data.adtLog; // 转科
+        //   this.adtLogWardName = res.data.data.adtLogWardName; // 转科
+        // });
         getBedExchangeInfo(datas).then((res )=>{
           this.bedExchangeLog = res.data.data.bedExchangeLog || this.patInfo.bed_label
+          this.adtLog = res.data.data.adtLog; // 转科
+          this.adtLogWardName = res.data.data.adtLogWardName; // 转科
         })
       }
 
@@ -2775,6 +2787,11 @@ export default {
 
       .value {
         font-weight: normal;
+        input{
+          outline: none;
+          resize: none;
+          border: none;
+        }
       }
     }
   }
