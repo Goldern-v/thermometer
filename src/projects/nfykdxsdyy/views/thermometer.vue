@@ -17,14 +17,13 @@
       <div class="head-title">体温单</div>
       <div class="head-info-1">
         <div class="item">
-          科室：<span class="value">
-             <input type="text" v-model="adtLog" style="width:85%;" @blur="onbedblur($event, 'adtLog')"> 
-            <!-- {{ adtLog || patInfo.dept_name }} -->
+          科室：<span class="value" :contenteditable="true"  @blur="onbedblur($event, 'adtLog')">
+            {{ adtLog || patInfo.dept_name }}
           </span>
         </div>
         <div class="item" style="padding: 0 60px 5px 5px">
-          病区：<span class="value">  
-            <input type="text" v-model="adtLogWardName" style="width:85%;" @blur="onbedblur($event, 'adtLogWardName')"> 
+          病区：<span class="value" :contenteditable="true"  @blur="onbedblur($event, 'adtLogWardName')">  
+            {{ adtLogWardName || patInfo.ward_name || "2号楼19楼东区" }}
           </span>
           <!-- 病区：<span class="value">{{
             adtLogWardName || patInfo.ward_name || "2号楼19楼东区"
@@ -1341,8 +1340,8 @@ export default {
         // });
         getBedExchangeInfo(datas).then((res )=>{
           this.bedExchangeLog = res.data.data.bedExchangeLog || this.patInfo.bed_label
-          this.adtLog = res.data.data.adtLog; // 转科
-          this.adtLogWardName = res.data.data.adtLogWardName; // 转科
+          this.adtLog = res.data.data.adtLog || this.patInfo.dept_name; // 转科
+          this.adtLogWardName = res.data.data.adtLogWardName || this.patInfo.ward_name; // 转科
         })
       }
 
@@ -2787,6 +2786,9 @@ export default {
 
       .value {
         font-weight: normal;
+        outline: none;
+        resize: none;
+        border: none;
         input{
           outline: none;
           resize: none;

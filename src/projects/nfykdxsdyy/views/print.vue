@@ -95,6 +95,7 @@ export default {
             this.$nextTick(() => {
               for (let i = 0; i < this.$refs.thermometer.length; i++) {
                 this.$refs.thermometer[i].adtLog = nurseExchangeInfo[i].adtLog
+                this.$refs.thermometer[i].adtLogWardName = nurseExchangeInfo[i].adtLogWardName
                 this.$refs.thermometer[i].bedExchangeLog = nurseExchangeInfo[i].bedExchangeLog
               }
             })
