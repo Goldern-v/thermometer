@@ -53,12 +53,12 @@
           住院号：<span class="value">{{ patInfo.inp_no }}</span>
         </div>
         <div class="item" style="text-align: right">
-          床号：<span class="value">
-            <input type="text" v-model="bedExchangeLog" style="width:128px;" @blur="onbedblur($event, 'bedExchangeLog')">
+          床号：<span class="value" :contenteditable="true"  @blur="onbedblur($event, 'bedExchangeLog')">
+            {{ bedExchangeLog || patInfo.bed_label }}
+          </span>
             <!-- {{
             bedExchangeLog || patInfo.bed_label
           }} -->
-          </span>
         </div>
       </div>
       <div class="table-area">
@@ -578,7 +578,7 @@ export default {
     const pulseRange = [0, 180];
     const painRange = [2, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       imgUrl: require("../assets/hosptialName.png"),
       apiData: "", // 接口数据
       zr: "",
@@ -1064,11 +1064,12 @@ export default {
   },
   methods: {
     onbedblur(e, key){
+      console.log('ffffffffffffffd', e.target.value);
        const urlParams = this.urlParse();
        let datas = {
           bedLabelNew: key == 'bedLabelNew' ? e.target.value : this.bedExchangeLog,
-          deptName: key == 'adtLog' ? e.target.value : this.adtLog,
-          wardName: key == 'adtLogWardName' ? e.target.value : this.adtLogWardName,
+          deptName: key == 'adtLog' ? e.target.outerText : this.adtLog,
+          wardName: key == 'adtLogWardName' ? e.target.outerText : this.adtLogWardName,
           moduleCode: 'temperature',
           pageNo: this.currentPage,
           patientId: urlParams.PatientId,
