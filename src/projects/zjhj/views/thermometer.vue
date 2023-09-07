@@ -12,6 +12,7 @@
       transformOrigin: expecialNavigator=='lowChrome'? '' : 'top',
     }"
   >
+  <div>
     <div class="head-hos"><img :src="imgUrl" alt="" /></div>
     <div class="head-title">体温单</div>
     <div class="head-info-1">
@@ -542,6 +543,7 @@
       </button>
     </span>
     <span class="pagination" v-else>第{{ currentPage }}页</span>
+  </div>
   </div>
 </template>
 
@@ -2667,7 +2669,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 0mm 0mm -40mm 0mm; // 页面的边距
+    margin: 0mm 0mm -60mm 0mm; // 页面的边距
   }
   .main-view {
     transform: scale(0.83);
@@ -2688,7 +2690,7 @@ export default {
 }
 
 .main-view {
-  padding: 5px 0;
+  padding: 0px 0;
   margin: 0 auto;
   font-size: 18px;
   color: #000;
@@ -2704,7 +2706,7 @@ export default {
   }
   .head-hos {
     font-family: SimHei;
-    font-size: 38px;
+    font-size: 100px;
     font-weight: bold;
 
     img {
