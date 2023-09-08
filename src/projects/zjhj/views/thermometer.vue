@@ -267,6 +267,62 @@
             class="label"
             :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
           >
+            血压(mmHg)
+          </div>
+          <div class="value-item-box font-14" style="color: blue">
+            <template v-for="(item, index) in formatPressureList">
+              <div
+                class="value-item font-14"
+                :style="middleTdStyle(index * 2, formatPressureList.length * 2)"
+                @click="() => clickDateChangeTime(item[0])"
+                :key="'am' + index"
+              >
+                {{ (item[0] || {}).value }}
+              </div>
+              <div
+                class="value-item font-14"
+                :style="middleTdStyle((index * 2) + 1, formatPressureList.length * 2)"
+                @click="() => clickDateChangeTime(item[1])"
+                :key="'am2' + index"
+              >
+                {{ (item[1] || {}).value }}
+              </div>
+            </template>
+          </div>
+        </div>
+        <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div
+            class="label"
+            :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
+          >
+            血压(mmHg)
+          </div>
+          <div class="value-item-box font-14" style="color: blue">
+            <template v-for="(item, index) in formatPressureList">
+              <div
+                class="value-item font-14"
+                :style="middleTdStyle(index * 2, formatPressureList.length * 2)"
+                @click="() => clickDateChangeTime(item[2])"
+                :key="'pm' + index"
+              >
+                {{ (item[2] || {}).value }}
+              </div>
+              <div
+                class="value-item font-14"
+                :style="middleTdStyle((index * 2) + 1, formatPressureList.length * 2)"
+                @click="() => clickDateChangeTime(item[3])"
+                :key="'pm2' + index + 1"
+              >
+                {{ (item[3] || {}).value }}
+              </div>
+            </template>
+          </div>
+        </div>
+        <!-- <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div
+            class="label"
+            :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
+          >
             血压(mmHg)(上午)
           </div>
           <div class="value-item-box font-14" style="color: blue">
@@ -299,7 +355,7 @@
               {{ item.value }}
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             总输入量(ml)
@@ -789,7 +845,6 @@ export default {
     },
     painList() {
       const list = [];
-      console.log("painRange===", this.painRange);
       for (let i = this.painRange[1]; i > this.painRange[0]; i -= 2) {
         list.push(i);
       }
@@ -797,6 +852,26 @@ export default {
     },
     trHeight() {
       return this.ySpace * 2 - 10;
+    },
+    formatPressureList() {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const pressureList = [...this.pressureList];
+      const oneDay = 24 * 60 * 60 * 1000;
+      for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += oneDay) {
+        const dayList = [];
+        for (let j = 0; j < pressureList.length; j++) {
+          const item = { timeNum: i, value: "" };
+          const timeNum = this.getTimeNum(pressureList[j].time);
+          if (timeNum > i && timeNum <= i + oneDay) {
+            item.value = pressureList[j].value;
+            item.time = pressureList[j].time;
+            dayList.push(item);
+          }
+        }
+        list.push(dayList);
+      }
+      return list;
     },
     formatPressureListAM() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
@@ -1132,8 +1207,7 @@ export default {
       }
     },
     clickDateChangeTime(dateTime) {
-      console.log("点击======》dateTime", dateTime);
-      if (dateTime.time)
+      if (dateTime && dateTime.time)
         window.parent.postMessage(
           { type: "clickDateTime", value: dateTime.time },
           "*"
@@ -1757,7 +1831,6 @@ export default {
         1 +
         (this.yRange[1] - this.yRange[0]) * 4;
       let preSpace = 0;
-      console.log("totalLine==", totalLine);
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1;
         const lineWidth = isBreak ? 3 : 2;
@@ -2895,10 +2968,10 @@ export default {
       }
     }
 
-    .temp {
+    /* .temp {
       .text {
       }
-    }
+    } */
 
     .temp :nth-child(2) > span {
       margin-top: 7px;
