@@ -1263,15 +1263,23 @@ export default {
           "温水浴",
           "PDD停辅助呼吸",
         ];
+        const specialChars = ['△'];
         let centerText = ["辅助呼吸"];
+        // 默认表顶注释
+        let pointY = xaxisNew[i].y - 2 * this.ySpace - 2;
+        // 底部
+        if (bottomText.includes(value)) {
+          pointY = y - 7 * this.ySpace - 8;
+          if (specialChars.includes(value)) {
+            pointY += 4;
+          }
+        } else if (centerText.includes(value)) { // 中间注释
+          pointY = y - 18 * this.ySpace - 4;
+        }
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: bottomText.includes(value)
-            ? y - 7 * this.ySpace - 8
-            : centerText.includes(value)
-            ? y - 18 * this.ySpace - 4
-            : y - 2 * this.ySpace - 2,
+          y: pointY,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,

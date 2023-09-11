@@ -1129,7 +1129,6 @@ export default {
     createNote(notes, y, color) {
       // 为了防止注释重叠，如果注释落在同一个格子里，则依次往后移一个格子
       const xaxis = notes.map((item) => {
-        console.log(this.getXaxis(this.getLocationTime(item.time)),item.time);
         return {
           x: this.getXaxis(this.getLocationTime(item.time)),
           y,
@@ -1148,6 +1147,8 @@ export default {
         }
         const especially = ["拒测", "离院"];
 
+        const specialChars = ['△'];
+
         const bottomText = this.bottomSheetNote
           .map((x) => {
             return x.value;
@@ -1156,6 +1157,17 @@ export default {
         let centerText = this.centerSheetNote.map((x) => {
           return x.value;
         });
+        // 默认表顶注释
+        let pointY = xaxisNew[i].y - 2 * this.ySpace - 2;
+        // 底部
+        if (bottomText.includes(value)) {
+          pointY = y - 7 * this.ySpace - 8;
+          if (specialChars.includes(value)) {
+            pointY += 4;
+          }
+        } else if (centerText.includes(value)) { // 中间注释
+          pointY = y - 18 * this.ySpace - 4;
+        }
         if (especially.includes(value)) {
           this.createIsogon({
             x: this.getXaxis(this.getLocationTime(x.time)),
@@ -1170,15 +1182,12 @@ export default {
         } else {
           this.createText({
             x: xaxisNew[i].x,
-            y: bottomText.includes(value)
-              ? y - 7 * this.ySpace - 8
-              : centerText.includes(value)
-              ? y - 18 * this.ySpace - 4
-              : xaxisNew[i].y - 2 * this.ySpace - 2,
+            y: pointY,
             value: this.addn(value),
             color,
             textLineHeight: this.ySpace + 1,
             fontWeight: "bold",
+            fontSize: specialChars.includes(value) ? 30 : undefined
           });
         }
       });
