@@ -1286,9 +1286,10 @@ export default {
       // 过快的时间和入院的注释的时间在同一时间段，将他调整到入院的后面
       const admit = this.topSheetNote.find((item,index) => item.value.includes('入院') || item.value.includes('出生'))
       const admitIndex  = this.topSheetNote.findIndex((item,index) => item.value.includes('入院') || item.value.includes('出生'))
-      const hyperIndex = this.topSheetNote.findIndex((items,index) => items.value.includes('过快')  && items.itme == admit.itme)
+      const hyperIndex = this.topSheetNote.findIndex((items,index) => items.value.includes('过快') && admit  && items.itme == admit.itme)
+      console.log(hyperIndex, admitIndex);
 
-      if(hyperIndex < admitIndex){
+      if(hyperIndex != -1 && admitIndex!= -1 && hyperIndex < admitIndex){
         let temp = this.topSheetNote[hyperIndex];
         this.topSheetNote[hyperIndex] = this.topSheetNote[admitIndex];
         this.topSheetNote[admitIndex] = temp;
