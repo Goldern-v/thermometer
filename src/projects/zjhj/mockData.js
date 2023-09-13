@@ -469,6 +469,36 @@ export const mockData = {
       time_point: "2022-08-29 11:11:08",
       vital_code: "3",
     },
+    // {
+    //   temperature_type: "表顶注释",
+    //   value: "手术|",
+    //   time_point: "2022-08-29 15:11:08",
+    //   vital_code: "3",
+    // },
+    // {
+    //   temperature_type: "表顶注释",
+    //   value: "手术结束|",
+    //   time_point: "2022-08-29 19:11:08",
+    //   vital_code: "3",
+    // },
+    {
+      temperature_type: "表顶注释",
+      value: "手术结束|",
+      time_point: "2022-08-30 19:11:08",
+      vital_code: "3",
+    },
+    {
+      temperature_type: "表顶注释",
+      value: "手术|",
+      time_point: "2022-08-29 22:11:08",
+      vital_code: "3",
+    },
+    {
+      temperature_type: "表顶注释",
+      value: "手术|",
+      time_point: "2022-08-31 22:11:08",
+      vital_code: "3",
+    },
     {
       temperature_type: "表顶注释",
       value: "入1|",

@@ -1021,7 +1021,7 @@ export default {
       const list = this.vitalSigns.filter(
         (x) =>
           x.vital_code === "3" &&
-          (x.value.includes("手术") ||
+          ( x.value.includes("手术") ||
             x.value.includes("分娩|") ||
             x.value.includes("手术分娩|") ||
             x.value.includes("手术入院|"))
@@ -1046,7 +1046,7 @@ export default {
         if (obj[date].length > 0) {
           deliveryObj = obj[date].find((obj) => obj.value.includes("分娩"));
           for (let i = obj[date].length - 1; i >= 0; i--) {
-            if (obj[date][i].value.includes("分娩")) {
+            if (obj[date][i].value.includes("分娩") || obj[date][i].value.includes("手术结束")) {
               obj[date].splice(i, 1);
             }
           }
@@ -1081,7 +1081,7 @@ export default {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
           return index === 0
             ? days[index]
-            : `${this.numToRome(index + 1)}-${days[index]}`;
+            : `${this.numToRome(index + 1 )}-${days[index]}`;
         } else {
           return "";
         }
