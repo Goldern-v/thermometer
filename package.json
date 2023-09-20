@@ -77,6 +77,8 @@
     "build:zjhj": "vue-cli-service build --project=zjhj",
     "dev:sdhpwk": "vue-cli-service serve --project=sdhpwk",
     "build:sdhpwk": "vue-cli-service build --project=sdhpwk",
+    "dev:hzly": "vue-cli-service serve --project=hzly",
+    "build:hzly": "vue-cli-service build --project=hzly",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },

@@ -79,6 +79,8 @@ const projectName = (() => {
       return "湛江海军医院";
     case "sdhpwk": // 顺德和平外科
       return "顺德和平外科医院";
+    case "hzly": // 惠州六院
+      return "惠州市第六人民医院";
     case "common": // 可配置的通用版本
       return "配置通用版本";
     default:
@@ -205,6 +207,8 @@ module.exports = {
           return "./src/projects/zjhj/main.js";
         case "sdhpwk": // 顺德和平外科医院
           return "./src/projects/sdhpwk/main.js";
+        case "hzly": // 惠州市第六人民医院
+          return "./src/projects/hzly/main.js";
         case "common": // 可配置的通用版本
           return "./src/projects/common/main.js";
         default:
