@@ -12,6 +12,7 @@
       transformOrigin: expecialNavigator=='lowChrome'? '' : 'top',
     }"
   >
+  <div>
     <div class="head-hos"><img :src="imgUrl" alt="" /></div>
     <div class="head-title">体温单</div>
     <div class="head-info-1">
@@ -266,6 +267,62 @@
             class="label"
             :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
           >
+            血压(mmHg)
+          </div>
+          <div class="value-item-box font-14" style="color: blue">
+            <template v-for="(item, index) in formatPressureList">
+              <div
+                class="value-item font-14"
+                :style="middleTdStyle(index * 2, formatPressureList.length * 2)"
+                @click="() => clickDateChangeTime(item[0])"
+                :key="'am' + index"
+              >
+                {{ (item[0] || {}).value }}
+              </div>
+              <div
+                class="value-item font-14"
+                :style="middleTdStyle((index * 2) + 1, formatPressureList.length * 2)"
+                @click="() => clickDateChangeTime(item[1])"
+                :key="'am2' + index"
+              >
+                {{ (item[1] || {}).value }}
+              </div>
+            </template>
+          </div>
+        </div>
+        <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div
+            class="label"
+            :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
+          >
+            血压(mmHg)
+          </div>
+          <div class="value-item-box font-14" style="color: blue">
+            <template v-for="(item, index) in formatPressureList">
+              <div
+                class="value-item font-14"
+                :style="middleTdStyle(index * 2, formatPressureList.length * 2)"
+                @click="() => clickDateChangeTime(item[2])"
+                :key="'pm' + index"
+              >
+                {{ (item[2] || {}).value }}
+              </div>
+              <div
+                class="value-item font-14"
+                :style="middleTdStyle((index * 2) + 1, formatPressureList.length * 2)"
+                @click="() => clickDateChangeTime(item[3])"
+                :key="'pm2' + index + 1"
+              >
+                {{ (item[3] || {}).value }}
+              </div>
+            </template>
+          </div>
+        </div>
+        <!-- <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div
+            class="label"
+            :style="{ width: `${leftWidth}px`, transform: 'translateX(2.5px)' }"
+          >
             血压(mmHg)(上午)
           </div>
           <div class="value-item-box font-14" style="color: blue">
@@ -298,7 +355,7 @@
               {{ item.value }}
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
             总输入量(ml)
@@ -435,13 +492,13 @@
 
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">
-            {{ customList0.label || "" }}
+            {{ outCustomList1.label || "" }}
           </div>
           <div class="value-item-box">
             <div
               class="value-item font-14"
               :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: customList0 })"
+              v-for="(item, index) in getFormatList({ tList: outCustomList1 })"
               :key="index"
               @click="() => clickDateChangeTime(item)"
               v-html="item.value"
@@ -454,6 +511,36 @@
           :style="{ height: `${trHeight * 4}px`, paddingTop:'25px'}"
         >
           其<br />它<br />
+        </div>
+        <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+            {{ outCustomList2.label || "" }}
+          </div>
+          <div class="value-item-box">
+            <div
+              class="value-item font-14"
+              :style="{ 'font-size': scaleFont(item.value) }"
+              v-for="(item, index) in getFormatList({ tList: outCustomList2 })"
+              :key="index"
+              @click="() => clickDateChangeTime(item)"
+              v-html="item.value"
+            ></div>
+          </div>
+        </div>
+        <div class="row font-14" :style="{ height: `${trHeight}px` }">
+          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
+            {{ customList0.label || "" }}
+          </div>
+          <div class="value-item-box">
+            <div
+              class="value-item font-14"
+              :style="{ 'font-size': scaleFont(item.value) }"
+              v-for="(item, index) in getFormatList({ tList: customList0 })"
+              :key="index"
+              @click="() => clickDateChangeTime(item)"
+              v-html="item.value"
+            ></div>
+          </div>
         </div>
         <div class="row font-14" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth - 40}px` }">
@@ -479,36 +566,6 @@
               class="value-item font-14"
               :style="{ 'font-size': scaleFont(item.value) }"
               v-for="(item, index) in getFormatList({ tList: customList2 })"
-              :key="index"
-              @click="() => clickDateChangeTime(item)"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            {{ customList3.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: customList3 })"
-              :key="index"
-              @click="() => clickDateChangeTime(item)"
-              v-html="item.value"
-            ></div>
-          </div>
-        </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
-          <div class="label" :style="{ width: `${leftWidth - 40}px` }">
-            {{ customList4.label || "" }}
-          </div>
-          <div class="value-item-box">
-            <div
-              class="value-item font-14"
-              :style="{ 'font-size': scaleFont(item.value) }"
-              v-for="(item, index) in getFormatList({ tList: customList4 })"
               :key="index"
               @click="() => clickDateChangeTime(item)"
               v-html="item.value"
@@ -542,6 +599,7 @@
       </button>
     </span>
     <span class="pagination" v-else>第{{ currentPage }}页</span>
+  </div>
   </div>
 </template>
 
@@ -691,11 +749,11 @@ export default {
       BMIList: [], // BMI
       ttgyList: [], // 疼痛干预
       outCustomList: [], // 自定义1
-      outCustomList1: [], // 排出自定义2
-      outCustomList2: [], // 排出自定义3
-      customList0: [], // 自定义2
-      customList1: [], // 自定义3
-      customList2: [], // 自定义4
+      outCustomList1: [], // 自定义2
+      outCustomList2: [], // 自定义3
+      customList0: [], // 自定义4
+      customList1: [], // 自定义5
+      customList2: [], // 自定义6
       customList3: [], // 自定义4
       customList4: [], // 自定义4
       dateRangeList: [], // 数组长度决定页数
@@ -734,11 +792,12 @@ export default {
         28: "呕吐量",
         29: "在线降温",
         ttpf: "疼痛评分",
-        4: "排出自定义",
-        6: "排出自定义3",
-        41: "自定义1",
-        42: "自定义2",
-        43: "自定义3",
+        4: "自定义1",
+        5: "自定义2",
+        6: "自定义3",
+        41: "自定义4",
+        42: "自定义5",
+        43: "自定义6",
         44: "自定义3",
       }, // vital_code是null的时候，是自定义字段，显示在体温表后面
       lineMap: {
@@ -786,7 +845,6 @@ export default {
     },
     painList() {
       const list = [];
-      console.log("painRange===", this.painRange);
       for (let i = this.painRange[1]; i > this.painRange[0]; i -= 2) {
         list.push(i);
       }
@@ -794,6 +852,26 @@ export default {
     },
     trHeight() {
       return this.ySpace * 2 - 10;
+    },
+    formatPressureList() {
+      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+      const list = [];
+      const pressureList = [...this.pressureList];
+      const oneDay = 24 * 60 * 60 * 1000;
+      for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += oneDay) {
+        const dayList = [];
+        for (let j = 0; j < pressureList.length; j++) {
+          const item = { timeNum: i, value: "" };
+          const timeNum = this.getTimeNum(pressureList[j].time);
+          if (timeNum > i && timeNum <= i + oneDay) {
+            item.value = pressureList[j].value;
+            item.time = pressureList[j].time;
+            dayList.push(item);
+          }
+        }
+        list.push(dayList);
+      }
+      return list;
     },
     formatPressureListAM() {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
@@ -943,7 +1021,7 @@ export default {
       const list = this.vitalSigns.filter(
         (x) =>
           x.vital_code === "3" &&
-          (x.value.includes("手术") ||
+          ( x.value.includes("手术") ||
             x.value.includes("分娩|") ||
             x.value.includes("手术分娩|") ||
             x.value.includes("手术入院|"))
@@ -968,7 +1046,7 @@ export default {
         if (obj[date].length > 0) {
           deliveryObj = obj[date].find((obj) => obj.value.includes("分娩"));
           for (let i = obj[date].length - 1; i >= 0; i--) {
-            if (obj[date][i].value.includes("分娩")) {
+            if (obj[date][i].value.includes("分娩") || obj[date][i].value.includes("手术结束")) {
               obj[date].splice(i, 1);
             }
           }
@@ -1003,7 +1081,7 @@ export default {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
           return index === 0
             ? days[index]
-            : `${this.numToRome(index + 1)}-${days[index]}`;
+            : `${this.numToRome(index + 1 )}-${days[index]}`;
         } else {
           return "";
         }
@@ -1129,8 +1207,7 @@ export default {
       }
     },
     clickDateChangeTime(dateTime) {
-      console.log("点击======》dateTime", dateTime);
-      if (dateTime.time)
+      if (dateTime && dateTime.time)
         window.parent.postMessage(
           { type: "clickDateTime", value: dateTime.time },
           "*"
@@ -1335,7 +1412,7 @@ export default {
         }
 
         if (
-          ["4", "41", "42", "43", "5", "6"].includes(vitalSigns[i].vital_code)
+          ["4","5", "6", "41", "42", "43", '44'].includes(vitalSigns[i].vital_code)
         ) {
           const sign = vitalSigns[i].temperature_type;
           switch (vitalSigns[i].vital_code) {
@@ -1381,20 +1458,20 @@ export default {
               });
               this.customList2.label = sign;
               break;
-            case "44":
-              this.customList3.push({
-                time: vitalSigns[i].time_point,
-                value: vitalSigns[i].value,
-              });
-              this.customList3.label = sign;
-              break;
-            case "45":
-              this.customList4.push({
-                time: vitalSigns[i].time_point,
-                value: vitalSigns[i].value,
-              });
-              this.customList4.label = sign;
-              break;
+            // case "44":
+            //   this.customList3.push({
+            //     time: vitalSigns[i].time_point,
+            //     value: vitalSigns[i].value,
+            //   });
+            //   this.customList3.label = sign;
+            //   break;
+            // case "45":
+            //   this.customList4.push({
+            //     time: vitalSigns[i].time_point,
+            //     value: vitalSigns[i].value,
+            //   });
+            //   this.customList4.label = sign;
+            //   break;
             default:
               break;
           }
@@ -1754,7 +1831,6 @@ export default {
         1 +
         (this.yRange[1] - this.yRange[0]) * 4;
       let preSpace = 0;
-      console.log("totalLine==", totalLine);
       for (let i = 0; i < totalLine; i++) {
         const isBreak = i % 5 === 0 && i > 0 && i < totalLine - 1;
         const lineWidth = isBreak ? 3 : 2;
@@ -2666,7 +2742,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 0mm 0mm -40mm 0mm; // 页面的边距
+    margin: 0mm 0mm -60mm 0mm; // 页面的边距
   }
   .main-view {
     transform: scale(0.83);
@@ -2687,7 +2763,7 @@ export default {
 }
 
 .main-view {
-  padding: 5px 0;
+  padding: 0px 0;
   margin: 0 auto;
   font-size: 18px;
   color: #000;
@@ -2703,7 +2779,7 @@ export default {
   }
   .head-hos {
     font-family: SimHei;
-    font-size: 38px;
+    font-size: 100px;
     font-weight: bold;
 
     img {
@@ -2892,10 +2968,10 @@ export default {
       }
     }
 
-    .temp {
+    /* .temp {
       .text {
       }
-    }
+    } */
 
     .temp :nth-child(2) > span {
       margin-top: 7px;

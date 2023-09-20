@@ -980,6 +980,7 @@ export default {
       window.parent.postMessage({ type: "pageTotal", value }, "*");
     },
     currentPage(value) {
+      this.heartPulseXyMap = new Map();
       if (!this.isPrintAll) {
         window.parent.postMessage({ type: "currentPage", value }, "*");
       }
@@ -1705,6 +1706,7 @@ export default {
               }
             })
           }
+          ['02'].includes(x.vital_code) && console.log('pulse', data, this.bottomSheetNote)
           //如果表底注释包含不在则跳过
           data.forEach((z) => {
             // console.log("z===",z)

@@ -684,14 +684,22 @@ export default {
         const item = { timeNum: i, value: "" };
         // 当天存在手术，左侧血压为小于手术时间且最接近手术时间的血压值，右侧为大于手术时间且最接近手术时间的血压值
         if (hasOperate) {
-          const left = JSON.parse(JSON.stringify(pressureList)).reverse().find(
-            p => this.getTimeNum(p.time) < this.getTimeNum(hasOperate.time)
-          );
-          const right = pressureList.find(p => this.getTimeNum(p.time) > this.getTimeNum(hasOperate.time));
-          if (!list[k].value) {
+          const left = JSON.parse(JSON.stringify(pressureList)).reverse().find(p => {
+            return (
+              this.getTimeNum(p.time) < this.getTimeNum(hasOperate.time) 
+              && moment(p.time).format('YYYY-MM-DD') === moment(hasOperate.time).format('YYYY-MM-DD')
+            )
+          });
+          const right = pressureList.find(p => {
+            return (
+              this.getTimeNum(p.time) > this.getTimeNum(hasOperate.time)
+              && moment(p.time).format('YYYY-MM-DD') === moment(hasOperate.time).format('YYYY-MM-DD')
+            )
+          });
+          if (!list[k].value && left) {
             list[k] = { timeNum: i, value: left.value };
           }
-          if (!list[k + 1].value) {
+          if (!list[k + 1].value && right) {
             list[k + 1] = { timeNum: i, value: right.value };
           }
           continue;
@@ -747,14 +755,14 @@ export default {
         const item = { timeNum: i, value: "" };
         const date = moment(i).format('YYYY-MM-DD');
         const hasTemperaturePoint = tList.find(item => moment(item.time).format('YYYY-MM-DD') === date);
-        if (!hasTemperaturePoint) continue;
+        // if (!hasTemperaturePoint) continue;
         for (let j = breatheList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(breatheList[j].time);
           if (timeNum >= i && timeNum < i + timeAdd(i)) {
             if (['R', 'r'].includes(breatheList[j].value)) {
               breatheList[j].value = '®'
             }
-            item.value = breatheList[j].value;
+            item.value = breatheList[j].value
             breatheList.splice(j, 1);
             break;
           }
@@ -2075,13 +2083,19 @@ export default {
                 ...this.settingMap.oralTemperature.data,
                 ...this.settingMap.axillaryTemperature.data,
                 ...this.settingMap.analTemperature.data,
-              ].map((x) => {
+              ]
+              // 相同日期没有体温点脉搏心率呼吸不画线
+              const date = moment(x.time).format('YYYY-MM-DD');
+              const hasTemperaturePoint = tList.find(item => moment(item.time).format('YYYY-MM-DD') === date);
+              if (!hasTemperaturePoint) break;
+
+              const tPointList = tList.map((x) => {
                 return {
                   x: this.getXaxis(this.getLocationTime(x.time)),
                   y: this.getYaxis(this.yRange, x.value),
                 };
               });
-              const sameAxisItem = tList.find(
+              const sameAxisItem = tPointList.find(
                 (x) =>
                   Math.abs(x.x.toFixed(2) - cx.toFixed(2)) >= 0 &&
                   Math.abs(x.x.toFixed(2) - cx.toFixed(2)) <= 4 &&

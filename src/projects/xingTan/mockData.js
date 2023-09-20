@@ -117,7 +117,18 @@ export const mockData = {
       time_point: "2021-12-08 12:00:00",
       vital_code: "033",
     },
-
+    {
+      temperature_type: "总出量",
+      value: "1000",
+      time_point: "2021-12-08 12:00:00",
+      vital_code: "19",
+    },
+    {
+      temperature_type: "总入量",
+      value: "1000",
+      time_point: "2021-12-08 12:00:00",
+      vital_code: "091",
+    },
     {
       temperature_type: "血压",
       value: "115/78",

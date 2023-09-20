@@ -176,10 +176,10 @@
             </div>
           </div>
         </div>
-        <div class="row font-14" :style="{ height: `${trHeight}px` }">
+        <div class="row font-16" :style="{ height: `${trHeight}px` }">
           <div class="label" :style="{ width: `${leftWidth}px` }">总出量(ml)</div>
           <div class="value-item-box">
-            <div class="value-item font-14" v-for="(item, index) in getFormatList({ tList: outputList })"
+            <div class="value-item font-16" v-for="(item, index) in getFormatList({ tList: outputList })"
               @click="() => clickDateChangeTime(item)" :key="index" v-html="item.value"></div>
           </div>
         </div>
@@ -340,7 +340,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -1029,7 +1029,7 @@ export default {
           case "12":
             this.urineList.push(item);
             break;
-          case "34":
+          case "19":
             this.outputList.push(item);
             break;
           case "27":

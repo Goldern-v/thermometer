@@ -1,6 +1,5 @@
 <template>
-  <!-- <div v-if="printData" style="height:100%"> -->
-  <div v-if="printData">
+  <div v-if="printData" style="height:100%">
     <Thermometer
       ref="thermometer"
       :printData="printData"
@@ -13,8 +12,8 @@
   </div>
 </template>
 <script>
-import Thermometer from "./thermometer.vue";
-import { mockData } from "src/projects/liaoBu/mockData.js";
+import Thermometer from "./printTem.vue";
+import { mockData } from "src/projects/sdhpwk/mockData.js";
 import { common , getNurseExchangeInfoBatch } from "src/api/index.js"
 
 export default {
@@ -79,7 +78,7 @@ export default {
             let nurseExchangeInfo = res.data.data.exchangeInfos
             this.$nextTick(() => {
               for (let i = 0; i < this.$refs.thermometer.length; i++) {
-                this.$refs.thermometer[i].adtLog = nurseExchangeInfo[i].adtLog
+                this.$refs.thermometer[i].adtLog = nurseExchangeInfo[i].adtLogWardName
                 this.$refs.thermometer[i].bedExchangeLog = nurseExchangeInfo[i].bedExchangeLog
               }
             })
@@ -103,13 +102,13 @@ export default {
 </script>
 
 <style>
-/* @media print {
+@media print {
   @page {
     size: a4; 
     margin: 8mm 5mm 8mm 5mm; 
   }
 
-} */
+}
 .printBreak {
   page-break-after: always;
 }

@@ -801,7 +801,6 @@ export default {
        });
       }
       const allList = [...xyMap.entries()].sort((a, b) => a[0] - b[0]);
-      console.log('allList: ', allList);
       if (allList.length) {
         let data = [[]];
         allList.forEach((x, index) => {
@@ -833,7 +832,6 @@ export default {
             data.push([x[0]]);
           }
         });
-        console.log('data', data)
         data = data.map((x) => {
           return [
             ...x.map((y) => [`${y+2} ${xyMap.get(y).heart.y}`]),
@@ -843,7 +841,6 @@ export default {
             return acc.concat(cur);
           }, []);;
         }).filter((item) => item.length)
-        console.log('data22', data)
         return data;
       }
       return [];
@@ -1286,7 +1283,19 @@ export default {
             break;
         }
       }
+      // 过快的时间和入院的注释的时间在同一时间段，将他调整到入院的后面
+      const admit = this.topSheetNote.find((item,index) => item.value.includes('入院') || item.value.includes('出生'))
+      const admitIndex  = this.topSheetNote.findIndex((item,index) => item.value.includes('入院') || item.value.includes('出生'))
+      const hyperIndex = this.topSheetNote.findIndex((items,index) => items.value.includes('过快') && admit  && items.itme == admit.itme)
+      console.log(hyperIndex, admitIndex);
 
+      if(hyperIndex != -1 && admitIndex!= -1 && hyperIndex < admitIndex){
+        let temp = this.topSheetNote[hyperIndex];
+        this.topSheetNote[hyperIndex] = this.topSheetNote[admitIndex];
+        this.topSheetNote[admitIndex] = temp;
+      }
+
+      
       //如果是新生儿  就去新生儿界面Init生成列表      //先计算是否存在相同的时间的脉搏心率，如果存在 就说明画了房颤
       //接着  计算脉搏心率相同的数组 筛选出跟录入心率相同的数组
       // 如果 数组的下标index 是123456 这种 就说明  连续的录入脉搏心率 如果中间断开 就说明录入了脉搏 没录入心率

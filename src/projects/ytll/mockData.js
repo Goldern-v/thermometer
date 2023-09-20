@@ -3398,9 +3398,10 @@ vitalSigns:[
     {
         "temperature_type": "表底注释",
         "value": "不升",
-        "time_point": "2023-03-02 15:00:00",
+        "time_point": "2023-03-01 15:00:00",
         "vital_code": "4"
     },
+    
     {
         "temperature_type": "大便次数",
         "value": "1",
@@ -3492,11 +3493,24 @@ vitalSigns:[
         "vital_code": "01"
     },
     {
+        "temperature_type": "脉搏",
+        "value": "300",
+        "time_point": "2023-03-02 15:00:00",
+        "vital_code": "02"
+    },
+    {
         "temperature_type": "表顶注释",
         "value": "出生||十四时十九分",
-        "time_point": "2023-03-02 14:19:24",
+        "time_point": "2023-03-02 15:00:00",
         "vital_code": "5"
     },
+    {
+        "temperature_type": "表顶注释",
+        "value": "入院||十四时十九分",
+        "time_point": "2023-03-02 15:00:00",
+        "vital_code": "5"
+    },
+    
     {
         "temperature_type": "表顶注释",
         "value": "出院||十四时零分",

@@ -75,6 +75,8 @@
     "build:songTao": "vue-cli-service build --project=songTao",
     "dev:zjhj": "vue-cli-service serve --project=zjhj",
     "build:zjhj": "vue-cli-service build --project=zjhj",
+    "dev:sdhpwk": "vue-cli-service serve --project=sdhpwk",
+    "build:sdhpwk": "vue-cli-service build --project=sdhpwk",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
