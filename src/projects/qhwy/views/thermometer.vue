@@ -2750,6 +2750,7 @@ export default {
 
   .main-view {
     transform: scaleX(0.85);
+    margin: 0 !important;
   }
 }
 
