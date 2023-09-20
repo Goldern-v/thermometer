@@ -653,7 +653,7 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [2, 6, 10, 14, 18, 22];
+      const list = [4,8,12,4,8,12];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
@@ -999,7 +999,7 @@ export default {
             this.scaleData = 1
           }else{
             this.scaleData = this.getScale()
-            
+
           }
           this.scaleFlag = e.data.value
 
@@ -1386,7 +1386,7 @@ export default {
               }
             }
           }
-        } 
+        }
         //如果没有BMI  直接判断是否有身高体重  然后把计算后的值渲染
         else {
           if (heightList.length > 0 && weightList.length > 0) {
@@ -2115,7 +2115,7 @@ export default {
             // })
             // if(this.topSheetNote[index].value.includes('入院')&&this.topSheetNote[i].value.includes('入院')){
             //   this.topSheetNote.splice(index,1)
-              
+
             // }else{
             xaxisList[i] += this.xSpace + 2;
             // }
@@ -2186,8 +2186,8 @@ export default {
     margin: 8mm 5mm 8mm 5mm; // 页面的边距
   }
   .main-view {
-    transform: scale(1)!important; 
-    transform: scaleY(0.96)!important; 
+    transform: scale(1)!important;
+    transform: scaleY(0.96)!important;
   }
 }
 .main-view {
