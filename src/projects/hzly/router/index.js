@@ -7,17 +7,17 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/thermometer.vue')
+    component: () => import('src/projects/hzly/views/thermometer.vue')
   },
   {
     path: '/detailed',
     name: 'Detailed',
-    component: () => import('../views/detailed.vue')
+    component: () => import('src/projects/hzly/views/detailed.vue')
   },
   {
     path: '/printAll',
     name: 'Print',
-    component: () => import('../views/print.vue')
+    component: () => import('src/projects/hzly/views/print.vue')
   }
 ]
 

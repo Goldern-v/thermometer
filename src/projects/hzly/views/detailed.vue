@@ -51,7 +51,7 @@
 </template>
 <script>
 import zrender from "zrender";
-import { mockData } from "src/projects/foShanShiYi/mockData.js";
+import { mockData } from "src/projects/hzly/mockData.js";
 import { common } from "src/api/index.js";
 
 export default {
