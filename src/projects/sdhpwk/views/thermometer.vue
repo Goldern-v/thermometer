@@ -702,7 +702,7 @@ export default {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const breatheList = [...this.breatheList];
-      // 根据医院要求，0-6点落在当天第一个格子，22-24点落在当天最后一个格子，所以特殊处理每天第一个格子和最后一个格子的落点
+      // 根据医院要求，0-7点落在当天第一个格子，23-24点落在当天最后一个格子，所以特殊处理每天第一个格子和最后一个格子的落点
       const timeNumList = this.dateList.map((x) => {
         return {
           start: this.getTimeNum(`${x} 00:00:00`),
@@ -710,7 +710,12 @@ export default {
         }
       })
       const timeAdd = (i) => {
-        return 4 * 60 * 60 * 1000;
+
+        return timeNumList.some((x) => x.start === i)
+        ? 7 * 60 *60 * 1000
+        : timeNumList.some((x) => x.end - 1 * 60 * 60 * 1000 === i)
+        ? 1 * 60 * 60 * 1000
+        : 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
@@ -1914,16 +1919,18 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "06:59:59"],
-        "06:00:00": ["07:00:00", "10:59:59"],
-        "10:00:00": ["11:00:00", "14:59:59"],
-        "14:00:00": ["13:00:00", "18:59:59"],
-        "18:00:00": ["19:00:00", "22:59:59"],
-        "22:00:00": ["23:00:00", "23:59:59"],
+        "02:00:00": ["00:00:00", "06:59:59"],//7
+        "06:00:00": ["07:00:00", "10:59:59"],//4
+        "10:00:00": ["11:00:00", "14:59:59"],//4
+        "14:00:00": ["15:00:00", "18:59:59"],//4
+        "18:00:00": ["19:00:00", "22:59:59"],//4
+        "22:00:00": ["23:00:00", "23:59:59"],//1
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
           const item = timeAreasMap[key];
+          // console.log(this.getTotalSeconds(item[0]),'this.getTotalSeconds(item[0])');
+          // console.log(this.getTotalSeconds(item[1]),'this.getTotalSeconds(item[1])');
           if (
             sec >= this.getTotalSeconds(item[0]) &&
             sec <= this.getTotalSeconds(item[1])
@@ -1933,6 +1940,7 @@ export default {
           }
         }
       }
+      console.log(`${time.slice(0, -8)}${str}`);
       return `${time.slice(0, -8)}${str}`;
     },
     // 根据时分秒00:00:00计算总秒数
