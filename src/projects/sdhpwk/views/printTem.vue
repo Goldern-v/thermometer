@@ -358,7 +358,7 @@
               ></div>
             </div>
           </div>
-          <div class="row" :style="{ height: `${trHeight}px` }">
+          <div class="row" :style="{ height: `${2*trHeight}px` }">
             <div class="label" :style="{ width: `${leftWidth}px` }">皮试</div>
             <div class="value-item-box">
               <div
@@ -658,7 +658,7 @@ export default {
       return tds;
     },
     trHeight() {
-      return this.ySpace +5;
+      return this.ySpace +4;
     },
 
     maTds() {
@@ -2135,7 +2135,8 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 8mm 5mm 8mm 5mm; // 页面的边距
+    margin: 1.7cm 5mm 1.7cm 1.7cm; // 页面的边距
+    transform: scale(0.95);
   }
   .main-view {
     transform: scale(1)!important; 
