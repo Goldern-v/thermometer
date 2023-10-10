@@ -272,7 +272,7 @@
         </div>
 
         <div>
-          <div class="left_box" :style="{ height: `${60}px` }">
+          <div class="left_box" :style="{ height: `${57}px` ,paddingTop:0}">
             排<br />出<br />量
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
@@ -2135,7 +2135,7 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 1.7cm 5mm 1.7cm 1.7cm; // 页面的边距
+   margin: 1cm 5mm 1.7cm 1cm; // 页面的边距
     transform: scale(0.95);
   }
   .main-view {

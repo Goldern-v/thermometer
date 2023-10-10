@@ -105,7 +105,7 @@ export default {
 @media print {
   @page {
     size: a4; 
-    margin: 1.7cm 5mm 1.7cm 1.7cm; 
+    margin: 1cm 5mm 1.7cm 1cm; 
     transform: scale(0.95);
   }
 
