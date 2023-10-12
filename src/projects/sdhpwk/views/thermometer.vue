@@ -5,7 +5,11 @@
     @dblclick="dblclick"
     class="main-view"
     v-if="apiData"
-    :style="{ width: `${leftWidth + areaWidth}px` ,transform:`scale(${scaleData})`,transformOrigin:'0 0'}">
+    :style="{
+       width: `${leftWidth + areaWidth}px`,
+       transform: scaleFlag ? `scale(${scaleData}) translateX(185px)` : `scale(${scaleData})`,
+       transformOrigin:'0 0'
+    }">
     <div class="head-hos">顺德和平外科医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
@@ -501,7 +505,7 @@ export default {
       ySpace: 15, //  横向网格的间距
       leftWidth: 145, // 左侧内容宽度
       xRange: [1, 8],
-      scaleData:this.getScale(),
+      scaleData:0.70,
       scaleFlag:true,
       yRange,
       PatientId: "",
@@ -559,6 +563,16 @@ export default {
           data: [
             // { time: '2019-05-15 07:10:00', value: 140},
           ],
+        },
+        // 脉搏心率一起连
+        pulse_heart: {
+          vitalCode: "ph",
+          label: "",
+          color: "red",
+          lineColor: "red",
+          dotType: "",
+          range: pulseRange,
+          data: [],
         },
       }, // 折线部分
       topSheetNote: [
@@ -908,6 +922,17 @@ export default {
     window.removeEventListener("message", this.messageHandle, false);
   },
   methods: {
+    //操作自定义的显示位置，存在空的自定义时 往上推不留空
+    handleCustomList() {
+      for (let k = 0; k < 3; k++) {
+        for (let j = k - 1; j >= 0; j--) {
+          if (this[`customList${j}`].length === 0) {
+            this[`customList${j}`] = this[`customList${k}`];
+            this[`customList${k}`] = [];
+          }
+        }
+      }
+    },
     smallTdStyle(index) {
       return {
         width: `${this.xSpace + ((index - 5) % 6 === 0 ? 3 : 2)}px`,
@@ -1003,7 +1028,7 @@ export default {
           if(!e.data.value){
             this.scaleData = 1
           }else{
-            this.scaleData = this.getScale()
+            this.scaleData = 0.70
 
           }
           this.scaleFlag = e.data.value
@@ -1020,7 +1045,7 @@ export default {
       if(this.scaleFlag) {
         this.scaleData = 1
       }else{
-        this.scaleData = this.getScale()
+        this.scaleData = 0.70
       }
       this.scaleFlag = (!this.scaleFlag)
     },
@@ -1175,10 +1200,16 @@ export default {
           }
         }
         if (this.lineMap[vitalSigns[i].vital_code]) {
-          this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push({
+         const point = {
             time: vitalSigns[i].time_point,
             value: Number(vitalSigns[i].value),
-          });
+          };
+          this.settingMap[this.lineMap[vitalSigns[i].vital_code]].data.push(
+            point
+          );
+          if (["02", "20"].includes(vitalSigns[i].vital_code)) {
+            this.settingMap.pulse_heart.data.push(point);
+          }
           continue;
         }
         const item = {
@@ -1258,16 +1289,59 @@ export default {
         this.yLine(); //生成Y轴坐标
         this.xLine(); //生成X轴坐标
         Object.values(this.settingMap).forEach((x) => {
-          this.createBrokenLine({
-            vitalCode: x.vitalCode,
-            data: x.data,
-            yRange: x.range,
-            lineColor: x.lineColor || x.color,
-            label: x.label,
-            dotColor: x.color,
-            dotSolid: x.solid,
-            dotType: x.dotType,
+          let data = [x.data];
+          // 脉搏、心率 02 20 
+          if (
+            ["02", "20"].includes(
+              x.vitalCode
+            )
+          ) {
+            data = [[]];
+            x.data.forEach((y, index) => {
+              data[data.length - 1].push(y);
+              if (index < x.data.length - 1) {
+                // 超过一天的时间点，中间断开
+                // ['02', '20'].includes(x.vitalCode)脉搏心率只画点，脉搏心率的画线由pulse_heart负责
+                if (
+                  this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
+                    this.getTimeNum(y.time.slice(0, 10)) >=
+                    24 * 60 * 60 * 1000 * 2 ||
+                  ["02", "20"].includes(x.vitalCode)
+                ) {
+                  data.push([x.data[index + 1]]);
+                }
+               
+              } else {
+                const list = data[data.length - 1];
+                if (!(list.length && list[list.length - 1].time === y.time)) {
+                  data[data.length - 1].push(y);
+                }
+              }
+            });
+          }
+          data.forEach((z) => {
+            this.createBrokenLine({
+              vitalCode: x.vitalCode,
+              data: z,
+              yRange: x.range,
+              lineColor: x.lineColor || x.color,
+              label: x.label,
+              dotColor: x.color,
+              dotSolid: x.solid,
+              dotType: x.dotType,
+            });
           });
+          // this.createBrokenLine({
+          //   vitalCode: x.vitalCode,
+          //   data: x.data,
+          //   yRange: x.range,
+          //   lineColor: x.lineColor || x.color,
+          //   label: x.label,
+          //   dotColor: x.color,
+          //   dotSolid: x.solid,
+          //   dotType: x.dotType,
+          // });
+          this.handleCustomList();
         });
         // 画线上降温，画红圈不用连线
         this.onLineCoolList.forEach((x) => {
