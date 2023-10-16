@@ -746,8 +746,12 @@ export default {
       });
       return listNew.map((x) => x.time_point);
     },
-    formatOperateDateList() {
+     formatOperateDateList() {
+      // 手术或产后日数
+      let foundDeath = false; // 用于标记是否找到 "死亡"
+      let istodayDeath = false; // 用于标记今天是否死亡
       return this.dateList.map((x) => {
+        istodayDeath = false
         let tomorrow = moment(new Date()).add(1, "d").format("YYYY-MM-DD");
         let today = moment(new Date()).format("YYYY-MM-DD");
         this.topSheetNote.forEach((y) => {
@@ -756,6 +760,10 @@ export default {
             (y.value.includes("出院") || y.value.includes("转出"))
           ) {
             today = tomorrow;
+          }
+          if (y.value.includes("死亡") &&  (moment(y.time).format("YYYY-MM-DD")==x) && !foundDeath) {
+            istodayDeath = true
+            foundDeath = true;
           }
         });
         //1.如果当前日期>出院日期，则停止计算
@@ -774,8 +782,12 @@ export default {
         for (let i = 0; i < days.length; i++) {
           if (days[i] >= 0) index = i;
         }
-        if (days[index] <= 10) {
+        if (days[index] <= 10 && !foundDeath) {
           /* 跨页处理：根据页码对分娩、手术后日期的次数进行赋值，idx=[0] */
+          return index === 0
+            ? days[index]
+            : `${this.numToRome(index + 1)}-${days[index]}`;
+        } else if(foundDeath && istodayDeath){
           return index === 0
             ? days[index]
             : `${this.numToRome(index + 1)}-${days[index]}`;
@@ -785,7 +797,12 @@ export default {
       });
     },
     formatStayDayList() {
+      // 住院日数
+      let foundDeath = false; // 用于标记是否找到 "死亡"
+      let istodayDeath = false; // 用于标记今天是否死亡
+      console.log('this.dataList',this.dateList)
       return this.dateList.map((x) => {
+        istodayDeath = false
         let tomorrow = moment(new Date()).add(1, "d").format("YYYY-MM-DD");
         let today = moment(new Date()).format("YYYY-MM-DD");
         this.topSheetNote.forEach((y) => {
@@ -795,10 +812,18 @@ export default {
           ) {
             today = tomorrow;
           }
+          if (y.value.includes("死亡") &&  (moment(y.time).format("YYYY-MM-DD")==x) && !foundDeath) {
+            foundDeath = true;
+            istodayDeath= true
+          }
         });
         if (this.dayInterval(x, today) > 0) return "";
         if (this.dayInterval(x, this.getLeaveTime()) > 0) return "";
-        return this.dayInterval(x, this.patInfo.admission_date) + 1;
+        if(foundDeath && !istodayDeath){
+          return''
+        }else{
+          return this.dayInterval(x, this.patInfo.admission_date) + 1;
+        }
       });
     },
     formatDateList() {
