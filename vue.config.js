@@ -358,6 +358,8 @@ module.exports = {
               return "http://172.17.5.41:9091";
             case "ytll":
               return "http://192.168.254.92:9091";
+            case "sdhpwk":
+              return "http://202.104.27.221:9091";
             default:
               return "http://218.14.180.38:9091";
           }
