@@ -16,18 +16,36 @@ export const mockData = {
     },
   },
   vitalSigns: [
-    // {
-    //   temperature_type: "体温",
-    //   value: "38.7",
-    //   time_point: "2021-11-08 09:00:00",
-    //   vital_code: "01",
-    // },
-    // {
-    //   temperature_type: "测试",
-    //   value: "38.7",
-    //   time_point: "2021-12-08 05:59:00",
-    //   vital_code: "41",
-    // },
+    {
+      temperature_type: "皮试",
+      value: "头孢呋辛钠(+)",
+      time_point: "2021-11-08 09:00:00",
+      vital_code: "30",
+    },
+    {
+      temperature_type: "皮试",
+      value: "头孢呋辛钠(-)",
+      time_point: "2021-11-08 09:00:00",
+      vital_code: "30",
+    },
+    {
+      temperature_type: "皮试",
+      value: "11点的测试",
+      time_point: "2021-11-08 11:00:00",
+      vital_code: "30",
+    },
+    {
+      temperature_type: "血压",
+      value: "38.9",
+      time_point: "2021-11-08 09:59:00",
+      vital_code: "062",
+    },
+    {
+      temperature_type: "血压",
+      value: "38.9",
+      time_point: "2021-11-08 09:59:00",
+      vital_code: "062",
+    },
     // {
     //   temperature_type: "体温",
     //   value: "38.7",

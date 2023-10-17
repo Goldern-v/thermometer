@@ -364,15 +364,22 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${2*trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">皮试</div>
+            <div
+            class="label"
+            :style="{ width: `${leftWidth}px` }"
+            >
+              皮试
+            </div>
             <div class="value-item-box">
               <div
                 class="value-item font-13"
-                v-for="(item, index) in getFormatList({ tList: skinTest })"
+                v-for="(item, index) in formatSkinTestList"
                 :key="index"
-                v-html="item.value"
+
                 @click="()=>clickDateChangeTime(item)"
-              ></div>
+              >
+              {{ (item[0] || {}).value || (item[1] || {}).value}}
+              </div>
             </div>
           </div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
@@ -496,7 +503,7 @@ export default {
     const yRange = [33, 42];
     const pulseRange = [0, 180];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -599,7 +606,7 @@ export default {
       feverList: [], // 发热体温
       otherList: [],
       otherList2: [],
-      skinTest: [],
+      skinTest: [],//皮试
       outCustomList:[],
       customList0: [], // 自定义1
       customList1: [], // 自定义2
@@ -709,6 +716,32 @@ export default {
       }
       return list;
     },
+    //按医院要求，皮试结果一天可录入两个，写的不好轻喷。
+ formatSkinTestList() {
+  const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+  const list = [];
+  const skinTest = [...this.skinTest];
+  const oneDay = 24 * 60 * 60 * 1000;
+  for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += oneDay) {
+    const dayList = [];
+    for (let j = 0; j < skinTest.length; j++) {
+      const item = { timeNum: i, value: "" };
+      const timeNum = this.getTimeNum(skinTest[j].time);
+      if (timeNum > i && timeNum <= i + oneDay) {
+        const existingItem = dayList.find((x) => x.timeNum === i);
+        if (existingItem) {
+          existingItem.value += `, ${skinTest[j].value}`; // 使用逗号进行拼接
+        } else {
+          item.value += skinTest[j].value;
+          item.time = skinTest[j].time;
+          dayList.push(item);
+        }
+      }
+    }
+    list.push(dayList);
+  }
+  return list;
+},
     timesTempAreaHeight() {
       return this.areaHeight;
     },
@@ -1290,7 +1323,7 @@ export default {
         this.xLine(); //生成X轴坐标
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data];
-          // 脉搏、心率 02 20 
+          // 脉搏、心率 02 20
           if (
             ["02", "20"].includes(
               x.vitalCode
@@ -1310,7 +1343,7 @@ export default {
                 ) {
                   data.push([x.data[index + 1]]);
                 }
-               
+
               } else {
                 const list = data[data.length - 1];
                 if (!(list.length && list[list.length - 1].time === y.time)) {
@@ -2380,6 +2413,7 @@ export default {
     .value-item {
       flex: 1;
       display: flex;
+      // display: inline-block;
       align-items: center;
       justify-content: center;
       height: 100%;
