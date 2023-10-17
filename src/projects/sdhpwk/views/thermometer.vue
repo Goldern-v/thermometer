@@ -277,7 +277,7 @@
         </div>
 
         <div>
-          <div class="left_box" :style="{ height: `${57}px` ,paddingTop:0}">
+          <div class="left_box" :style="{ height: `${trHeight * 3}px` ,paddingTop:0}">
             排<br />出<br />量
           </div>
           <div class="row" :style="{ height: `${trHeight}px` }">
@@ -682,7 +682,7 @@ export default {
       return tds;
     },
     trHeight() {
-      return this.ySpace +4;
+      return this.ySpace + 9 ;
     },
 
     maTds() {
@@ -2298,12 +2298,12 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-    margin: 1cm 5mm 1.7cm 1cm; // 页面的边距
-    transform: scale(0.95);
+    margin: 0.3cm 5mm 0.1cm 1cm; // 页面的边距
+    /* transform: scale(0.95); */
   }
   .main-view {
     transform: scale(1)!important;
-    transform: scaleY(0.96)!important;
+    /* transform: scaleY(0.96)!important; */
   }
 }
 .main-view {
