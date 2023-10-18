@@ -753,8 +753,10 @@ export default {
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
-        const date = moment(i).format('YYYY-MM-DD');
-        const hasTemperaturePoint = tList.find(item => moment(item.time).format('YYYY-MM-DD') === date);
+        const date = moment(i).format('YYYY-MM-DD HH:mm:ss');
+        const hasTemperaturePoint = tList.find(
+          item => this.getLocationTime(item.time) === this.getLocationTime(date)
+        );
         if (hasTemperaturePoint) {
           for (let j = breatheList.length - 1; j >= 0; j--) {
             const timeNum = this.getTimeNum(breatheList[j].time);
@@ -944,7 +946,7 @@ export default {
       settingMap.heart.data.forEach((x) => {
         // 相同日期没有体温点脉搏心率呼吸不画线
         const hasTemperaturePoint = tList.find(
-          item => moment(item.time).format('YYYY-MM-DD') === moment(x.time).format('YYYY-MM-DD')
+          item => this.getLocationTime(item.time) === this.getLocationTime(x.time)
         );
         if (!hasTemperaturePoint) return;
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
@@ -971,7 +973,7 @@ export default {
       settingMap.pulse.data.forEach((x) => {
         // 相同日期没有体温点脉搏心率呼吸不画线
         const hasTemperaturePoint = tList.find(
-          item => moment(item.time).format('YYYY-MM-DD') === moment(x.time).format('YYYY-MM-DD')
+          item => this.getLocationTime(item.time) === this.getLocationTime(x.time)
         );
         if (!hasTemperaturePoint) return;
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
@@ -1660,7 +1662,7 @@ export default {
             x.data.forEach((y, index) => {
               // 相同日期没有体温点脉搏心率呼吸不画线
               const hasTemperaturePoint = tList.find(
-                item => moment(item.time).format('YYYY-MM-DD') === moment(y.time).format('YYYY-MM-DD')
+                item => this.getLocationTime(item.time) === this.getLocationTime(y.time)
               );
               if (!hasTemperaturePoint) return;
 
@@ -2086,8 +2088,9 @@ export default {
                 ...this.settingMap.analTemperature.data,
               ]
               // 相同日期没有体温点脉搏心率呼吸不画线
-              const date = moment(x.time).format('YYYY-MM-DD');
-              const hasTemperaturePoint = tList.find(item => moment(item.time).format('YYYY-MM-DD') === date);
+              const hasTemperaturePoint = tList.find(
+                item => this.getLocationTime(item.time) === this.getLocationTime(x.time)
+              );
               if (!hasTemperaturePoint) break;
 
               const tPointList = tList.map((x) => {
