@@ -755,16 +755,17 @@ export default {
         const item = { timeNum: i, value: "" };
         const date = moment(i).format('YYYY-MM-DD');
         const hasTemperaturePoint = tList.find(item => moment(item.time).format('YYYY-MM-DD') === date);
-        // if (!hasTemperaturePoint) continue;
-        for (let j = breatheList.length - 1; j >= 0; j--) {
-          const timeNum = this.getTimeNum(breatheList[j].time);
-          if (timeNum >= i && timeNum < i + timeAdd(i)) {
-            if (['R', 'r'].includes(breatheList[j].value)) {
-              breatheList[j].value = '®'
+        if (hasTemperaturePoint) {
+          for (let j = breatheList.length - 1; j >= 0; j--) {
+            const timeNum = this.getTimeNum(breatheList[j].time);
+            if (timeNum >= i && timeNum < i + timeAdd(i)) {
+              if (['R', 'r'].includes(breatheList[j].value)) {
+                breatheList[j].value = '®'
+              }
+              item.value = breatheList[j].value
+              breatheList.splice(j, 1);
+              break;
             }
-            item.value = breatheList[j].value
-            breatheList.splice(j, 1);
-            break;
           }
         }
         list.push(item);
