@@ -46,115 +46,115 @@ export const mockData = {
       time_point: "2021-11-08 09:59:00",
       vital_code: "062",
     },
-    // {
-    //   temperature_type: "体温",
-    //   value: "38.7",
-    //   time_point: "2021-12-09 06:00:00",
-    //   vital_code: "01",
-    // },
-    // {
-    //   temperature_type: "体温",
-    //   value: "38.7",
-    //   time_point: "2021-12-09 09:59:00",
-    //   vital_code: "01",
-    // },
-    // {
-    //   temperature_type: "体温",
-    //   value: "38.7",
-    //   time_point: "2021-12-10 14:00:00",
-    //   vital_code: "01",
-    // },
-    // {
-    //   temperature_type: "体温",
-    //   value: "38.7",
-    //   time_point: "2021-12-11 22:00:00",
-    //   vital_code: "01",
-    // },
-    // {
-    //   temperature_type: "体温",
-    //   value: "38.7",
-    //   time_point: "2021-12-12 22:00:00",
-    //   vital_code: "01",
-    // },
-    // {
-    //   temperature_type: "体温",
-    //   value: "38.7",
-    //   time_point: "2021-12-13 22:00:00",
-    //   vital_code: "01",
-    // },
-    // {
-    //   temperature_type: "体温",
-    //   value: "38.7",
-    //   time_point: "2021-12-14 22:00:00",
-    //   vital_code: "01",
-    // },
-    // {
-    //   temperature_type: "呼吸",
-    //   value: "261",
-    //   time_point: "2021-12-12 22:00:00",
-    //   vital_code: "04",
-    // },
+    {
+      temperature_type: "体温",
+      value: "38.7",
+      time_point: "2021-11-09 06:00:00",
+      vital_code: "01",
+    },
+    {
+      temperature_type: "体温",
+      value: "38.7",
+      time_point: "2021-11-09 09:59:00",
+      vital_code: "01",
+    },
+    {
+      temperature_type: "体温",
+      value: "38.7",
+      time_point: "2021-11-10 14:00:00",
+      vital_code: "01",
+    },
+    {
+      temperature_type: "体温",
+      value: "38.7",
+      time_point: "2021-11-11 22:00:00",
+      vital_code: "01",
+    },
+    {
+      temperature_type: "体温",
+      value: "38.7",
+      time_point: "2021-11-12 22:00:00",
+      vital_code: "01",
+    },
+    {
+      temperature_type: "体温",
+      value: "38.7",
+      time_point: "2021-11-13 22:00:00",
+      vital_code: "01",
+    },
+    {
+      temperature_type: "体温",
+      value: "38.7",
+      time_point: "2021-11-14 22:00:00",
+      vital_code: "01",
+    },
+    {
+      temperature_type: "呼吸",
+      value: "261",
+      time_point: "2021-11-12 22:00:00",
+      vital_code: "04",
+    },
 
-    // {
-    //   temperature_type: "其它",
-    //   value: "SpO2:98%",
-    //   time_point: "2021-12-08 12:00:00",
-    //   vital_code: "51",
-    // },
+    {
+      temperature_type: "其它",
+      value: "SpO2:98%",
+      time_point: "2021-11-08 12:00:00",
+      vital_code: "51",
+    },
 
-    // {
-    //   temperature_type: "身高",
-    //   value: "120",
-    //   time_point: "2021-12-08 12:00:00",
-    //   vital_code: "094",
-    // },
+    {
+      temperature_type: "身高",
+      value: "120",
+      time_point: "2021-11-08 12:00:00",
+      vital_code: "094",
+    },
 
-    // {
-    //   temperature_type: "体温",
-    //   value: "38.7",
-    //   time_point: "2021-12-08 12:00:00",
-    //   vital_code: "01",
-    // },
+    {
+      temperature_type: "体温",
+      value: "38.7",
+      time_point: "2021-11-08 12:00:00",
+      vital_code: "01",
+    },
 
-    // {
-    //   temperature_type: "体重",
-    //   value: "22",
-    //   time_point: "2021-12-08 12:00:00",
-    //   vital_code: "033",
-    // },
-    // {
-    //   temperature_type: "身高",
-    //   value: "172",
-    //   time_point: "2021-12-08 12:00:00",
-    //   vital_code: "32",
-    // },
+    {
+      temperature_type: "体重",
+      value: "22",
+      time_point: "2021-11-08 12:00:00",
+      vital_code: "033",
+    },
+    {
+      temperature_type: "身高",
+      value: "172",
+      time_point: "2021-11-08 12:00:00",
+      vital_code: "32",
+    },
 
-    // {
-    //   temperature_type: "血压",
-    //   value: "115/78",
-    //   time_point: "2021-12-08 04:00:00",
-    //   vital_code: "062",
-    // },
-    // {
-    //   temperature_type: "血压",
-    //   value: "200/78",
-    //   time_point: "2021-12-08 04:00:00",
-    //   vital_code: "062",
-    // },
+    {
+      temperature_type: "血压",
+      value: "115/78",
+      time_point: "2021-11-08 04:00:00",
+      vital_code: "062",
+    },
+    {
+      temperature_type: "血压",
+      value: "200/78",
+      time_point: "2021-11-08 04:00:00",
+      vital_code: "062",
+    },
 
-    // {
-    //   temperature_type: "心率",
-    //   value: "115",
-    //   time_point: "2021-12-08 12:00:00",
-    //   vital_code: "20",
-    // },
+    {
+      temperature_type: "心率",
+      value: "115",
+      time_point: "2021-11-08 12:00:00",
+      vital_code: "20",
+    },
 
-    // {
-    //   temperature_type: "体温",
-    //   value: "39.6",
-    //   time_point: "2021-12-08 16:00:00",
-    //   vital_code: "01",
-    // },
+    {
+      temperature_type: "体温",
+      value: "39.6",
+      time_point: "2021-11-08 16:00:00",
+      vital_code: "01",
+    },
 
     {
       temperature_type: "呼吸",
