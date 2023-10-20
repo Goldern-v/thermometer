@@ -488,7 +488,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       showFlage: true,
@@ -600,6 +600,7 @@ export default {
       customList4: [], // 自定义5
       customList5: [], // 自定义6
       coolList: [], // 降温
+      TemporaryTemperature: [], // 临时体温
       copyCoolList: [], // 复制一份降温
       ttgyList: [], // 疼痛干预
       nounList: [], // 腹围
@@ -1163,6 +1164,7 @@ export default {
       this.urineList = [];
       this.outputList = [];
       this.coolList = [];
+      this.TemporaryTemperature = [];
       this.copyCoolList = [];
       this.ttgyList = [];
       this.nounList = [];
@@ -1363,6 +1365,7 @@ export default {
             // 每个区间降温最多只画一个
             if (!this.hasCoolInTimeRange(item.time)) {
               this.coolList.push(item);
+              this.TemporaryTemperature.push(item);
               this.copyCoolList.push(item);
             }
             break;
@@ -1947,6 +1950,34 @@ export default {
                 lineDash: [3, 3],
               });
               this.coolList.splice(i, 1);
+            }
+          }
+          // 画降温
+          for (let i = this.TemporaryTemperature.length - 1; i >= 0; i--) {
+            const item = this.TemporaryTemperature[i];
+            const coolX = this.getXaxis(this.getLocationTime(item.time));
+            const coolY = this.getYaxis(yRange, item.value, vitalCode);
+            if (coolX === cx) {
+              this.createCircle({
+                cx: coolX,
+                cy: coolY,
+                r: 4,
+                color: "red",
+                zlevel: 10,
+                tips: `${item.time} 降温：${item.value}`,
+                dotSolid: false,
+              });
+              this.createLine({
+                x1: cx,
+                y1: cy,
+                x2: coolX,
+                y2: coolY,
+                lineWidth: 1,
+                color: "red",
+                zlevel: 1,
+                lineDash: [3, 3],
+              });
+              this.TemporaryTemperature.splice(i, 1);
             }
           }
           // // 画复试

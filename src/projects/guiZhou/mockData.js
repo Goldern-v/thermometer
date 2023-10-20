@@ -703,6 +703,13 @@ export const mockData = {
       expand2: null
     },
     {
+      temperature_type: '降温',
+      value: '36.2',
+      time_point: '2021-10-30 06:00:00',
+      vital_code: 'TemporaryTemperature',
+      expand2: null
+    },
+    {
       temperature_type: '大便',
       value: '0',
       time_point: '2021-10-30 14:00:00',
