@@ -1822,7 +1822,7 @@ export default {
           top:${y + 100}px;
           left:${x - textWidth / 2 + 40}px;
           display:block;
-          font-size:12px;
+          font-size:18px;
           background-color:rgba(0,0,0,.7);
           padding:5px 2px;
           border-radius:2px;
