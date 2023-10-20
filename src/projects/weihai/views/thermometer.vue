@@ -686,7 +686,7 @@ export default {
         if (hasOperate) {
           const left = JSON.parse(JSON.stringify(pressureList)).reverse().find(p => {
             return (
-              this.getTimeNum(p.time) < this.getTimeNum(hasOperate.time) 
+              this.getTimeNum(p.time) < this.getTimeNum(hasOperate.time)
               && moment(p.time).format('YYYY-MM-DD') === moment(hasOperate.time).format('YYYY-MM-DD')
             )
           });
@@ -755,8 +755,9 @@ export default {
         const item = { timeNum: i, value: "" };
         const date = moment(i).format('YYYY-MM-DD HH:mm:ss');
         const hasTemperaturePoint = tList.find(
-          item => this.getLocationTime(item.time) === this.getLocationTime(date)
+          item => item.time === date
         );
+        console.log(hasTemperaturePoint,"llx");
         if (hasTemperaturePoint) {
           for (let j = breatheList.length - 1; j >= 0; j--) {
             const timeNum = this.getTimeNum(breatheList[j].time);
@@ -946,7 +947,7 @@ export default {
       settingMap.heart.data.forEach((x) => {
         // 相同日期没有体温点脉搏心率呼吸不画线
         const hasTemperaturePoint = tList.find(
-          item => this.getLocationTime(item.time) === this.getLocationTime(x.time)
+          item => item.time === x.time
         );
         if (!hasTemperaturePoint) return;
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
@@ -973,7 +974,7 @@ export default {
       settingMap.pulse.data.forEach((x) => {
         // 相同日期没有体温点脉搏心率呼吸不画线
         const hasTemperaturePoint = tList.find(
-          item => this.getLocationTime(item.time) === this.getLocationTime(x.time)
+          item => item.time === x.time
         );
         if (!hasTemperaturePoint) return;
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
@@ -1662,7 +1663,7 @@ export default {
             x.data.forEach((y, index) => {
               // 相同日期没有体温点脉搏心率呼吸不画线
               const hasTemperaturePoint = tList.find(
-                item => this.getLocationTime(item.time) === this.getLocationTime(y.time)
+                item => item.time === y.time
               );
               if (!hasTemperaturePoint) return;
 
@@ -2089,7 +2090,7 @@ export default {
               ]
               // 相同日期没有体温点脉搏心率呼吸不画线
               const hasTemperaturePoint = tList.find(
-                item => this.getLocationTime(item.time) === this.getLocationTime(x.time)
+                item => item.time === x.time
               );
               if (!hasTemperaturePoint) break;
 
