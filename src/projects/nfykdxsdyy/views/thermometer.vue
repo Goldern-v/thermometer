@@ -1592,7 +1592,7 @@ export default {
                   this.getTimeNum(x.data[index + 1].time.slice(0, 10)) -
                     this.getTimeNum(y.time.slice(0, 10)) >=
                     24 * 60 * 60 * 1000 * 2 ||
-                  ["11", "12", "1", "2", "19", "20"].includes(x.vitalCode)
+                  ["1", "2", "19", "20"].includes(x.vitalCode)
                 ) {
                   data.push([x.data[index + 1]]);
                 }
@@ -1611,7 +1611,6 @@ export default {
                     }
                   }
                 }
-
                 if (topNode.length > 0) {
                   for (let item of topNode) {
                     if (
