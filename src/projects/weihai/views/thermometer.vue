@@ -755,9 +755,9 @@ export default {
         const item = { timeNum: i, value: "" };
         const date = moment(i).format('YYYY-MM-DD HH:mm:ss');
         const hasTemperaturePoint = tList.find(
-          item => item.time === date
+          // item => item.time === date
+          item => this.getLocationTime(item.time) === this.getLocationTime(date)
         );
-        console.log(hasTemperaturePoint,"llx");
         if (hasTemperaturePoint) {
           for (let j = breatheList.length - 1; j >= 0; j--) {
             const timeNum = this.getTimeNum(breatheList[j].time);
@@ -948,6 +948,7 @@ export default {
         // 相同日期没有体温点脉搏心率呼吸不画线
         const hasTemperaturePoint = tList.find(
           item => item.time === x.time
+          // item => this.getLocationTime(item.time) === this.getLocationTime(x.time)
         );
         if (!hasTemperaturePoint) return;
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
@@ -975,6 +976,7 @@ export default {
         // 相同日期没有体温点脉搏心率呼吸不画线
         const hasTemperaturePoint = tList.find(
           item => item.time === x.time
+          // item => this.getLocationTime(item.time) === this.getLocationTime(x.time)
         );
         if (!hasTemperaturePoint) return;
         const xAxis = this.getXaxis(this.getLocationTime(x.time));
@@ -1664,6 +1666,7 @@ export default {
               // 相同日期没有体温点脉搏心率呼吸不画线
               const hasTemperaturePoint = tList.find(
                 item => item.time === y.time
+                // item => this.getLocationTime(item.time) === this.getLocationTime(y.time)
               );
               if (!hasTemperaturePoint) return;
 
@@ -2091,6 +2094,7 @@ export default {
               // 相同日期没有体温点脉搏心率呼吸不画线
               const hasTemperaturePoint = tList.find(
                 item => item.time === x.time
+                // item => this.getLocationTime(item.time) === this.getLocationTime(x.time)
               );
               if (!hasTemperaturePoint) break;
 
