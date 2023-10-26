@@ -100,6 +100,12 @@ export const mockData = {
       vital_code: "01",
     },
     {
+      temperature_type: "呼吸",
+      value: "75",
+      time_point: "2022-12-04 22:00:00",
+      vital_code: "04",
+    },
+    {
       temperature_type: "心率",
       value: "55",
       time_point: "2022-12-04 22:37:00",

@@ -81,6 +81,8 @@ const projectName = (() => {
       return "顺德和平外科医院";
     case "hzly": // 惠州六院
       return "惠州市第六人民医院";
+    case "dgdl": // 大朗医院
+      return "东莞市大朗医院";
     case "common": // 可配置的通用版本
       return "配置通用版本";
     default:
@@ -209,6 +211,8 @@ module.exports = {
           return "./src/projects/sdhpwk/main.js";
         case "hzly": // 惠州市第六人民医院
           return "./src/projects/hzly/main.js";
+        case "dgdl": // 惠州市第六人民医院
+          return "./src/projects/dgdl/main.js";
         case "common": // 可配置的通用版本
           return "./src/projects/common/main.js";
         default:
