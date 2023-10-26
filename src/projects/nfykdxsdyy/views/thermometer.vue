@@ -1550,7 +1550,7 @@ export default {
     getNotTemTime(sheetNote = []) {
       let outTime = [];
       sheetNote.forEach((y) => {
-        if (["不升", "外出", "拒测", "手术", "手术|"].includes(y.value)) {
+        if (["不升", "外出", "拒测", "手术", "手术|", "请假"].includes(y.value)) {
           outTime.push(y.time);
         }
       });
@@ -1602,10 +1602,11 @@ export default {
                 if (bottomNode.length > 0) {
                   for (let item of bottomNode) {
                     if (
-                      this.getTimeNum(x.data[index + 1].time) >
-                        this.getTimeNum(item) &&
-                      this.getTimeNum(y.time) <= this.getTimeNum(item)
-                      // item.slice(0, 10) === y.time.slice(0, 10)
+                       this.getTimeNum(
+                        this.getLocationTime(x.data[index + 1].time)
+                      ) > this.getTimeNum(this.getLocationTime(item)) &&
+                      this.getTimeNum(this.getLocationTime(y.time)) <=
+                        this.getTimeNum(this.getLocationTime(item))
                     ) {
                       data.push([x.data[index + 1]]);
                     }
