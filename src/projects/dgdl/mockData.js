@@ -111,7 +111,7 @@ export const mockData = {
     },
     {
       temperature_type: "体温",
-      value: "36.6",
+      value: "35",
       time_point: "2023-04-17 15:55:00",
       vital_code: "1",
       expand2: null,
@@ -1136,7 +1136,7 @@ export const mockData = {
     {
       time_point: "2023/06/24 18:00:00",
       temperature_type: "体温",
-      value: "36.6",
+      value: "34.1",
       vital_code: "1",
     },
     {

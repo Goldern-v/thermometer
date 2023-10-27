@@ -1493,7 +1493,8 @@ export default {
             // 体温为不升时，折线需要断开
             data = [[]];
             x.data.forEach((y, index) => {
-              if (y.value >= 35) {
+              //按医院要求，低于35度可以录入体温
+              if (y.value >= 34) {
                 data[data.length - 1].push(y);
               } else {
                 data.push([]);
