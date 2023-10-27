@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      useMockData: false,
+      useMockData: true,
       printData: null,
       isPrintAll: true,
       pageTotal: 1,
@@ -104,8 +104,8 @@ export default {
 <style>
 @media print {
   @page {
-    size: a4; 
-    margin: 1cm 5mm 1.7cm 1cm; 
+    size: a4;
+    margin: 1cm 5mm 1.7cm 1cm;
     transform: scale(0.95);
   }
 

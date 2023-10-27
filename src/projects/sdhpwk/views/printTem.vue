@@ -359,15 +359,20 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${2*trHeight}px` }">
-            <div class="label" :style="{ width: `${leftWidth}px` }">皮试</div>
+            <div class="label"
+            :style="{ width: `${leftWidth}px` }"
+            >
+              皮试
+            </div>
             <div class="value-item-box">
               <div
                 class="value-item font-13"
-                v-for="(item, index) in getFormatList({ tList: skinTest })"
+                v-for="(item, index) in formatSkinTestList"
                 :key="index"
-                v-html="item.value"
                 @click="()=>clickDateChangeTime(item)"
-              ></div>
+              >
+              {{ (item[0] || {}).value || (item[1] || {}).value}}
+              </div>
             </div>
           </div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
@@ -660,7 +665,8 @@ export default {
   },
   computed: {
     timeTds() {
-      const list = [2, 6, 10, 14, 18, 22];
+      // const list = [2, 6, 10, 14, 18, 22];
+      const list = [4,8,12,4,8,12];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
@@ -702,6 +708,32 @@ export default {
       }
       return list;
     },
+        //按医院要求，皮试结果一天可录入两个，写的不好轻喷。
+      formatSkinTestList() {
+        const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+        const list = [];
+        const skinTest = [...this.skinTest];
+        const oneDay = 24 * 60 * 60 * 1000;
+        for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += oneDay) {
+          const dayList = [];
+          for (let j = 0; j < skinTest.length; j++) {
+            const item = { timeNum: i, value: "" };
+            const timeNum = this.getTimeNum(skinTest[j].time);
+            if (timeNum > i && timeNum <= i + oneDay) {
+              const existingItem = dayList.find((x) => x.timeNum === i);
+              if (existingItem) {
+                existingItem.value += `, ${skinTest[j].value}`; // 使用逗号进行拼接
+              } else {
+                item.value += skinTest[j].value;
+                item.time = skinTest[j].time;
+                dayList.push(item);
+              }
+            }
+          }
+          list.push(dayList);
+        }
+        return list;
+      },
     timesTempAreaHeight() {
       return this.areaHeight;
     },
@@ -717,7 +749,11 @@ export default {
         }
       })
       const timeAdd = (i) => {
-        return 4 * 60 * 60 * 1000;
+        return timeNumList.some((x) => x.start === i)
+        ? 7 * 60 *60 * 1000
+        : timeNumList.some((x) => x.end - 1 * 60 * 60 * 1000 === i)
+        ? 1 * 60 * 60 * 1000
+        : 4 * 60 * 60 * 1000;
       };
       for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeAdd(i)) {
         const item = { timeNum: i, value: "" };
@@ -1245,7 +1281,7 @@ export default {
         this.xLine(); //生成X轴坐标
         Object.values(this.settingMap).forEach((x) => {
           let data = [x.data];
-          // 脉搏、心率 02 20 
+          // 脉搏、心率 02 20
           if (
             ["02", "20"].includes(
               x.vitalCode
@@ -1265,7 +1301,7 @@ export default {
                 ) {
                   data.push([x.data[index + 1]]);
                 }
-               
+
               } else {
                 const list = data[data.length - 1];
                 if (!(list.length && list[list.length - 1].time === y.time)) {
@@ -1420,7 +1456,7 @@ export default {
               }
             }
           }
-        } 
+        }
         //如果没有BMI  直接判断是否有身高体重  然后把计算后的值渲染
         else {
           if (heightList.length > 0 && weightList.length > 0) {
@@ -1467,7 +1503,7 @@ export default {
           } else {
             map[`${key}`] = notes[i].time
           }
-        } 
+        }
       }
       const xaxis = notes.map((x) =>
         this.getXaxis(this.getLocationTime(x.time))
@@ -1948,12 +1984,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "03:59:59"],
-        "06:00:00": ["04:00:00", "07:59:59"],
-        "10:00:00": ["08:00:00", "11:59:59"],
-        "14:00:00": ["12:00:00", "15:59:59"],
-        "18:00:00": ["16:00:00", "19:59:59"],
-        "22:00:00": ["20:00:00", "23:59:59"],
+        "02:00:00": ["00:00:00", "06:59:59"],
+        "06:00:00": ["07:00:00", "10:59:59"],
+        "10:00:00": ["11:00:00", "14:59:59"],
+        "14:00:00": ["13:00:00", "18:59:59"],
+        "18:00:00": ["19:00:00", "22:59:59"],
+        "22:00:00": ["23:00:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
@@ -2209,8 +2245,8 @@ export default {
     transform: scale(0.95);
   }
   .main-view {
-    transform: scale(1)!important; 
-    transform: scaleY(0.96)!important; 
+    transform: scale(1)!important;
+    transform: scaleY(0.96)!important;
   }
 }
 .main-view {

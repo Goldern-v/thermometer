@@ -34,6 +34,30 @@ export const mockData = {
       vital_code: "5",
     },
     {
+      temperature_type: "表顶注释",
+      value: "测试|十时四十八分",
+      time_point: "2022-12-04 15:56:00",
+      vital_code: "5",
+    },
+    {
+      temperature_type: "表顶注释",
+      value: "测试|十时四十八分",
+      time_point: "2022-12-04 23:56:00",
+      vital_code: "5",
+    },
+    {
+      temperature_type: "表顶注释",
+      value: "测试|十时四十八分",
+      time_point: "2022-12-04 23:59:00",
+      vital_code: "5",
+    },
+    {
+      temperature_type: "表顶注释",
+      value: "手术",
+      time_point: "2022-12-04 23:55:17",
+      vital_code: "5",
+    },
+    {
       temperature_type: "血压",
       value: "44/46",
       time_point: "2022-12-02 07:00:00",
