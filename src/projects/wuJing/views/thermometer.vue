@@ -5,7 +5,7 @@
     :style="{ width: `${leftWidth + areaWidth}px` }"
     v-if="apiData"
   >
-    <div class="head-hos">武警广东省总队医院</div>
+    <div class="head-hos">武警广东总队医院</div>
     <div class="head-title">体温单</div>
     <div class="head-info">
       <div class="item" style="width: 135px; flex: none">
@@ -508,7 +508,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
