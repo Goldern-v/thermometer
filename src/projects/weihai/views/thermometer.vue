@@ -2567,13 +2567,13 @@ export default {
       //定义一个数组，为全部最后一格的数据，如果与最后一格重叠，就往底下移动
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {
-        let lastXaxis = Math.floor(this.getLastXasis(xaxisList[i]));
+        // let lastXaxis = Math.floor(this.getLastXasis(xaxisList[i]));
         if (!xaxisNew.includes(Math.floor(xaxisList[i]))&&xaxisNew.includes(Math.floor(xaxisList[i])-1)&&xaxisNew.includes(Math.floor(xaxisList[i])+1)) {
           xaxisNew.push(Math.floor(xaxisList[i]));
         } else {
           while (
-            (xaxisNew.includes(Math.floor(xaxisList[i]))||xaxisNew.includes(Math.floor(xaxisList[i])-1)||xaxisNew.includes(Math.floor(xaxisList[i])+1)) &&
-            xaxisList[i] < lastXaxis
+            (xaxisNew.includes(Math.floor(xaxisList[i]))||xaxisNew.includes(Math.floor(xaxisList[i])-1)||xaxisNew.includes(Math.floor(xaxisList[i])+1))
+            // &&  xaxisList[i] < lastXaxis
           ) {
             xaxisList[i] += this.xSpace + 2;
           }

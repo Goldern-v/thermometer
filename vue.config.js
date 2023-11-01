@@ -211,7 +211,7 @@ module.exports = {
           return "./src/projects/sdhpwk/main.js";
         case "hzly": // 惠州市第六人民医院
           return "./src/projects/hzly/main.js";
-        case "dgdl": // 惠州市第六人民医院
+        case "dgdl": // 东莞大朗医院
           return "./src/projects/dgdl/main.js";
         case "common": // 可配置的通用版本
           return "./src/projects/common/main.js";
@@ -286,6 +286,8 @@ module.exports = {
             case "qhwy":
               return "http://218.107.37.134:9093";
             case "zjhj":
+              return "http://218.107.37.134:9093";
+            case "dgdl":
               return "http://218.107.37.134:9093";
             case "common":
               return "http://172.17.5.41:9091";
@@ -363,6 +365,8 @@ module.exports = {
             case "ytll":
               return "http://192.168.254.92:9091";
             case "sdhpwk":
+              return "http://202.104.27.221:9091";
+            case "dgdl":
               return "http://202.104.27.221:9091";
             default:
               return "http://218.14.180.38:9091";
