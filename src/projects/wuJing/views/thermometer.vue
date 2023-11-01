@@ -508,7 +508,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: false,
+      useMockData: true,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -2464,7 +2464,13 @@ export default {
       const xaxisNew = [];
       for (let i = 0; i < xaxisList.length; i++) {
         if (!xaxisNew.includes(Math.floor(xaxisList[i]))) {
-          xaxisNew.push(Math.floor(xaxisList[i]));
+          // 避免覆盖到下一个注释，处理多一层
+          if((xaxisList[i + 1]- xaxisList[i]) < this.xSpace + 2){
+            xaxisList[i+1] += this.xSpace + 2;
+            xaxisNew.push(Math.floor(xaxisList[i]));
+          }else{
+            xaxisNew.push(Math.floor(xaxisList[i]));
+          }
         } else {
           while (xaxisNew.includes(Math.floor(xaxisList[i]))) {
             xaxisList[i] += this.xSpace + 2;

@@ -119,9 +119,30 @@ export const mockData = {
     },
     {
       temperature_type: '表顶注释',
+      value: '转出',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-18 10:00:00',
+      vital_code: '21'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '转入',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-18 14:00:00',
+      vital_code: '21'
+    },
+    {
+      temperature_type: '表顶注释',
+      value: '转入',
+      // "time_point": "2020-12-15 03:12:00",
+      time_point: '2019-05-18 18:00:00',
+      vital_code: '21'
+    },
+    {
+      temperature_type: '表顶注释',
       value: '手术',
       // "time_point": "2020-12-15 03:12:00",
-      time_point: '2019-05-18 16:12:00',
+      time_point: '2019-05-18 10:30:00',
       vital_code: '21'
     },
     {
