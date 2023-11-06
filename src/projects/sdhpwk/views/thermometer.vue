@@ -364,22 +364,17 @@
             </div>
           </div>
           <div class="row" :style="{ height: `${2*trHeight}px` }">
-            <div
-            class="label"
-            :style="{ width: `${leftWidth}px` }"
-            >
-              皮试
+            <div class="label" :style="{ width: `${leftWidth}px` }">皮试
             </div>
-            <div class="value-item-box">
+               <div class="value-item-box">
               <div
-                class="value-item font-13"
-                v-for="(item, index) in formatSkinTestList"
+                class="value-item font-12"
+                style="display: inline-block;"
+                v-for="(item, index) in getFormatList({ tList: skinTest })"
                 :key="index"
-
-                @click="()=>clickDateChangeTime(item)"
-              >
-              {{ (item[0] || {}).value || (item[1] || {}).value}}
-              </div>
+                @click="() => clickDateChangeTime(item)"
+                v-html="item.value"
+              ></div>
             </div>
           </div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
@@ -717,31 +712,63 @@ export default {
       return list;
     },
     //按医院要求，皮试结果一天可录入两个，写的不好轻喷。
- formatSkinTestList() {
-  const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
-  const list = [];
-  const skinTest = [...this.skinTest];
-  const oneDay = 24 * 60 * 60 * 1000;
-  for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += oneDay) {
-    const dayList = [];
-    for (let j = 0; j < skinTest.length; j++) {
-      const item = { timeNum: i, value: "" };
-      const timeNum = this.getTimeNum(skinTest[j].time);
-      if (timeNum > i && timeNum <= i + oneDay) {
-        const existingItem = dayList.find((x) => x.timeNum === i);
-        if (existingItem) {
-          existingItem.value += `, ${skinTest[j].value}`; // 使用逗号进行拼接
-        } else {
-          item.value += skinTest[j].value;
-          item.time = skinTest[j].time;
-          dayList.push(item);
-        }
-      }
-    }
-    list.push(dayList);
-  }
-  return list;
-},
+    //   formatSkinTestList() {
+    //     const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+    //     const list = [];
+    //     const skinTest = [...this.skinTest];
+    //     const oneDay = 24 * 60 * 60 * 1000;
+    //     for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += oneDay) {
+    //       const dayList = [];
+    //       for (let j = 0; j < skinTest.length; j++) {
+    //         const item = { timeNum: i, value: "" };
+    //         const timeNum = this.getTimeNum(skinTest[j].time);
+    //         if (timeNum > i && timeNum <= i + oneDay) {
+    //           const existingItem = dayList.find((x) => x.timeNum === i);
+    //           if (existingItem) {
+    //             const value = skinTest[j].value.replace("+",
+    //           '<span class="increase">+</span>'); // 使用 <span> 标签和样式设置文本为红色
+    //             existingItem.value += `, ${value}`; // 使用逗号进行拼接
+    //           } else {
+    //             const value = skinTest[j].value.replace("+",
+    //           '<span class="increase">+</span>');
+    //             item.value += value;
+    //             item.time = skinTest[j].time;
+    //             dayList.push(item);
+    //           }
+    //         }
+    //       }
+    //       list.push(dayList);
+    //     }
+    //     console.log(list,'list');
+    //     return list;
+    //   },
+    // formatSkinTestListTest({ tList, timeInterval = 24 * 60 * 60 * 1000 }){
+    //   const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+    //   const list = [];
+    //   const targetList = [...tList];
+    //   for (
+    //     let i = timeNumRange[0];i < timeNumRange[1] - 1;i += timeInterval){
+    //     const dayList = [];
+    //     for(let j = 0;j < targetList.length;j++){
+    //       const item = { timeNum: i, value: "" };
+    //       const timeNum = this.getTimeNum(targetList[j].time);
+    //       if(timeNum > i && timeNum < i + timeInterval){
+    //         const existingItem = dayList.find((x) => x.timeNum === i);
+    //         if(existingItem){
+    //          const value = targetList[j].value.replace("+", '<span class="increase">+</span>'); // 将字符串中的 "+" 号替换为带有红色样式的元素
+    //          existingItem.value += `, ${value}`; // 使用逗号进行拼接
+    //         } else {
+    //           const value = targetList[j].value.replace("+", '<span class="increase">+</span>');
+    //           item.value += value;
+    //           item.time = targetList[j].time;
+    //           dayList.push(item);
+    //         }
+    //       }
+    //     }
+    //     list.push(dayList);
+    //   }
+    //   return list
+    // },
     timesTempAreaHeight() {
       return this.areaHeight;
     },
@@ -2047,7 +2074,7 @@ export default {
           }
         }
       }
-      console.log(`${time.slice(0, -8)}${str}`);
+      // console.log(`${time.slice(0, -8)}${str}`);
       return `${time.slice(0, -8)}${str}`;
     },
     // 根据时分秒00:00:00计算总秒数
@@ -2149,24 +2176,24 @@ export default {
       return obj;
     },
     // 计算底部数据的渲染列表
+    //多个皮试结果情况下拼接并且有“+”的情况下显示红色
     getFormatList({ tList, timeInterval = 24 * 60 * 60 * 1000 }) {
       const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
       const list = [];
       const targetList = [...tList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
+      for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeInterval) {
         const item = { timeNum: i, value: "" };
+        const values = [];
         for (let j = targetList.length - 1; j >= 0; j--) {
           const timeNum = this.getTimeNum(targetList[j].time);
           if (timeNum >= i && timeNum < i + timeInterval) {
-            item.value = targetList[j].value.replace(
-              "+",
-              '<span class="increase">+</span>'
-            );
-          item.time = targetList[j].time
+            const value = targetList[j].value.replace("+", '<span style="color: red">+</span>').trim();
+            values.push(value);
+            item.time = targetList[j].time;
             targetList.splice(j, 1);
-            break;
           }
         }
+        item.value = values.join(",");
         list.push(item);
       }
       return list;

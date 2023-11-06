@@ -24,16 +24,29 @@ export const mockData = {
     },
     {
       temperature_type: "皮试",
-      value: "头孢呋辛钠(-)",
+      value: "头孢呋辛钠(+)",
       time_point: "2021-11-08 09:00:00",
       vital_code: "30",
     },
     {
       temperature_type: "皮试",
-      value: "11点的测试",
-      time_point: "2021-11-08 11:00:00",
+      value: "111111(+)",
+      time_point: "2021-11-08 09:00:00",
       vital_code: "30",
     },
+    // {
+    //   temperature_type: "皮试",
+    //   value: "头孢呋辛钠(+)",
+    //   time_point: "2021-11-08 09:00:00",
+    //   vital_code: "30",
+    // },
+    // {
+    //   temperature_type: "皮试",
+    //   value: "1111111111111111s",
+    //   time_point: "2021-11-08 09:10:00",
+    //   vital_code: "30",
+    // },
+
     {
       temperature_type: "血压",
       value: "38.9",

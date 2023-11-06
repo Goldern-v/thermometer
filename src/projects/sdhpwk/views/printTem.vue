@@ -366,13 +366,13 @@
             </div>
             <div class="value-item-box">
               <div
-                class="value-item font-13"
-                v-for="(item, index) in formatSkinTestList"
+                class="value-item font-12"
+                style="display: inline-block;"
+                v-for="(item, index) in getFormatList({ tList: skinTest })"
                 :key="index"
-                @click="()=>clickDateChangeTime(item)"
-              >
-              {{ (item[0] || {}).value || (item[1] || {}).value}}
-              </div>
+                @click="() => clickDateChangeTime(item)"
+                v-html="item.value"
+              ></div>
             </div>
           </div>
           <div class="row font-14" :style="{ height: `${trHeight}px` }">
@@ -2104,28 +2104,28 @@ export default {
       return obj;
     },
     // 计算底部数据的渲染列表
+    //多个皮试结果情况下拼接并且有“+”的情况下显示红色
     getFormatList({ tList, timeInterval = 24 * 60 * 60 * 1000 }) {
-      const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
-      const list = [];
-      const targetList = [...tList];
-      for (let i = timeNumRange[0]; i < timeNumRange[1]-1; i += timeInterval) {
-        const item = { timeNum: i, value: "" };
-        for (let j = targetList.length - 1; j >= 0; j--) {
-          const timeNum = this.getTimeNum(targetList[j].time);
-          if (timeNum >= i && timeNum < i + timeInterval) {
-            item.value = targetList[j].value.replace(
-              "+",
-              '<span class="increase">+</span>'
-            );
-          item.time = targetList[j].time
-            targetList.splice(j, 1);
-            break;
+        const timeNumRange = this.timeRange.map((x) => this.getTimeNum(x));
+        const list = [];
+        const targetList = [...tList];
+        for (let i = timeNumRange[0]; i < timeNumRange[1] - 1; i += timeInterval) {
+          const item = { timeNum: i, value: "" };
+          const values = [];
+          for (let j = targetList.length - 1; j >= 0; j--) {
+            const timeNum = this.getTimeNum(targetList[j].time);
+            if (timeNum >= i && timeNum < i + timeInterval) {
+              const value = targetList[j].value.replace("+", '<span style="color: red">+</span>').trim();
+              values.push(value);
+              item.time = targetList[j].time;
+              targetList.splice(j, 1);
+            }
           }
+          item.value = values.join(",");
+          list.push(item);
         }
-        list.push(item);
-      }
-      return list;
-    },
+        return list;
+      },
     // 数字转中文
     toChinesNum(num) {
       let changeNum = [
