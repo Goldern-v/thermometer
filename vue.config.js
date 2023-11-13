@@ -83,6 +83,8 @@ const projectName = (() => {
       return "惠州市第六人民医院";
     case "dgdl": // 大朗医院
       return "东莞市大朗医院";
+    case "houJie": // 厚街医院
+      return "东莞市厚街医院";
     case "common": // 可配置的通用版本
       return "配置通用版本";
     default:
@@ -213,6 +215,8 @@ module.exports = {
           return "./src/projects/hzly/main.js";
         case "dgdl": // 东莞大朗医院
           return "./src/projects/dgdl/main.js";
+        case "houJie": // 东莞市厚街医院
+          return "./src/projects/houJie/main.js";
         case "common": // 可配置的通用版本
           return "./src/projects/common/main.js";
         default:
@@ -288,6 +292,8 @@ module.exports = {
             case "zjhj":
               return "http://218.107.37.134:9093";
             case "dgdl":
+              return "http://218.107.37.134:9093";
+            case "houJie":
               return "http://218.107.37.134:9093";
             case "common":
               return "http://172.17.5.41:9091";
@@ -368,6 +374,8 @@ module.exports = {
               return "http://202.104.27.221:9091";
             case "dgdl":
               return "http://202.104.27.221:9091";
+            case "houJie":
+              return "http://10.35.0.94:9091";
             default:
               return "http://218.14.180.38:9091";
           }

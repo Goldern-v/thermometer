@@ -81,6 +81,8 @@
     "build:hzly": "vue-cli-service build --project=hzly",
     "dev:dgdl": "vue-cli-service serve --project=dgdl",
     "build:dgdl": "vue-cli-service build --project=dgdl",
+    "dev:houJie": "vue-cli-service serve --project=houJie",
+    "build:houJie": "vue-cli-service build --project=houJie",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
