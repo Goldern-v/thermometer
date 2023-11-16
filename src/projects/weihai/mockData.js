@@ -114,6 +114,12 @@ export const mockData = {
     {
       temperature_type: "呼吸",
       value: "75",
+      time_point: "2022-12-04 06:15:00",
+      vital_code: "04",
+    },
+    {
+      temperature_type: "呼吸",
+      value: "100",
       time_point: "2022-12-03 22:00:00",
       vital_code: "04",
     },
@@ -125,8 +131,20 @@ export const mockData = {
     },
     {
       temperature_type: "呼吸",
-      value: "75",
+      value: "99",
       time_point: "2022-12-04 22:00:00",
+      vital_code: "04",
+    },
+    {
+      temperature_type: "呼吸",
+      value: "99",
+      time_point: "2022-12-04 21:00:00",
+      vital_code: "04",
+    },
+    {
+      temperature_type: "呼吸",
+      value: "60",
+      time_point: "2022-12-04 20:00:00",
       vital_code: "04",
     },
     {
