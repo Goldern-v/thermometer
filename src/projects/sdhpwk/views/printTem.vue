@@ -3,7 +3,11 @@
     @dblclick="dblclick"
     class="main-view"
     v-if="apiData"
-    :style="{ width: `${leftWidth + areaWidth}px`}"
+    :style="{
+       width: `${leftWidth + areaWidth}px`,
+       transform: scaleFlag ? `scale(${scaleData}) translateX(185px)` : `scale(${scaleData})`,
+       transformOrigin:'0 0'
+    }"
   >
     <div class="head-hos">顺德和平外科医院</div>
     <div class="head-title">体温单</div>
@@ -505,6 +509,8 @@ export default {
       ySpace: 15, //  横向网格的间距
       leftWidth: 145, // 左侧内容宽度
       xRange: [1, 8],
+      scaleData:0.70,
+      scaleFlag:true,
       yRange,
       PatientId: "",
       pulseRange,
@@ -1042,6 +1048,15 @@ export default {
               this.bedExchangeLog = e.data.value.bedExchangeLog || ""; // 转床
             }
             break;
+             case "rightSheetChange":
+          if(!e.data.value){
+            this.scaleData = 1
+          }else{
+            this.scaleData = 0.70
+
+          }
+          this.scaleFlag = e.data.value
+
             break
           default:
             break;
@@ -1051,6 +1066,12 @@ export default {
     dblclick() {
       // 和iframe外部通信，传递双击事件
       window.parent.postMessage({ type: "dblclick" }, "*");
+      if(this.scaleFlag) {
+        this.scaleData = 1
+      }else{
+        this.scaleData = 0.70
+      }
+      this.scaleFlag = (!this.scaleFlag)
     },
     reset() {
       Object.keys(this.settingMap).forEach((x) => {
@@ -2241,12 +2262,13 @@ export default {
 @media print {
   @page {
     size: a4; //定义为a4纸
-   margin: 1cm 5mm 1.7cm 1cm; // 页面的边距
-    transform: scale(0.95);
+    margin: 0.3cm 5mm 0.1cm 1cm; // 页面的边距
+    // transform: scale(0.95);
   }
   .main-view {
     transform: scale(1)!important;
-    transform: scaleY(0.96)!important;
+    // transform: scaleY(0.96)!important;
+    margin-top: -5px !important;
   }
 }
 .main-view {
