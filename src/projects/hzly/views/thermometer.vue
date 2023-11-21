@@ -586,7 +586,7 @@
 
 <script>
 import zrender from "zrender";
-import { mockData } from "src/projects/nfykdxsdyy/mockData.js";
+import { mockData } from "src/projects/hzly/mockData.js";
 import {
   common,
   getNurseExchangeInfoByTime,
@@ -832,7 +832,7 @@ export default {
       return !!this.$route.query.isPDF;
     },
     timeTds() {
-      const list = [2, 6, 10, 2, 6, 10];
+      const list = [4,8,12,4,8,12];
       const tds = [];
       for (let i = 0; i < 7; i++) {
         tds.push(...list);
@@ -2451,12 +2451,12 @@ export default {
       const sec = this.getTotalSeconds(time.slice(-8));
       let str = "";
       const timeAreasMap = {
-        "02:00:00": ["00:00:00", "04:00:59"],
-        "06:00:00": ["04:01:00", "08:00:59"],
-        "10:00:00": ["08:01:00", "12:00:59"],
-        "14:00:00": ["12:01:00", "16:00:59"],
-        "18:00:00": ["16:01:00", "20:00:59"],
-        "22:00:00": ["20:01:00", "23:59:59"],
+        "02:00:00": ["00:00:00", "05:59:59"],
+        "06:00:00": ["06:01:00", "09:59:59"],
+        "10:00:00": ["10:00:00", "13:59:59"],
+        "14:00:00": ["14:00:00", "17:59:59"],
+        "18:00:00": ["18:00:00", "21:59:59"],
+        "22:00:00": ["22:00:00", "23:59:59"],
       };
       for (let key in timeAreasMap) {
         if (timeAreasMap.hasOwnProperty(key)) {
