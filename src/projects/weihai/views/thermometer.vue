@@ -669,6 +669,8 @@ export default {
       const pressureList = [...this.pressureList];
       const pressureSiteList = [...this.pressureSiteList];
       const halfDay = 3 * 4 * 60 * 60 * 1000;
+      // 为了在手术的同一天就不让默认在添加一次
+      const useArray = new Array(14).fill(false);
       for (
         let i = timeNumRange[0], k = 0;
         i < timeNumRange[1] - 1;
@@ -679,6 +681,7 @@ export default {
           const timeNum = this.getTimeNum(node.time);
           return timeNum >= i && timeNum < (i + halfDay * 2) && k % 2 == 0;
         });
+        // console.log('dayTopNode', dayTopNode);
         // 当天表顶注释为手术
         const hasOperate = dayTopNode.find(node => node.value.includes('手术'));
         const item = { timeNum: i, value: "" };
@@ -696,12 +699,14 @@ export default {
               && moment(p.time).format('YYYY-MM-DD') === moment(hasOperate.time).format('YYYY-MM-DD')
             )
           });
+          useArray[k] = true;
+          useArray[k + 1] = true;
           if (!list[k].value && left) {
             list[k] = { timeNum: i, value: left.value };
           }
           if (!list[k + 1].value && right) {
             list[k + 1] = { timeNum: i, value: right.value };
-          }
+          } 
           continue;
         } else {
           for (let j = pressureList.length - 1; j >= 0; j--) {
@@ -720,7 +725,7 @@ export default {
               break;
             }
           }
-          if (!list[k].value) {
+          if (!list[k].value && !useArray[k]) {
             list[k] = item
           }
         }
