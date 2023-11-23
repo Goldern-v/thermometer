@@ -822,7 +822,7 @@ export const mockData = {
     {
       "temperature_type": "脉搏",
       "value": "80",
-      "time_point": "2023-10-19 03:15:00",
+      "time_point": "2023-11-13 03:15:00",
       "vital_code": "02"
     },
     {
@@ -908,6 +908,12 @@ export const mockData = {
       "value": "38",
       "time_point": "2023-11-16 18:29:00",
       "vital_code": "01"
+    },
+    {
+      "temperature_type": "脉搏",
+      "value": "181",
+      "time_point": "2023-11-16 18:29:00",
+      "vital_code": "02"
     },
     {
       "temperature_type": "血压",

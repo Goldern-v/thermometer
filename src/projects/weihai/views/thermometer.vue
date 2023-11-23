@@ -480,7 +480,7 @@ export default {
     const pulseRange = [20, 180];
     const painRange = [0, 10];
     return {
-      useMockData: true,
+      useMockData: false,
       apiData: "", // 接口数据
       zr: "",
       areaWidth: 0, // 网格区域的宽度
@@ -706,7 +706,7 @@ export default {
           }
           if (!list[k + 1].value && right) {
             list[k + 1] = { timeNum: i, value: right.value };
-          } 
+          }
           continue;
         } else {
           for (let j = pressureList.length - 1; j >= 0; j--) {
@@ -1402,7 +1402,7 @@ export default {
           ) {
             this.topPulseNote.push({
               time: vitalSigns[i].time_point,
-              value: "过快",
+              value: "速脉",
             });
           } else if (
             ["041", "01", "043"].includes(vitalSigns[i].vital_code) &&
@@ -1566,10 +1566,13 @@ export default {
         let bottomValu = this.bottomSheetNote.map((x) => {
           return x.value;
         });
+        let PulsValue = this.topPulseNote.map((x) => {
+          return x.value
+        });
         this.createText({
           // x: this.getXaxis(this.getSplitTime(x.time)) + this.xSpace/2,
           x: xaxisNew[i],
-          y: bottomValu.includes(value) ? y + 1 + yNew : yNew + 2 * this.ySpace + 4,
+          y: bottomValu.includes(value) ? y + 1 + yNew : PulsValue.includes(value) ? yNew + 2 * this.ySpace - 30 :   yNew + 2 * this.ySpace + 4 ,
           value: this.addn(value),
           color,
           textLineHeight: this.ySpace + 1,
@@ -1736,7 +1739,7 @@ export default {
           });
         }
         // 生成心率脉搏过快注释
-        this.createNote(this.topPulseNote, this.ySpace + 2, "black");
+        this.createNote(this.topPulseNote,  this.ySpace + 2, "black");
         // 生成表顶注释
         this.createNote(this.topSheetNote, this.indexTextAreaHeight + 2, "red");
         // 生成表底注释
